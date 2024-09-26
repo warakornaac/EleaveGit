@@ -39,12 +39,13 @@ $RECYCLE.BIN/
 .DS_Store
 
 # Config
-BudgetForecastGit/Web.config
+Eleave/Web.config
 
 # Visual Studio 2015 cache/options directory
 .vs/
 
 /.vs
+Eleave/obj/Debug/
 # /.vs/BudgetForecast/config/applicationhost.config
 # /.vs/BudgetForecast/config/applicationhost.config
 
