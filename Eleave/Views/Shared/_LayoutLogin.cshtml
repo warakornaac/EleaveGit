@@ -1,0 +1,35 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/Content/css")
+    <link href="~/Content/style-flat.css" rel="stylesheet" />
+    <link href="~/Content/plugins/animate.min.css" rel="stylesheet" />
+    <link href="~/Content/plugins/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/plugins/prism-coy.css" rel="stylesheet" />
+    <link href="~/Content/plugins/perfect-scrollbar.css" rel="stylesheet" />
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="auth-wrapper">
+        <div class="auth-content text-center">
+            @RenderBody()
+        </div>
+    </div>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>
+<script src="~/Scripts/vendor-all.min.js"></script>
+<script src="~/Scripts/plugins/bootstrap.min.js"></script>
+<script src="~/Scripts/pcoded.js"></script>
+<script src="~/Scripts/plugins/apexcharts.min.js"></script>
+<script src="~/Scripts/uikit.min.js"></script>
+<script src="~/Scripts/analytics.min.js"></script>
+
+<script src="~/Scripts/plugins/jquery-ui.min.js"></script>
+<script src="~/Scripts/plugins/gmaps.min.js"></script>
+<script src="~/Scripts/plugins/perfect-scrollbar.min.js"></script>
+<script src="~/Scripts/plugins/prism.js"></script>
+<script src="~/Scripts/plugins/horizontal-menu.js"></script>
