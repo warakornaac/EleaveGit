@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@{
+    string UsrType = Session["UserType"] != null ? Session["UserType"].ToString() : string.Empty;
+    string UserID = Session["UserID"] != null ? Session["UserID"].ToString() : string.Empty;
+}
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -42,22 +46,22 @@
                     </div>
                     <div class="collapse" id="nav-user-link">
                         <ul class="list-unstyled">
-                            <li class="list-group-item"><a href="user-profile.html"><i class="feather icon-user m-r-5"></i>View Profile</a></li>
+                            <li class="list-group-item"><a href="user-profile"><i class="feather icon-user m-r-5"></i>View Profile</a></li>
                             <li class="list-group-item"><a href="#!"><i class="feather icon-settings m-r-5"></i>Settings</a></li>
-                            <li class="list-group-item"><a href="auth-normal-sign-in.html"><i class="feather icon-log-out m-r-5"></i>Logout</a></li>
+                            <li class="list-group-item"><a href="auth-normal-sign-in"><i class="feather icon-log-out m-r-5"></i>Logout</a></li>
                         </ul>
                     </div>
                 </div>
 
                 <ul class="nav pcoded-inner-navbar ">
                     <li class="nav-item pcoded-menu-caption">
-                        <label>Navigation</label>
+                        <label>ข้อมูล</label>
                     </li>
                     <li class="nav-item">
-                        <a href="index.html" class="nav-link "><span class="pcoded-micon"><i class="feather icon-home"></i></span><span class="pcoded-mtext">หน้าแรก</span></a>
-                    </li>    
+                        <a href="@Url.Action("Index","Home")" class="nav-link "><span class="pcoded-micon"><i class="feather icon-home"></i></span><span class="pcoded-mtext">หน้าแรก</span></a>
+                    </li>
                     <li class="nav-item">
-                        <a href="index.html" class="nav-link "><span class="pcoded-micon"><i class="feather icon-align-justify"></i></span><span class="pcoded-mtext">บันทึกการลา</span></a>
+                        <a href="@Url.Action("Index","Home")" class="nav-link "><span class="pcoded-micon"><i class="feather icon-align-justify"></i></span><span class="pcoded-mtext">บันทึกการลา</span></a>
                     </li>
                     <li class="nav-item pcoded-hasmenu">
                         <a href="#!" class="nav-link "><span class="pcoded-micon"><i class="feather icon-layout"></i></span><span class="pcoded-mtext">Page layouts</span></a>
@@ -66,7 +70,15 @@
                             <li><a href="layout-horizontal.html" target="_blank">Horizontal</a></li>
                         </ul>
                     </li>
-
+                    <li class="nav-item pcoded-menu-caption">
+                        <label>การลา</label>
+                    </li>
+                    <li class="nav-item">
+                        <a href="@Url.Action("Index","Home")" class="nav-link "><span class="pcoded-micon"><i class="feather icon-home"></i></span><span class="pcoded-mtext">ลา</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="@Url.Action("Index","Home")" class="nav-link "><span class="pcoded-micon"><i class="feather icon-home"></i></span><span class="pcoded-mtext">ตรวจสอบการลา</span></a>
+                    </li>
                     <li class="nav-item pcoded-menu-caption">
                         <label>Pages</label>
                     </li>
@@ -81,14 +93,12 @@
                         <a href="#!" class="nav-link "><span class="pcoded-micon"><i class="feather icon-lock"></i></span><span class="pcoded-mtext">Authentication</span></a>
                         <ul class="pcoded-submenu">
                             <li><a href="auth-signup.html" target="_blank">Sign up</a></li>
-                            <li><a href="home/login" target="_blank">Sign in</a></li>  
+                            <li><a href="home/login" target="_blank">Sign in</a></li>
                         </ul>
                     </li>
                     <li class="nav-item"><a href="sample-page.html" class="nav-link "><span class="pcoded-micon"><i class="feather icon-sidebar"></i></span><span class="pcoded-mtext">Sample page</span></a></li>
 
                 </ul>
-
-
             </div>
         </div>
     </nav>
@@ -119,92 +129,101 @@
                 </li>
             </ul>
             <ul class="navbar-nav ml-auto">
-                <li>
-                    <div class="dropdown">
-                        <a class="dropdown-toggle" href="#" data-toggle="dropdown">
-                            <i class="fa fa-bell"></i>
-                            <span class="badge badge-pill badge-danger">5</span>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right notification">
-                            <div class="noti-head">
-                                <h6 class="d-inline-block m-b-0">Notifications</h6>
-                                <div class="float-right">
-                                    <a href="#!" class="m-r-10">mark as read</a>
-                                    <a href="#!">clear all</a>
+                @if (string.IsNullOrEmpty(UserID))
+                {
+                    <li class="nav-item">
+                        <a href="@Url.Action("Login","Home")"><i class="fa fa-sign-in" aria-hidden="true"></i>&nbsp;Login</a>
+                    </li>
+                }
+                else
+                {
+                    <li>
+                        <div class="dropdown">
+                            <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+                                <i class="fa fa-bell"></i>
+                                <span class="badge badge-pill badge-danger">5</span>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right notification">
+                                <div class="noti-head">
+                                    <h6 class="d-inline-block m-b-0">Notifications</h6>
+                                    <div class="float-right">
+                                        <a href="#!" class="m-r-10">mark as read</a>
+                                        <a href="#!">clear all</a>
+                                    </div>
+                                </div>
+                                <ul class="noti-body">
+                                    <li class="n-title">
+                                        <p class="m-b-0">NEW</p>
+                                    </li>
+                                    <li class="notification">
+                                        <div class="media">
+                                            @*<img class="img-radius" src="assets/images/user/avatar-1.jpg" alt="Generic placeholder image">*@
+                                            <i class="fa fa-user"></i>
+                                            <div class="media-body">
+                                                <p><strong>John Doe</strong><span class="n-time text-muted"><i class="fa fa-user icon-clock m-r-10"></i>5 min</span></p>
+                                                <p>New ticket Added</p>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="n-title">
+                                        <p class="m-b-0">EARLIER</p>
+                                    </li>
+                                    <li class="notification">
+                                        <div class="media">
+                                            <img class="img-radius" src="assets/images/user/avatar-2.jpg" alt="Generic placeholder image">
+                                            <div class="media-body">
+                                                <p><strong>Joseph William</strong><span class="n-time text-muted"><i class="icon feather icon-clock m-r-10"></i>10 min</span></p>
+                                                <p>Prchace New Theme and make payment</p>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="notification">
+                                        <div class="media">
+                                            <img class="img-radius" src="assets/images/user/avatar-1.jpg" alt="Generic placeholder image">
+                                            <div class="media-body">
+                                                <p><strong>Sara Soudein</strong><span class="n-time text-muted"><i class="icon feather icon-clock m-r-10"></i>12 min</span></p>
+                                                <p>currently login</p>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="notification">
+                                        <div class="media">
+                                            <img class="img-radius" src="assets/images/user/avatar-2.jpg" alt="Generic placeholder image">
+                                            <div class="media-body">
+                                                <p><strong>Joseph William</strong><span class="n-time text-muted"><i class="icon feather icon-clock m-r-10"></i>30 min</span></p>
+                                                <p>Prchace New Theme and make payment</p>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                                <div class="noti-footer">
+                                    <a href="#!">show all</a>
                                 </div>
                             </div>
-                            <ul class="noti-body">
-                                <li class="n-title">
-                                    <p class="m-b-0">NEW</p>
-                                </li>
-                                <li class="notification">
-                                    <div class="media">
-                                        @*<img class="img-radius" src="assets/images/user/avatar-1.jpg" alt="Generic placeholder image">*@
-                                        <i class="fa fa-user"></i>
-                                        <div class="media-body">
-                                            <p><strong>John Doe</strong><span class="n-time text-muted"><i class="fa fa-user icon-clock m-r-10"></i>5 min</span></p>
-                                            <p>New ticket Added</p>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="n-title">
-                                    <p class="m-b-0">EARLIER</p>
-                                </li>
-                                <li class="notification">
-                                    <div class="media">
-                                        <img class="img-radius" src="assets/images/user/avatar-2.jpg" alt="Generic placeholder image">
-                                        <div class="media-body">
-                                            <p><strong>Joseph William</strong><span class="n-time text-muted"><i class="icon feather icon-clock m-r-10"></i>10 min</span></p>
-                                            <p>Prchace New Theme and make payment</p>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="notification">
-                                    <div class="media">
-                                        <img class="img-radius" src="assets/images/user/avatar-1.jpg" alt="Generic placeholder image">
-                                        <div class="media-body">
-                                            <p><strong>Sara Soudein</strong><span class="n-time text-muted"><i class="icon feather icon-clock m-r-10"></i>12 min</span></p>
-                                            <p>currently login</p>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="notification">
-                                    <div class="media">
-                                        <img class="img-radius" src="assets/images/user/avatar-2.jpg" alt="Generic placeholder image">
-                                        <div class="media-body">
-                                            <p><strong>Joseph William</strong><span class="n-time text-muted"><i class="icon feather icon-clock m-r-10"></i>30 min</span></p>
-                                            <p>Prchace New Theme and make payment</p>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
-                            <div class="noti-footer">
-                                <a href="#!">show all</a>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="dropdown drp-user">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="fa fa-user-circle"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right profile-notification">
+                                <div class="pro-head">
+                                    <img src="../Images/avatar.png" class="img-radius" alt="User-Profile-Image">
+                                    <span>@UserID</span>
+                                    <a href="@Url.Action("Login","Home")" class="dud-logout" title="Logout">
+                                        <i class="feather icon-log-out"></i>
+                                    </a>
+                                </div>
+                                <ul class="pro-body">
+                                    <li><a href="user-profile.html" class="dropdown-item"><i class="feather icon-user"></i> Profile</a></li>
+                                    <li><a href="email_inbox.html" class="dropdown-item"><i class="feather icon-mail"></i> My Messages</a></li>
+                                    <li><a href="auth-signin.html" class="dropdown-item"><i class="feather icon-lock"></i> Lock Screen</a></li>
+                                </ul>
                             </div>
                         </div>
-                    </div>
-                </li>
-                <li>
-                    <div class="dropdown drp-user">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <i class="fa fa-user-circle"></i>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right profile-notification">
-                            <div class="pro-head">
-                                <img src="assets/images/user/avatar-1.jpg" class="img-radius" alt="User-Profile-Image">
-                                <span>John Doe</span>
-                                <a href="auth-signin.html" class="dud-logout" title="Logout">
-                                    <i class="feather icon-log-out"></i>
-                                </a>
-                            </div>
-                            <ul class="pro-body">
-                                <li><a href="user-profile.html" class="dropdown-item"><i class="feather icon-user"></i> Profile</a></li>
-                                <li><a href="email_inbox.html" class="dropdown-item"><i class="feather icon-mail"></i> My Messages</a></li>
-                                <li><a href="auth-signin.html" class="dropdown-item"><i class="feather icon-lock"></i> Lock Screen</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </li>
+                    </li>
+                }
             </ul>
         </div>
     </header>
@@ -237,3 +256,11 @@
 <script src="~/Scripts/plugins/perfect-scrollbar.min.js"></script>
 <script src="~/Scripts/plugins/prism.js"></script>
 <script src="~/Scripts/plugins/horizontal-menu.js"></script>
+@*<script>
+        $(document).ready(function () {
+            var userID = '@UserID';
+            if (userID === "") {
+                window.location.href = '@Url.Action("Login", "Home")';
+            }
+        });
+    </script>*@

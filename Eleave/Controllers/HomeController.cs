@@ -1,8 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Data.SqlClient;
+using System.DirectoryServices;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
+using static Eleave.Models.ModelLogin;
 
 namespace Eleave.Controllers
 {
@@ -16,11 +22,143 @@ namespace Eleave.Controllers
         [HttpGet]
         public ActionResult Login()
         {
+            var model = new LoginUserModels();
+
             if (this.Session["UserType"] == null)
             {
                 this.Session["UserType"] = "";
             }
-            return View();
+            return View(model);
+        }
+        [HttpPost]
+        public ActionResult Login(LoginUserModels loginUser)
+        {
+            if (ModelState.IsValid)
+            {
+                this.Session["UserType"] = null;
+                this.Session["UserID"] = loginUser.User.Trim();
+                this.Session["UserPassword"] = loginUser.Password.Trim();
+                this.Session["SLMCOD"] = string.Empty;
+                string UserType = string.Empty;
+
+                var conntionString = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+                SqlConnection conn = new SqlConnection(conntionString);
+                try
+                {
+                    DirectoryEntry entry = new DirectoryEntry("LDAP://ADSRV2016-01/dc=Automotive,dc=com", loginUser.User, loginUser.Password);
+                    DirectorySearcher searcher = new DirectorySearcher(entry);
+                    searcher.Filter = "(SAMAccountName=" + loginUser.User.Trim() + ")";
+                    searcher.PropertiesToLoad.Add("cn");
+                    SearchResult result = searcher.FindOne();
+
+                    var userSearch = searcher.FindOne();
+                    DirectoryEntry directoryEntry = (DirectoryEntry)userSearch.GetDirectoryEntry();
+                    string DepartmentAd = directoryEntry.Properties["Department"].Value.ToString();
+
+                    conn.Open();
+                    if (result == null)
+                    {
+                        if (ModelState.IsValid)
+                        {
+                            FormsAuthentication.SetAuthCookie(loginUser.User.Trim(), false);
+                            return RedirectToAction("Index", "Home");
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("", "Login details are wrong 1.");
+                        }
+                    }
+                    else
+                    {//มีใน AD จะไม่เช็ค password UsrTbl
+                        string sqlString = "SELECT Usr.UsrTyp, Ad.Department, Ad.SLMCOD " +
+                            "FROM UsrTbl_Budget Usr " +
+                            "INNER JOIN v_ADUser Ad ON Ad.LogInName = Usr.UsrID " +
+                            "WHERE UsrID =N'" + loginUser.User.Trim() + "'" +
+                            "AND Usr.Password is null";
+                        SqlCommand cmd = new SqlCommand(sqlString, conn);
+                        SqlDataReader reader = cmd.ExecuteReader();
+                        //มีใน table
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+                                this.Session["UserType"] = reader["UsrTyp"].ToString();
+                                this.Session["Department"] = "";
+                                this.Session["SLMCOD"] = reader["SLMCOD"].ToString();
+                                UserType = Session["UserType"].ToString();
+                            }
+                        }
+                        else //ไม่มีใน table
+                        {
+                            //Default IT
+                            if (DepartmentAd == "MIS")
+                            {
+                                this.Session["UserType"] = 1;
+                                UserType = Session["UserType"].ToString();
+                            }
+                            else
+                            {
+                                ModelState.AddModelError("", "You don't have permission, Please contact admin");
+                            }
+                        }
+                        reader.Close();
+                        reader.Dispose();
+                        cmd.Dispose();
+                        FormsAuthentication.SetAuthCookie(loginUser.User.Trim(), false);
+                        if (UserType == "1" || UserType == "2")//admin pm
+                        {
+                            return RedirectToAction("Index", "Home");
+                        }
+                        else if (UserType == "3")//sale
+                        {
+                            return RedirectToAction("Index", "Home");
+                        }
+                        else if (UserType == "4") { return RedirectToAction("Index", "Home"); }
+                        ModelState.AddModelError("", "Login Details are wrong 2. " + "Type: " + UserType);
+                    }
+                }
+                catch //ไม่มีใน table
+                {
+                    conn.Open();
+                    string txtSql = "";
+                    txtSql = "SELECT Usr.UsrTyp, Ad.Department, ISNULL(Usr.SLMCOD ,Ad.SLMCOD) as SLMCOD " +
+                        "FROM UsrTbl_Budget Usr " +
+                        "LEFT JOIN v_ADUser Ad ON Ad.LogInName = Usr.UsrID " +
+                        "WHERE UsrID =N'" + loginUser.User.Trim() + "'and [dbo].F_decrypt([Password])='" + loginUser.Password.Trim() + "'";
+                    SqlCommand cmd = new SqlCommand(txtSql, conn);
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        this.Session["UserType"] = reader["UsrTyp"].ToString();
+                        this.Session["Department"] = "";
+                        this.Session["SLMCOD"] = reader["SLMCOD"].ToString();
+                    }
+                    reader.Close();
+                    reader.Dispose();
+                    cmd.Dispose();
+                    FormsAuthentication.SetAuthCookie(loginUser.User.Trim(), false);
+                    if (UserType == "1" || UserType == "2")
+                    {
+                        return RedirectToAction("Index", "Home");
+                    }
+                    else if (UserType == "3")
+                    {
+                        return RedirectToAction("Index", "Home");
+                    }
+                    else if (UserType == "4")
+                    {
+                        return RedirectToAction("Index", "Home");
+                    }
+                    ModelState.AddModelError("", "Login details are wrong 3.");
+                }
+                conn.Close();
+            }
+            return View(loginUser);
+        }
+        private bool TestLogin(string username, string password)
+        {
+            return (username == "testuser" && password == "password123");
+
         }
     }
 }

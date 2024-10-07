@@ -1,25 +1,49 @@
-﻿
+﻿@model Eleave.Models.ModelLogin.LoginUserModels
 @{
     ViewBag.Title = "Login E-Leave";
     Layout = "~/Views/Shared/_LayoutLogin.cshtml";
 }
 <img src="assets/images/logo.png" alt="" class="img-fluid mb-4">
+<h1 class="text-white font-weight-bold">E-Leave</h1>
 <div class="card borderless">
     <div class="row align-items-center ">
+
         <div class="col-md-12">
+
             <div class="card-body">
-                <h4 class="mb-3 f-w-400">Login</h4>
-                <hr>
-                <div class="form-group mb-3">
-                    <input type="text" class="form-control" id="Email" placeholder="Email address">
-                </div>
-                <div class="form-group mb-4">
-                    <input type="password" class="form-control" id="Password" placeholder="Password">
-                </div>
-                <button class="btn btn-block btn-primary mb-4">Signin</button>
-                <hr>
-                <p class="mb-2 text-muted">Forgot password? <a href="auth-reset-password.html" class="f-w-400">Reset</a></p>
+                @*<h4 class="mb-3 f-w-400">Login</h4>
+                    <hr>
+                    <div class="form-group mb-3">
+                        <input type="text" class="form-control" id="Email" placeholder="Email address">
+                    </div>
+                    <div class="form-group mb-4">
+                        <input type="password" class="form-control" id="Password" placeholder="Password">
+                    </div>
+                    <button class="btn btn-block btn-primary mb-4">Signin</button>
+                    <hr>
+                    <p class="mb-2 text-muted">Forgot password? <a href="auth-reset-password.html" class="f-w-400">Reset</a></p>*@
                 @*<p class="mb-0 text-muted">Don’t have an account? <a href="auth-signup.html" class="f-w-400">Signup</a></p>*@
+                @using (Html.BeginForm("Login", "Home", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    <img class="mb-2 rounded" src="../Images/Logo/logo_heager.jpg" />
+                    <h4 class="mb-3 f-w-400">Login</h4>
+                    <hr>
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <div class="form-group mb-3">
+                        @Html.EditorFor(model => model.User, new { htmlAttributes = new { @class = "form-control", @id = "Email", @placeholder = "Email" } })
+                        @Html.ValidationMessageFor(model => model.User, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group mb-4">
+                        @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", @id = "Password", @placeholder = "Password" } })
+                        @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                    </div>
+                    <button class="btn btn-block btn-primary mb-4">Signin</button>
+                    @*s<input type="submit" value="Login" class="btn btn-block btn-primary mb-4" />*@
+                    <hr>
+                    <p class="mb-2 text-muted">Forgot password? <a href="auth-reset-password.html" class="f-w-400">Reset</a></p>
+                    <hr>
+                }
             </div>
         </div>
     </div>
