@@ -149,8 +149,15 @@
     <Content Include="Content\bootstrap.rtl.css" />
     <Content Include="Content\bootstrap.rtl.min.css" />
     <Content Include="Content\font-awesome.min.css" />
+    <Content Include="fonts\fa-brands-400.svg" />
+    <Content Include="fonts\fa-regular-400.svg" />
+    <Content Include="fonts\fa-solid-900.svg" />
+    <Content Include="fonts\feather.svg" />
+    <Content Include="fonts\Flaticon.svg" />
+    <Content Include="fonts\pct.svg" />
     <Content Include="Images\avatar.png" />
     <Content Include="Images\Logo\logo_heager.jpg" />
+    <Content Include="Images\Logo\logo_tru.png" />
     <Content Include="Scripts\analytics.min.js" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
@@ -158,6 +165,59 @@
     <Content Include="Scripts\bootstrap.esm.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="fonts\fa-brands-400.eot" />
+    <Content Include="fonts\fa-brands-400.ttf" />
+    <Content Include="fonts\fa-brands-400.woff" />
+    <Content Include="fonts\fa-brands-400.woff2" />
+    <Content Include="fonts\fa-regular-400.eot" />
+    <Content Include="fonts\fa-regular-400.ttf" />
+    <Content Include="fonts\fa-regular-400.woff" />
+    <Content Include="fonts\fa-regular-400.woff2" />
+    <Content Include="fonts\fa-solid-900.eot" />
+    <Content Include="fonts\fa-solid-900.ttf" />
+    <Content Include="fonts\fa-solid-900.woff" />
+    <Content Include="fonts\fa-solid-900.woff2" />
+    <Content Include="fonts\feather.eot" />
+    <Content Include="fonts\feather.ttf" />
+    <Content Include="fonts\feather.woff" />
+    <Content Include="fonts\Flaticon.eot" />
+    <Content Include="fonts\Flaticon.ttf" />
+    <Content Include="fonts\Flaticon.woff" />
+    <Content Include="fonts\Flaticon.woff2" />
+    <Content Include="fonts\kanit\Kanit-Black.ttf" />
+    <Content Include="fonts\kanit\Kanit-BlackItalic.ttf" />
+    <Content Include="fonts\kanit\Kanit-Bold.ttf" />
+    <Content Include="fonts\kanit\Kanit-BoldItalic.ttf" />
+    <Content Include="fonts\kanit\Kanit-ExtraBold.ttf" />
+    <Content Include="fonts\kanit\Kanit-ExtraBoldItalic.ttf" />
+    <Content Include="fonts\kanit\Kanit-ExtraLight.ttf" />
+    <Content Include="fonts\kanit\Kanit-ExtraLightItalic.ttf" />
+    <Content Include="fonts\kanit\Kanit-Italic.ttf" />
+    <Content Include="fonts\kanit\Kanit-Light.ttf" />
+    <Content Include="fonts\kanit\Kanit-LightItalic.ttf" />
+    <Content Include="fonts\kanit\Kanit-Medium.ttf" />
+    <Content Include="fonts\kanit\Kanit-MediumItalic.ttf" />
+    <Content Include="fonts\kanit\Kanit-Regular.ttf" />
+    <Content Include="fonts\kanit\Kanit-SemiBold.ttf" />
+    <Content Include="fonts\kanit\Kanit-SemiBoldItalic.ttf" />
+    <Content Include="fonts\kanit\Kanit-Thin.ttf" />
+    <Content Include="fonts\kanit\Kanit-ThinItalic.ttf" />
+    <Content Include="fonts\opensans\mem5YaGs126MiZpBA-UNirkOUehpOqc.woff2" />
+    <Content Include="fonts\opensans\mem5YaGs126MiZpBA-UNirkOVuhpOqc.woff2" />
+    <Content Include="fonts\opensans\mem5YaGs126MiZpBA-UNirkOX-hpOqc.woff2" />
+    <Content Include="fonts\opensans\mem5YaGs126MiZpBA-UNirkOXehpOqc.woff2" />
+    <Content Include="fonts\opensans\mem5YaGs126MiZpBA-UNirkOXOhpOqc.woff2" />
+    <Content Include="fonts\opensans\mem5YaGs126MiZpBA-UNirkOXuhpOqc.woff2" />
+    <Content Include="fonts\opensans\mem8YaGs126MiZpBA-UFUZ0bbck.woff2" />
+    <Content Include="fonts\opensans\mem8YaGs126MiZpBA-UFVp0bbck.woff2" />
+    <Content Include="fonts\opensans\mem8YaGs126MiZpBA-UFVZ0b.woff2" />
+    <Content Include="fonts\opensans\mem8YaGs126MiZpBA-UFW50bbck.woff2" />
+    <Content Include="fonts\opensans\mem8YaGs126MiZpBA-UFWJ0bbck.woff2" />
+    <Content Include="fonts\opensans\mem8YaGs126MiZpBA-UFWp0bbck.woff2" />
+    <Content Include="fonts\opensans\mem8YaGs126MiZpBA-UFWZ0bbck.woff2" />
+    <Content Include="fonts\pct.eot" />
+    <Content Include="fonts\pct.ttf" />
+    <Content Include="fonts\pct.woff" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -194,6 +254,7 @@
     <Content Include="Content\bootstrap-grid.rtl.css.map" />
     <Content Include="Content\bootstrap-grid.min.css.map" />
     <Content Include="Content\bootstrap-grid.css.map" />
+    <Content Include="Scripts\LoadingOverlay.js" />
     <Content Include="Scripts\loadingoverlay.min.js" />
     <Content Include="Scripts\pcoded.js" />
     <Content Include="Scripts\plugins\apexcharts.min.js" />
@@ -229,7 +290,10 @@
     <Compile Include="Contact.aspx.designer.cs">
       <DependentUpon>Contact.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Controllers\EleaveController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LeaveController.cs" />
+    <Compile Include="Controllers\EmployeeController.cs" />
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -267,7 +331,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="fonts\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -278,6 +341,14 @@
     <Content Include="Views\Home\Login.cshtml" />
     <Content Include="Scripts\jquery-3.4.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.4.1.min.map" />
+    <Content Include="Views\Employee\ViewProfile.cshtml" />
+    <Content Include="Views\Leave\RequestForm.cshtml" />
+    <Content Include="Views\Shared\_LayoutAdmin.cshtml" />
+    <Content Include="Views\Shared\_LayoutMgr.cshtml" />
+    <Content Include="Views\Employee\ManagerEmployee.cshtml" />
+    <Content Include="Views\Employee\UpdateEmployee.cshtml" />
+    <Content Include="Views\Leave\ManagerHistory.cshtml" />
+    <Content Include="Views\Eleave\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -287,6 +358,20 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Eleave.Data\Eleave.Data.csproj">
+      <Project>{c09d8a87-445d-4675-a218-e88b97885d2c}</Project>
+      <Name>Eleave.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Eleave.Library\Eleave.Library.csproj">
+      <Project>{7bc035d7-4556-41d1-b390-d996e02d4222}</Project>
+      <Name>Eleave.Library</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Eleave.Models\Eleave.Models.csproj">
+      <Project>{5a2325bd-a6e1-4170-9e62-01514394b3ce}</Project>
+      <Name>Eleave.Models</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

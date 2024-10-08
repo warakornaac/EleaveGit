@@ -1,15 +1,27 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.8.34330.188
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.33328.57
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eleave", "Eleave\Eleave.csproj", "{CDE001FE-B69E-4649-B67A-2FC27CB2F6DC}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C09D8A87-445D-4675-A218-E88B97885D2C} = {C09D8A87-445D-4675-A218-E88B97885D2C}
+		{5A2325BD-A6E1-4170-9E62-01514394B3CE} = {5A2325BD-A6E1-4170-9E62-01514394B3CE}
+		{7BC035D7-4556-41D1-B390-D996E02D4222} = {7BC035D7-4556-41D1-B390-D996E02D4222}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eleave.Library", "Eleave.Library\Eleave.Library.csproj", "{7BC035D7-4556-41D1-B390-D996E02D4222}"
+	ProjectSection(ProjectDependencies) = postProject
+		{5A2325BD-A6E1-4170-9E62-01514394B3CE} = {5A2325BD-A6E1-4170-9E62-01514394B3CE}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eleave.Models", "Eleave.Models\Eleave.Models.csproj", "{5A2325BD-A6E1-4170-9E62-01514394B3CE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eleave.Data", "Eleave.Data\Eleave.Data.csproj", "{C09D8A87-445D-4675-A218-E88B97885D2C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{5A2325BD-A6E1-4170-9E62-01514394B3CE} = {5A2325BD-A6E1-4170-9E62-01514394B3CE}
+		{7BC035D7-4556-41D1-B390-D996E02D4222} = {7BC035D7-4556-41D1-B390-D996E02D4222}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

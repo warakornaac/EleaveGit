@@ -4,12 +4,11 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 
-namespace BudgetForecast.Library
+namespace Eleave.Library
 {
     public class SqlQuery
     {
-        // string connectionstring = Utils.GetConfig("MobileOrder_ConnectionString");
-        string connectionstring = Utils.GetConfig("Lip_ConnectionString");
+        string connectionstring = Utils.GetConfig("HRIS_DB");
 
         public DataTable GetSqlQuery(string sql, SqlParameters param)
         {

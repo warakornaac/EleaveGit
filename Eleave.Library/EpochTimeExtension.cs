@@ -2,7 +2,7 @@
 using System.Data.SqlTypes;
 using System.Globalization;
 
-namespace BudgetForecast.Library
+namespace Eleave.Library
 {
     public static class EpochTimeExtensions
     {

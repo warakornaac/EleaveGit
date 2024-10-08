@@ -1,0 +1,134 @@
+﻿@using Eleave.Models;
+@{
+    ViewBag.Title = "Profile";
+    var dataEmp = (StoreGetProfile)ViewBag.ProfileList;
+}
+<div class="page-header">
+    <div class="page-block">
+        <div class="row align-items-center">
+            <div class="col-md-12">
+                <div class="page-header-title">
+                    @*<h5 class="m-b-10">โปรไฟล์</h5>*@
+                </div>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index","Home")"><i class="feather icon-home"></i></a></li>
+                    <li class="breadcrumb-item"><a href="#!">โปรไฟล์</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-7 col-md-8">
+        <!-- ข้อมูลผู้ใช้งาน -->
+        <div class="card-container profile-container">
+            <h5 class="margin-top-15">ข้อมูลผู้ใช้งาน</h5>
+            <div class="card card-primary">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-4">
+                            <div class="form-group">
+                                <h5>รหัสพนักงาน</h5>
+                                <div> @dataEmp.EmpId </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6 col-sm-4">
+                            <div class="form-group">
+                                <h5>ชื่อ-สกุล</h5>
+                                <div> @dataEmp.Fullname  </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6 col-sm-4">
+                            <div class="form-group">
+                                <h5>บริษัท</h5>
+                                <div> @dataEmp.Company </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6 col-sm-4">
+                            <div class="form-group">
+                                <h5>หน่วยงาน</h5>
+                                <div> @dataEmp.DeptId </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6 col-sm-4">
+                            <div class="form-group">
+                                <h5>ตำแหน่ง</h5>
+                                <div> @dataEmp.Position </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6 col-sm-4">
+                            <div class="form-group">
+                                <h5>วันที่เริ่มงาน</h5>
+                                <div> @dataEmp.StartDate </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @*flat able*@
+        <div class="card">
+            <div class="card-header">
+                <h5>Basic Component</h5>
+            </div>
+            <div class="card-body">
+                <form>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="floating-label" for="Email">Email address</label>
+                                <input type="email" class="form-control" id="Email" aria-describedby="emailHelp" value="123">
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="floating-label" for="Text">Text</label>
+                                <input type="text" class="form-control" id="Text" placeholder="123">
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="floating-label" for="password">password</label>
+                                <input type="password" class="form-control" id="password" placeholder="">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+    <div class="col-sm-5 col-md-4">
+        @*Permission*@
+        <div class="card-container permission-container">
+            <h5>สิทธิ์การเข้าถึง</h5>
+            <div class="card card-primary">
+                <div class="card-body">
+                    เจ้าหน้าที่ Application, ผู้จัดการ
+                </div>
+            </div>
+        </div>
+
+        @*แจ้งงาน / ปัญหา
+            <div class="card-container pr-request-container">
+                <h3 class="">แจ้งงาน / ปัญหา</h3>
+                <div class="card card-primary card-pr-request">
+                     <div class="card-header with-border">
+                        <h3 class="card-title">Recently Added Products</h3>
+                        <div class="card-tools pull-right">
+                            <button type="button" class="btn btn-card-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                            <button type="button" class="btn btn-card-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        ไม่มีรายการ
+                    </div>
+
+                </div>
+            </div>*@
+
+    </div>
+</div>
+

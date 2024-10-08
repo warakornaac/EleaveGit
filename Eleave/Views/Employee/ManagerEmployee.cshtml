@@ -1,0 +1,102 @@
+﻿@using Eleave.Models;
+@{
+    ViewBag.Title = "จัดการผู้ใช้งาน";
+}
+@*bread*@
+<div class="page-header">
+    <div class="page-block">
+        <div class="row align-items-center">
+            <div class="col-md-12">
+                <div class="page-header-title">
+                    <h5 class="m-b-10">จัดการผู้ใช้งาน</h5>
+                </div>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home")"><i class="feather icon-home"></i></a></li>
+                    <li class="breadcrumb-item"><a href="@Url.Action("ManagerEmployee", "Employee")" ">จัดการผู้ใช้งาน</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+@*Modal*@
+@*viewEmployee*@
+<div class="modal" id="modalEmployeeDetail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-lg" role="document" style="max-width:900px;">
+        <div class="modal-content">
+            <div class="modal-header pb-2">
+                <div class="col-sm-10 col-md-10">
+                    <h4 class="modal-title" id="myModalLabel">ข้อมูลผู้ใช้งาน</h4>
+                </div>
+                <div class="col-sm-2 col-md-2 text-right"><button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">ปิด</button></div>
+            </div>
+            <div class="modal-body p-2">
+            </div>
+        </div>
+    </div>
+</div>
+
+@*table*@
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card card-danger">
+            @*<div class="card-header text-white bg-primary">
+                    <h5>จัดการผู้ใช้งาน</h5>
+                </div>*@
+            <div class="card-body m-0 p-0">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th class="text-center">รหัสพนักงาน</th>
+                                <th class="text-center">ชื่อ-สกุล</th>
+                                <th class="text-center">หน่วยงาน</th>
+                                <th class="text-center">ตำแหน่ง</th>
+                                <th class="text-center">ดำเนินการ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                int rowData = 0;
+                                foreach (var dataItem in (List<StoreGetProfile>)ViewBag.EmployeeList)
+                                {
+                                    ++rowData;
+                                    <tr>
+                                        <td>@rowData</td>
+                                        <td>@dataItem.EmpId</td>
+                                        <td>@dataItem.Fullname</td>
+                                        <td>@dataItem.DeptId</td>
+                                        <td>@dataItem.Position</td>
+                                        <td class="text-center p-1">
+                                            <div class="btn btn-info btn-xs" id="viewEmployeeDetail" title="แสดง"><span class="fa fa-eye"></span></div>
+                                            <a class="btn btn-warning btn-xs" href="../Employee/UpdateEmployee?EmpId=xxx" ,"Employee")" title="แก้ไข"><span class="fa fa-edit"></span></a>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script defer>
+    $(document).ready(function () {
+        $('#viewEmployeeDetail').on('click', function (e) {
+            e.preventDefault();
+            LoadingShow();
+            $('#modalEmployeeDetail').modal('show')
+                .find('.modal-body')
+                .html('<i class="fa fa-spinner fa-pulse fa-1x fa-fw"></i><span class="">กรุณารอสักครู่...</span>');
+
+            $('#modalEmployeeDetail .modal-body').html('//');
+            $('#modalEmployeeDetail').modal('show');
+
+            LoadingHide();
+            //$("#modalEmployeeDetail").on('shown.bs.modal', function () {
+            //    LoadingHide();
+            //});
+        });
+    });
+</script>

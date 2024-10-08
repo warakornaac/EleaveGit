@@ -50,7 +50,6 @@ namespace Eleave.Controllers
                     searcher.Filter = "(SAMAccountName=" + loginUser.User.Trim() + ")";
                     searcher.PropertiesToLoad.Add("cn");
                     SearchResult result = searcher.FindOne();
-
                     var userSearch = searcher.FindOne();
                     DirectoryEntry directoryEntry = (DirectoryEntry)userSearch.GetDirectoryEntry();
                     string DepartmentAd = directoryEntry.Properties["Department"].Value.ToString();
@@ -132,6 +131,7 @@ namespace Eleave.Controllers
                         this.Session["UserType"] = reader["UsrTyp"].ToString();
                         this.Session["Department"] = "";
                         this.Session["SLMCOD"] = reader["SLMCOD"].ToString();
+                        UserType = reader["UsrTyp"].ToString();
                     }
                     reader.Close();
                     reader.Dispose();
