@@ -1,0 +1,101 @@
+﻿@using Eleave.Models;
+@{
+    var dataEmp = (StoreGetProfile)ViewBag.ProfileList;
+}
+
+<style>
+    .card {
+        border-top-color: white;
+    }
+</style>
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-xs-6 col-sm-4">
+                <div class="form-group">
+                    <h5>รหัสพนักงาน</h5>
+                    <div> @dataEmp.EmpId </div>
+                </div>
+            </div>
+            <div class="col-xs-6 col-sm-4">
+                <div class="form-group">
+                    <h5>ชื่อ-สกุล</h5>
+                    <div> @dataEmp.Fullname  </div>
+                </div>
+            </div>
+            <div class="col-xs-6 col-sm-4">
+                <div class="form-group">
+                    <h5>บริษัท</h5>
+                    <div> @dataEmp.Company </div>
+                </div>
+            </div>
+
+            <div class="col-xs-6 col-sm-4">
+                <div class="form-group">
+                    <h5>หน่วยงาน</h5>
+                    <div> @dataEmp.DeptId </div>
+                </div>
+            </div>
+            <div class="col-xs-6 col-sm-4">
+                <div class="form-group">
+                    <h5>ตำแหน่ง</h5>
+                    <div> @dataEmp.Position </div>
+                </div>
+            </div>
+            <div class="col-xs-6 col-sm-4">
+                <div class="form-group">
+                    <h5>หัวหน้างาน</h5>
+                    <div> @dataEmp.Position </div>
+                </div>
+            </div>
+
+
+        </div>
+        <div class="row">
+            <div class="col-xs-6 col-sm-4">
+                <div class="form-group">
+                    <h5>ระดับพนักงาน</h5>
+                    <div> @dataEmp.DeptId </div>
+                </div>
+            </div>
+            <div class="col-xs-6 col-sm-4">
+                <div class="form-group">
+                    <h5>ประเภทพนักงาน</h5>
+                    <div> @dataEmp.DeptId </div>
+                </div>
+            </div>
+            <div class="col-xs-6 col-sm-4">
+                <div class="form-group">
+                    <h5>รหัสกลุ่มอนุมัติ</h5>
+                    <div> @dataEmp.DeptId </div>
+                </div>
+            </div>
+            <div class="col-xs-6 col-sm-4">
+                <div class="form-group">
+                    <h5>วันที่เริ่มงาน</h5>
+                    <div> @dataEmp.StartDate </div>
+                </div>
+            </div>
+            <div class="col-xs-6 col-sm-4">
+                <div class="form-group">
+                    <h5>อายุงาน</h5>
+                    <div> @dataEmp.StartDate </div>
+                </div>
+            </div>
+            <div class="col-xs-6 col-sm-4">
+                <div class="form-group">
+                    <h5>สถานะพนักนักงาน</h5>
+                    @if (dataEmp.EmpStatus == "1")
+                    {
+                        <div class="text-success"><i class="fa fa-check-circle-o" aria-hidden="true"></i><span>Active</span></div>
+                    }
+                    else
+                    {
+                        <div class="text-danger"><i class="fa fa-times-circle-o" aria-hidden="true"></i><span>Inactive</span></div>
+                    }
+                    @*<div> @dataEmp.StartDate </div>*@
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

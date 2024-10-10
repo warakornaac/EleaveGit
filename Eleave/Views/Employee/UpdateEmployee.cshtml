@@ -1,7 +1,157 @@
-﻿
+﻿@model Eleave.Models.StoreUpdateEmployeeProfile
 @{
-    ViewBag.Title = "UpdateEmployee";
+    ViewBag.Title = "แก้ไขข้อมูลพนักงาน";
 }
 
-<h2>UpdateEmployee</h2>
+@*bread*@
+<div class="page-header">
+    <div class="page-block">
+        <div class="row align-items-center">
+            <div class="col-md-12">
+                <div class="page-header-title">
+                    <h5 class="m-b-10">แก้ไขข้อมูลผู้ใช้งาน</h5>
+                </div>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home")"><i class="feather icon-home"></i></a></li>
+                    <li class="breadcrumb-item"><a href="@Url.Action("UpdateEmployee", "Employee")">แก้ไขข้อมูลผู้ใช้งาน</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-xl-12 col-md-12">
+    <div class="card table-card">
+        <div class="card-header">
+            <h5>แก้ไขข้อมูลพนักงาน</h5>
+
+        </div>
+        <div class="card-body p-3 d-flex justify-content-center">
+            @using (Html.BeginForm("UpdateEmployee", "Employee", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                <div class="row">
+                    <div class="col-md-6 col-lg-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.EmpId, "รหัสพนักงาน")
+                            @Html.TextBoxFor(model => model.EmpId, new { @class = "form-control", @readonly = "readonly" })
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Company, "บริษัท")
+                            @Html.DropDownListFor(model => model.Company, new List<SelectListItem>
+                                               {
+                                                    new SelectListItem() {Text="AAC", Value="AAC"},
+                                                    new SelectListItem() {Text="TAC", Value="TAC"},
+                                                    new SelectListItem(){Text="OMP",Value="OMP"}
+                                               }, "เลือกบริษัท", new { @class = "custom-select" })
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-lg-4">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.TitleName, "คำนำหน้า")
+                            @Html.DropDownListFor(model => model.TitleName, new List<SelectListItem>
+                                                {
+                                                    new SelectListItem() {Text="นาย", Value="นาย"},
+                                                    new SelectListItem() {Text="นาง", Value="นาง"},
+                                                    new SelectListItem(){Text="นางสาว",Value="นางสาว"}
+                                                }, "เลือกคำนำหน้า", new { @class = "custom-select" })
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-lg-4">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.FirstName, "ชื่อ")
+                            @Html.TextBoxFor(model => model.FirstName, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-lg-4">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.LastName, "นามสกุล")
+                            @Html.TextBoxFor(model => model.LastName, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-lg-4">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.DeptId, "หน่วยงาน")
+                            @*@Html.TextBoxFor(model => model.DeptId, new { @class = "form-control" })*@
+                            @Html.DropDownListFor(model => model.DeptId, new SelectList(ViewBag.DepartmentList, "DeptId", "DeptName"), "เลือกหน่อยงาน", new { @class = "custom-select" })
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-lg-4">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Position, "ตำแหน่ง")
+                            @Html.TextBoxFor(model => model.Position, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-lg-4">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.DirectorId, "หัวหน้างาน")
+                            @Html.TextBoxFor(model => model.DirectorId, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-lg-4">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.EmpLvl, "ระดับพนักงาน")
+                            @Html.TextBoxFor(model => model.EmpLvl, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-lg-4">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.EmpTypeId, "ประเภทพนักงาน")
+                            @Html.TextBoxFor(model => model.EmpTypeId, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-lg-4">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.EmpStatus, "สถานะพนักนักงาน")
+                            @Html.DropDownListFor(model => model.EmpStatus, new List<SelectListItem>
+                                                                           {
+                                                                                new SelectListItem() {Text="Active", Value="1"},
+                                                                                new SelectListItem(){Text="Inactive",Value="0"}
+                                                                           }, new { @class = "custom-select", id = "empStatusDropdown" })
+                        </div>
+                    </div>
+
+                </div>
+                <input type="submit" value="บันทึก" class="btn btn-success float-end" />
+            }
+        </div>
+    </div>
+</div>
+<script>
+    const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+        }
+    });
+
+    $(document).ready(function () {
+        @if (ViewBag.UpdateStatus == "Success") {
+            <text>
+                Swal.fire({
+                    icon: 'success',
+                title: 'Success!',
+                    text: 'อัพเดตข้อมูลพนักงานสำเร็จ',
+                confirmButtonText: 'ตกลง'
+                });
+            </text>
+        }
+        else if (ViewBag.UpdateStatus == "Error"){
+            <text>
+                Toast.fire({
+                    icon: "error",
+                    title: "อัพเดตข้อมูลพนักงานไม่สำเร็จ"
+                });
+            </text>
+        }
+    });
+</script>
 

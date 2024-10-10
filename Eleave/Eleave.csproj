@@ -264,6 +264,7 @@
     <Content Include="Scripts\plugins\jquery-ui.min.js" />
     <Content Include="Scripts\plugins\perfect-scrollbar.min.js" />
     <Content Include="Scripts\plugins\prism.js" />
+    <Content Include="Scripts\scriptEmployee.js" />
     <Content Include="Scripts\uikit.min.js" />
     <Content Include="Scripts\vendor-all.min.js" />
     <Content Include="Site.Master" />
@@ -349,6 +350,7 @@
     <Content Include="Views\Employee\UpdateEmployee.cshtml" />
     <Content Include="Views\Leave\ManagerHistory.cshtml" />
     <Content Include="Views\Eleave\Index.cshtml" />
+    <Content Include="Views\Employee\_DetailEmployee.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

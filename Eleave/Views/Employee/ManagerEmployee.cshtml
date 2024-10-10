@@ -30,6 +30,7 @@
                 <div class="col-sm-2 col-md-2 text-right"><button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">ปิด</button></div>
             </div>
             <div class="modal-body p-2">
+                <div id="detailEmployee"></div>
             </div>
         </div>
     </div>
@@ -68,8 +69,8 @@
                                         <td>@dataItem.DeptId</td>
                                         <td>@dataItem.Position</td>
                                         <td class="text-center p-1">
-                                            <div class="btn btn-info btn-xs" id="viewEmployeeDetail" title="แสดง"><span class="fa fa-eye"></span></div>
-                                            <a class="btn btn-warning btn-xs" href="../Employee/UpdateEmployee?EmpId=xxx" ,"Employee")" title="แก้ไข"><span class="fa fa-edit"></span></a>
+                                            <div class="btn btn-info btn-xs" id="viewEmployeeDetail-@dataItem.EmpId" title="แสดง" data-emp="@dataItem.EmpId"><span class="fa fa-eye"></span></div>
+                                            <a class="btn btn-warning btn-xs" href="@Url.Action("UpdateEmployee", "Employee", new { EmpId = dataItem.EmpId })" ,"Employee")" title="แก้ไข"><span class="fa fa-edit"></span></a>
                                         </td>
                                     </tr>
                                 }
@@ -81,22 +82,15 @@
         </div>
     </div>
 </div>
+<script src="@Url.Content("~/Scripts/scriptEmployee.js")"></script>
 <script defer>
+    var getDetailEmployeeURL = '@Url.Action("DetailEmployee", "Employee")';
     $(document).ready(function () {
-        $('#viewEmployeeDetail').on('click', function (e) {
+        $('[id^="viewEmployeeDetail-"]').on('click', function (e) {
             e.preventDefault();
-            LoadingShow();
-            $('#modalEmployeeDetail').modal('show')
-                .find('.modal-body')
-                .html('<i class="fa fa-spinner fa-pulse fa-1x fa-fw"></i><span class="">กรุณารอสักครู่...</span>');
+            var empID = $(this).data('emp');
+            getDetailEmployee(empID);
 
-            $('#modalEmployeeDetail .modal-body').html('//');
-            $('#modalEmployeeDetail').modal('show');
-
-            LoadingHide();
-            //$("#modalEmployeeDetail").on('shown.bs.modal', function () {
-            //    LoadingHide();
-            //});
         });
     });
 </script>

@@ -5,9 +5,10 @@ using System.Web;
 
 namespace Eleave.Models
 {
-    public class TestLeave
+    public class Department
     {
-        public string Name { get; set; }
+        public string DeptId { get; set; }
+        public string DeptName { get; set; }
     }
 
 }

@@ -23,7 +23,10 @@
     <div class="col-sm-7 col-md-8">
         <!-- ข้อมูลผู้ใช้งาน -->
         <div class="card-container profile-container">
-            <h5 class="margin-top-15">ข้อมูลผู้ใช้งาน</h5>
+            <div class="d-flex align-items-center justify-content-between">
+                <h5 class="m-0">ข้อมูลผู้ใช้งาน</h5>
+                <button class="btn btn-warning" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">ตั้งรหัสผ่านใหม่</button>
+            </div>
             <div class="card card-primary">
                 <div class="card-body">
                     <div class="row">
@@ -59,9 +62,42 @@
                         </div>
                         <div class="col-xs-6 col-sm-4">
                             <div class="form-group">
-                                <h5>วันที่เริ่มงาน</h5>
-                                <div> @dataEmp.StartDate </div>
+                                <h5>หัวหน้างาน</h5>
+                                <div> @dataEmp.DirectorId </div>
                             </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-4">
+                            <h5>ระดับพนักงาน</h5>
+                            <div>@dataEmp.EmpLvl</div>
+                        </div>
+                        <div class="col-xs-6 col-sm-4">
+                            <h5>ประเภทพนักงาน</h5>
+                            <div>@dataEmp.EmpTypeId</div>
+                        </div>
+                        <div class="col-xs-6 col-sm-4">
+                            <h5>รหัสกลุ่มอนุมัติ</h5>
+                            <div>@dataEmp.ApprGrpID</div>
+                        </div>
+                        <div class="col-xs-6 col-sm-4">
+                            <h5>วันที่เริ่มงาน</h5>
+                            <div>@dataEmp.StartDate</div>
+                        </div>
+                        <div class="col-xs-6 col-sm-4">
+                            <h5>อายุงาน</h5>
+                            <div>@dataEmp.StartDate</div>
+                        </div>
+                        <div class="col-xs-6 col-sm-4">
+                            <h5>สถานะพนักนักงาน</h5>
+                            @if (dataEmp.EmpStatus == "1")
+                            {
+                                <div class="text-success"><i class="fa fa-check-circle-o" aria-hidden="true"></i><span>Active</span></div>
+                            }
+                            else
+                            {
+                                <div class="text-danger"><i class="fa fa-times-circle-o" aria-hidden="true"></i><span>Inactive</span></div>
+                            }
                         </div>
                     </div>
                 </div>
@@ -131,4 +167,22 @@
 
     </div>
 </div>
+<div class="modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Modal body text goes here.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 

@@ -2306,6 +2306,22 @@ pre {
     transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 
+.form-select {
+    display: block;
+    width: 100%;
+    height: calc(1.5em + 1.25rem + 4px);
+    padding: 0.625rem 1.1875rem;
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 2px solid rgba(0, 0, 0, 0.15);
+    border-radius: 0;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
 @media (prefers-reduced-motion: reduce) {
     .form-control {
         transition: none;
@@ -20951,10 +20967,10 @@ pre[class*=language-]:before {
                     justify-content: center;
                 }
 
-                .pcoded-navbar .pcoded-inner-navbar li > a > .pcoded-micon + .pcoded-mtext {
-                    position: relative;
-                    top: 0;
-                }
+                    .pcoded-navbar .pcoded-inner-navbar li > a > .pcoded-micon + .pcoded-mtext {
+                        position: relative;
+                        top: 0;
+                    }
 
             .pcoded-navbar .pcoded-inner-navbar li.pcoded-hasmenu > a:after {
                 content: "\e844";
