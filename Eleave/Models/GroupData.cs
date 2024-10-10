@@ -10,5 +10,4 @@ namespace Eleave.Models
         public string DeptId { get; set; }
         public string DeptName { get; set; }
     }
-
 }

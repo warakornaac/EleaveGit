@@ -231,7 +231,8 @@
                             </div>
                             <ul class="pro-body">
                                 <li><a href="@Url.Action("ViewProfile","Employee")" class="dropdown-item"><i class="feather icon-user"></i> โปรไฟล์</a></li>
-                                <li><a href="auth-signin.html" class="dropdown-item"><i class="feather icon-log-out"></i> ออกจากระบบ</a></li>
+                                <li><a href="@Url.Action("Logout","Home")" class="dropdown-item"><i class="feather icon-log-out"></i> ออกจากระบบ</a></li>
+
                             </ul>
                         </div>
                     </div>
@@ -239,6 +240,7 @@
                 @* } *@
             </ul>
         </div>
+
     </header>
     <!-- [ Header ] end -->
 

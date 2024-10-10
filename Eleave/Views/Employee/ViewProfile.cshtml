@@ -3,6 +3,75 @@
     ViewBag.Title = "Profile";
     var dataEmp = (StoreGetProfile)ViewBag.ProfileList;
 }
+<style>
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 120px;
+        height: 34px;
+    }
+
+        .switch input {
+            display: none;
+        }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #e74c3c;
+        -webkit-transition: .4s;
+        transition: .4s;
+        border-radius: 34px;
+    }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+    input:checked + .slider {
+        background-color: #2ecc71;
+    }
+
+    input:focus + .slider {
+        box-shadow: 0 0 1px #2196F3;
+    }
+
+    input:checked + .slider:before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(85px);
+    }
+
+    /*------ ADDED CSS ---------*/
+    .slider:after {
+        content: 'Inactive';
+        color: white;
+        display: block;
+        position: absolute;
+        transform: translate(-50%,-50%);
+        top: 50%;
+        left: 50%;
+        font-size: 10px;
+        font-family: Verdana, sans-serif;
+    }
+
+    input:checked + .slider:after {
+        content: 'Active';
+    }
+</style>
 <div class="page-header">
     <div class="page-block">
         <div class="row align-items-center">
@@ -25,7 +94,7 @@
         <div class="card-container profile-container">
             <div class="d-flex align-items-center justify-content-between">
                 <h5 class="m-0">ข้อมูลผู้ใช้งาน</h5>
-                <button class="btn btn-warning" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">ตั้งรหัสผ่านใหม่</button>
+                @*<button class="btn btn-warning" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">ตั้งรหัสผ่านใหม่</button>*@
             </div>
             <div class="card card-primary">
                 <div class="card-body">
@@ -92,11 +161,17 @@
                             <h5>สถานะพนักนักงาน</h5>
                             @if (dataEmp.EmpStatus == "1")
                             {
-                                <div class="text-success"><i class="fa fa-check-circle-o" aria-hidden="true"></i><span>Active</span></div>
+                                <label class="switch">
+                                    <input type="checkbox" checked disabled>
+                                    <span class="slider font-weight-bold"></span>
+                                </label>
                             }
                             else
                             {
-                                <div class="text-danger"><i class="fa fa-times-circle-o" aria-hidden="true"></i><span>Inactive</span></div>
+                                <label class="switch">
+                                    <input type="checkbox" disabled>
+                                    <span class="slider font-weight-bold"></span>
+                                </label>
                             }
                         </div>
                     </div>
