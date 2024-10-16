@@ -2,7 +2,83 @@
 @{
     ViewBag.Title = "แก้ไขข้อมูลพนักงาน";
 }
+<style>
+    /* ปรับ dropdown ที่มีการใช้ select2 */
+    .select2-container .select2-selection--single {
+        display: inline-block;
+        width: 100%;
+        height: calc(1.5em + 1.25rem + 4px);
+        padding: 0.625rem 2.1875rem 0.625rem 1.1875rem;
+        font-size: 0.875rem;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #495057;
+        vertical-align: middle;
+        background: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3e%3cpath fill='%23343a40' d='M2 0L0 2h4zm0 5L0 3h4z'/%3e%3c/svg%3e") no-repeat right 1.1875rem center/8px 10px;
+        background-color: #fff;
+        border: 2px solid rgba(0, 0, 0, 0.15);
+        border-radius: 2px;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        cursor: default;
+    }
 
+    .select2-container--default.select2-container--open .select2-selection--single {
+        border-color: #1abc9c;
+        outline: 0;
+        box-shadow: 0 0 0 0rem rgba(26, 188, 156, 0.25);
+    }
+
+    .select2-container--default .select2-results__option--highlighted.select2-results__option--selectable {
+        background-color: #1abc9c;
+        color: white
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+        color: #444;
+    }
+
+    .select2-container .select2-selection--single .select2-selection__rendered {
+        padding-left: 0;
+    }
+
+    .select2-container .select2-selection--single:focus {
+        border-color: #1abc9c;
+        outline: 0;
+        box-shadow: 0 0 0 0rem rgba(26, 188, 156, 0.25);
+    }
+
+    .select2-container:focus {
+        border-color: #1abc9c;
+        outline: 0;
+        box-shadow: 0 0 0 0rem rgba(26, 188, 156, 0.25);
+    }
+
+    .select2-selection__arrow {
+        display: none;
+    }
+
+    .select2-results__option select2-results__option--selectable .select2-results__option--selected .select2-results__option--highlighted {
+        background-color: #1abc9c;
+    }
+
+    .select2-selection__rendered {
+        line-height: 1.5rem !important; /* ปรับค่าให้ตรงกับขนาดความสูงของ select */
+    }
+
+    .select2-container--classic .select2-search--dropdown .select2-search__field {
+        border-color: #1abc9c;
+        outline: 0;
+        box-shadow: 0 0 0 0rem rgba(26, 188, 156, 0.25);
+    }
+
+    .select2-container--default.select2-container--open .select2-selection--single .select2-selection__arrow b {
+        border-color: #1abc9c;
+        outline: 0;
+        box-shadow: 0 0 0 0rem rgba(26, 188, 156, 0.25);
+    }
+</style>
 @*bread*@
 <div class="page-header">
     <div class="page-block">
@@ -76,7 +152,7 @@
                         <div class="form-group">
                             @Html.LabelFor(model => model.DeptId, "หน่วยงาน")
                             @*@Html.TextBoxFor(model => model.DeptId, new { @class = "form-control" })*@
-                            @Html.DropDownListFor(model => model.DeptId, new SelectList(ViewBag.DepartmentList, "DeptId", "DeptName"), "เลือกหน่อยงาน", new { @class = "custom-select" })
+                            @Html.DropDownListFor(model => model.DeptId, new SelectList(ViewBag.DepartmentList, "DeptId", "DeptName"), "เลือกหน่อยงาน", new { @class = "custom-select", @id = "department-selector" })
                         </div>
                     </div>
                     <div class="col-md-4 col-lg-4">
@@ -94,13 +170,23 @@
                     <div class="col-md-4 col-lg-4">
                         <div class="form-group">
                             @Html.LabelFor(model => model.EmpLvl, "ระดับพนักงาน")
-                            @Html.TextBoxFor(model => model.EmpLvl, new { @class = "form-control" })
+                            @Html.DropDownListFor(model => model.EmpLvl, new List<SelectListItem>
+                                                {
+                                                    new SelectListItem() {Text="User", Value="Usr"},
+                                                    new SelectListItem() {Text="Admin", Value="Ad"},
+                                                    new SelectListItem(){Text="Super",Value="Su"}
+                                                }, "เลือกระดับพนักงาน", new { @class = "custom-select" })
                         </div>
                     </div>
                     <div class="col-md-4 col-lg-4">
                         <div class="form-group">
                             @Html.LabelFor(model => model.EmpTypeId, "ประเภทพนักงาน")
-                            @Html.TextBoxFor(model => model.EmpTypeId, new { @class = "form-control" })
+                            @Html.DropDownListFor(model => model.EmpTypeId, new List<SelectListItem>
+                                                            {
+                                                                new SelectListItem() {Text="User", Value="Usr"},
+                                                                new SelectListItem() {Text="Admin", Value="Ad"},
+                                                                new SelectListItem(){Text="Super",Value="Su"}
+                                                            }, "เลือกประเภทพนักงาน", new { @class = "custom-select" })
                         </div>
                     </div>
                     <div class="col-md-4 col-lg-4">
@@ -110,7 +196,7 @@
                                                                            {
                                                                                 new SelectListItem() {Text="Active", Value="1"},
                                                                                 new SelectListItem(){Text="Inactive",Value="0"}
-                                                                           }, new { @class = "custom-select", id = "empStatusDropdown" })
+                                                                           }, new { @class = "custom-select", @id = "empStatusDropdown" })
                         </div>
                     </div>
 
@@ -121,37 +207,10 @@
     </div>
 </div>
 <script>
-    const Toast = Swal.mixin({
-        toast: true,
-        position: "top-end",
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-        didOpen: (toast) => {
-            toast.onmouseenter = Swal.stopTimer;
-            toast.onmouseleave = Swal.resumeTimer;
-        }
+
+    $('#department-selector').select2({
+        width: '100%'
     });
 
-    $(document).ready(function () {
-        @if (ViewBag.UpdateStatus == "Success") {
-            <text>
-                Swal.fire({
-                    icon: 'success',
-                title: 'Success!',
-                    text: 'อัพเดตข้อมูลพนักงานสำเร็จ',
-                confirmButtonText: 'ตกลง'
-                });
-            </text>
-        }
-        else if (ViewBag.UpdateStatus == "Error"){
-            <text>
-                Toast.fire({
-                    icon: "error",
-                    title: "อัพเดตข้อมูลพนักงานไม่สำเร็จ"
-                });
-            </text>
-        }
-    });
 </script>
 

@@ -9,6 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title</title>
     @Styles.Render("~/Content/css")
+    <script src="~/Scripts/jquery-3.4.1.js"></script>
     @*@Scripts.Render("~/bundles/modernizr")*@
 
     <link href="~/Content/style-flat.css" rel="stylesheet" />
@@ -17,7 +18,19 @@
     <link href="~/Content/plugins/prism-coy.css" rel="stylesheet" />
     <link href="~/Content/plugins/perfect-scrollbar.css" rel="stylesheet" />
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
-    <script src="~/Scripts/jquery-3.4.1.js"></script>
+    <!-- SweetAlert CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link href="~/Content/plugins/datatables.min.css" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/plugins/select2.min.css")" rel="stylesheet" />
+    <script src="@Url.Content("~/Scripts/plugins/select2.min.js")"></script>
+
+    <link href="~/Content/plugins/bootstrap-datepicker.min.css" rel="stylesheet" />
+    <script src="~/Scripts/plugins/bootstrap-datepicker.min.js"></script>
+    @*<script src="~/Scripts/plugins/jquery-ui.min.js"></script>*@
+
+
+
 
     <style>
         footer {
@@ -259,11 +272,9 @@
     @RenderSection("Scripts", required: false)
 </body>
 </html>
-<!-- SweetAlert CSS -->
-<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
 
 <!-- SweetAlert JS -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
 <script src="~/Scripts/vendor-all.min.js"></script>
 <script src="~/Scripts/plugins/bootstrap.min.js"></script>
@@ -271,11 +282,11 @@
 @*<script src="~/Scripts/plugins/apexcharts.min.js"></script>*@
 @*<script src="~/Scripts/uikit.min.js"></script>
     <script src="~/Scripts/analytics.min.js"></script>*@
-
-<script src="~/Scripts/plugins/jquery-ui.min.js"></script>
+<script src="~/Scripts/plugins/datatables.min.js"></script>
 <script src="~/Scripts/plugins/gmaps.min.js"></script>
 <script src="~/Scripts/plugins/perfect-scrollbar.min.js"></script>
 <script src="~/Scripts/plugins/prism.js"></script>
+
 @*<script src="~/Scripts/plugins/horizontal-menu.js"></script>*@
 <script src="~/Scripts/LoadingOverlay.js"></script>
 

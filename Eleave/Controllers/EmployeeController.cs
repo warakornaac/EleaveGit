@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
 using Eleave.Data;
@@ -17,12 +18,45 @@ namespace Eleave.Controllers
         {
             var GetEmployee = new List<StoreGetProfile>();
             GetEmployee = new SearchEmployee().GetStoreSearchEmployee();
+
             ViewBag.EmployeeList = GetEmployee;
-            return View("ManagerEmployee", new
-            {
-                @ViewBag.EmployeeList
-            });
+            LoadDepartments();
+            return View();
+
+            //return RedirectToAction("ManagerEmployee", new
+            //{
+            //    @ViewBag.EmployeeList,
+            //    @ViewBag.DepartmentList,
+            //});
         }
+        [HttpPost]
+        public ActionResult SearchUser(int? EmpId, string Department, string Name, string Level)
+        {
+            var GetEmployee = new List<StoreGetProfile>();
+            GetEmployee = new SearchEmployee().GetStoreSearchEmployee();
+            if (EmpId.HasValue)
+            {
+                GetEmployee = GetEmployee.Where(emp => emp.EmpId.ToString().Contains(EmpId.ToString())).ToList();
+            }
+            if (!string.IsNullOrEmpty(Department))
+            {
+                GetEmployee = GetEmployee.Where(emp => emp.DeptId.ToString().ToTrim() == Department).ToList();
+            }
+            if (!string.IsNullOrEmpty(Name))
+            {
+                GetEmployee = GetEmployee.Where(emp => emp.Fullname.Contains(Name.Trim())).ToList();
+            }
+
+            if (!string.IsNullOrEmpty(Level))
+            {
+                GetEmployee = GetEmployee.Where(emp => emp.EmpLvl.Contains(Level.Trim())).ToList();
+            }
+            ViewBag.EmployeeList = GetEmployee;
+            LoadDepartments();
+
+            return View("ManagerEmployee");
+        }
+
         public ActionResult ViewProfile()
         {
             string EmpId = string.Empty;
@@ -92,7 +126,7 @@ namespace Eleave.Controllers
         }
         private void LoadDepartments()
         {
-            List<Department> departments = new List<Department>();
+            List<SelectListItem> departmentList = new List<SelectListItem>();
             var connectionString = ConfigurationManager.ConnectionStrings["HRIS_DB"].ConnectionString;
             SqlConnection conn = new SqlConnection(connectionString);
             conn.Open();
@@ -100,17 +134,17 @@ namespace Eleave.Controllers
             SqlDataReader reader_dept = cmd.ExecuteReader();
             while (reader_dept.Read())
             {
-                departments.Add(new Department
+                departmentList.Add(new SelectListItem
                 {
-                    DeptId = reader_dept["DeptId"].ToString(),
-                    DeptName = reader_dept["DeptName"].ToString()
+                    Value = reader_dept["DeptName"].ToString(),
+                    Text = reader_dept["DeptName"].ToString()
                 });
             }
             reader_dept.Close();
             reader_dept.Dispose();
             cmd.Dispose();
             conn.Close();
-            ViewBag.DepartmentList = departments;
+            ViewBag.DepartmentList = departmentList;
         }
     }
 }
