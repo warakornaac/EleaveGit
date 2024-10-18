@@ -149,6 +149,11 @@
     <Content Include="Content\bootstrap.rtl.css" />
     <Content Include="Content\bootstrap.rtl.min.css" />
     <Content Include="Content\font-awesome.min.css" />
+    <Content Include="Content\plugins\bootstrap-datepicker.min.css" />
+    <Content Include="Content\plugins\datatables.css" />
+    <Content Include="Content\plugins\datatables.min.css" />
+    <Content Include="Content\plugins\select2.css" />
+    <Content Include="Content\plugins\select2.min.css" />
     <Content Include="fonts\fa-brands-400.svg" />
     <Content Include="fonts\fa-regular-400.svg" />
     <Content Include="fonts\fa-solid-900.svg" />
@@ -258,12 +263,20 @@
     <Content Include="Scripts\loadingoverlay.min.js" />
     <Content Include="Scripts\pcoded.js" />
     <Content Include="Scripts\plugins\apexcharts.min.js" />
+    <Content Include="Scripts\plugins\bootstrap-datepicker.min.js" />
     <Content Include="Scripts\plugins\bootstrap.min.js" />
+    <Content Include="Scripts\plugins\datatables.js" />
+    <Content Include="Scripts\plugins\datatables.min.js" />
     <Content Include="Scripts\plugins\gmaps.min.js" />
     <Content Include="Scripts\plugins\horizontal-menu.js" />
     <Content Include="Scripts\plugins\jquery-ui.min.js" />
     <Content Include="Scripts\plugins\perfect-scrollbar.min.js" />
     <Content Include="Scripts\plugins\prism.js" />
+    <Content Include="Scripts\plugins\select2.full.js" />
+    <Content Include="Scripts\plugins\select2.full.min.js" />
+    <Content Include="Scripts\plugins\select2.js" />
+    <Content Include="Scripts\plugins\select2.min.js" />
+    <Content Include="Scripts\scriptEmployee.js" />
     <Content Include="Scripts\uikit.min.js" />
     <Content Include="Scripts\vendor-all.min.js" />
     <Content Include="Site.Master" />
@@ -349,6 +362,7 @@
     <Content Include="Views\Employee\UpdateEmployee.cshtml" />
     <Content Include="Views\Leave\ManagerHistory.cshtml" />
     <Content Include="Views\Eleave\Index.cshtml" />
+    <Content Include="Views\Employee\_DetailEmployee.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

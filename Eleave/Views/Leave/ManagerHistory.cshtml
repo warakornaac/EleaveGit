@@ -1,4 +1,5 @@
-﻿
+﻿@model IEnumerable<Eleave.Models.LeaveHisDemo>
+
 @{
     ViewBag.Title = "ประวัติการลา";
 }
@@ -6,7 +7,7 @@
 <div class="page-header">
     <div class="page-block">
         <div class="row align-items-center">
-            <div class="col-md-12">
+            <div class="col-lg-12">
                 <div class="page-header-title">
                     <h5 class="m-b-10">ประวัติการลา</h5>
                 </div>
@@ -18,4 +19,188 @@
         </div>
     </div>
 </div>
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card">
+            @using (Html.BeginForm("SearchLeaveHistory", "Leave", FormMethod.Post, new { @id = "formSearch" }))
+            {
+                <div class="card-body p-3 m-0">
 
+                    @Html.AntiForgeryToken()
+                    <div class="row">
+                        <div class="form-group col-lg-4">
+                            <label>ประเภทการลา :</label>
+                            @Html.DropDownList("LeaveType", new List<SelectListItem>
+                                                {
+                                                    new SelectListItem() {Text="ลาป่วย", Value="ลาป่วย"},
+                                                    new SelectListItem() {Text="ลากิจ", Value="ลากิจ"},
+                                                    new SelectListItem(){Text="ลาพักร้อน",Value="ลาพักร้อน"}
+                                                }, "ประเภทการลา", new { @class = "custom-select", @id = "LeaveType-selector" })
+
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <label>ประเภทร้องขอ :</label>
+                            @Html.DropDownList("reqType", new List<SelectListItem>
+                                                {
+                                                    new SelectListItem() {Text="ลาป่วย", Value="ลาป่วย"},
+                                                    new SelectListItem() {Text="ลากิจ", Value="ลากิจ"},
+                                                    new SelectListItem(){Text="ลาพักร้อน",Value="ลาพักร้อน"}
+                                                }, "ประเภทร้องขอ", new { @class = "custom-select", @id = "reqType-selector" })
+
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <label>สถานะคำขอ :</label>
+                            @Html.DropDownList("ReqStatus", new List<SelectListItem>
+                                                {
+                                                    new SelectListItem() {Text="Approve", Value="S1"},
+                                                    new SelectListItem() {Text="Reject", Value="S2"},
+                                                    new SelectListItem(){Text="Waiting",Value="S3"}
+                                                }, "สถานะคำขอ", new { @class = "custom-select", @id = "reqStatus" })
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <label>เริ่มวันที่ :</label>
+                            @Html.TextBox("ReqStart", null, new { @class = "form-control", @id = "reqStart", @placeholder = "--/--/--" })
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <label>ถึงวันที่ :</label>
+                            @Html.TextBox("ReqEnd", null, new { @class = "form-control", @id = "reqEnd", @placeholder = "--/--/--" })
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <label>แผนก :</label>
+                            @Html.DropDownList("Department", new SelectList(ViewBag.DepartmentList, "Value", "Text"), "เลือกหน่วยงาน", new { @class = "custom-select" })
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <label>รหัสคำขอ :</label>
+                            @Html.TextBox("reqId", null, new { @class = "form-control", @id = "reqId" })
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <label>ชื่อพนักงาน :</label>
+                            @Html.TextBox("empName", null, new { @class = "form-control", @id = "empName", @placeholder = "ชื่อพนักงาน" })
+                        </div>
+
+                    </div>
+                </div>
+                <div class="card-footer p-0">
+                    <div class="col-lg-12">
+                        <div class="form-group float-end m-2">
+                            <input type="button" value="Reset" class="btn btn-danger" id="reset-btn" />
+                            <input type="submit" value="Search" class="btn btn-success" />
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="col-xl-12">
+        <div class="card p-0">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped m-0" id="leave-his-table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th class="text-center">รหัสคำขอ</th>
+                                <th class="text-center">วันที่ขอ</th>
+                                <th class="text-center">ประเภทการขอ</th>
+                                <th class="text-center">ผู้ร้องขอ</th>
+                                <th class="text-center">ประเภทการลา</th>
+                                <th class="text-center">วันที่ลา(เริ่ม)</th>
+                                <th class="text-center">วันที่ลา(สิ้นสุด)</th>
+                                <th class="text-center">รวมขอลา</th>
+                                <th class="text-center">สถานะคำขอ</th>
+                                <th class="text-center">ผู้อนุมัติ</th>
+                                <th class="text-center">วันที่อนุมัติ</th>
+                                <th class="text-center">ผู้รับอนุมัติ</th>
+                                <th class="text-center">วันที่ HR รับอนุมัติ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                int i = 0;
+                            }
+                            @foreach (var leave in Model)
+                            {
+                                i++;
+                                <tr>
+                                    <td>@i</td>
+                                    <td>@leave.LeavId</td>
+                                    <td>@leave.ReqDate.ToString("dd/MM/yyyy")</td>
+                                    <td class="text-center">@leave.ReqType</td>
+                                    <td class="text-center">@leave.ReqBy</td>
+                                    <td class="text-center">@leave.LeaveType</td>
+                                    <td>@leave.StartDate.ToString("dd/MM/yyyy")</td>
+                                    <td>@leave.EndDate.ToString("dd/MM/yyyy")</td>
+                                    <td class="text-center">@leave.TotalReq</td>
+                                    @if (leave.ReqStatus == "S1")
+                                    {
+                                        <td class="text-center">
+                                            <div class="text-success"><i class="fa fa-check" aria-hidden="true"></i><span>อนุมัติ</span></div>
+                                        </td>
+
+                                    }
+                                    else if (leave.ReqStatus == "S2")
+                                    {
+                                        <td class="text-center">
+                                            <div class="text-danger"><i class="fa fa-times" aria-hidden="true"></i><span>ไม่อนุมัติ</span></div>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td class="text-center">
+                                            <div class="text-warning"><i class="fa fa-repeat" aria-hidden="true"></i><span>รอดำเนินงาน</span></div>
+                                        </td>
+                                    }
+                                    <td class="text-center">@leave.ApprvBy</td>
+                                    <td>@leave.ApprDate.ToString("dd/MM/yyyy")</td>
+                                    <td class="text-center">@leave.HrBy</td>
+                                    <td>@leave.HrDate.ToString("dd/MM/yyyy")</td>
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('#reqDate').datepicker({
+        orientation: "bottom auto",
+        format: "dd/mm/yyyy",
+        autoclose: true
+    });
+    $('#reqStart').datepicker({
+        orientation: "bottom auto",
+        format: "dd/mm/yyyy",
+        autoclose: true
+    });
+    $('#reqEnd').datepicker({
+        orientation: "bottom auto",
+        format: "dd/mm/yyyy",
+        autoclose: true
+    });
+    $('#reset-btn').on('click', function () {
+        $('#reqId').val('');                      // รหัสคำขอ
+        $('#reqType-selector').val('').trigger('change'); // ประเภทคำขอ
+        $('#reqDate').val('');                    // วันที่แจ้ง
+        $('#reqStart').val('');                   // เริ่มวันที่
+        $('#reqEnd').val('');                     // ถึงวันที่
+        $('#reqStatus').val('').trigger('change'); // สถานะคำขอ
+    });
+    $(document).ready(function () {
+        $('#leave-his-table').dataTable({
+            paging: true,
+            pageLength: 50,
+            lengthChange: false,
+            searching: false,
+            ordering: false,
+            select: false,
+            language: {
+                info: "แสดง _START_ ถึง _END_ จากทั้งหมด _TOTAL_ คน"
+            }
+        });
+    });
+
+
+</script>

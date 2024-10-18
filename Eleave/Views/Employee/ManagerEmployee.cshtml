@@ -2,6 +2,99 @@
 @{
     ViewBag.Title = "จัดการผู้ใช้งาน";
 }
+<style>
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 120px;
+        height: 34px;
+    }
+
+        .switch input {
+            display: none;
+        }
+
+    .slider {
+        position: absolute;
+        cursor: default;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #e74c3c;
+        -webkit-transition: .4s;
+        transition: .4s;
+        border-radius: 34px;
+    }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+    input:checked + .slider {
+        background-color: #2ecc71;
+    }
+
+    input:focus + .slider {
+        box-shadow: 0 0 1px #2196F3;
+    }
+
+    input:checked + .slider:before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(85px);
+    }
+
+    /*------ ADDED CSS ---------*/
+    .slider:after {
+        content: 'Inactive';
+        color: white;
+        display: block;
+        position: absolute;
+        transform: translate(-50%,-50%);
+        top: 50%;
+        left: 50%;
+        font-size: 10px;
+        font-family: Verdana, sans-serif;
+    }
+
+    input:checked + .slider:after {
+        content: 'Active';
+    }
+
+    /*.select2-container .select2-selection--single {
+        display: inline-block;
+        width: 100%;
+        height: calc(1.5em + 1.25rem + 4px);
+        padding: 0.625rem 2.1875rem 0.625rem 1.1875rem;
+        font-size: 0.875rem;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #495057;
+        vertical-align: middle;
+        background: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3e%3cpath fill='%23343a40' d='M2 0L0 2h4zm0 5L0 3h4z'/%3e%3c/svg%3e") no-repeat right 1.1875rem center/8px 10px;
+        background-color: #fff;
+        border: 2px solid rgba(0, 0, 0, 0.15);
+        border-radius: 2px;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        cursor: default;
+    }
+
+    .select2-selection__rendered {
+        line-height: 1.5rem !important;*/ /* ปรับค่าให้ตรงกับขนาดความสูงของ select */
+    /*}*/
+</style>
 @*bread*@
 <div class="page-header">
     <div class="page-block">
@@ -12,7 +105,7 @@
                 </div>
                 <ul class="breadcrumb">
                     <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home")"><i class="feather icon-home"></i></a></li>
-                    <li class="breadcrumb-item"><a href="@Url.Action("ManagerEmployee", "Employee")" ">จัดการผู้ใช้งาน</a></li>
+                    <li class="breadcrumb-item"><a href="@Url.Action("ManagerEmployee", "Employee")">จัดการผู้ใช้งาน</a></li>
                 </ul>
             </div>
         </div>
@@ -30,6 +123,7 @@
                 <div class="col-sm-2 col-md-2 text-right"><button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">ปิด</button></div>
             </div>
             <div class="modal-body p-2">
+                <div id="detailEmployee"></div>
             </div>
         </div>
     </div>
@@ -38,13 +132,52 @@
 @*table*@
 <div class="row">
     <div class="col-xl-12">
+        <div class="card">
+            @using (Html.BeginForm("SearchUser", "Employee", FormMethod.Post, new { @id = "formSearch" }))
+            {
+                <div class="card-body p-3 m-0">
+
+                    @Html.AntiForgeryToken()
+                    <div class="row">
+                        <div class="form-group col-md-3">
+                            <label>รหัสพนักงาน :</label>
+                            @Html.TextBox("EmpId", null, new { @class = "form-control", @id = "empId" })
+                        </div>
+
+                        <div class="form-group col-md-3">
+                            <label>หน่วยงาน :</label>
+                            @Html.DropDownList("Department", new SelectList(ViewBag.DepartmentList, "DeptName", "DeptName"), "เลือกหน่วยงาน", new { @class = "custom-select", @id = "department-selector" })
+
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label>ชื่อพนักงาน :</label>
+                            @Html.TextBox("Name", null, new { @class = "form-control", @id = "empName" })
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label>ระดับพนักงาน :</label>
+                            @Html.TextBox("Level", null, new { @class = "form-control", @id = "empRole" })
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer p-0">
+                    <div class="col-md-12">
+                        <div class="form-group float-end m-2">
+                            <input type="button" value="Reset" class="btn btn-danger" id="reset-btn" />
+                            <input type="submit" value="Search" class="btn btn-success" />
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="col-xl-12">
         <div class="card card-danger">
             @*<div class="card-header text-white bg-primary">
                     <h5>จัดการผู้ใช้งาน</h5>
                 </div>*@
             <div class="card-body m-0 p-0">
                 <div class="table-responsive">
-                    <table class="table table-bordered table-striped">
+                    <table class="table table-bordered table-striped" id="employee-table">
                         <thead>
                             <tr>
                                 <th>#</th>
@@ -53,6 +186,7 @@
                                 <th class="text-center">หน่วยงาน</th>
                                 <th class="text-center">ตำแหน่ง</th>
                                 <th class="text-center">ดำเนินการ</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -67,9 +201,33 @@
                                         <td>@dataItem.Fullname</td>
                                         <td>@dataItem.DeptId</td>
                                         <td>@dataItem.Position</td>
+                                        @if (dataItem.EmpStatus == "1")
+                                        {
+                                            <td class="text-center">
+                                                <div class="text-success"><i class="fa fa-check-circle-o" aria-hidden="true"></i><span>Active</span></div>
+                                                @*<div class="text-center">
+                                                        <label class="switch">
+                                                            <input type="checkbox" checked disabled>
+                                                            <span class="slider font-weight-bold"></span>
+                                                        </label>
+                                                    </div>*@
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td class="text-center">
+                                                <div class="text-danger"><i class="fa fa-times-circle-o" aria-hidden="true"></i><span>Inactive</span></div>
+                                                @*<div class="text-center">
+                                                        <label class="switch">
+                                                            <input type="checkbox" disabled>
+                                                            <span class="slider font-weight-bold"></span>
+                                                        </label>
+                                                    </div>*@
+                                            </td>
+                                        }
                                         <td class="text-center p-1">
-                                            <div class="btn btn-info btn-xs" id="viewEmployeeDetail" title="แสดง"><span class="fa fa-eye"></span></div>
-                                            <a class="btn btn-warning btn-xs" href="../Employee/UpdateEmployee?EmpId=xxx" ,"Employee")" title="แก้ไข"><span class="fa fa-edit"></span></a>
+                                            <div class="btn btn-info btn-xs" id="viewEmployeeDetail-@dataItem.EmpId" title="แสดง" data-emp="@dataItem.EmpId"><span class="fa fa-eye"></span></div>
+                                            <a class="btn btn-warning btn-xs" href="@Url.Action("UpdateEmployee", "Employee", new { EmpId = dataItem.EmpId })" ,"Employee")" title="แก้ไข"><span class="fa fa-edit"></span></a>
                                         </td>
                                     </tr>
                                 }
@@ -81,22 +239,51 @@
         </div>
     </div>
 </div>
+<script src="@Url.Content("~/Scripts/scriptEmployee.js")"></script>
 <script defer>
+    $('#department-selector').select2({
+        width: '100%'
+    });
+    var getDetailEmployeeURL = '@Url.Action("DetailEmployee", "Employee")';
     $(document).ready(function () {
-        $('#viewEmployeeDetail').on('click', function (e) {
+        $('[id^="viewEmployeeDetail-"]').on('click', function (e) {
             e.preventDefault();
-            LoadingShow();
-            $('#modalEmployeeDetail').modal('show')
-                .find('.modal-body')
-                .html('<i class="fa fa-spinner fa-pulse fa-1x fa-fw"></i><span class="">กรุณารอสักครู่...</span>');
-
-            $('#modalEmployeeDetail .modal-body').html('//');
-            $('#modalEmployeeDetail').modal('show');
-
-            LoadingHide();
-            //$("#modalEmployeeDetail").on('shown.bs.modal', function () {
-            //    LoadingHide();
-            //});
+            var empID = $(this).data('emp');
+            getDetailEmployee(empID);
+        });
+        $('#employee-table').dataTable({
+            paging: true,
+            pageLength: 50,
+            lengthChange: false,
+            searching: false,
+            ordering: false,
+            select: false,
+            language: {
+                info: "แสดง _START_ ถึง _END_ จากทั้งหมด _TOTAL_ คน"
+            }
         });
     });
+    $('#reset-btn').on('click', function () {
+        $('#empId').val('');
+        $('#department-selector').val('').trigger('change');
+        $('#empName').val('');
+        //$('#')
+    });
+    $(document).ready(function () {
+        $('#formSearch').submit(function (e) {
+            var empId = $("#empId").val().trim();
+            var department = $("#department-selector").val();
+            var name = $("#empName").val().trim();
+            var level = $("#empRole").val().trim();
+
+            if (empId == '' && (department === "" || department === null) && name == '' && level == '') {
+                e.preventDefault();
+                Swal.fire({
+                    icon: "error",
+                    title: "กรุณากรอกข้อมูลที่ต้องการค้นหา"
+                });
+                return false;
+            }
+        });
+    })
 </script>

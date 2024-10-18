@@ -155,6 +155,12 @@ namespace Eleave.Controllers
             }
             return View(loginUser);
         }
+        public ActionResult Logout()
+        {
+            Session.Clear();
+            Session.Abandon();
+            return RedirectToAction("Login", "Home");
+        }
         private bool TestLogin(string username, string password)
         {
             return (username == "testuser" && password == "password123");
