@@ -223,74 +223,45 @@ namespace Eleave.Library
             }
             return ret;
         }
-        public static Tuple<string, string, string> GetDateInput(int id, string year)
+        public static string GetDocumentRequest(string DocumentNo)
         {
-            string flagInput = "NO";
-            string startDate = "";
-            string endDate = "";
-            if (id != 0 && year != null)
-            {
-                using (SqlConnection Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Lip_ConnectionString"].ConnectionString))
-                {
-                    Connection.Open();
-                    //วันที่คีย์ได้ budget pm
-                    var dateCurrent = DateTime.Now.ToString("yyy-MM-dd", new CultureInfo("en-US"));
-                    var cmdSearch = new SqlCommand("P_Search_Budget_Forecast_Dateinput", Connection);
-                    var yearCurrent = DateTime.Now.Year.ToString();
+            string getDocumentNo = "";
 
-                    cmdSearch.CommandType = CommandType.StoredProcedure;
-                    cmdSearch.Parameters.AddWithValue("@inEvent", id);
-                    cmdSearch.Parameters.AddWithValue("@inYear", year);
-                    SqlParameter p = new SqlParameter("@outResult", SqlDbType.NVarChar, 1000);
-                    SqlParameter p1 = new SqlParameter("@outStartDate", SqlDbType.NVarChar, 1000);
-                    SqlParameter p2 = new SqlParameter("@outEndDate", SqlDbType.NVarChar, 1000);
-                    p.Direction = ParameterDirection.Output;
-                    p1.Direction = ParameterDirection.Output;
-                    p2.Direction = ParameterDirection.Output;
-                    cmdSearch.Parameters.Add(p);
-                    cmdSearch.Parameters.Add(p1);
-                    cmdSearch.Parameters.Add(p2);
-                    int INSID = cmdSearch.ExecuteNonQuery();
-                    flagInput = cmdSearch.Parameters["@outResult"].Value.ToString();
-                    startDate = cmdSearch.Parameters["@outStartDate"].Value.ToString();
-                    endDate = cmdSearch.Parameters["@outEndDate"].Value.ToString();
-                    cmdSearch.Dispose();
-                }
+            using (SqlConnection Connection = new SqlConnection(GetConfig("HRIS_DB")))
+            {
+                Connection.Open();
+                var cmdSearch = new SqlCommand("P_Get_Document_Request", Connection);
+
+                cmdSearch.CommandType = CommandType.StoredProcedure;
+                cmdSearch.Parameters.AddWithValue("@inReqNo", DocumentNo);
+                SqlParameter returnResult = new SqlParameter("@outResult", SqlDbType.NVarChar, 1000);
+                returnResult.Direction = ParameterDirection.Output;
+                cmdSearch.Parameters.Add(returnResult);
+                int INSID = cmdSearch.ExecuteNonQuery();
+                getDocumentNo = cmdSearch.Parameters["@outResult"].Value.ToString();
+                cmdSearch.Dispose();
             }
-            return Tuple.Create(flagInput, startDate, endDate);
+            return getDocumentNo;
         }
-
-        public static Dictionary<string, Tuple<string, bool>> GetdataNote(string year, string[] cuscod)
+        public static string save(string DocumentNo)
         {
-            Dictionary<string, Tuple<string, bool>> resultDictionary = new Dictionary<string, Tuple<string, bool>>();
-            if (year != null && cuscod != null)
+            string getDocumentNo = "";
+
+            using (SqlConnection Connection = new SqlConnection(GetConfig("HRIS_DB")))
             {
-                using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Lip_ConnectionString"].ConnectionString))
-                {
-                    conn.Open();
-                    foreach (var cus in cuscod)
-                    {
-                        var cmdSearch = new SqlCommand("P_Get_Note_TheStar", conn);
+                Connection.Open();
+                var cmdSearch = new SqlCommand("P_Get_Document_Request", Connection);
 
-                        cmdSearch.CommandType = CommandType.StoredProcedure;
-                        cmdSearch.Parameters.AddWithValue("@cuscod", cus);
-                        cmdSearch.Parameters.AddWithValue("@Year", year);
-                        SqlParameter p = new SqlParameter("@IsStar", SqlDbType.Bit);
-                        SqlParameter p2 = new SqlParameter("@Note", SqlDbType.NVarChar, 1000);
-                        p.Direction = ParameterDirection.Output;
-                        p2.Direction = ParameterDirection.Output;
-                        cmdSearch.Parameters.Add(p);
-                        cmdSearch.Parameters.Add(p2);
-                        int INSID = cmdSearch.ExecuteNonQuery();
-                        bool IsStar = Convert.ToBoolean(cmdSearch.Parameters["@IsStar"].Value);
-                        string Note = cmdSearch.Parameters["@Note"].Value.ToString();
-
-                        resultDictionary.Add(cus, Tuple.Create(Note, IsStar));
-                        cmdSearch.Dispose();
-                    }
-                }
+                cmdSearch.CommandType = CommandType.StoredProcedure;
+                cmdSearch.Parameters.AddWithValue("@inReqNo", DocumentNo);
+                SqlParameter returnResult = new SqlParameter("@outResult", SqlDbType.NVarChar, 1000);
+                returnResult.Direction = ParameterDirection.Output;
+                cmdSearch.Parameters.Add(returnResult);
+                int INSID = cmdSearch.ExecuteNonQuery();
+                getDocumentNo = cmdSearch.Parameters["@outResult"].Value.ToString();
+                cmdSearch.Dispose();
             }
-            return resultDictionary;
+            return getDocumentNo;
         }
     }
 }
