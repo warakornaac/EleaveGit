@@ -1,4 +1,5 @@
-﻿@{
+﻿@model IEnumerable<Eleave.Models.LeaveHisDemo>
+@{
     ViewBag.Title = "หน้าแรก";
 }
 <div class="page-header">
@@ -174,7 +175,7 @@
                     </div>
                 </div>
             </div>
-           
+
         </div>
     </div>
     <!-- Widget primary-success card end -->
@@ -199,62 +200,68 @@
             </div>
             <div class="card-body p-0">
                 <div class="table-responsive">
-                    <table class="table table-hover mb-0">
+                    <table class="table table-bordered table-striped m-0" id="leave-his-table">
                         <thead>
                             <tr>
-                                <th>
-                                    <div class="chk-option">
-                                        <label class="check-task custom-control custom-checkbox d-flex justify-content-center done-task">
-                                            <input type="checkbox" class="custom-control-input">
-                                            <span class="custom-control-label"></span>
-                                        </label>
-                                    </div>
-                                    Assigned
-                                </th>
-                                <th>Name</th>
-                                <th>Due Date</th>
-                                <th class="text-right">Priority</th>
+                                <th>#</th>
+                                <th class="text-center">รหัสคำขอ</th>
+                                <th class="text-center">วันที่ขอ</th>
+                                <th class="text-center">ประเภทการขอ</th>
+                                <th class="text-center">ผู้ร้องขอ</th>
+                                <th class="text-center">ประเภทการลา</th>
+                                <th class="text-center">วันที่ลา(เริ่ม)</th>
+                                <th class="text-center">วันที่ลา(สิ้นสุด)</th>
+                                <th class="text-center">รวมขอลา</th>
+                                <th class="text-center">สถานะคำขอ</th>
+                                <th class="text-center">ผู้อนุมัติ</th>
+                                <th class="text-center">วันที่อนุมัติ</th>
+                                <th class="text-center">ผู้รับอนุมัติ</th>
+                                <th class="text-center">วันที่ HR รับอนุมัติ</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>
-                                    <div class="chk-option">
-                                        <label class="check-task custom-control custom-checkbox d-flex justify-content-center done-task">
-                                            <input type="checkbox" class="custom-control-input">
-                                            <span class="custom-control-label"></span>
-                                        </label>
-                                    </div>
-                                    <div class="d-inline-block align-middle">
-                                        <div class="d-inline-block">
-                                            <h6>John Deo</h6>
-                                            <p class="text-muted m-b-0">Graphics Designer</p>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>Able Pro</td>
-                                <td>Jun, 26</td>
-                                <td class="text-right"><label class="badge badge-light-danger">รออนุมัติแล้ว</label></td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="chk-option">
-                                        <label class="check-task custom-control custom-checkbox d-flex justify-content-center done-task">
-                                            <input type="checkbox" class="custom-control-input">
-                                            <span class="custom-control-label"></span>
-                                        </label>
-                                    </div>
-                                    <div class="d-inline-block align-middle">
-                                        <div class="d-inline-block">
-                                            <h6>Jenifer Vintage</h6>
-                                            <p class="text-muted m-b-0">Web Designer</p>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>Mashable</td>
-                                <td>March, 31</td>
-                                <td class="text-right"><label class="badge badge-light-primary">อนุมัติแล้ว</label></td>
-                            </tr>
+                            @{
+                                int i = 0;
+                            }
+                            @foreach (var leave in Model)
+                            {
+                                i++;
+                                <tr>
+                                    <td>@i</td>
+                                    <td>@leave.LeavId</td>
+                                    <td>@leave.ReqDate.ToString("dd/MM/yyyy")</td>
+                                    <td class="text-center">@leave.ReqType</td>
+                                    <td class="text-center">@leave.ReqBy</td>
+                                    <td class="text-center">@leave.LeaveType</td>
+                                    <td>@leave.StartDate.ToString("dd/MM/yyyy")</td>
+                                    <td>@leave.EndDate.ToString("dd/MM/yyyy")</td>
+                                    <td class="text-center">@leave.TotalReq</td>
+                                    @if (leave.ReqStatus == "S1")
+                                    {
+                                        <td class="text-center">
+                                            <div class="text-success"><i class="fa fa-check" aria-hidden="true"></i><span>อนุมัติ</span></div>
+                                        </td>
+
+                                    }
+                                    else if (leave.ReqStatus == "S2")
+                                    {
+                                        <td class="text-center">
+                                            <div class="text-danger"><i class="fa fa-times" aria-hidden="true"></i><span>ไม่อนุมัติ</span></div>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td class="text-center">
+                                            <div class="text-warning"><i class="fa fa-repeat" aria-hidden="true"></i><span>รอดำเนินงาน</span></div>
+                                        </td>
+                                    }
+                                    <td class="text-center">@leave.ApprvBy</td>
+                                    <td>@leave.ApprDate.ToString("dd/MM/yyyy")</td>
+                                    <td class="text-center">@leave.HrBy</td>
+                                    <td>@leave.HrDate.ToString("dd/MM/yyyy")</td>
+                                </tr>
+                            }
+
                         </tbody>
                     </table>
                 </div>
@@ -262,3 +269,19 @@
         </div>
     </div>
 </div>
+<script>
+    $(document).ready(function () {
+        $('#leave-his-table').dataTable({
+            paging: true,
+            pageLength: 50,
+            lengthChange: false,
+            searching: false,
+            ordering: false,
+            select: false,
+            language: {
+                info: "แสดง _START_ ถึง _END_ จากทั้งหมด _TOTAL_ การร้องขอ"
+            }
+        });
+    })
+
+</script>

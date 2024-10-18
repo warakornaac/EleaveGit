@@ -1,4 +1,5 @@
-﻿using Eleave.Models;
+﻿using Eleave.Data;
+using Eleave.Models;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -24,8 +25,14 @@ namespace Eleave.Controllers
 
             return View(leaveHis);
         }
+        public ActionResult EmployeeHistory()
+        {
+            var leaveHis = Demodata();
+            LoadDepartments();
+            return View(leaveHis);
+        }
         [HttpPost]
-        public ActionResult SearchLeaveHistory(string LeaveType, string reqType, string ReqStatus, string ReqStart, string ReqEnd, string Department, string reqId, string empName)
+        public ActionResult ManagerSearchHistory(string LeaveType, string reqType, string ReqStatus, string ReqStart, string ReqEnd, string Department, string reqId, string empName)
         {
             var leaveHis = Demodata();
 
@@ -70,7 +77,47 @@ namespace Eleave.Controllers
             LoadDepartments();
             return View("ManagerHistory", leaveHis);
         }
+        [HttpPost]
+        public ActionResult EmployeeHistory(string LeaveType, string reqType, string ReqStatus, string ReqStart, string ReqEnd, string reqId)
+        {
+            var leaveHis = Demodata();
+            if (!string.IsNullOrEmpty(LeaveType))
+            {
 
+            }
+
+            if (!string.IsNullOrEmpty(reqType))
+            {
+                leaveHis = leaveHis.Where(l => l.LeaveType == reqType).ToList();
+            }
+            if (!string.IsNullOrEmpty(ReqStatus))
+            {
+                leaveHis = leaveHis.Where(l => l.ReqStatus == ReqStatus).ToList();
+            }
+            if (!string.IsNullOrEmpty(ReqStart))
+            {
+                DateTime startParsed;
+                if (DateTime.TryParseExact(ReqStart, "d/M/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out startParsed))
+                {
+                    leaveHis = leaveHis.Where(l => l.StartDate.Date >= startParsed.Date).ToList();
+                }
+            }
+            if (!string.IsNullOrEmpty(ReqEnd))
+            {
+                DateTime endParsed;
+                if (DateTime.TryParseExact(ReqEnd, "d/M/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out endParsed))
+                {
+                    leaveHis = leaveHis.Where(l => l.EndDate.Date <= endParsed.Date).ToList();
+                }
+            }
+
+            if (!string.IsNullOrEmpty(reqId))
+            {
+                leaveHis = leaveHis.Where(l => l.LeavId == reqId).ToList();
+            }
+            LoadDepartments();
+            return View(leaveHis);
+        }
 
         private List<LeaveHisDemo> Demodata()
         {
@@ -147,6 +194,13 @@ namespace Eleave.Controllers
             };
 
             return allLeave;
+        }
+        private void LoadReqType()
+        {
+            var EMP_LVL = new List<StoreGetLookupData>();
+            EMP_LVL = new GetLookupData().GetLookupDataStore("EMP_LVL");
+
+            ViewBag.ReqType = EMP_LVL;
         }
         private void LoadDepartments()
         {

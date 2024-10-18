@@ -363,6 +363,8 @@
     <Content Include="Views\Leave\ManagerHistory.cshtml" />
     <Content Include="Views\Eleave\Index.cshtml" />
     <Content Include="Views\Employee\_DetailEmployee.cshtml" />
+    <Content Include="Views\Employee\Setting.cshtml" />
+    <Content Include="Views\Leave\EmployeeHistory.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

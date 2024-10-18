@@ -9,8 +9,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title</title>
     @Styles.Render("~/Content/css")
-    <script src="~/Scripts/jquery-3.4.1.js"></script>
+    @*<script src="~/Scripts/jquery-3.4.1.js"></script>*@
     @*@Scripts.Render("~/bundles/modernizr")*@
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
 
     <link href="~/Content/style-flat.css" rel="stylesheet" />
     <link href="~/Content/plugins/animate.min.css" rel="stylesheet" />
@@ -22,12 +23,16 @@
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="~/Content/plugins/datatables.min.css" rel="stylesheet" />
-    <link href="@Url.Content("~/Content/plugins/select2.min.css")" rel="stylesheet" />
-    <script src="@Url.Content("~/Scripts/plugins/select2.min.js")"></script>
-
     <link href="~/Content/plugins/bootstrap-datepicker.min.css" rel="stylesheet" />
-    <script src="~/Scripts/plugins/bootstrap-datepicker.min.js"></script>
+
+    <script src="~/Scripts/vendor-all.min.js"></script>
     @*<script src="~/Scripts/plugins/jquery-ui.min.js"></script>*@
+    <link href="@Url.Content("~/Content/plugins/select2.min.css")" rel="stylesheet" />
+    <script src="~/Scripts/plugins/bootstrap-datepicker.min.js"></script>
+    <script src="@Url.Content("~/Scripts/plugins/select2.min.js")"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.7/jquery.inputmask.min.js"></script>
+
+
 
 
 
@@ -61,8 +66,8 @@
                     </div>
                     <div class="collapse" id="nav-user-link">
                         <ul class="list-unstyled">
-                            <li class="list-group-item"><a href="user-profile"><i class="feather icon-user m-r-5"></i>View Profile</a></li>
-                            <li class="list-group-item"><a href="auth-normal-sign-in"><i class="feather icon-log-out m-r-5"></i>Logout</a></li>
+                            <li class="list-group-item"><a href="@Url.Action("ViewProfile","Employee")"><i class="feather icon-user m-r-5"></i>View Profile</a></li>
+                            <li class="list-group-item"><a href="@Url.Action("Logout","Home")"><i class="feather icon-log-out m-r-5"></i>Logout</a></li>
                         </ul>
                     </div>
                 </div>
@@ -100,7 +105,7 @@
                     <li class="nav-item pcoded-hasmenu">
                         <a href="#" class="nav-link "><span class="pcoded-micon"><i class="fa fa-cog"></i></span><span class="pcoded-mtext">ตั่งค่า</span></a>
                         <ul class="pcoded-submenu">
-                            <li><a href="#" target="">สิทธิ์เข้าใช้งาน</a></li>
+                            <li><a href="@Url.Action("Setting","Employee")" target="">สิทธิ์เข้าใช้งาน</a></li>
                             <li><a href="#" target="">ลำดับการอนุมัติ</a></li>
                         </ul>
                     </li>
@@ -267,16 +272,17 @@
         </div>
     </div>
 
+
     @*@Scripts.Render("~/bundles/jquery")*@
     @*@Scripts.Render("~/bundles/bootstrap")*@
-    @RenderSection("Scripts", required: false)
+    @*@RenderSection("Scripts", required: false)*@
+
 </body>
 </html>
 
 <!-- SweetAlert JS -->
 
 
-<script src="~/Scripts/vendor-all.min.js"></script>
 <script src="~/Scripts/plugins/bootstrap.min.js"></script>
 <script src="~/Scripts/pcoded.js"></script>
 @*<script src="~/Scripts/plugins/apexcharts.min.js"></script>*@
@@ -289,6 +295,7 @@
 
 @*<script src="~/Scripts/plugins/horizontal-menu.js"></script>*@
 <script src="~/Scripts/LoadingOverlay.js"></script>
+
 
 <script type="text/javascript">
     function LoadingShow() {

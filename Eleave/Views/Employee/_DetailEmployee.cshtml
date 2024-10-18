@@ -45,7 +45,7 @@
             <div class="col-xs-6 col-sm-4">
                 <div class="form-group">
                     <h5>หัวหน้างาน</h5>
-                    <div> @dataEmp.Position </div>
+                    <div> @dataEmp.DirectorId </div>
                 </div>
             </div>
 
@@ -55,19 +55,19 @@
             <div class="col-xs-6 col-sm-4">
                 <div class="form-group">
                     <h5>ระดับพนักงาน</h5>
-                    <div> @dataEmp.DeptId </div>
+                    <div> @dataEmp.EmpLvl </div>
                 </div>
             </div>
             <div class="col-xs-6 col-sm-4">
                 <div class="form-group">
                     <h5>ประเภทพนักงาน</h5>
-                    <div> @dataEmp.DeptId </div>
+                    <div> @dataEmp.EmpTypeId </div>
                 </div>
             </div>
             <div class="col-xs-6 col-sm-4">
                 <div class="form-group">
                     <h5>รหัสกลุ่มอนุมัติ</h5>
-                    <div> @dataEmp.DeptId </div>
+                    <div> @dataEmp.ApprGrpID </div>
                 </div>
             </div>
             <div class="col-xs-6 col-sm-4">
@@ -79,7 +79,48 @@
             <div class="col-xs-6 col-sm-4">
                 <div class="form-group">
                     <h5>อายุงาน</h5>
-                    <div> @dataEmp.StartDate </div>
+                    <div>
+                        @{
+                            string startDateString = dataEmp.StartDate;
+                            DateTime startDate;
+
+                            if (!string.IsNullOrEmpty(startDateString) && DateTime.TryParse(startDateString, out startDate))
+                            {
+                                var now = DateTime.Now;
+
+                                // คำนวณจำนวนปี, เดือน, และวัน
+                                int years = now.Year - startDate.Year;
+                                int months = now.Month - startDate.Month;
+                                int days = now.Day - startDate.Day;
+
+                                // ถ้าเดือนติดลบ ให้ถอยปีออก 1
+                                if (months < 0)
+                                {
+                                    years--;
+                                    months += 12;
+                                }
+
+                                // ถ้าวันติดลบ ให้ถอยเดือนออก 1
+                                if (days < 0)
+                                {
+                                    months--;
+
+                                    // หาจำนวนวันในเดือนก่อนหน้าเพื่อนำมาบวก
+                                    var previousMonth = now.AddMonths(-1);
+                                    int daysInPreviousMonth = DateTime.DaysInMonth(previousMonth.Year, previousMonth.Month);
+                                    days += daysInPreviousMonth;
+                                }
+
+                                <span>@years ปี, @months เดือน, @days วัน</span>
+                            }
+                            else
+                            {
+                                @dataEmp.StartDate
+                            }
+                        }
+
+
+                    </div>
                 </div>
             </div>
             <div class="col-xs-6 col-sm-4">

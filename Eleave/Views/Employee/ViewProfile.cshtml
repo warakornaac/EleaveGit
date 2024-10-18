@@ -135,74 +135,157 @@
                                 <div> @dataEmp.DirectorId </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
                         <div class="col-xs-6 col-sm-4">
-                            <h5>ระดับพนักงาน</h5>
-                            <div>@dataEmp.EmpLvl</div>
+                            <div class="form-group">
+                                <h5>
+                                    ระดับพนักงาน
+                                </h5>
+                                <div> @dataEmp.EmpLvl </div>
+                            </div>
                         </div>
                         <div class="col-xs-6 col-sm-4">
-                            <h5>ประเภทพนักงาน</h5>
-                            <div>@dataEmp.EmpTypeId</div>
+                            <div class="form-group">
+                                <h5>
+                                    ประเภทพนักงาน
+                                </h5>
+                                <div> @dataEmp.EmpTypeId </div>
+                            </div>
                         </div>
                         <div class="col-xs-6 col-sm-4">
-                            <h5>รหัสกลุ่มอนุมัติ</h5>
-                            <div>@dataEmp.ApprGrpID</div>
+                            <div class="form-group">
+                                <h5>
+                                    รหัสกลุ่มอนุมัติ
+                                </h5>
+                                <div> @dataEmp.ApprGrpID </div>
+                            </div>
                         </div>
                         <div class="col-xs-6 col-sm-4">
-                            <h5>วันที่เริ่มงาน</h5>
-                            <div>@dataEmp.StartDate</div>
+                            <div class="form-group">
+                                <h5>
+                                    วันที่เริ่มงาน
+                                </h5>
+                                <div> @dataEmp.StartDate </div>
+                            </div>
                         </div>
                         <div class="col-xs-6 col-sm-4">
-                            <h5>อายุงาน</h5>
-                            <div>@dataEmp.StartDate</div>
+                            <div class="form-group">
+                                <h5>
+                                    อายุงาน
+                                </h5>
+                                <div>
+
+                                    <div>
+                                        @{
+                                            string startDateString = dataEmp.StartDate;
+                                            DateTime startDate;
+
+                                            if (!string.IsNullOrEmpty(startDateString) && DateTime.TryParse(startDateString, out startDate))
+                                            {
+                                                var now = DateTime.Now;
+
+                                                // คำนวณจำนวนปีและจำนวนเดือน
+                                                int years = now.Year - startDate.Year;
+                                                int months = now.Month - startDate.Month;
+                                                int days = now.Day - startDate.Day;
+
+                                                // ถ้าเดือนติดลบ (หมายถึงยังไม่ถึงเดือนนี้ในปีปัจจุบัน ให้ถอยปีออก 1)
+                                                if (months < 0)
+                                                {
+                                                    years--;
+                                                    months += 12;
+                                                }
+                                                // ถ้าวันติดลบ (หมายถึงยังไม่ถึงวันที่ปัจจุบันในเดือนนี้ ให้ถอยเดือนออก 1)
+                                                if (days < 0)
+                                                {
+                                                    months--;
+                                                    // หาจำนวนวันในเดือนก่อนหน้าเพื่อนำมาบวก
+                                                    var previousMonth = now.AddMonths(-1);
+                                                    int daysInPreviousMonth = DateTime.DaysInMonth(previousMonth.Year, previousMonth.Month);
+                                                    days += daysInPreviousMonth;
+                                                }
+
+                                                <span>@years ปี, @months เดือน, @days วัน</span>
+                                            }
+                                            else
+                                            {
+                                                @dataEmp.StartDate
+                                            }
+                                        }
+                                    </div>
+
+                                </div>
+                            </div>
                         </div>
                         <div class="col-xs-6 col-sm-4">
-                            <h5>สถานะพนักนักงาน</h5>
-                            @if (dataEmp.EmpStatus == "1")
-                            {
-                                <div class="text-success"><i class="fa fa-check-circle-o" aria-hidden="true"></i><span>Active</span></div>
-                            }
-                            else
-                            {
-                                <div class="text-danger"><i class="fa fa-times-circle-o" aria-hidden="true"></i><span>Inactive</span></div>
-                            }
+                            <div class="form-group">
+                                <h5>
+                                    สถานะพนักนักงาน
+
+                                </h5>
+                                @if (dataEmp.EmpStatus == "1")
+                                {
+                                    <div class="text-success"><i class="fa fa-check-circle-o" aria-hidden="true"></i><span>Active</span></div>
+                                }
+                                else
+                                {
+                                    <div class="text-danger"><i class="fa fa-times-circle-o" aria-hidden="true"></i><span>Inactive</span></div>
+                                }
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
         @*flat able*@
-        <div class="card">
-            <div class="card-header">
-                <h5>Basic Component</h5>
-            </div>
-            <div class="card-body">
-                <form>
+        <div class="card flat-card">
+            <div class="row-table ">
+                <div class="col-sm-3 card-body">
                     <div class="row">
                         <div class="col-sm-4">
-                            <div class="form-group">
-                                <label class="floating-label" for="Email">Email address</label>
-                                <input type="email" class="form-control" id="Email" aria-describedby="emailHelp" value="123">
-                            </div>
+                            <i class="icon feather icon-eye text-c-green mb-1 d-block"></i>
                         </div>
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label class="floating-label" for="Text">Text</label>
-                                <input type="text" class="form-control" id="Text" placeholder="123">
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label class="floating-label" for="password">password</label>
-                                <input type="password" class="form-control" id="password" placeholder="">
-                            </div>
+                        <div class="col-sm-8 text-md-center">
+                            <h5>2</h5>
+                            <span>ลาป่วย</span>
                         </div>
                     </div>
-                </form>
+                </div>
+                <div class="col-sm-3 card-body">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <i class="icon feather icon-music text-c-red mb-1 d-block"></i>
+                        </div>
+                        <div class="col-sm-8 text-md-center">
+                            <h5>1</h5>
+                            <span>ลากิจ</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-3 card-body">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <i class="icon feather icon-file-text text-c-blue mb-1 d-block"></i>
+                        </div>
+                        <div class="col-sm-8 text-md-center">
+                            <h5>2</h5>
+                            <span>ลาพักร้อน</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3 card-body">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <i class="icon feather icon-mail text-c-yellow mb-1 d-block"></i>
+                        </div>
+                        <div class="col-sm-8 text-md-center">
+                            <h5>5</h5>
+                            <span>ลาทั้งหมด</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-
     </div>
     <div class="col-sm-5 col-md-4">
         @*Permission*@
@@ -211,6 +294,25 @@
             <div class="card card-primary">
                 <div class="card-body">
                     เจ้าหน้าที่ Application, ผู้จัดการ
+                </div>
+            </div>
+            <h5>สิทธิ์การลา</h5>
+            <div class="card card-primary">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <h6>วันลาทั้งหมด</h6>
+                        </div>
+                        <div class="col-sm-12">
+                            ลากิจ : 6 วัน
+                        </div>
+                        <div class="col-sm-12">
+                            ลาป่วย : 30 วัน
+                        </div>
+                        <div class="col-sm-12">
+                            ลาพักร้อน : 12 วัน
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
