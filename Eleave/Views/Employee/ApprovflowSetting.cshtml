@@ -1,0 +1,104 @@
+﻿
+@{
+    ViewBag.Title = "ตั้งค้า-กำหนดลำดับการอนุมัติ";
+}
+<div class="page-header">
+    <div class="page-block">
+        <div class="row align-items-center">
+            <div class="col-md-12">
+                <div class="page-header-title">
+                    <h5 class="m-b-10">กำหนดลำดับการอนุมัติ</h5>
+                </div>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home")"><i class="feather icon-home"></i></a></li>
+                    <li class="breadcrumb-item"><a href="@Url.Action("ApprovflowSetting", "Employee")">กำหนดลำดับการอนุมัติ</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xl-12" `>
+        <div class="card">
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                @Html.Label("แผนก")
+                                @Html.DropDownList("Department", new SelectList(ViewBag.DepartmentList, "DeptId", "DeptName"), "เลือกหน่วยงาน", new { @class = "custom-select", @id = "department-selector" })
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                @Html.Label("รหัสกลุ่มอนุมัตอ")
+                                @Html.DropDownList("ApprvGrp", new List<SelectListItem>
+                                                           {
+                                                               new SelectListItem(){Text="MIS",Value="MIS"},
+                                                               new SelectListItem(){Text="Product",Value="Product"},
+                                                               new SelectListItem(){Text="Sales",Value="Sales"}
+                                                           }, "ALL", new { @class = "custom-select" })
+                            </div>
+                        </div>
+                        <div class="col-md-4 d-md-flex align-items-md-center">
+                            <button class="btn btn-success">Search</button>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped" id="apprv-flow-table">
+                        <thead>
+                            <tr>
+                                <th class="text-center">Group ID</th>
+                                <th class="text-center">Group Name</th>
+                                <th class="text-center">Dep ID.</th>
+                                <th class="text-center">Approve Level</th>
+                                <th class="text-center">Approval Emp ID</th>
+                                <th class="text-center">Action Type</th>
+                                <th class="text-center">เพิ่ม/แก้ไข/ลบ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="text-center">1</td>
+                                <td class="text-center">MIS Apprv</td>
+                                <td class="text-center">MIS07</td>
+                                <td class="text-center">1</td>
+                                <td class="text-center">Thiraphon</td>
+                                <td class="text-center">Approve</td>
+                                <td>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('#department-selector').select2()
+    $(document).ready(function () {
+        $('#apprv-flow-table').dataTable({
+            paging: true,
+            pageLength: 50,
+            lengthChange: false,
+            searching: false,
+            ordering: false,
+            select: false,
+            language: {
+                info: "แสดง _START_ ถึง _END_ จากทั้งหมด _TOTAL_ กลุ่ม"
+            }
+        });
+    });
+</script>

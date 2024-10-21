@@ -17,7 +17,7 @@ namespace Eleave.Controllers
         public ActionResult ManagerEmployee()
         {
             var GetEmployee = new List<StoreGetProfile>();
-            GetEmployee = new SearchEmployee().GetStoreSearchEmployee();
+            GetEmployee = new GetProfileList().GetProfileListS();
 
             ViewBag.EmployeeList = GetEmployee;
             LoadDepartments();
@@ -34,14 +34,14 @@ namespace Eleave.Controllers
         public ActionResult ManagerEmployee(string Company, string Department, string Name, string EmpID)
         {
             var GetEmployee = new List<StoreGetProfile>();
-            GetEmployee = new SearchEmployee().GetStoreSearchEmployee();
+            GetEmployee = new GetProfileList().GetProfileListS();
             if (!string.IsNullOrEmpty(Company))
             {
                 GetEmployee = GetEmployee.Where(emp => emp.Company == Company).ToList();
             }
             if (!string.IsNullOrEmpty(Department))
             {
-                GetEmployee = GetEmployee.Where(emp => emp.DeptId.ToString().ToTrim() == Department).ToList();
+                GetEmployee = GetEmployee.Where(emp => emp.DeptName.ToString().ToTrim() == Department).ToList();
             }
             if (!string.IsNullOrEmpty(Name))
             {
@@ -119,6 +119,11 @@ namespace Eleave.Controllers
                 return View(store);
             }
         }
+        public ActionResult ApprovflowSetting()
+        {
+            LoadDepartments();
+            return View();
+        }
         public ActionResult DetailEmployee(string EMPID)
         {
             //string EmpId = string.Empty;
@@ -179,6 +184,9 @@ namespace Eleave.Controllers
             cmd.Dispose();
             conn.Close();
             ViewBag.DepartmentList = departments;
+        }
+        private void LoadApprGrp()
+        {
         }
     }
 }

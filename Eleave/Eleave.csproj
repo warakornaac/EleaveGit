@@ -365,6 +365,7 @@
     <Content Include="Views\Employee\_DetailEmployee.cshtml" />
     <Content Include="Views\Employee\Setting.cshtml" />
     <Content Include="Views\Leave\EmployeeHistory.cshtml" />
+    <Content Include="Views\Employee\ApprovflowSetting.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
