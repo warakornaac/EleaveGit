@@ -21,6 +21,7 @@ namespace Eleave.Controllers
 
             ViewBag.EmployeeList = GetEmployee;
             LoadDepartments();
+            LoadEmployeeLevel();
             return View();
 
             //return RedirectToAction("ManagerEmployee", new
@@ -30,13 +31,13 @@ namespace Eleave.Controllers
             //});
         }
         [HttpPost]
-        public ActionResult SearchUser(int? EmpId, string Department, string Name, string Level)
+        public ActionResult ManagerEmployee(string Company, string Department, string Name, string EmpID)
         {
             var GetEmployee = new List<StoreGetProfile>();
             GetEmployee = new SearchEmployee().GetStoreSearchEmployee();
-            if (EmpId.HasValue)
+            if (!string.IsNullOrEmpty(Company))
             {
-                GetEmployee = GetEmployee.Where(emp => emp.EmpId.ToString().Contains(EmpId.ToString())).ToList();
+                GetEmployee = GetEmployee.Where(emp => emp.Company == Company).ToList();
             }
             if (!string.IsNullOrEmpty(Department))
             {
@@ -47,14 +48,14 @@ namespace Eleave.Controllers
                 GetEmployee = GetEmployee.Where(emp => emp.Fullname.Contains(Name.Trim())).ToList();
             }
 
-            if (!string.IsNullOrEmpty(Level))
+            if (!string.IsNullOrEmpty(EmpID))
             {
-                GetEmployee = GetEmployee.Where(emp => emp.EmpLvl.Contains(Level.Trim())).ToList();
+                GetEmployee = GetEmployee.Where(emp => emp.EmpId.ToString().Contains(EmpID.Trim())).ToList();
             }
             ViewBag.EmployeeList = GetEmployee;
             LoadDepartments();
 
-            return View("ManagerEmployee");
+            return View();
         }
 
         public ActionResult ViewProfile()
@@ -85,8 +86,15 @@ namespace Eleave.Controllers
             {
                 model = modelData.FirstOrDefault();
             }
+
+            LoadEmployeeLevel();
             LoadDepartments();
+            LoadEmpType();
             return View(model);
+        }
+        public ActionResult Setting()
+        {
+            return View();
         }
 
         [HttpPost]
@@ -98,12 +106,16 @@ namespace Eleave.Controllers
                 updateEmployee = new UpdateProfileEmployee().Update(store);
                 ViewBag.UpdateStatus = "Success";
                 LoadDepartments();
+                LoadEmpType();
+                LoadEmployeeLevel();
                 return View(store);
             }
-            catch
+            catch (Exception ex)
             {
-                ViewBag.UpdateStatus = "Error";
+                ViewBag.Error = ex.ToString();
                 LoadDepartments();
+                LoadEmpType();
+                LoadEmployeeLevel();
                 return View(store);
             }
         }
@@ -124,9 +136,31 @@ namespace Eleave.Controllers
                 ViewBag.ProfileList
             });
         }
+        public void LoadEmployeeLevel()
+        {
+            var EMP_LVL = new List<StoreGetLookupData>();
+            EMP_LVL = new GetLookupData().GetLookupDataStore("EMP_LVL");
+
+            ViewBag.EmpLevel = EMP_LVL;
+
+            //var empLevelList = EMP_LVL.Select(x => new SelectListItem
+            //{
+            //    Value = x.LookValue.ToString(),
+            //    Text = x.LookDesc
+            //}).ToList();
+
+            //ViewBag.EmpLvl = empLevelList;
+        }
+        private void LoadEmpType()
+        {
+            var Emp_Type = new List<StoreGetLookupData>();
+            Emp_Type = new GetLookupData().GetLookupDataStore("EMP_TYPE");
+
+            ViewBag.EmpTyp = Emp_Type;
+        }
         private void LoadDepartments()
         {
-            List<SelectListItem> departmentList = new List<SelectListItem>();
+            List<Department> departments = new List<Department>();
             var connectionString = ConfigurationManager.ConnectionStrings["HRIS_DB"].ConnectionString;
             SqlConnection conn = new SqlConnection(connectionString);
             conn.Open();
@@ -134,17 +168,17 @@ namespace Eleave.Controllers
             SqlDataReader reader_dept = cmd.ExecuteReader();
             while (reader_dept.Read())
             {
-                departmentList.Add(new SelectListItem
+                departments.Add(new Department
                 {
-                    Value = reader_dept["DeptName"].ToString(),
-                    Text = reader_dept["DeptName"].ToString()
+                    DeptId = reader_dept["DeptId"].ToString(),
+                    DeptName = reader_dept["DeptName"].ToString()
                 });
             }
             reader_dept.Close();
             reader_dept.Dispose();
             cmd.Dispose();
             conn.Close();
-            ViewBag.DepartmentList = departmentList;
+            ViewBag.DepartmentList = departments;
         }
     }
 }

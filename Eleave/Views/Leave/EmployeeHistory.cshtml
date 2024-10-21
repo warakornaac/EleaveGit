@@ -13,7 +13,7 @@
                 </div>
                 <ul class="breadcrumb">
                     <li class="breadcrumb-item"><a href="@Url.Action("Index","Home")"><i class="feather icon-home"></i></a></li>
-                    <li class="breadcrumb-item"><a href="@Url.Action("ManagerHistory","Leave")">ประวัติการลา</a></li>
+                    <li class="breadcrumb-item"><a href="@Url.Action("EmployeeHistory","Leave")">ประวัติการลา</a></li>
                 </ul>
             </div>
         </div>
@@ -22,7 +22,7 @@
 <div class="row">
     <div class="col-xl-12">
         <div class="card">
-            @using (Html.BeginForm("ManagerSearchHistory", "Leave", FormMethod.Post, new { @id = "formSearch" }))
+            @using (Html.BeginForm("EmployeeHistory", "Leave", FormMethod.Post))
             {
                 <div class="card-body p-3 m-0">
 
@@ -55,7 +55,7 @@
                                                     new SelectListItem() {Text="Approve", Value="S1"},
                                                     new SelectListItem() {Text="Reject", Value="S2"},
                                                     new SelectListItem(){Text="Waiting",Value="S3"}
-                                                }, "สถานะคำขอ", new { @class = "custom-select", @id = "reqStatus" })
+                                                }, "สถานะคำขอ", new { @class = "custom-select", @id = "reqStatus-selector" })
                         </div>
                         <div class="form-group col-lg-4">
                             <label>เริ่มวันที่ :</label>
@@ -66,16 +66,8 @@
                             @Html.TextBox("ReqEnd", null, new { @class = "form-control", @id = "reqEnd", @placeholder = "--/--/--" })
                         </div>
                         <div class="form-group col-lg-4">
-                            <label>แผนก :</label>
-                            @Html.DropDownList("Department", new SelectList(ViewBag.DepartmentList, "Value", "Text"), "เลือกหน่วยงาน", new { @class = "custom-select", @id = "department-selector" })
-                        </div>
-                        <div class="form-group col-lg-4">
                             <label>รหัสคำขอ :</label>
-                            @Html.TextBox("reqId", null, new { @class = "form-control", @id = "reqId", @placeholder = "รหัสคำขอ" })
-                        </div>
-                        <div class="form-group col-lg-4">
-                            <label>ชื่อพนักงาน :</label>
-                            @Html.TextBox("empName", null, new { @class = "form-control", @id = "empName", @placeholder = "ชื่อพนักงาน" })
+                            @Html.TextBox("reqId", null, new { @class = "form-control", @id = "reqId" })
                         </div>
 
                     </div>
@@ -178,14 +170,15 @@
     });
 
     $(document).on("click", "#reset-btn", function () {
-        $('#reqId').val('');                      // รหัสคำขอ
+        $('#LeaveType-selector').val('').trigger('change'); // ประเภทคำขอ
         $('#reqType-selector').val('').trigger('change'); // ประเภทคำขอ
+        $('#reqStatus-selector').val('').trigger('change'); // ประเภทคำขอ
+        $('#reqId').val('');                      // รหัสคำขอ
         $('#reqDate').val('');                    // วันที่แจ้ง
         $('#reqStart').val('');                   // เริ่มวันที่
         $('#reqEnd').val('');                     // ถึงวันที่
-        $('#reqStatus').val('').trigger('change'); // สถานะคำขอ
-        $('#department-selector').val('').trigger('change');
     });
+
     $(document).ready(function () {
         $('#reqStart').inputmask('99/99/9999');
         $('#reqEnd').inputmask('99/99/9999');
@@ -197,7 +190,7 @@
             ordering: false,
             select: false,
             language: {
-                info: "แสดง _START_ ถึง _END_ จากทั้งหมด _TOTAL_ คน"
+                info: "แสดง _START_ ถึง _END_ จากทั้งหมด _TOTAL_ การร้องขอ"
             }
         });
 
@@ -217,7 +210,7 @@
         $(document).ready(function () {
             setTimeout(function () {
                 LoadingHide();
-            }, 1500); // หน่วงเวลา (2 วินาที)
+            }, 1500); // หน่วงเวลา (1.5 วินาที)
         });
     </script>
 }

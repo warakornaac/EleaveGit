@@ -45,6 +45,7 @@
     <Compile Include="Eleaving.cs" />
     <Compile Include="Request.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StoreGetLookupData.cs" />
     <Compile Include="StoreGetProfile.cs" />
     <Compile Include="StoreUpdateEmployeeProfile.cs" />
     <Compile Include="UserAD.cs" />

@@ -151,7 +151,6 @@
                     <div class="col-md-4 col-lg-4">
                         <div class="form-group">
                             @Html.LabelFor(model => model.DeptId, "หน่วยงาน")
-                            @*@Html.TextBoxFor(model => model.DeptId, new { @class = "form-control" })*@
                             @Html.DropDownListFor(model => model.DeptId, new SelectList(ViewBag.DepartmentList, "DeptId", "DeptName"), "เลือกหน่อยงาน", new { @class = "custom-select", @id = "department-selector" })
                         </div>
                     </div>
@@ -170,23 +169,16 @@
                     <div class="col-md-4 col-lg-4">
                         <div class="form-group">
                             @Html.LabelFor(model => model.EmpLvl, "ระดับพนักงาน")
-                            @Html.DropDownListFor(model => model.EmpLvl, new List<SelectListItem>
-                                                {
-                                                    new SelectListItem() {Text="User", Value="Usr"},
-                                                    new SelectListItem() {Text="Admin", Value="Ad"},
-                                                    new SelectListItem(){Text="Super",Value="Su"}
-                                                }, "เลือกระดับพนักงาน", new { @class = "custom-select" })
+                            @Html.DropDownListFor(model => model.EmpLvl, new SelectList(ViewBag.EmpLevel, "LookValue", "LookDesc"), "เลือกหน่อยงาน", new { @class = "custom-select", @id = "emplvl-selector" })
+
+
                         </div>
                     </div>
                     <div class="col-md-4 col-lg-4">
                         <div class="form-group">
                             @Html.LabelFor(model => model.EmpTypeId, "ประเภทพนักงาน")
-                            @Html.DropDownListFor(model => model.EmpTypeId, new List<SelectListItem>
-                                                            {
-                                                                new SelectListItem() {Text="User", Value="Usr"},
-                                                                new SelectListItem() {Text="Admin", Value="Ad"},
-                                                                new SelectListItem(){Text="Super",Value="Su"}
-                                                            }, "เลือกประเภทพนักงาน", new { @class = "custom-select" })
+                            @Html.DropDownListFor(model => model.EmpTypeId, new SelectList(ViewBag.EmpTyp, "LookValue", "LookDesc"), "เลือกหน่อยงาน", new { @class = "custom-select", @id = "emptyp-selector" })
+
                         </div>
                     </div>
                     <div class="col-md-4 col-lg-4">
@@ -207,7 +199,13 @@
     </div>
 </div>
 <script>
-
+    if ("@ViewBag.Error" !== "") {
+        Swal.fire({
+            title: "The Internet?",
+            text: "@ViewBag.Error",
+            icon: "question"
+        });
+    }
     $('#department-selector').select2({
         width: '100%'
     });

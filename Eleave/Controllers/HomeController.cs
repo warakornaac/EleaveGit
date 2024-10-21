@@ -1,8 +1,10 @@
-﻿using System;
+﻿using Eleave.Models;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
 using System.DirectoryServices;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -17,7 +19,8 @@ namespace Eleave.Controllers
         // GET: Home
         public ActionResult Index()
         {
-            return View();
+            var leaveHis = Demodata();
+            return View(leaveHis);
         }
         [HttpGet]
         public ActionResult Login()
@@ -165,6 +168,82 @@ namespace Eleave.Controllers
         {
             return (username == "testuser" && password == "password123");
 
+        }
+        private List<LeaveHisDemo> Demodata()
+        {
+            LeaveHisDemo leave1 = new LeaveHisDemo()
+            {
+                LeavId = "01",
+                ReqType = "ลา",
+                LeaveType = "ลาป่วย",
+                ReqBy = "ธีระพล ประทาน",
+                TotalReq = "1",
+                ApprvBy = "โกศล พิมลศรี",
+                HrBy = "นรี กรพิทัพิทักษ์",
+                ReqDate = DateTime.ParseExact("16/6/2024", "d/M/yyyy", CultureInfo.InvariantCulture),
+                StartDate = DateTime.ParseExact("16/6/2024", "d/M/yyyy", CultureInfo.InvariantCulture),
+                EndDate = DateTime.ParseExact("17/6/2024", "d/M/yyyy", CultureInfo.InvariantCulture),
+                ApprDate = DateTime.ParseExact("15/6/2024", "d/M/yyyy", CultureInfo.InvariantCulture),
+                HrDate = DateTime.ParseExact("15/6/2024", "d/M/yyyy", CultureInfo.InvariantCulture),
+                ReqStatus = "S1"
+            };
+            LeaveHisDemo leave2 = new LeaveHisDemo()
+            {
+                LeavId = "02",
+                ReqType = "ลา",
+                ReqBy = "ธีระพล ประทาน",
+                LeaveType = "ลากิจ",
+                TotalReq = "2",
+                ApprvBy = "โกศล พิมลศรี",
+                HrBy = "นรี กรพิทัพิทักษ์",
+                ReqDate = DateTime.ParseExact("19/6/2024", "d/M/yyyy", CultureInfo.InvariantCulture),
+                StartDate = DateTime.ParseExact("20/6/2024", "d/M/yyyy", CultureInfo.InvariantCulture),
+                EndDate = DateTime.ParseExact("21/6/2024", "d/M/yyyy", CultureInfo.InvariantCulture),
+                ApprDate = DateTime.ParseExact("19/6/2024", "d/M/yyyy", CultureInfo.InvariantCulture),
+                HrDate = DateTime.ParseExact("19/6/2024", "d/M/yyyy", CultureInfo.InvariantCulture),
+                ReqStatus = "S1"
+            };
+            LeaveHisDemo leave3 = new LeaveHisDemo()
+            {
+                LeavId = "03",
+                ReqType = "ลา",
+                LeaveType = "ลาพักร้อน",
+                ReqBy = "ธีระพล ประทาน",
+                TotalReq = "2",
+                ApprvBy = "โกศล พิมลศรี",
+                HrBy = "นรี กรพิทัพิทักษ์",
+                ReqDate = DateTime.Now,
+                StartDate = DateTime.ParseExact("16/10/2024", "d/M/yyyy", CultureInfo.InvariantCulture),
+                EndDate = DateTime.ParseExact("30/10/2024", "d/M/yyyy", CultureInfo.InvariantCulture),
+                ApprDate = DateTime.ParseExact("15/10/2024", "d/M/yyyy", CultureInfo.InvariantCulture),
+                HrDate = DateTime.ParseExact("15/10/2024", "d/M/yyyy", CultureInfo.InvariantCulture),
+                ReqStatus = "S2"
+            };
+            LeaveHisDemo leave4 = new LeaveHisDemo()
+            {
+                LeavId = "04",
+                ReqType = "ลา",
+                LeaveType = "ลาป่วย",
+                ReqBy = "ธีระพล ประทาน",
+                TotalReq = "1",
+                ApprvBy = "โกศล พิมลศรี",
+                HrBy = "นรี กรพิทัพิทักษ์",
+                ReqDate = DateTime.Now,
+                StartDate = DateTime.ParseExact("16/10/2024", "d/M/yyyy", CultureInfo.InvariantCulture),
+                EndDate = DateTime.ParseExact("30/10/2024", "d/M/yyyy", CultureInfo.InvariantCulture),
+                ApprDate = DateTime.ParseExact("15/10/2024", "d/M/yyyy", CultureInfo.InvariantCulture),
+                HrDate = DateTime.ParseExact("15/10/2024", "d/M/yyyy", CultureInfo.InvariantCulture),
+                ReqStatus = "S3"
+            };
+            List<LeaveHisDemo> allLeave = new List<LeaveHisDemo>
+            {
+                leave1,
+                leave2,
+                leave3,
+                leave4
+            };
+
+            return allLeave;
         }
     }
 }

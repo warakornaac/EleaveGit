@@ -133,29 +133,33 @@
 <div class="row">
     <div class="col-xl-12">
         <div class="card">
-            @using (Html.BeginForm("SearchUser", "Employee", FormMethod.Post, new { @id = "formSearch" }))
+            @using (Html.BeginForm("ManagerEmployee", "Employee", FormMethod.Post, new { @id = "formSearch" }))
             {
                 <div class="card-body p-3 m-0">
 
                     @Html.AntiForgeryToken()
                     <div class="row">
                         <div class="form-group col-md-3">
-                            <label>รหัสพนักงาน :</label>
-                            @Html.TextBox("EmpId", null, new { @class = "form-control", @id = "empId" })
+                            <label>บริษัท :</label>
+                            @Html.DropDownList("Company", new List<SelectListItem>
+                                                {
+                                                    new SelectListItem() {Text="AAC", Value="AAC"},
+                                                    new SelectListItem() {Text="TAC", Value="TAC"},
+                                                    new SelectListItem(){Text="OMP",Value="OMP"}
+                                                }, "บริษัท", new { @class = "custom-select", @id = "Company-selector" })
                         </div>
 
                         <div class="form-group col-md-3">
                             <label>หน่วยงาน :</label>
                             @Html.DropDownList("Department", new SelectList(ViewBag.DepartmentList, "DeptName", "DeptName"), "เลือกหน่วยงาน", new { @class = "custom-select", @id = "department-selector" })
-
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label>รหัสพนักงาน :</label>
+                            @Html.TextBox("EmpID", null, new { @class = "form-control", @id = "empID" })
                         </div>
                         <div class="form-group col-md-3">
                             <label>ชื่อพนักงาน :</label>
                             @Html.TextBox("Name", null, new { @class = "form-control", @id = "empName" })
-                        </div>
-                        <div class="form-group col-md-3">
-                            <label>ระดับพนักงาน :</label>
-                            @Html.TextBox("Level", null, new { @class = "form-control", @id = "empRole" })
                         </div>
                     </div>
                 </div>
@@ -263,11 +267,11 @@
             }
         });
     });
-    $('#reset-btn').on('click', function () {
+    $(document).on('click', "#reset-btn", function () {
         $('#empId').val('');
+        $('#Company-selector').val('').trigger('change');
         $('#department-selector').val('').trigger('change');
         $('#empName').val('');
-        //$('#')
     });
     $(document).ready(function () {
         $('#formSearch').submit(function (e) {
@@ -287,3 +291,20 @@
         });
     })
 </script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        LoadingShow();
+    });
+</script>
+
+@if (ViewBag.EmployeeList != null)
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            setTimeout(function () {
+                LoadingHide();
+            }, 1500); // หน่วงเวลา (2 วินาที)
+        });
+    </script>
+}
