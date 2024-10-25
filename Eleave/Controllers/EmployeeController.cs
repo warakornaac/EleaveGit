@@ -143,6 +143,38 @@ namespace Eleave.Controllers
             ViewBag.apprvFlow = list.ToList();
             return View();
         }
+        public JsonResult GenerateApprvFlowID(string Dept)
+        {
+            string message = string.Empty;
+            string apprvGrbID = string.Empty;
+            var connectionString = ConfigurationManager.ConnectionStrings["HRIS_DB"].ConnectionString;
+            SqlConnection conn = new SqlConnection(connectionString);
+            conn.Open();
+            try
+            {
+                var cmd = new SqlCommand("P_Generate_ArrovalFlow_GroupID", conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@inDepartment", Dept);
+                SqlParameter p = new SqlParameter("@OutGenstatus", SqlDbType.NVarChar, 100);
+                p.Direction = ParameterDirection.Output;
+                SqlParameter gen = new SqlParameter("@NewApprGrpId", SqlDbType.VarChar, 20);
+                gen.Direction = ParameterDirection.Output;
+                cmd.Parameters.Add(p);
+                cmd.Parameters.Add(gen);
+                cmd.ExecuteNonQuery();
+                message = cmd.Parameters["@OutGenstatus"].Value.ToString();
+                apprvGrbID = cmd.Parameters["@NewApprGrpId"].Value.ToString();
+
+                conn.Close();
+                cmd.Dispose();
+            }
+            catch (Exception ex)
+            {
+                conn.Close();
+                message = ex.Message;
+            }
+            return Json(new { message = message, apprvGrbID = apprvGrbID.Trim() }, JsonRequestBehavior.AllowGet);
+        }
         public JsonResult GetDirectorDepartment(string deptID)
         {
             string message = string.Empty;
@@ -204,6 +236,42 @@ namespace Eleave.Controllers
 
             return Json(new { message = message, getApproval }, JsonRequestBehavior.AllowGet);
         }
+        public JsonResult AddApprvFlow(string apprvID, string apprvName, string dept, string step, string empId, string action, string desc)
+        {
+            string message = string.Empty;
+            string username = Session["Username"].ToString();
+            var connectionString = ConfigurationManager.ConnectionStrings["HRIS_DB"].ConnectionString;
+            SqlConnection conn = new SqlConnection(connectionString);
+            conn.Open();
+            try
+            {
+                var cmd = new SqlCommand("P_Add_ApprovalFlow", conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@inApprvID", apprvID);
+                cmd.Parameters.AddWithValue("@inApprvName", apprvName);
+                cmd.Parameters.AddWithValue("@inDept", dept);
+                cmd.Parameters.AddWithValue("@inStep", step);
+                cmd.Parameters.AddWithValue("@inEmpID", empId);
+                cmd.Parameters.AddWithValue("@inAction", action);
+                cmd.Parameters.AddWithValue("@inApprvDes", desc);
+                cmd.Parameters.AddWithValue("@inUser", username.Trim());
+                SqlParameter p = new SqlParameter("@outGenstatus", SqlDbType.NVarChar, 100);
+                p.Direction = ParameterDirection.Output;
+                cmd.Parameters.Add(p);
+                cmd.ExecuteNonQuery();
+                message = cmd.Parameters["@OutGenstatus"].Value.ToString();
+
+                cmd.Dispose();
+                conn.Close();
+            }
+            catch (Exception ex)
+            {
+                conn.Close();
+                message = ex.Message;
+            }
+            return Json(new { message = message }, JsonRequestBehavior.AllowGet);
+        }
+
         public JsonResult UpdateApprvFlow(string apprvID, string apprvName, string dept, string step, string empId, string action)
         {
             string message = string.Empty;

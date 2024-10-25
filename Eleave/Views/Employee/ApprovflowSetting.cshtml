@@ -4,7 +4,7 @@
 }
 
 <style>
-    .swal2-front {
+    .swal-custom-zindex {
         z-index: 1060 !important;
     }
 </style>
@@ -37,7 +37,7 @@
                     <div class="col-12">
                         <div class="form-group">
                             @Html.Label("รหัสกลุ่มอนุมัติ")
-                            @Html.TextBox("GroupID", null, new { @class = "form-control", @id = "apprvID-add", @readonly = "readonly" })
+                            @Html.TextBox("GroupID", null, new { @class = "form-control", @id = "groupId-add", @readonly = "readonly" })
                         </div>
                     </div>
                     <div class="col-12">
@@ -49,7 +49,7 @@
                     <div class="col-12">
                         <div class="form-group">
                             @Html.Label("แผนก")
-                            @Html.DropDownList("Department", new SelectList(ViewBag.DepartmentList, "LookParam", "LookDesc"), "เลือกหน่วยงาน", new { @class = "custom-select", @id = "department-selector-add" })
+                            @Html.DropDownList("Department", new SelectList(ViewBag.DepartmentList, "LookValue", "LookDesc"), "เลือกหน่วยงาน", new { @class = "custom-select", @id = "department-selector-add" })
                         </div>
                     </div>
                     <div class="col-12">
@@ -82,12 +82,18 @@
                                                }, "เลือกประเภทอนุมัติ", new { @class = "custom-select", @id = "actiontyp-add" })
                         </div>
                     </div>
+                    <div class="col-12">
+                        <div class="form-group">
+                            @Html.Label("รายระเอียดประเภทอนุมัติ")
+                            @Html.TextArea("ApprvDesc", null, new { @class = "form-control", @id = "apprvDesc-add" })
+                        </div>
+                    </div>
                 </div>
 
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-primary" id="addApprove-btn">Add</button>
             </div>
         </div>
     </div>
@@ -268,8 +274,9 @@
         });
     });
     $(document).on('click', '#addFlowbtn', function () {
-        $('#apprvID-add').val('');
+        $('#groupId-add').val('');
         $('#groupName-add').val('');
+        $('#apprvDesc-add').val('');
         $('#department-selector-add').val('').trigger('change');
         $('#apprvLvl-add').val('').trigger('change');
         $('#empId-add').val('').trigger('change');
@@ -277,6 +284,100 @@
 
         DropdownEmpSelectAdd();
     });
+    $(document).on('click', '#addApprove-btn', function () {
+        var apprvID = $('#groupId-add').val();
+        var apprvNm = $('#groupName-add').val();
+        var deptVal = $('#department-selector-add').val();
+        var stepNum = $('#ApprvLvl-add').val();
+        var empId = $('#empid-add').val();
+        var actionTex = $('#actiontyp-add').val();
+        var apprvDesc = $('#apprvDesc-add').val();
+        if (apprvID == "") {
+            $('#addFormModal').modal('hide');
+            Swal.fire({
+                title: "Error!!!",
+                text: "ไม่พบรหัสรหัสกลุ่มอนุมัติ กรุณาตรวจสอบข้อมูล",
+                icon: "error"
+            }).then(() => {
+                $('#addFormModal').modal('show');
+            });
+            return false;
+        }
+        if (apprvNm == "") {
+            $('#addFormModal').modal('hide');
+            Swal.fire({
+                title: "Error!!!",
+                text: "กรุณากรอกชื่อกลุ่มอนุมัติ",
+                icon: "error"
+            }).then(() => {
+                $('#addFormModal').modal('show');
+            });
+            return false;
+        }
+        if (deptVal === "" || deptVal === null) {
+            $('#addFormModal').modal('hide');
+            Swal.fire({
+                title: "Error!!!",
+                text: "กรุณาเลือกแผนก",
+                icon: "error"
+            }).then(() => {
+                $('#addFormModal').modal('show');
+            });
+
+            return false;
+        }
+        if (stepNum === "" || stepNum === null) {
+            $('#addFormModal').modal('hide');
+            Swal.fire({
+                title: "Error!!!",
+                text: "กรุณาเลือกลำดับการอนุมัติ",
+                icon: "error"
+            }).then(() => {
+                $('#addFormModal').modal('show');
+            });
+            return false;
+        }
+        if (empId === "" || empId === null) {
+            $('#addFormModal').modal('hide');
+            Swal.fire({
+                title: "Error!!!",
+                text: "กรุณาเลือกพนักงานผู้อนุมัติ",
+                icon: "error"
+            }).then(() => {
+                $('#addFormModal').modal('show');
+            });
+            return false;
+        }
+        if (actionTex === "" || actionTex === null) {
+            $('#addFormModal').modal('hide');
+            Swal.fire({
+                title: "Error!!!",
+                text: "กรุณาเลือกประเภทอนุมัติ",
+                icon: "error"
+            }).then(() => {
+                $('#addFormModal').modal('show');
+            });
+            return false;
+        }
+        if (apprvDesc == "") {
+            $('#addFormModal').modal('hide');
+            Swal.fire({
+                title: "Error!!!",
+                text: "กรุณากรอกรายระเอียดขั้นตอนอนุมัติ",
+                icon: "error"
+            }).then(() => {
+                $('#addFormModal').modal('show');
+            });
+            return false;
+        }
+        AddApprvFlow();
+    });
+
+    $(document).on('change', '#department-selector-add', function () {
+        var depart = $(this).val();
+        GenerateApprvGrbID(depart);
+    });
+
 
     $('[id^="editApprv-"]').on('click', function () {
         var ApprvID = $(this).data('apprv');
@@ -375,8 +476,47 @@
              }
          });
     }
+    function GenerateApprvGrbID(department) {
+        $.ajax({
+            url: '@Url.Action("GenerateApprvFlowID", "Employee")',
+            data: {
+                Dept: department
+            },
+            type: 'POST',
+            dataType: 'JSON',
+            beforeSend: function () {
+                $('#groupId-edit').val('Generating...');
+            },
+            success: function (data) {
+                if (data.message == 'Y') {
+                    $('#groupId-add').val(data.apprvGrbID);
+                }
+            }
+        });
+    }
     function AddApprvFlow() {
+        var apprvID = $('#groupId-add').val();
+        var apprvNm = $('#groupName-add').val();
+        var deptVal = $('#department-selector-add').val();
+        var stepNum = $('#ApprvLvl-add').val();
+        var empId = $('#empid-add').val();
+        var actionTex = $('#actiontyp-add').val();
+        var apprvDesc = $('#apprvDesc-add').val();
 
+        $.ajax({
+            url: '@Url.Action("UpdateApprvFlow", "Employee")',
+            data: {
+
+            },
+            type: 'POST',
+            dataType: 'JSON',
+            beforeSend: function () {
+
+            },
+            success: function () {
+
+            }
+        })
     }
     function UpdateApprvFlow() {
         var apprvID = $('#groupId-edit').val();
