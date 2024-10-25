@@ -1,15 +1,22 @@
-﻿@{
-    Layout = "~/Views/Shared/_Layout.cshtml";
+﻿    @{
 
-    //string layout = "";
-    //if (Session["UserType"]) //UserT
-    //{
-    //    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
-    //}
-    //else
-    //{
-    //    Layout = "~/Views/Shared/_Layout.cshtml";
-    //}
+        //string layout = "";
+        //switch (Session["UserType"].ToString())
+        //{
+        //    case "1": //Employee
+        //        layout = "~/Views/Shared/_LayoutEmployee.cshtml";
+        //        break;
+        //    case "2": //Hr
+        //        layout = "~/Views/Shared/_LayoutHr.cshtml";
+        //        break;
+        //    case "3": //Approve
+        //        layout = "~/Views/Shared/_LayoutMgr.cshtml";
+        //        break;
+        //    default: //SuperAdmin (IT)
+        //        layout = "~/Views/Shared/_LayoutSuper.cshtml";
+        //        break;
+        //}
 
-    //Layout = layout;
-}
+        Layout = "~/Views/Shared/_LayoutMain.cshtml";
+
+    }

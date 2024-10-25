@@ -1,0 +1,230 @@
+/*
+* Start CSS validation
+*/
+
+label.error{
+    color:red;
+}
+
+/*
+* New Style Profile
+*/
+.page-profile .card-block {
+    padding: 40px 15px;
+    background-color: #fff;
+}
+
+.page-profile .card .avatar {
+    width: 130px;
+    margin-bottom: 10px;
+}
+
+.page-profile .avatar img {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    border: 0 none;
+    border-radius: 5%;
+}
+
+.page-profile table tr td.font-bold{
+    font-weight: bold !important;
+}
+
+/*
+* New Style Profile-v2
+*/
+.page-profile-v2 .user-release-actions button{
+    margin: 10px;
+}
+
+
+/*
+* New Style form-group 
+*/
+.form-group.reset-margin-bottom-0 {
+    margin-bottom: 0 !important;
+}
+
+
+/*
+* New Style Form Validation
+*/
+span.required{
+    color: red;
+}
+
+
+/*
+* New Style DataTable
+*/
+table .tool a{
+    margin-left: 5px;
+}
+
+button.disabled i{
+    color: white;
+}
+
+button.disabled{
+    cursor: default;
+}
+
+
+/*
+* New Style toolWidgets HelperService
+*/
+a.card-table{
+    text-decoration: none;
+}
+
+
+/*
+* New Style computer-map (moduel room)
+*/
+.computer-map{
+    display: inline-block;
+}
+
+.computer-map a{
+    border: 1px solid #ccc;
+    padding: 10px;
+    display: inline-block;
+    width: 220px;
+}
+
+.computer-map a:hover{
+    border: 1px solid #ff4c52;
+}
+
+.computer-map .computer-map-icon{
+    float: left;
+}
+
+.computer-map .computer-map-detail{
+    float: right;
+    margin-left: 20px;
+    width: 60%;
+}
+
+.boxexam{
+    display: inline-block;
+}
+
+.listexam{
+    float: left;
+    margin-right: 20px;
+}
+
+.listexam input[type=number]{
+    width: 100px;
+    text-align: center;
+}
+
+.computer-map .box-series {
+    border: 1px solid #ccc;
+    margin-bottom: 18px;
+    padding: 10px;
+    height: 60px;
+    width: 220px;
+}
+
+
+/*
+* New Style Color
+*/
+.red{
+    color: red;
+}
+
+.green{
+    color:green;
+}
+
+/*
+* New Style Other
+*/
+.page-title {
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: 20px;
+}
+
+span.comment-code{
+    color: #28a745;
+    font-weight: 800;
+}
+
+span.code-edit{
+    color:yellowgreen;
+    font-weight: 800;
+}
+
+pre {
+    font-size: 100%;
+}
+
+.mt10 {
+    margin-top: 10px;
+}
+
+div.revoke{
+    color: black;
+    min-width: 450px;
+}
+
+div.revoke .title{
+    font-weight: 400;
+    float: left;
+    width: 40%;
+}
+
+div.revoke .detail{
+    float: left;
+}
+
+.centered {  
+    position: fixed;  
+    top: 50%;  
+    left: 50%;  
+    transform: translate(-50%, -50%);  
+}
+
+div.revoke div.box-btn{
+    margin-top: 25px;
+}
+
+div.revoke div.box-btn a{
+    width: 120px;
+}
+
+div.revoke div h4.header{
+    margin-top: 10px;
+}
+
+div.revoke div.ribbon-vwrapper{
+    padding: 55px 40px 30px 40px !important;
+}
+
+div.revoke h4.color-red{
+    color: red;
+}
+
+div.revoke h4.color-green{
+    color: #05a85c;
+}
+
+div.revoke div.ribbon{
+    font-weight: 400;
+    font-size: 16px;
+}
+
+@media (max-width: 450px) {
+    div.revoke{
+        min-width: 350px;
+    }
+
+    div.revoke .title{
+        width: 35%;
+    }
+}

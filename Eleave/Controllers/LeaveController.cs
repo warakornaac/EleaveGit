@@ -8,8 +8,6 @@ using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using Eleave.Data;
-using Eleave.Models;
 using Eleave.Library;
 using System.IO;
 
@@ -23,7 +21,7 @@ namespace Eleave.Controllers
             var DocumentRequest = Utils.GetDocumentRequest("");
 
             ViewBag.DocumentRequest = DocumentRequest;
-            return View(new FileUploadModel());
+            return View();
         }
         [HttpPost]
         public ActionResult SaveRequestForm(string ReqNo)
