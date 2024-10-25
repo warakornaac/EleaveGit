@@ -22,7 +22,10 @@ namespace Eleave.Controllers
             var DocumentRequest = Utils.GetDocumentRequest("");
 
             ViewBag.DocumentRequest = DocumentRequest;
+<<<<<<< HEAD
 
+=======
+>>>>>>> c271049a2381041ac2d6d27dcdaf22ec3509f5b8
             return View();
         }
         [HttpPost]
