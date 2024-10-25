@@ -58,24 +58,28 @@
                 </div>
                 @{
                     string fileMenu = "";
-                    switch (Session["UserType"].ToString())
-                    {
-                        case "1": //Employee
-                            fileMenu = "../Include/MenuEmployee";
-                            break;
-                        case "2": //Hr
-                            fileMenu = "../Include/MenuHr";
-                            break;
-                        case "3": //Approve
-                            fileMenu = "../Include/MenuMgr";
-                            break;
-                        default: //SuperAdmin (IT)
-                            fileMenu = "../Include/MenuSuper";
-                            break;
+                    if (Session["UserType"] != null) {
+                        switch (Session["UserType"].ToString())
+                        {
+                            case "1": //Employee
+                                fileMenu = "../Include/MenuEmployee";
+                                break;
+                            case "2": //Hr
+                                fileMenu = "../Include/MenuHr";
+                                break;
+                            case "3": //Approve
+                                fileMenu = "../Include/MenuMgr";
+                                break;
+                            default: //SuperAdmin (IT)
+                                fileMenu = "../Include/MenuSuper";
+                                break;
+                        }
+                        @Html.Partial(fileMenu)
+                    } else {
+                        Response.Redirect("/Home/Login");
                     }
                 }
 
-                @Html.Partial(fileMenu)
 
             </div>
         </div>

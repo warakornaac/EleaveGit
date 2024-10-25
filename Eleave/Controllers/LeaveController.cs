@@ -21,10 +21,6 @@ namespace Eleave.Controllers
             var DocumentRequest = Utils.GetDocumentRequest("");
 
             ViewBag.DocumentRequest = DocumentRequest;
-<<<<<<< HEAD
-=======
-            //return View(new FileUploadModel());
->>>>>>> 53c0cf86fd3ebe05f1dd9ab00d7e620be7841a89
             return View();
         }
         [HttpPost]
