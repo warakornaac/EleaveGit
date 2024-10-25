@@ -1,7 +1,9 @@
 ﻿using Eleave.Models;
+using Eleave.Library;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data;
 using System.Data.SqlClient;
 using System.DirectoryServices;
 using System.Globalization;
@@ -36,15 +38,10 @@ namespace Eleave.Controllers
         [HttpPost]
         public ActionResult Login(LoginUserModels loginUser)
         {
+            string UserType = string.Empty;
             if (ModelState.IsValid)
             {
-                this.Session["UserType"] = null;
-                this.Session["UserID"] = loginUser.User.Trim();
-                this.Session["UserPassword"] = loginUser.Password.Trim();
-                this.Session["SLMCOD"] = string.Empty;
-                string UserType = string.Empty;
-
-                var conntionString = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+                var conntionString = ConfigurationManager.ConnectionStrings["HRIS_DB"].ConnectionString;
                 SqlConnection conn = new SqlConnection(conntionString);
                 try
                 {
@@ -56,107 +53,88 @@ namespace Eleave.Controllers
                     var userSearch = searcher.FindOne();
                     DirectoryEntry directoryEntry = (DirectoryEntry)userSearch.GetDirectoryEntry();
                     string DepartmentAd = directoryEntry.Properties["Department"].Value.ToString();
-
+                    string EmpId = directoryEntry.Properties["PhysicalDeliveryOfficeName"].Value.ToString();
                     conn.Open();
                     if (result == null)
                     {
                         if (ModelState.IsValid)
                         {
-                            FormsAuthentication.SetAuthCookie(loginUser.User.Trim(), false);
-                            return RedirectToAction("Index", "Home");
+                            return RedirectToAction("Index", "Login");
                         }
                         else
                         {
-                            ModelState.AddModelError("", "Login details are wrong 1.");
+                            ModelState.AddModelError("", "Username or password ไม่ถูกต้อง");
                         }
                     }
-                    else
-                    {//มีใน AD จะไม่เช็ค password UsrTbl
-                        string sqlString = "SELECT Usr.UsrTyp, Ad.Department, Ad.SLMCOD " +
-                            "FROM UsrTbl_Budget Usr " +
-                            "INNER JOIN v_ADUser Ad ON Ad.LogInName = Usr.UsrID " +
-                            "WHERE UsrID =N'" + loginUser.User.Trim() + "'" +
-                            "AND Usr.Password is null";
-                        SqlCommand cmd = new SqlCommand(sqlString, conn);
-                        SqlDataReader reader = cmd.ExecuteReader();
-                        //มีใน table
-                        if (reader.HasRows)
-                        {
-                            while (reader.Read())
-                            {
-                                this.Session["UserType"] = reader["UsrTyp"].ToString();
-                                this.Session["Department"] = "";
-                                this.Session["SLMCOD"] = reader["SLMCOD"].ToString();
-                                UserType = Session["UserType"].ToString();
-                            }
-                        }
-                        else //ไม่มีใน table
-                        {
-                            //Default IT
-                            if (DepartmentAd == "MIS")
-                            {
-                                this.Session["UserType"] = 1;
-                                UserType = Session["UserType"].ToString();
-                            }
-                            else
-                            {
-                                ModelState.AddModelError("", "You don't have permission, Please contact admin");
-                            }
-                        }
-                        reader.Close();
-                        reader.Dispose();
-                        cmd.Dispose();
-                        FormsAuthentication.SetAuthCookie(loginUser.User.Trim(), false);
-                        if (UserType == "1" || UserType == "2")//admin pm
-                        {
+                    else //User/Pass มีบน AD
+                    {
+                        var dateCheckLogin = CheckLoginEmployee(EmpId, "");
+                        UserType = dateCheckLogin.Item2;
+                        if (!string.IsNullOrEmpty(UserType)) { 
                             return RedirectToAction("Index", "Home");
                         }
-                        else if (UserType == "3")//sale
-                        {
-                            return RedirectToAction("Index", "Home");
-                        }
-                        else if (UserType == "4") { return RedirectToAction("Index", "Home"); }
-                        ModelState.AddModelError("", "Login Details are wrong 2. " + "Type: " + UserType);
+                        ModelState.AddModelError("", "ไม่พบข้อมูลพนักงานของท่านในระบบ HR | Username or password ไม่ถูกต้อง");
                     }
                 }
-                catch //ไม่มีใน table
+                catch //User/Pass ไม่มีบน AD | พนักงานคลัง
                 {
-                    conn.Open();
-                    string txtSql = "";
-                    txtSql = "SELECT Usr.UsrTyp, Ad.Department, ISNULL(Usr.SLMCOD ,Ad.SLMCOD) as SLMCOD " +
-                        "FROM UsrTbl_Budget Usr " +
-                        "LEFT JOIN v_ADUser Ad ON Ad.LogInName = Usr.UsrID " +
-                        "WHERE UsrID =N'" + loginUser.User.Trim() + "'and [dbo].F_decrypt([Password])='" + loginUser.Password.Trim() + "'";
-                    SqlCommand cmd = new SqlCommand(txtSql, conn);
-                    SqlDataReader reader = cmd.ExecuteReader();
-                    while (reader.Read())
-                    {
-                        this.Session["UserType"] = reader["UsrTyp"].ToString();
-                        this.Session["Department"] = "";
-                        this.Session["SLMCOD"] = reader["SLMCOD"].ToString();
-                        UserType = reader["UsrTyp"].ToString();
-                    }
-                    reader.Close();
-                    reader.Dispose();
-                    cmd.Dispose();
-                    FormsAuthentication.SetAuthCookie(loginUser.User.Trim(), false);
-                    if (UserType == "1" || UserType == "2")
+                    var dateCheckLogin = CheckLoginEmployee(loginUser.User, loginUser.Password);
+                    UserType = dateCheckLogin.Item2;
+                    if (!string.IsNullOrEmpty(UserType))
                     {
                         return RedirectToAction("Index", "Home");
                     }
-                    else if (UserType == "3")
-                    {
-                        return RedirectToAction("Index", "Home");
-                    }
-                    else if (UserType == "4")
-                    {
-                        return RedirectToAction("Index", "Home");
-                    }
-                    ModelState.AddModelError("", "Login details are wrong 3.");
+                    ModelState.AddModelError("", "ไม่พบข้อมูลพนักงานของท่านในระบบ HR | Username or password ไม่ถูกต้อง");
                 }
                 conn.Close();
             }
             return View(loginUser);
+        }
+        public (string, string, string, string) CheckLoginEmployee(string Username, string Password) {
+            this.Session["EmpId"] = null;
+            this.Session["UserType"] = null;
+            this.Session["FullName"] = null;
+            this.Session["DeptName"] = null;
+            this.Session["Username"] = null;
+
+            string EmpId = "";
+            string UserType = "";
+            string FullName = "";
+            string DeptName = "";
+            using (SqlConnection Connection = new SqlConnection(Utils.GetConfig("HRIS_DB")))
+            {
+                Connection.Open();
+                var command = new SqlCommand("P_Check_Login_Employee", Connection);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("@inUsername", Username);
+                command.Parameters.AddWithValue("@inPassword", Password);
+                SqlParameter returnEmpId = new SqlParameter("@getEmpId", SqlDbType.NVarChar, 1000);
+                SqlParameter returnUserType = new SqlParameter("@getUserType", SqlDbType.NVarChar, 1000);
+                SqlParameter returnFullName = new SqlParameter("@getFullName", SqlDbType.NVarChar, 1000);
+                SqlParameter returnDeptName = new SqlParameter("@getDeptName", SqlDbType.NVarChar, 1000);
+                returnEmpId.Direction = ParameterDirection.Output;
+                returnUserType.Direction = ParameterDirection.Output;
+                returnFullName.Direction = ParameterDirection.Output;
+                returnDeptName.Direction = ParameterDirection.Output;
+                command.Parameters.Add(returnEmpId);
+                command.Parameters.Add(returnUserType);
+                command.Parameters.Add(returnFullName);
+                command.Parameters.Add(returnDeptName);
+                int outputResult = command.ExecuteNonQuery();
+                EmpId = command.Parameters["@getEmpId"].Value.ToString();
+                UserType = command.Parameters["@getUserType"].Value.ToString();
+                FullName = command.Parameters["@getFullName"].Value.ToString();
+                DeptName = command.Parameters["@getDeptName"].Value.ToString();
+                //keep session
+                this.Session["EmpId"] = EmpId;
+                this.Session["UserType"] = UserType;
+                this.Session["FullName"] = FullName;
+                this.Session["DeptName"] = DeptName;
+                this.Session["Username"] = Username;
+                command.Dispose();
+                Connection.Close();
+            }
+            return (EmpId, UserType, FullName, DeptName);
         }
         public ActionResult Logout()
         {

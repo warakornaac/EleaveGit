@@ -70,6 +70,9 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.Helpers.dll</HintPath>
@@ -149,6 +152,17 @@
     <Content Include="Content\bootstrap.rtl.css" />
     <Content Include="Content\bootstrap.rtl.min.css" />
     <Content Include="Content\font-awesome.min.css" />
+    <Content Include="Content\login\bootstrap-extend.min.css" />
+    <Content Include="Content\login\bootstrap.min.css" />
+    <Content Include="Content\login\brand-icons.min.css" />
+    <Content Include="Content\login\cookieconsent.css" />
+    <Content Include="Content\login\font-awesome.css" />
+    <Content Include="Content\login\login-v2.css" />
+    <Content Include="Content\login\ribbon-page.css" />
+    <Content Include="Content\login\site.css" />
+    <Content Include="Content\login\style.css" />
+    <Content Include="Content\login\teal.css" />
+    <Content Include="Content\login\web-icons.min.css" />
     <Content Include="Content\plugins\bootstrap-datepicker.min.css" />
     <Content Include="Content\plugins\datatables.css" />
     <Content Include="Content\plugins\datatables.min.css" />
@@ -223,6 +237,7 @@
     <Content Include="fonts\pct.eot" />
     <Content Include="fonts\pct.ttf" />
     <Content Include="fonts\pct.woff" />
+    <Content Include="Views\Include\Header.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -348,7 +363,6 @@
   <ItemGroup>
     <None Include="packages.config" />
     <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Shared\_LayoutLogin.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\Login.cshtml" />
@@ -356,8 +370,6 @@
     <Content Include="Scripts\jquery-3.4.1.min.map" />
     <Content Include="Views\Employee\ViewProfile.cshtml" />
     <Content Include="Views\Leave\RequestForm.cshtml" />
-    <Content Include="Views\Shared\_LayoutAdmin.cshtml" />
-    <Content Include="Views\Shared\_LayoutMgr.cshtml" />
     <Content Include="Views\Employee\ManagerEmployee.cshtml" />
     <Content Include="Views\Employee\UpdateEmployee.cshtml" />
     <Content Include="Views\Leave\ManagerHistory.cshtml" />
@@ -365,7 +377,14 @@
     <Content Include="Views\Employee\_DetailEmployee.cshtml" />
     <Content Include="Views\Employee\Setting.cshtml" />
     <Content Include="Views\Leave\EmployeeHistory.cshtml" />
+<<<<<<< HEAD
+    <Content Include="Views\Shared\_LayoutMain.cshtml" />
+    <Content Include="Views\Include\MenuSuper.cshtml" />
+    <Content Include="Views\Include\MenuEmployee.cshtml" />
+    <Content Include="Views\Include\MenuMgr.cshtml" />
+=======
     <Content Include="Views\Employee\ApprovflowSetting.cshtml" />
+>>>>>>> 53c0cf86fd3ebe05f1dd9ab00d7e620be7841a89
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

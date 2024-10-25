@@ -2,34 +2,62 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover">
     <title>@ViewBag.Title</title>
     @Styles.Render("~/Content/css")
-    <link href="~/Content/style-flat.css" rel="stylesheet" />
-    <link href="~/Content/plugins/animate.min.css" rel="stylesheet" />
-    <link href="~/Content/plugins/bootstrap.min.css" rel="stylesheet" />
-    <link href="~/Content/plugins/prism-coy.css" rel="stylesheet" />
-    <link href="~/Content/plugins/perfect-scrollbar.css" rel="stylesheet" />
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
-</head>
-<body>
-    <div class="auth-wrapper">
-        <div class="auth-content text-center">
-            @RenderBody()
-        </div>
-    </div>
-    @RenderSection("Scripts", required: false)
-</body>
-</html>
-<script src="~/Scripts/vendor-all.min.js"></script>
-<script src="~/Scripts/plugins/bootstrap.min.js"></script>
-<script src="~/Scripts/pcoded.js"></script>
-<script src="~/Scripts/plugins/apexcharts.min.js"></script>
-<script src="~/Scripts/uikit.min.js"></script>
-<script src="~/Scripts/analytics.min.js"></script>
 
-<script src="~/Scripts/plugins/jquery-ui.min.js"></script>
-<script src="~/Scripts/plugins/gmaps.min.js"></script>
-<script src="~/Scripts/plugins/perfect-scrollbar.min.js"></script>
-<script src="~/Scripts/plugins/prism.js"></script>
-<script src="~/Scripts/plugins/horizontal-menu.js"></script>
+    <!-- Stylesheets -->
+    <link href="~/Content/style-flat.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/Content/login/bootstrap.min.css">
+    <link rel="stylesheet" href="~/Content/login/bootstrap-extend.min.css">
+    <link rel="stylesheet" href="~/Content/login/site.css">
+    <link rel="stylesheet" href="~/Content/login/teal.css">
+
+    <!-- Plugins -->
+    <link rel="stylesheet" href="~/Content/login/login-v2.css">
+
+    <!-- Fonts -->
+    <link rel="stylesheet" href="~/Content/login/web-icons.min.css">
+    <link rel="stylesheet" href="~/Content/login/brand-icons.min.css">
+    <link rel="stylesheet" href="~/Content/login/font-awesome.css">
+
+    <!-- New Style -->
+    <link rel="stylesheet" href="~/Content/login/ribbon-page.css">
+    <link rel="stylesheet" href="~/Content/login/style.css">
+
+</head>
+
+    @RenderBody()
+    @*@RenderSection("Scripts", required: false)*@
+
+</html>
+<!-- Core  -->
+<script src="~/Scripts/login/babel-external-helpers.js"></script>
+<script src="~/Scripts/login/jquery.js"></script>
+<script src="~/Scripts/login/popper-js/umd/popper.min.js"></script>
+<script src="~/Scripts/login/bootstrap.js"></script>
+<script src="~/Scripts/login/animsition.js"></script>
+<!-- Plugins -->
+<!-- Scripts -->
+<script src="~/Scripts/login/Component.js"></script>
+<script src="~/Scripts/login/Plugin.js"></script>
+<script src="~/Scripts/login/Base.js"></script>
+<script src="~/Scripts/login/Config.js"></script>
+
+<!-- Page -->
+<script src="~/Scripts/login/Site.js"></script>
+<script src="~/Scripts/login/asscrollable.js"></script>
+<script src="~/Scripts/login/slidepanel.js"></script>
+<script src="~/Scripts/login/switchery.js"></script>
+<script src="~/Scripts/login/jquery-placeholder.js"></script>
+
+<script>
+    (function (document, window, $) {
+        'use strict';
+
+        var Site = window.Site;
+        $(document).ready(function () {
+            Site.run();
+        });
+    })(document, window, jQuery);
+</script>

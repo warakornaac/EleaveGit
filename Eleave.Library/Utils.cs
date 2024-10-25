@@ -243,17 +243,21 @@ namespace Eleave.Library
             }
             return getDocumentNo;
         }
-        public static string save(string DocumentNo)
+        public static string savePathFile(string DocumentNo)
         {
             string getDocumentNo = "";
 
             using (SqlConnection Connection = new SqlConnection(GetConfig("HRIS_DB")))
             {
                 Connection.Open();
-                var cmdSearch = new SqlCommand("P_Get_Document_Request", Connection);
+                var cmdSearch = new SqlCommand("P_Save_PathFile", Connection);
 
                 cmdSearch.CommandType = CommandType.StoredProcedure;
                 cmdSearch.Parameters.AddWithValue("@inReqNo", DocumentNo);
+                cmdSearch.Parameters.AddWithValue("@inFileName", DocumentNo);
+                cmdSearch.Parameters.AddWithValue("@inFilePath", DocumentNo);
+                cmdSearch.Parameters.AddWithValue("@inFileNo", DocumentNo);
+                cmdSearch.Parameters.AddWithValue("@inUser", DocumentNo);
                 SqlParameter returnResult = new SqlParameter("@outResult", SqlDbType.NVarChar, 1000);
                 returnResult.Direction = ParameterDirection.Output;
                 cmdSearch.Parameters.Add(returnResult);
