@@ -165,7 +165,9 @@
     </div>
 </div>
 <script defer>
-    $('#department-selector').select2()
+    $('#department-selector').select2({
+        width: '100%'
+    });
     $('#reqStart').datepicker({
         orientation: "bottom auto",
         format: "dd/mm/yyyy",

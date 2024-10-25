@@ -10,6 +10,7 @@ using System.Web;
 using System.Web.Mvc;
 using Eleave.Library;
 using System.IO;
+using Microsoft.Ajax.Utilities;
 
 namespace Eleave.Controllers
 {
@@ -97,7 +98,7 @@ namespace Eleave.Controllers
             }
             if (!string.IsNullOrEmpty(empName))
             {
-                leaveHis = leaveHis.Where(l => l.ReqBy == empName).ToList();
+                leaveHis = leaveHis.Where(l => l.ReqBy.Contains(empName)).ToList();
             }
             LoadDepartments();
             return View("ManagerHistory", leaveHis);
@@ -249,5 +250,6 @@ namespace Eleave.Controllers
             conn.Close();
             ViewBag.DepartmentList = departmentList;
         }
+
     }
 }
