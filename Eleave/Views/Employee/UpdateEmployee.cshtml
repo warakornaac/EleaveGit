@@ -151,7 +151,7 @@
                     <div class="col-md-4 col-lg-4">
                         <div class="form-group">
                             @Html.LabelFor(model => model.DeptId, "หน่วยงาน")
-                            @Html.DropDownListFor(model => model.DeptId, new SelectList(ViewBag.DepartmentList, "DeptId", "DeptName"), "เลือกหน่อยงาน", new { @class = "custom-select", @id = "department-selector" })
+                            @Html.DropDownListFor(model => model.DeptId, new SelectList(ViewBag.DepartmentList, "LookValue", "LookDesc"), "เลือกหน่อยงาน", new { @class = "custom-select", @id = "department-selector" })
                         </div>
                     </div>
                     <div class="col-md-4 col-lg-4">
@@ -206,9 +206,17 @@
             icon: "question"
         });
     }
+    if ("@ViewBag.UpdateStatus" == "Success") {
+        Swal.fire({
+    title: "@ViewBag.UpdateStatus",
+    text: "@ViewBag.UpdateStatus",
+    icon: "success"
+});
+    }
     $('#department-selector').select2({
         width: '100%'
     });
+
 
 </script>
 
