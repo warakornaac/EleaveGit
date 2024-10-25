@@ -377,10 +377,14 @@
     <Content Include="Views\Employee\_DetailEmployee.cshtml" />
     <Content Include="Views\Employee\Setting.cshtml" />
     <Content Include="Views\Leave\EmployeeHistory.cshtml" />
+<<<<<<< HEAD
     <Content Include="Views\Shared\_LayoutMain.cshtml" />
     <Content Include="Views\Include\MenuSuper.cshtml" />
     <Content Include="Views\Include\MenuEmployee.cshtml" />
     <Content Include="Views\Include\MenuMgr.cshtml" />
+=======
+    <Content Include="Views\Employee\ApprovflowSetting.cshtml" />
+>>>>>>> 53c0cf86fd3ebe05f1dd9ab00d7e620be7841a89
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

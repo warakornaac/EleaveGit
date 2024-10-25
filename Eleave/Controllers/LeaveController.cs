@@ -21,13 +21,18 @@ namespace Eleave.Controllers
             var DocumentRequest = Utils.GetDocumentRequest("");
 
             ViewBag.DocumentRequest = DocumentRequest;
+<<<<<<< HEAD
+=======
+            //return View(new FileUploadModel());
+>>>>>>> 53c0cf86fd3ebe05f1dd9ab00d7e620be7841a89
             return View();
         }
         [HttpPost]
         public ActionResult SaveRequestForm(string ReqNo)
         {
             string fileNameNew = string.Empty;
-            if (Request.Files != null) { 
+            if (Request.Files != null)
+            {
                 for (int i = 0; i < Request.Files.Count; i++)
                 {
                     var file = Request.Files[i];

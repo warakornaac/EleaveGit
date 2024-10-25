@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="GetLookupData.cs" />
     <Compile Include="GetProfile.cs" />
+    <Compile Include="GetProfileList.cs" />
     <Compile Include="GetUpdateProfile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SearchEmployee.cs" />
