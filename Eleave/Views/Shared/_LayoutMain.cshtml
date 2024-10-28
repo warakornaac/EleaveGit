@@ -58,7 +58,8 @@
                 </div>
                 @{
                     string fileMenu = "";
-                    if (Session["UserType"] != null) {
+                    if (Session["UserType"] != null)
+                    {
                         switch (Session["UserType"].ToString())
                         {
                             case "1": //Employee
@@ -75,7 +76,9 @@
                                 break;
                         }
                         @Html.Partial(fileMenu)
-                    } else {
+                    }
+                    else
+                    {
                         Response.Redirect("/Home/Login");
                     }
                 }
@@ -105,7 +108,7 @@
 </html>
 
 <script src="~/Scripts/plugins/jquery-ui.min.js"></script>
-<script src="~/Scripts/vendor-all.min.js"></script>
+@*<script src="~/Scripts/vendor-all.min.js"></script>*@
 <script src="~/Scripts/plugins/bootstrap.min.js"></script>
 <script src="~/Scripts/pcoded.js"></script>
 

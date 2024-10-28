@@ -194,7 +194,7 @@ namespace Eleave.Controllers
                     {
                         Company = reader["Company"].ToString(),
                         CountryCode = reader["CountryCode"].ToString(),
-                        EmpId = int.Parse(reader["EmpId"].ToString()),
+                        EmpId = int.Parse(reader["EmpId"].ToString().Trim()),
                         Fullname = reader["Fullname"].ToString(),
                         DeptId = reader["DeptId"].ToString(),
                         Position = reader["Position"].ToString(),
@@ -239,7 +239,7 @@ namespace Eleave.Controllers
         public JsonResult AddApprvFlow(string apprvID, string apprvName, string dept, string step, string empId, string action, string desc)
         {
             string message = string.Empty;
-            string username = Session["Username"].ToString();
+            string username = Session["EmpId"].ToString();
             var connectionString = ConfigurationManager.ConnectionStrings["HRIS_DB"].ConnectionString;
             SqlConnection conn = new SqlConnection(connectionString);
             conn.Open();
@@ -275,6 +275,7 @@ namespace Eleave.Controllers
         public JsonResult UpdateApprvFlow(string apprvID, string apprvName, string dept, string step, string empId, string action)
         {
             string message = string.Empty;
+            string username = Session["EmpId"].ToString();
             var connectionString = ConfigurationManager.ConnectionStrings["HRIS_DB"].ConnectionString;
             SqlConnection conn = new SqlConnection(connectionString);
             conn.Open();
@@ -288,6 +289,7 @@ namespace Eleave.Controllers
                 cmd.Parameters.AddWithValue("@inStep", step);
                 cmd.Parameters.AddWithValue("@inEmpID", empId);
                 cmd.Parameters.AddWithValue("@inAction", action);
+                cmd.Parameters.AddWithValue("@inUser", username.Trim());
                 SqlParameter p = new SqlParameter("@outGenstatus", SqlDbType.NVarChar, 100);
                 p.Direction = ParameterDirection.Output;
                 cmd.Parameters.Add(p);

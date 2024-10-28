@@ -51,6 +51,7 @@
     <Compile Include="StoreGetProfile.cs" />
     <Compile Include="StoreUpdateEmployeeProfile.cs" />
     <Compile Include="UserAD.cs" />
+    <Compile Include="UserPermission.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

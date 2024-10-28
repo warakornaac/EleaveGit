@@ -201,17 +201,17 @@
 <script>
     if ("@ViewBag.Error" !== "") {
         Swal.fire({
-            title: "The Internet?",
+            title: "Error",
             text: "@ViewBag.Error",
-            icon: "question"
+            icon: "error"
         });
     }
     if ("@ViewBag.UpdateStatus" == "Success") {
         Swal.fire({
-    title: "@ViewBag.UpdateStatus",
-    text: "@ViewBag.UpdateStatus",
-    icon: "success"
-});
+            title: "@ViewBag.UpdateStatus",
+            text: "@ViewBag.UpdateStatus",
+            icon: "success"
+        });
     }
     $('#department-selector').select2({
         width: '100%'

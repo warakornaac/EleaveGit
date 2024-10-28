@@ -1,9 +1,6 @@
-<<<<<<< HEAD
-﻿@{ ViewBag.Title = "บันทึกการลา"; }
-=======
 ﻿@*@model Eleave.Models.FileUploadModel*@
 @{ ViewBag.Title = "บันทึกการลา"; }
->>>>>>> 53c0cf86fd3ebe05f1dd9ab00d7e620be7841a89
+
 <style>
     .filepond--credits {
         display: none;
@@ -39,9 +36,14 @@
                     <div class="col-md-3 mb-3">
                         <label for="validationTooltip02" class="font-weight-bold">ประเภทการร้องขอ</label>
                         <select id="inputState" class="form-control">
-                            <option selected>Leave</option>
-                            <option>Leave2</option>
-                            <option>Leave3</option>
+                            <option selected>เลือกประเภทร้องขอ</option>
+                            @foreach (var type in ViewBag.REQ_T)
+                            {
+                                <option value="@type.LookValue">@type.LookDesc</option>
+                            }
+                            @*<option selected>Leave</option>
+                                <option>Leave2</option>
+                                <option>Leave3</option>*@
                         </select>
                     </div>
                     <div class="col-md-9 mb-9">

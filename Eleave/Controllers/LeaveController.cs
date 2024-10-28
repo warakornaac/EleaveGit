@@ -20,17 +20,15 @@ namespace Eleave.Controllers
         public ActionResult RequestForm()
         {
             var DocumentRequest = Utils.GetDocumentRequest("");
-
+            LoadRequestType();
             ViewBag.DocumentRequest = DocumentRequest;
-<<<<<<< HEAD
 
-=======
->>>>>>> c271049a2381041ac2d6d27dcdaf22ec3509f5b8
             return View();
         }
         [HttpPost]
         public ActionResult SaveRequestForm(string ReqNo)
         {
+
             string fileNameNew = string.Empty;
             if (Request.Files != null)
             {
@@ -253,6 +251,13 @@ namespace Eleave.Controllers
             cmd.Dispose();
             conn.Close();
             ViewBag.DepartmentList = departmentList;
+        }
+        private void LoadRequestType()
+        {
+            var REQ_Typ = new List<StoreGetLookupData>();
+            REQ_Typ = new GetLookupData().GetLookupDataStore("REQ_TYPE");
+
+            ViewBag.REQ_T = REQ_Typ;
         }
 
     }

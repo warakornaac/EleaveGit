@@ -49,6 +49,7 @@
     <Compile Include="GetProfile.cs" />
     <Compile Include="GetProfileList.cs" />
     <Compile Include="GetUpdateProfile.cs" />
+    <Compile Include="GetUserPermisstion.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SearchEmployee.cs" />
     <Compile Include="UpdateProfileEmployee.cs" />

@@ -125,7 +125,7 @@
                     <div class="col-12">
                         <div class="form-group">
                             @Html.Label("แผนก")
-                            @Html.DropDownList("Department", new SelectList(ViewBag.DepartmentList, "LookValue", "LookDesc"), "เลือกหน่วยงาน", new { @class = "custom-select", @id = "department-selector-edit" })
+                            @Html.DropDownList("Department", new SelectList(ViewBag.DepartmentList, "LookParam", "LookDesc"), "เลือกหน่วยงาน", new { @class = "custom-select", @id = "department-selector-edit" })
                         </div>
                     </div>
                     <div class="col-12">
@@ -136,6 +136,10 @@
                                                             new SelectListItem() {Text="1",Value="1"},
                                                             new SelectListItem() {Text="2",Value="2"},
                                                             new SelectListItem() {Text="3",Value="3"},
+                                                            new SelectListItem() {Text="4",Value="4"},
+                                                            new SelectListItem() {Text="5",Value="5"},
+                                                            new SelectListItem() {Text="6",Value="6"},
+                                                            new SelectListItem() {Text="7",Value="7"},
                                                            }, "Approve Level", new { @class = "custom-select", @id = "ApprvLvl-edit" })
                         </div>
                     </div>
@@ -288,8 +292,8 @@
         var apprvID = $('#groupId-add').val();
         var apprvNm = $('#groupName-add').val();
         var deptVal = $('#department-selector-add').val();
-        var stepNum = $('#ApprvLvl-add').val();
-        var empId = $('#empid-add').val();
+        var stepNum = $('#apprvLvl-add').val();
+        var empId = $('#empId-add').val();
         var actionTex = $('#actiontyp-add').val();
         var apprvDesc = $('#apprvDesc-add').val();
         if (apprvID == "") {
@@ -393,7 +397,7 @@
             dataType: 'JSON',
             beforeSend: function () {
                 $('#groupName-edit').val('');
-                $('#department-selector-edit').val('').trigger('change');
+                $('#department-selector-edit').val(null).trigger('change');
                 $('#ApprvLvl-edit').val('').trigger('change');
                 $('#empid-edit').val('').trigger('change');
                 $('#actiontyp-edit').val('').trigger('change');
@@ -402,23 +406,22 @@
                 if (res.message === "Y") {
                     if (res.getApproval && res.getApproval.length > 0) {
                         $('#groupName-edit').val(res.getApproval[0].ApprGrpNm);
-                        var dept = res.getApproval[0].DepId;
+                        var dept = res.getApproval[0].DepId.trim();
 
                         var shortDept = dept.substring(0, 3);
-
+                        console.log(dept);
 
                         $('#department-selector-edit option').each(function () {
                             var optionValue = $(this).val();
-                            if (optionValue === shortDept) {
+                            if (optionValue.includes(shortDept) ) {
+                                console.log('depert option: ' + optionValue);
                                 $('#department-selector-edit').val(optionValue).trigger('change');
                                 return false;
                             }
                         });
-
                         $('#ApprvLvl-edit').val(res.getApproval[0].ApprStep).trigger('change');
-
                         var emp = res.getApproval[0].EmpId;
-                        console.log('Head: '+emp);
+                        console.log('Head: ' + emp);
                         $('#empid-edit').val(res.getApproval[0].EmpId).trigger('change');
                         if (res.getApproval[0].ActionType) {
                             $('#actiontyp-edit').val(res.getApproval[0].ActionType.trim()).trigger('change');
@@ -453,7 +456,6 @@
              });
     }
     function DropdownEmpSelectEdit() {
-         var ApprvID = $('#department-selector-edit').val();
          $.ajax({
              url: '@Url.Action("GetDirectorDepartment", "Employee")',
              data: {
@@ -495,26 +497,49 @@
         });
     }
     function AddApprvFlow() {
-        var apprvID = $('#groupId-add').val();
+        var apprvId = $('#groupId-add').val();
         var apprvNm = $('#groupName-add').val();
         var deptVal = $('#department-selector-add').val();
-        var stepNum = $('#ApprvLvl-add').val();
-        var empId = $('#empid-add').val();
+        var stepNum = $('#apprvLvl-add').val();
+        var emp = $('#empId-add').val();
         var actionTex = $('#actiontyp-add').val();
         var apprvDesc = $('#apprvDesc-add').val();
 
         $.ajax({
-            url: '@Url.Action("UpdateApprvFlow", "Employee")',
+            url: '@Url.Action("AddApprvFlow", "Employee")',
             data: {
-
+                apprvID: apprvId,
+                apprvName: apprvNm,
+                dept: deptVal,
+                step: stepNum,
+                empId: emp,
+                action: actionTex,
+                desc: apprvDesc
             },
             type: 'POST',
             dataType: 'JSON',
             beforeSend: function () {
-
+                $('#addFormModal').modal('hide');
+                LoadingShow();
             },
-            success: function () {
-
+            success: function (data) {
+                LoadingHide();
+                if (data.message == "Y") {
+                    Swal.fire({
+                        title: "Success",
+                        text: "เพิ่มการอนุมัติสำเร็จ",
+                        icon: "success"
+                    });
+                }
+                else {
+                    Swal.fire({
+                        title: "Error!!!",
+                        text: data.message,
+                        icon: "error"
+                    }).then(() => {
+                        $('#addFormModal').modal('show');
+                    });
+                }
             }
         })
     }
@@ -526,35 +551,47 @@
         var empId = $('#empid-edit').val();
         var actionTex = $('#actiontyp-edit').val();
 
-        if (apprvNm===null || apprvNm.trim() === "") {
+        if (apprvNm === null || apprvNm.trim() === "") {
+            $('#editFormModal').modal('hide');
             Swal.fire({
                 title: "Error!!!",
                 text: "กรุณากรอกชื่อกลุ่มอนุมัติ",
                 icon: "error"
+            }).then(() => {
+                $('#editFormModal').modal('show');
             });
             return false;
         }
         if (deptVal === null || deptVal.trim() === "") {
+            $('#editFormModal').modal('hide');
             Swal.fire({
                 title: "Error!!!",
                 text: "กรุณาเลือกแผนก",
                 icon: "error"
+            }).then(() => {
+                $('#editFormModal').modal('show');
             });
             return false;
         }
         if (stepNum === null || stepNum.trim() === "") {
+            $('#editFormModal').modal('hide');
             Swal.fire({
                 title: "Error!!!",
                 text: "กรุณาเลือกลำดับการอนุมัติ",
                 icon: "error"
+            }).then(() => {
+                $('#editFormModal').modal('show');
             });
             return false;
         }
         if (empId === null || empId.trim() === "") {
+            $('#editFormModal').modal('hide');
             Swal.fire({
                 title: "Error!!!",
                 text: "กรุณาเลือกผู้ทำการอนุมัติ",
                 icon: "error"
+            }).then(() => {
+                $('#editFormModal').modal('show');
             });
             return false;
         }
