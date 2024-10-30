@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GetApprovalFlowEdit.cs" />
+    <Compile Include="GetLeaveType.cs" />
     <Compile Include="GetLookupData.cs" />
     <Compile Include="GetProfile.cs" />
     <Compile Include="GetProfileList.cs" />

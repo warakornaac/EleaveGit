@@ -35,7 +35,7 @@
                     <input type="hidden" id="ReqNo" value="@ViewBag.DocumentRequest">
                     <div class="col-md-3 mb-3">
                         <label for="validationTooltip02" class="font-weight-bold">ประเภทการร้องขอ</label>
-                        <select id="inputState" class="form-control">
+                        <select id="inputState" class="form-control" onchange="dropDownRequest(); getConditionReqNo(this.value);">
                             <option selected>เลือกประเภทร้องขอ</option>
                             @foreach (var type in ViewBag.REQ_T)
                             {
@@ -147,6 +147,31 @@
 <script src="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@5.5.0/js/fileinput.min.js"></script>
 
 <script defer>
+
+    function dropDownRequest() {
+        $.ajax({
+            url: '@Url.Action("GetLeavetype", "Leave")',
+            data: {
+
+            },
+            type: 'POST',
+            dataType: 'JSON',
+            success: function (data) {
+                if (data.message == 'Y') {
+                    var select = $('#ReqId');
+                    select.children().remove();
+                    select.append($('<option>').val(0).text('เลือกประเภทการลา'))
+                    $(data.LeaveType).each(function (index, item) {
+                        select.append($('<option>').val(item.RequestID).text(item.Description));
+                    });
+                    select.val(0).trigger('change');
+                }
+                else {
+                    console.log('Message Type: ' + data.message);
+                }
+            }
+        });
+    }
     function btnSubmitRequest() {
         var ReqNo = $("#ReqNo").val();
         var formData = new FormData();
@@ -296,6 +321,9 @@
     });
     function getConditionReq(ReqId) {
         console.log("ReqId = " + ReqId);
+    }
+    function getConditionReqNo(ReqNo) {
+        console.log('ReqNo = ' + ReqNo);
     }
     //var diffDays = Math.abs((firstDate.getTime() - secondDate.getTime())/(oneDay));
     $(document).ready(function () {

@@ -146,7 +146,22 @@ namespace Eleave.Controllers
             LoadDepartments();
             return View(leaveHis);
         }
+        public JsonResult GetLeavetype()
+        {
+            var LeaveType = new List<LeaveTypeModel>();
+            string message = string.Empty;
+            try
+            {
+                LeaveType = new GetLeaveType().GetLeaveTypeList();
+                message = "Y";
+            }
+            catch (Exception ex)
+            {
+                message = ex.Message;
+            }
 
+            return Json(new { message = message, LeaveType }, JsonRequestBehavior.AllowGet);
+        }
         private List<LeaveHisDemo> Demodata()
         {
             LeaveHisDemo leave1 = new LeaveHisDemo()

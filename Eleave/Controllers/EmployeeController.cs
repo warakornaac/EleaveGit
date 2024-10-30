@@ -95,7 +95,10 @@ namespace Eleave.Controllers
         }
         public ActionResult Setting()
         {
-            return View();
+            var UsrPermisstion = new List<UserPermission>();
+            UsrPermisstion = new GetUserPermisstion().GetUser_Permissions();
+
+            return View(UsrPermisstion);
         }
 
         [HttpPost]

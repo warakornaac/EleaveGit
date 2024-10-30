@@ -17,7 +17,7 @@ namespace Eleave.Models
         public string Remark { get; set; }
         public Boolean Approval { get; set; }
         public Boolean Request { get; set; }
-        public Boolean Actknowlege { get; set; }
+        public Boolean Actknowledge { get; set; }
         public Boolean Setting { get; set; }
 
     }
