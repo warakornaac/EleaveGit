@@ -199,18 +199,20 @@
     </div>
 </div>
 <script>
-    if ("@ViewBag.Error" !== "") {
+    if ('@ViewBag.Error' != '') {
         Swal.fire({
-            title: "Error",
-            text: "@ViewBag.Error",
-            icon: "error"
+            title: 'Error',
+            html: '@ViewBag.Error',
+            icon: 'error'
         });
     }
     if ("@ViewBag.UpdateStatus" == "Success") {
         Swal.fire({
             title: "@ViewBag.UpdateStatus",
-            text: "@ViewBag.UpdateStatus",
+            text: "Update ข้อมูลพนักงานสำเร็จ",
             icon: "success"
+        }).then(() => {
+            window.location.href = "@Url.Action("ManagerEmployee", "Employee")";
         });
     }
     $('#department-selector').select2({

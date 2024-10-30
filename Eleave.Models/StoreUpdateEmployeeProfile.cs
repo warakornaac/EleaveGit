@@ -11,7 +11,7 @@ namespace Eleave.Models
 {
     public class StoreUpdateEmployeeProfile
     {
-
+        public string usrID { get; set; }
         public string Company { get; set; }
         public int EmpId { get; set; }
         public string TitleName { get; set; }
@@ -27,6 +27,7 @@ namespace Eleave.Models
         public DateTime StartDate { get; set; }
         public string EmpStatus { get; set; }
         public string DirectorId { get; set; }
+
 
     }
 }

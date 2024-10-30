@@ -15,9 +15,10 @@ namespace Eleave.Data
         {
 
         }
-        public List<StoreUpdateEmployeeProfile> Update(StoreUpdateEmployeeProfile profile)
+        public List<StoreUpdateEmployeeProfile> Update(StoreUpdateEmployeeProfile profile, string usrID)
         {
             var p = new SqlParameters();
+
             p.AddParams("@inEmpId", profile.EmpId);
             p.AddParams("@inCompany", profile.Company);
             p.AddParams("@inPrefix", profile.TitleName);
@@ -29,6 +30,7 @@ namespace Eleave.Data
             p.AddParams("@inEmpLvl", profile.EmpLvl);
             p.AddParams("@inEmpTypeId", profile.EmpTypeId);
             p.AddParams("@inEmpStatus", profile.EmpStatus);
+            p.AddParams("@inUser", usrID);
 
             return ConvertExtension.ConvertDataTable<StoreUpdateEmployeeProfile>(GetData(CmdStore("P_Update_Profile_Employee", p)));
         }

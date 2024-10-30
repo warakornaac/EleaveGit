@@ -162,6 +162,12 @@
                                                }, new { @class = "custom-select", @id = "actiontyp-edit" })
                         </div>
                     </div>
+                    <div class="col-12">
+                        <div class="form-group">
+                            @Html.Label("รายระเอียดประเภทอนุมัติ")
+                            @Html.TextArea("ApprvDesc", null, new { @class = "form-control", @id = "apprvDesc-edit" })
+                        </div>
+                    </div>
                 </div>
 
             </div>
@@ -401,6 +407,7 @@
                 $('#ApprvLvl-edit').val('').trigger('change');
                 $('#empid-edit').val('').trigger('change');
                 $('#actiontyp-edit').val('').trigger('change');
+                $('#apprvDesc-edit').val('');
             },
             success: function (res) {
                 if (res.message === "Y") {
@@ -426,6 +433,7 @@
                         if (res.getApproval[0].ActionType) {
                             $('#actiontyp-edit').val(res.getApproval[0].ActionType.trim()).trigger('change');
                         }
+                        $('#apprvDesc-edit').val(res.getApproval[0].ApprDesc)
                     }
                 }
             }
@@ -550,7 +558,7 @@
         var stepNum = $('#ApprvLvl-edit').val();
         var empId = $('#empid-edit').val();
         var actionTex = $('#actiontyp-edit').val();
-
+        var apprvDesc = $('#apprvDesc-edit').val();
         if (apprvNm === null || apprvNm.trim() === "") {
             $('#editFormModal').modal('hide');
             Swal.fire({
@@ -595,6 +603,17 @@
             });
             return false;
         }
+        if (apprvDesc === "") {
+            $('#editFormModal').modal('hide');
+            Swal.fire({
+                title: "Error!!!",
+                text: "กรุณากรอกรายละเอียด",
+                icon: "error"
+            }).then(() => {
+                $('#editFormModal').modal('show');
+            });
+            return false;
+        }
 
 
         $.ajax({
@@ -605,7 +624,8 @@
                 dept: deptVal,
                 step: stepNum,
                 empId: empId,
-                action: actionTex
+                action: actionTex,
+                desc: apprvDesc
             },
             type: 'POST',
             dataType: 'JSON',

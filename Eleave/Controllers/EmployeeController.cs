@@ -107,7 +107,8 @@ namespace Eleave.Controllers
             var updateEmployee = new List<StoreUpdateEmployeeProfile>();
             try
             {
-                updateEmployee = new UpdateProfileEmployee().Update(store);
+                string usr = Session["EmpId"].ToString();
+                updateEmployee = new UpdateProfileEmployee().Update(store, usr);
                 ViewBag.UpdateStatus = "Success";
                 LoadDepartments();
                 LoadEmpType();
@@ -275,7 +276,7 @@ namespace Eleave.Controllers
             return Json(new { message = message }, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult UpdateApprvFlow(string apprvID, string apprvName, string dept, string step, string empId, string action)
+        public JsonResult UpdateApprvFlow(string apprvID, string apprvName, string dept, string step, string empId, string action, string desc)
         {
             string message = string.Empty;
             string username = Session["EmpId"].ToString();
@@ -292,6 +293,7 @@ namespace Eleave.Controllers
                 cmd.Parameters.AddWithValue("@inStep", step);
                 cmd.Parameters.AddWithValue("@inEmpID", empId);
                 cmd.Parameters.AddWithValue("@inAction", action);
+                cmd.Parameters.AddWithValue("@inDesc", desc);
                 cmd.Parameters.AddWithValue("@inUser", username.Trim());
                 SqlParameter p = new SqlParameter("@outGenstatus", SqlDbType.NVarChar, 100);
                 p.Direction = ParameterDirection.Output;
