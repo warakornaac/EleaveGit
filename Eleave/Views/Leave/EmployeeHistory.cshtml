@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Eleave.Models.LeaveHisDemo>
+﻿@model IEnumerable<Eleave.Models.RequestList>
 
 @{
     ViewBag.Title = "ประวัติการลา";
@@ -107,45 +107,41 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @{
-                                int i = 0;
-                            }
                             @foreach (var leave in Model)
                             {
-                                i++;
                                 <tr>
-                                    <td>@i</td>
-                                    <td>@leave.LeavId</td>
-                                    <td>@leave.ReqDate.ToString("dd/MM/yyyy")</td>
+                                    <td>@leave.ReqNo</td>
+                                    <td>@leave.ReqId</td>
+                                    <td>@(leave.ReqDate?.ToString("dd/MM/yyyy")??"")</td>
                                     <td class="text-center">@leave.ReqType</td>
-                                    <td class="text-center">@leave.ReqBy</td>
-                                    <td class="text-center">@leave.LeaveType</td>
-                                    <td>@leave.StartDate.ToString("dd/MM/yyyy")</td>
-                                    <td>@leave.EndDate.ToString("dd/MM/yyyy")</td>
-                                    <td class="text-center">@leave.TotalReq</td>
-                                    @if (leave.ReqStatus == "S1")
+                                    <td class="text-center">@leave.Empname</td>
+                                    <td class="text-center">@leave.ReqType</td>
+                                    <td>@(leave.StartDate?.ToString("dd/MM/yyyy")??"")</td>
+                                    <td>@(leave.EndDate?.ToString("dd/MM/yyyy")??"")</td>
+                                    <td class="text-center">@leave.NumDay</td>
+                                    @if (leave.ReqStatus == "1")
                                     {
                                         <td class="text-center">
-                                            <div class="text-success"><i class="fa fa-check" aria-hidden="true"></i><span>อนุมัติ</span></div>
+                                            <div class="text-success"><i class="fa fa-check" aria-hidden="true"></i><span>@leave.ReqStaDesc</span></div>
                                         </td>
 
                                     }
-                                    else if (leave.ReqStatus == "S2")
+                                    else if (leave.ReqStatus == "2")
                                     {
                                         <td class="text-center">
-                                            <div class="text-danger"><i class="fa fa-times" aria-hidden="true"></i><span>ไม่อนุมัติ</span></div>
+                                            <div class="text-danger"><i class="fa fa-times" aria-hidden="true"></i><span>@leave.ReqStaDesc</span></div>
                                         </td>
                                     }
-                                    else
+                                    else if (leave.ReqStatus == "0")
                                     {
                                         <td class="text-center">
-                                            <div class="text-warning"><i class="fa fa-repeat" aria-hidden="true"></i><span>รอดำเนินงาน</span></div>
+                                            <div class="text-warning"><i class="fa fa-repeat" aria-hidden="true"></i><span>@leave.ReqStaDesc</span></div>
                                         </td>
                                     }
-                                    <td class="text-center">@leave.ApprvBy</td>
-                                    <td>@leave.ApprDate.ToString("dd/MM/yyyy")</td>
-                                    <td class="text-center">@leave.HrBy</td>
-                                    <td>@leave.HrDate.ToString("dd/MM/yyyy")</td>
+                                    <td class="text-center">@leave.AcceptBy</td>
+                                    <td>@(leave.AcceptDate?.ToString("dd/MM/yyyy")??"")</td>
+                                    <td class="text-center">@leave.UpdatedBy</td>
+                                    <td>@(leave.UpdateDate?.ToString("dd/MM/yyyy")??"")</td>
                                 </tr>
                             }
 
@@ -168,7 +164,34 @@
         format: "dd/mm/yyyy",
         autoclose: true
     });
+    $(document).on('change', '#LeaveType-selector', function () {
+        DropdownReqTyp();
+    });
+    function DropdownReqTyp()
+    {
+        $.ajax({
+                url: '@Url.Action("GetLeavetype", "Leave")',
+                data: {
 
+                },
+                type: 'POST',
+                dataType: 'JSON',
+                success: function (data) {
+                    if (data.message == 'Y') {
+                        var select = $('#reqType-selector');
+                        select.children().remove();
+                        select.append($('<option>').val(0).text('เลือกประเภทการร้องขอ'))
+                        $(data.LeaveType).each(function (index, item) {
+                            select.append($('<option>').val(item.RequestID).text(item.Description));
+                        });
+                        select.val(0).trigger('change');
+                    }
+                    else {
+                        console.log('Message Type: ' + data.message);
+                    }
+                }
+            });
+    }
     $(document).on("click", "#reset-btn", function () {
         $('#LeaveType-selector').val('').trigger('change'); // ประเภทคำขอ
         $('#reqType-selector').val('').trigger('change'); // ประเภทคำขอ

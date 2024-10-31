@@ -49,6 +49,7 @@
     <Compile Include="GetLookupData.cs" />
     <Compile Include="GetProfile.cs" />
     <Compile Include="GetProfileList.cs" />
+    <Compile Include="GetRequestList.cs" />
     <Compile Include="GetUpdateProfile.cs" />
     <Compile Include="GetUserPermisstion.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

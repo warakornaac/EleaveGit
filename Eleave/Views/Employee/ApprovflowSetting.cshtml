@@ -30,14 +30,29 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">เพิ่ม Approve Flow</h5>
+
                 <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+
             </div>
             <div class="modal-body">
                 <div class="row">
                     <div class="col-12">
                         <div class="form-group">
+                            <label>การเพิ่มอนุมัต</label>
+                            <select class="custom-select" id="select-addApprv">
+                                <option value="1">เพิ่มกลุ่มอนุมัต</option>
+                                <option value="2">เพิ่มลำดับการอนุมัติ</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-group">
                             @Html.Label("รหัสกลุ่มอนุมัติ")
-                            @Html.TextBox("GroupID", null, new { @class = "form-control", @id = "groupId-add", @readonly = "readonly" })
+                            @Html.TextBox("GroupID", null, new { @class = "form-control", @id = "groupId-add", @readonly = "readonly", list = "group-list" })
+                            <datalist id="group-list">
+                                <option value="dataTest">Group</option>
+
+                            </datalist>
                         </div>
                     </div>
                     <div class="col-12">
@@ -55,12 +70,7 @@
                     <div class="col-12">
                         <div class="form-group">
                             @Html.Label("ลำดับการอนุมัติ")
-                            @Html.DropDownList("ApprvLvl", new List<SelectListItem>
-                                                           {
-                                                            new SelectListItem() {Text="1",Value="1"},
-                                                            new SelectListItem() {Text="2",Value="2"},
-                                                            new SelectListItem() {Text="3",Value="3"},
-                                                           }, "Approve Level", new { @class = "custom-select", @id = "apprvLvl-add" })
+                            @Html.TextBox("ApprvLvl", null, new { @class = "custom-select", @id = "apprvLvl-add", @readonly = "readonly" })
                         </div>
                     </div>
                     <div class="col-12">
@@ -78,7 +88,7 @@
                             @Html.DropDownList("ActionType", new List<SelectListItem>
                                                {
                                                    new SelectListItem(){Text="Approve", Value="Approve"},
-                                                   new SelectListItem(){Text="Acknowleadge", Value="Acknowleadge"}
+                                                   new SelectListItem(){Text="Acknowledge", Value="Acknowledge"}
                                                }, "เลือกประเภทอนุมัติ", new { @class = "custom-select", @id = "actiontyp-add" })
                         </div>
                     </div>
@@ -158,7 +168,7 @@
                             @Html.DropDownList("ActionType", new List<SelectListItem>
                                                {
                                                    new SelectListItem(){Text="Approve", Value="Approve"},
-                                                   new SelectListItem(){Text="Acknowleadge", Value="Acknowleadge"}
+                                                   new SelectListItem(){Text="Acknowledge", Value="Acknowledge"}
                                                }, new { @class = "custom-select", @id = "actiontyp-edit" })
                         </div>
                     </div>
@@ -288,7 +298,7 @@
         $('#groupName-add').val('');
         $('#apprvDesc-add').val('');
         $('#department-selector-add').val('').trigger('change');
-        $('#apprvLvl-add').val('').trigger('change');
+        $('#apprvLvl-add').val('');
         $('#empId-add').val('').trigger('change');
         $('#actiontyp-add').val('').trigger('change');
 
@@ -383,11 +393,33 @@
         AddApprvFlow();
     });
 
+    $(document).on('focusout', '#groupId-add', function () {
+        var grpID = $(this).val();
+        GenerateApprvStep(grpID);
+    });
     $(document).on('change', '#department-selector-add', function () {
         var depart = $(this).val();
-        GenerateApprvGrbID(depart);
-    });
+        var selectApprv = $('#select-addApprv').val();
+        if (selectApprv == 1) {
+            GenerateApprvGrbID(depart);
+        }
+        else {
+            GetApprovalID(depart);
+        }
 
+    });
+    $(document).on('change', '#select-addApprv', function () {
+        var selectVal = $(this).val();
+        var em = ''
+        if (selectVal == 2) {
+            $('#groupId-add').removeAttr('readonly');
+            GetApprovalID(em);
+        }
+        else {
+            $('#groupId-add').attr('readonly',true);
+        }
+
+    });
 
     $('[id^="editApprv-"]').on('click', function () {
         var ApprvID = $(this).data('apprv');
@@ -500,6 +532,50 @@
             success: function (data) {
                 if (data.message == 'Y') {
                     $('#groupId-add').val(data.apprvGrbID);
+                    $('#apprvLvl-add').val('1');
+                }
+            }
+        });
+    }
+    function GetApprovalID(department) {
+        $.ajax({
+                url: '@Url.Action("GetApprvID", "Employee")',
+                data: {
+                    Dept: department
+                },
+                type: 'POST',
+                dataType: 'JSON',
+                beforeSend: function () {
+
+                },
+                success: function (data) {
+                    if (data.message == 'Y') {
+                        var select = $('#group-list');
+                        select.children().remove();
+                        $(data.GrpvID).each(function (index, item) {
+                            select.append($('<option>').val(item.ApprGrpId).text(item.ApprGrpNm));
+                        });
+                    }
+                    else {
+                        console.log('Error GetID:' + data.message);
+                    }
+                }
+            });
+    }
+    function GenerateApprvStep(Grp) {
+        $.ajax({
+            url: '@Url.Action("GenerateApprvFlowStep", "Employee")',
+            data: {
+                GrpID: Grp
+            },
+            type: 'POST',
+            dataType: 'JSON',
+            beforeSend: function () {
+
+            },
+            success: function (data) {
+                if (data.message == 'Y') {
+                    $('#apprvLvl-add').val(data.stepGrb);
                 }
             }
         });
@@ -537,6 +613,10 @@
                         title: "Success",
                         text: "เพิ่มการอนุมัติสำเร็จ",
                         icon: "success"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            location.reload();
+                        }
                     });
                 }
                 else {

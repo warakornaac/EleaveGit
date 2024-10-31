@@ -48,16 +48,57 @@ namespace Eleave.Controllers
         }
         public ActionResult ManagerHistory()
         {
-            var leaveHis = Demodata();
+            string EmpID = string.Empty;
+            string EmpType = string.Empty;
+            if (Session["EmpId"] != null)
+            {
+                EmpID = Session["EmpId"].ToString();
+                EmpType = Session["UserType"].ToString();
+            }
+            else
+            {
+                return RedirectToAction("Login", "Home");
+            }
+            var HisRequest = new List<RequestList>();
+
+            try
+            {
+                HisRequest = new GetRequestList().GetRequests(EmpID, EmpType);
+            }
+            catch (Exception ex)
+            {
+
+            }
             LoadDepartments();
 
-            return View(leaveHis);
+            return View(HisRequest);
         }
         public ActionResult EmployeeHistory()
         {
-            var leaveHis = Demodata();
+            string EmpID = string.Empty;
+            string EmpType = string.Empty;
+            if (Session["EmpId"] != null)
+            {
+                EmpID = Session["EmpId"].ToString();
+                EmpType = Session["UserType"].ToString();
+            }
+            else
+            {
+                return RedirectToAction("Login", "Home");
+            }
+            var HisRequest = new List<RequestList>();
+
+            try
+            {
+                HisRequest = new GetRequestList().GetRequests(EmpID, EmpType);
+            }
+            catch (Exception ex)
+            {
+
+            }
             LoadDepartments();
-            return View(leaveHis);
+
+            return View(HisRequest);
         }
         [HttpPost]
         public ActionResult ManagerSearchHistory(string LeaveType, string reqType, string ReqStatus, string ReqStart, string ReqEnd, string Department, string reqId, string empName)

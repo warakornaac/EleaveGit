@@ -62,7 +62,7 @@ namespace Eleave.Controllers
         public ActionResult ViewProfile()
         {
             string EmpId = string.Empty;
-            this.Session["EmpId"] = "6601002";
+            //this.Session["EmpId"] = "6601002";
             EmpId = Session["EmpId"].ToString();
             var GetProfile = new List<StoreGetProfile>();
             //if (EmpId != null)
@@ -87,7 +87,7 @@ namespace Eleave.Controllers
             {
                 model = modelData.FirstOrDefault();
             }
-
+            LoadDirector();
             LoadEmployeeLevel();
             LoadDepartments();
             LoadEmpType();
@@ -110,6 +110,7 @@ namespace Eleave.Controllers
                 string usr = Session["EmpId"].ToString();
                 updateEmployee = new UpdateProfileEmployee().Update(store, usr);
                 ViewBag.UpdateStatus = "Success";
+                LoadDirector();
                 LoadDepartments();
                 LoadEmpType();
                 LoadEmployeeLevel();
@@ -118,6 +119,7 @@ namespace Eleave.Controllers
             catch (Exception ex)
             {
                 ViewBag.Error = ex.ToString();
+                LoadDirector();
                 LoadDepartments();
                 LoadEmpType();
                 LoadEmployeeLevel();
@@ -147,10 +149,12 @@ namespace Eleave.Controllers
             ViewBag.apprvFlow = list.ToList();
             return View();
         }
+        //ApprvFlowSetting 
         public JsonResult GenerateApprvFlowID(string Dept)
         {
             string message = string.Empty;
             string apprvGrbID = string.Empty;
+            string stepGrb = string.Empty;
             var connectionString = ConfigurationManager.ConnectionStrings["HRIS_DB"].ConnectionString;
             SqlConnection conn = new SqlConnection(connectionString);
             conn.Open();
@@ -163,12 +167,15 @@ namespace Eleave.Controllers
                 p.Direction = ParameterDirection.Output;
                 SqlParameter gen = new SqlParameter("@NewApprGrpId", SqlDbType.VarChar, 20);
                 gen.Direction = ParameterDirection.Output;
+                SqlParameter step = new SqlParameter("@NewStep", SqlDbType.VarChar, 3);
+                step.Direction = ParameterDirection.Output;
                 cmd.Parameters.Add(p);
                 cmd.Parameters.Add(gen);
+                cmd.Parameters.Add(step);
                 cmd.ExecuteNonQuery();
                 message = cmd.Parameters["@OutGenstatus"].Value.ToString();
                 apprvGrbID = cmd.Parameters["@NewApprGrpId"].Value.ToString();
-
+                stepGrb = cmd.Parameters["@NewStep"].Value.ToString();
                 conn.Close();
                 cmd.Dispose();
             }
@@ -177,7 +184,75 @@ namespace Eleave.Controllers
                 conn.Close();
                 message = ex.Message;
             }
-            return Json(new { message = message, apprvGrbID = apprvGrbID.Trim() }, JsonRequestBehavior.AllowGet);
+            return Json(new { message = message, apprvGrbID = apprvGrbID.Trim(), stepGrb = stepGrb.Trim() }, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult GetApprvID(string Dept)
+        {
+            string message = string.Empty;
+            //string GrpvID = string.Empty;
+            List<object> GrpvID = new List<object>();
+            var connectionString = ConfigurationManager.ConnectionStrings["HRIS_DB"].ConnectionString;
+            SqlConnection conn = new SqlConnection(connectionString);
+            conn.Open();
+            try
+            {
+                var cmd = new SqlCommand("P_Get_ArrovalFlow_GrpID", conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@inDepartment", Dept);
+                SqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    GrpvID.Add(new
+                    {
+                        ApprGrpId = reader["ApprGrpId"].ToString(),
+                        ApprGrpNm = reader["ApprGrpNm"].ToString()
+                    });
+
+                }
+                conn.Close();
+                conn.Dispose();
+                reader.Close();
+                reader.Dispose();
+                message = "Y";
+
+            }
+            catch (Exception ex)
+            {
+                conn.Close();
+                message = ex.Message;
+            }
+            return Json(new { message = message, GrpvID = GrpvID }, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult GenerateApprvFlowStep(string GrpID)
+        {
+            string message = string.Empty;
+            string stepGrb = string.Empty;
+            var connectionString = ConfigurationManager.ConnectionStrings["HRIS_DB"].ConnectionString;
+            SqlConnection conn = new SqlConnection(connectionString);
+            conn.Open();
+            try
+            {
+                var cmd = new SqlCommand("P_Generate_ArrovalFlow_Step", conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@inGrpID", GrpID);
+                SqlParameter p = new SqlParameter("@OutGenstatus", SqlDbType.NVarChar, 100);
+                p.Direction = ParameterDirection.Output;
+                SqlParameter step = new SqlParameter("@NewStep", SqlDbType.VarChar, 3);
+                step.Direction = ParameterDirection.Output;
+                cmd.Parameters.Add(p);
+                cmd.Parameters.Add(step);
+                cmd.ExecuteNonQuery();
+                message = cmd.Parameters["@OutGenstatus"].Value.ToString();
+                stepGrb = cmd.Parameters["@NewStep"].Value.ToString();
+                conn.Close();
+                cmd.Dispose();
+            }
+            catch (Exception ex)
+            {
+                conn.Close();
+                message = ex.Message;
+            }
+            return Json(new { message = message, stepGrb = stepGrb.Trim() }, JsonRequestBehavior.AllowGet);
         }
         public JsonResult GetDirectorDepartment(string deptID)
         {
@@ -240,6 +315,7 @@ namespace Eleave.Controllers
 
             return Json(new { message = message, getApproval }, JsonRequestBehavior.AllowGet);
         }
+        //AddFlow
         public JsonResult AddApprvFlow(string apprvID, string apprvName, string dept, string step, string empId, string action, string desc)
         {
             string message = string.Empty;
@@ -275,7 +351,7 @@ namespace Eleave.Controllers
             }
             return Json(new { message = message }, JsonRequestBehavior.AllowGet);
         }
-
+        //UpdateFlow
         public JsonResult UpdateApprvFlow(string apprvID, string apprvName, string dept, string step, string empId, string action, string desc)
         {
             string message = string.Empty;
@@ -395,7 +471,7 @@ namespace Eleave.Controllers
             SqlConnection conn = new SqlConnection(connectionString);
             conn.Open();
             List<ApprovalFlow> apprvFlow = new List<ApprovalFlow>();
-            SqlCommand cmd = new SqlCommand("SELECT *  FROM [HRIS].[dbo].[ApprovalFlow]", conn);
+            SqlCommand cmd = new SqlCommand("SELECT *  FROM [HRIS].[dbo].[ApprovalFlow] order by ApprGrpId,ApprStep", conn);
             SqlDataReader reader = cmd.ExecuteReader();
             while (reader.Read())
             {
@@ -415,8 +491,45 @@ namespace Eleave.Controllers
             conn.Close();
             return apprvFlow;
         }
-        private void LoadApprGrp()
+        private void LoadDirector()
         {
+            string message = string.Empty;
+            var getDirector = new List<DirectorProfile>();
+            var connectionString = ConfigurationManager.ConnectionStrings["HRIS_DB"].ConnectionString;
+            SqlConnection conn = new SqlConnection(connectionString);
+            conn.Open();
+            try
+            {
+                var cmd = new SqlCommand("P_Get_ProfileDirector_Dept_List", conn);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@inDepartment", "123");
+                SqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    getDirector.Add(new DirectorProfile()
+                    {
+                        Company = reader["Company"].ToString(),
+                        CountryCode = reader["CountryCode"].ToString(),
+                        EmpId = int.Parse(reader["EmpId"].ToString().Trim()),
+                        Fullname = reader["Fullname"].ToString(),
+                        DeptId = reader["DeptId"].ToString(),
+                        Position = reader["Position"].ToString(),
+                        EmpTypeId = reader["EmpTypeId"].ToString(),
+                        UserType = reader["UserType"].ToString()
+
+                    });
+                }
+                reader.Close();
+                reader.Dispose();
+                conn.Close();
+                message = "Y";
+            }
+            catch (Exception ex)
+            {
+                conn.Close();
+                message = ex.Message;
+            }
+            ViewBag.Directors = getDirector;
         }
     }
 }

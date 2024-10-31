@@ -163,7 +163,13 @@
                     <div class="col-md-4 col-lg-4">
                         <div class="form-group">
                             @Html.LabelFor(model => model.DirectorId, "หัวหน้างาน")
-                            @Html.TextBoxFor(model => model.DirectorId, new { @class = "form-control" })
+                            @Html.TextBoxFor(model => model.DirectorId, new { @class = "form-control", list = "directors-list" })
+                            <datalist id="directors-list">
+                                @foreach (var director in ViewBag.Directors)
+                                {
+                                    <option value="@director.EmpId">@director.Fullname</option>
+                                }
+                            </datalist>
                         </div>
                     </div>
                     <div class="col-md-4 col-lg-4">
