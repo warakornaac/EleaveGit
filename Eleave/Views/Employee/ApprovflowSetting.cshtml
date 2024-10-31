@@ -148,8 +148,6 @@
                                                             new SelectListItem() {Text="3",Value="3"},
                                                             new SelectListItem() {Text="4",Value="4"},
                                                             new SelectListItem() {Text="5",Value="5"},
-                                                            new SelectListItem() {Text="6",Value="6"},
-                                                            new SelectListItem() {Text="7",Value="7"},
                                                            }, "Approve Level", new { @class = "custom-select", @id = "ApprvLvl-edit" })
                         </div>
                     </div>
@@ -289,7 +287,8 @@
             ordering: false,
             select: false,
             language: {
-                info: "แสดง _START_ ถึง _END_ จากทั้งหมด _TOTAL_ กลุ่ม"
+                info: "แสดง _START_ ถึง _END_ จากทั้งหมด _TOTAL_ กลุ่ม",
+                infoEmpty: "ไม่มีข้อมูลให้แสดง"
             }
         });
     });
