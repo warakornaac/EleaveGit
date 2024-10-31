@@ -135,7 +135,7 @@
                     <div class="col-12">
                         <div class="form-group">
                             @Html.Label("แผนก")
-                            @Html.DropDownList("Department", new SelectList(ViewBag.DepartmentList, "LookParam", "LookDesc"), "เลือกหน่วยงาน", new { @class = "custom-select", @id = "department-selector-edit" })
+                            @Html.DropDownList("Department", new SelectList(ViewBag.DepartmentList, "LookParam", "LookDesc"), "เลือกหน่วยงาน", new { @class = "custom-select", @id = "department-selector-edit", @disabled = "disabled" })
                         </div>
                     </div>
                     <div class="col-12">
@@ -435,7 +435,7 @@
             dataType: 'JSON',
             beforeSend: function () {
                 $('#groupName-edit').val('');
-                $('#department-selector-edit').val(null).trigger('change');
+                $('#department-selector-edit').val('').trigger('change');
                 $('#ApprvLvl-edit').val('').trigger('change');
                 $('#empid-edit').val('').trigger('change');
                 $('#actiontyp-edit').val('').trigger('change');
