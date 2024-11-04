@@ -11,6 +11,7 @@ using System.Web.Mvc;
 using Eleave.Library;
 using System.IO;
 using Microsoft.Ajax.Utilities;
+using System.Web.Services.Description;
 
 namespace Eleave.Controllers
 {
@@ -67,9 +68,12 @@ namespace Eleave.Controllers
             }
             catch (Exception ex)
             {
-
+                ViewBag.ErrorMessage = "ไม่สามารถโหลดข้อมูลได้ กรุณาลองอีกครั้ง";
             }
             LoadDepartments();
+            LoadRequestType();
+            LoadLeavetype();
+            LoadReqStatus();
 
             return View(HisRequest);
         }
@@ -97,112 +101,103 @@ namespace Eleave.Controllers
 
             }
             LoadDepartments();
+            LoadRequestType();
+            LoadLeavetype();
+            LoadReqStatus();
 
             return View(HisRequest);
         }
         [HttpPost]
         public ActionResult ManagerSearchHistory(string LeaveType, string reqType, string ReqStatus, string ReqStart, string ReqEnd, string Department, string reqId, string empName)
         {
-            var leaveHis = Demodata();
+            DateTime? startDate = null;
+            DateTime? endDate = null;
 
-
-            if (!string.IsNullOrEmpty(reqType))
-            {
-                leaveHis = leaveHis.Where(l => l.LeaveType == reqType).ToList();
-            }
-            if (!string.IsNullOrEmpty(ReqStatus))
-            {
-                leaveHis = leaveHis.Where(l => l.ReqStatus == ReqStatus).ToList();
-            }
+            // แปลง ReqStart เป็น DateTime 
             if (!string.IsNullOrEmpty(ReqStart))
             {
-                DateTime startParsed;
-                if (DateTime.TryParseExact(ReqStart, "d/M/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out startParsed))
+                if (DateTime.TryParseExact(ReqStart, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedStartDate))
                 {
-                    leaveHis = leaveHis.Where(l => l.StartDate.Date >= startParsed.Date).ToList();
+                    startDate = parsedStartDate;
                 }
             }
+
+            // แปลง ReqEnd เป็น DateTime 
             if (!string.IsNullOrEmpty(ReqEnd))
             {
-                DateTime endParsed;
-                if (DateTime.TryParseExact(ReqEnd, "d/M/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out endParsed))
+                if (DateTime.TryParseExact(ReqEnd, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedEndDate))
                 {
-                    leaveHis = leaveHis.Where(l => l.EndDate.Date <= endParsed.Date).ToList();
+                    endDate = parsedEndDate;
                 }
             }
-            if (!string.IsNullOrEmpty(Department))
+            var leaveHis = new List<RequestList>();
+            try
             {
-
+                leaveHis = new SearchHistoryRequest().GetHis(LeaveType, reqType, ReqStatus, startDate, endDate, Department, reqId, empName);
+            }
+            catch (Exception ex)
+            {
+                ViewBag.ErrorMessage = "ไม่สามารถโหลดข้อมูลได้ กรุณาลองอีกครั้ง";
             }
 
-            if (!string.IsNullOrEmpty(reqId))
-            {
-                leaveHis = leaveHis.Where(l => l.LeavId == reqId).ToList();
-            }
-            if (!string.IsNullOrEmpty(empName))
-            {
-                leaveHis = leaveHis.Where(l => l.ReqBy.Contains(empName)).ToList();
-            }
+
             LoadDepartments();
+            LoadRequestType();
+            LoadLeavetype();
+            LoadReqStatus();
             return View("ManagerHistory", leaveHis);
         }
         [HttpPost]
         public ActionResult EmployeeHistory(string LeaveType, string reqType, string ReqStatus, string ReqStart, string ReqEnd, string reqId)
         {
-            var leaveHis = Demodata();
-            if (!string.IsNullOrEmpty(LeaveType))
+            string EmpID = string.Empty;
+            string EmpName = string.Empty;
+            if (Session["EmpId"] != null)
             {
+                EmpID = Session["EmpId"].ToString();
+                EmpName = Session["FullName"].ToString();
 
             }
+            else
+            {
+                return RedirectToAction("Login", "Home");
+            }
+            DateTime? startDate = null;
+            DateTime? endDate = null;
 
-            if (!string.IsNullOrEmpty(reqType))
-            {
-                leaveHis = leaveHis.Where(l => l.LeaveType == reqType).ToList();
-            }
-            if (!string.IsNullOrEmpty(ReqStatus))
-            {
-                leaveHis = leaveHis.Where(l => l.ReqStatus == ReqStatus).ToList();
-            }
+            // แปลง ReqStart เป็น DateTime 
             if (!string.IsNullOrEmpty(ReqStart))
             {
-                DateTime startParsed;
-                if (DateTime.TryParseExact(ReqStart, "d/M/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out startParsed))
+                if (DateTime.TryParseExact(ReqStart, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedStartDate))
                 {
-                    leaveHis = leaveHis.Where(l => l.StartDate.Date >= startParsed.Date).ToList();
-                }
-            }
-            if (!string.IsNullOrEmpty(ReqEnd))
-            {
-                DateTime endParsed;
-                if (DateTime.TryParseExact(ReqEnd, "d/M/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out endParsed))
-                {
-                    leaveHis = leaveHis.Where(l => l.EndDate.Date <= endParsed.Date).ToList();
+                    startDate = parsedStartDate;
                 }
             }
 
-            if (!string.IsNullOrEmpty(reqId))
+            // แปลง ReqEnd เป็น DateTime 
+            if (!string.IsNullOrEmpty(ReqEnd))
             {
-                leaveHis = leaveHis.Where(l => l.LeavId == reqId).ToList();
+                if (DateTime.TryParseExact(ReqEnd, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedEndDate))
+                {
+                    endDate = parsedEndDate;
+                }
             }
-            LoadDepartments();
-            return View(leaveHis);
-        }
-        public JsonResult GetLeavetype()
-        {
-            var LeaveType = new List<LeaveTypeModel>();
-            string message = string.Empty;
+            var leaveHis = new List<RequestList>();
             try
             {
-                LeaveType = new GetLeaveType().GetLeaveTypeList();
-                message = "Y";
+                leaveHis = new SearchHistoryRequest().GetHis(LeaveType, reqType, ReqStatus, startDate, endDate, string.Empty, reqId, EmpName);
             }
             catch (Exception ex)
             {
-                message = ex.Message;
+                ViewBag.ErrorMessage = "ไม่สามารถโหลดข้อมูลได้ กรุณาลองอีกครั้ง";
             }
-
-            return Json(new { message = message, LeaveType }, JsonRequestBehavior.AllowGet);
+            LoadDepartments();
+            LoadRequestType();
+            LoadLeavetype();
+            LoadReqStatus();
+            return View(leaveHis);
         }
+
         private List<LeaveHisDemo> Demodata()
         {
             LeaveHisDemo leave1 = new LeaveHisDemo()
@@ -279,6 +274,39 @@ namespace Eleave.Controllers
 
             return allLeave;
         }
+        private void LoadLeavetype()
+        {
+            var LeaveType = new List<LeaveTypeModel>();
+            string message = string.Empty;
+            try
+            {
+                LeaveType = new GetLeaveType().GetLeaveTypeList();
+                message = "Y";
+            }
+            catch (Exception ex)
+            {
+                message = ex.Message;
+            }
+            ViewBag.Leavetype = LeaveType;
+
+
+        }
+        private void LoadReqStatus()
+        {
+            var ReqSta = new List<StoreGetLookupData>();
+            string message = string.Empty;
+            try
+            {
+
+                ReqSta = new GetLookupData().GetLookupDataStore("REQ_STS");
+                message = "Y";
+            }
+            catch (Exception ex)
+            {
+                message = ex.Message;
+            }
+            ViewBag.ReqSta = ReqSta;
+        }
         private void LoadReqType()
         {
             var EMP_LVL = new List<StoreGetLookupData>();
@@ -288,25 +316,11 @@ namespace Eleave.Controllers
         }
         private void LoadDepartments()
         {
-            List<SelectListItem> departmentList = new List<SelectListItem>();
-            var connectionString = ConfigurationManager.ConnectionStrings["HRIS_DB"].ConnectionString;
-            SqlConnection conn = new SqlConnection(connectionString);
-            conn.Open();
-            SqlCommand cmd = new SqlCommand("SELECT * FROM [HRIS].[dbo].[Department]", conn);
-            SqlDataReader reader_dept = cmd.ExecuteReader();
-            while (reader_dept.Read())
-            {
-                departmentList.Add(new SelectListItem
-                {
-                    Value = reader_dept["DeptName"].ToString(),
-                    Text = reader_dept["DeptName"].ToString()
-                });
-            }
-            reader_dept.Close();
-            reader_dept.Dispose();
-            cmd.Dispose();
-            conn.Close();
-            ViewBag.DepartmentList = departmentList;
+            var departments = new List<StoreGetLookupData>();
+            departments = new GetLookupData().GetLookupDataStore("DEPART");
+
+
+            ViewBag.DepartmentList = departments;
         }
         private void LoadRequestType()
         {

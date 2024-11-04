@@ -13,7 +13,7 @@ namespace Eleave.Models
     {
         public string usrID { get; set; }
         public string Company { get; set; }
-        public int EmpId { get; set; }
+        public string EmpId { get; set; }
         public string TitleName { get; set; }
         [Required(ErrorMessage = "กรุณากรอกชื่อ")]
         public string FirstName { get; set; }

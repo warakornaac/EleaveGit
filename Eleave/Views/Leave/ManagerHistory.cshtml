@@ -29,33 +29,23 @@
                     @Html.AntiForgeryToken()
                     <div class="row">
                         <div class="form-group col-lg-4">
-                            <label>ประเภทการลา :</label>
+                            <label>ประเภทร้องขอ :</label>
                             @Html.DropDownList("LeaveType", new List<SelectListItem>
                                                 {
                                                     new SelectListItem() {Text="ลาป่วย", Value="ลาป่วย"},
                                                     new SelectListItem() {Text="ลากิจ", Value="ลากิจ"},
                                                     new SelectListItem(){Text="ลาพักร้อน",Value="ลาพักร้อน"}
-                                                }, "ประเภทการลา", new { @class = "custom-select", @id = "LeaveType-selector" })
+                                                }, "ลา", new { @class = "custom-select", @id = "LeaveType-selector", @disabled = "disabled" })
 
                         </div>
                         <div class="form-group col-lg-4">
-                            <label>ประเภทร้องขอ :</label>
-                            @Html.DropDownList("reqType", new List<SelectListItem>
-                                                {
-                                                    new SelectListItem() {Text="ลาป่วย", Value="ลาป่วย"},
-                                                    new SelectListItem() {Text="ลากิจ", Value="ลากิจ"},
-                                                    new SelectListItem(){Text="ลาพักร้อน",Value="ลาพักร้อน"}
-                                                }, "ประเภทร้องขอ", new { @class = "custom-select", @id = "reqType-selector" })
+                            <label>ประเภทการลา :</label>
+                            @Html.DropDownList("reqType", new SelectList(ViewBag.Leavetype, "RequestID", "Description"), "ประเภทการลา", new { @class = "custom-select", @id = "reqType-selector" })
 
                         </div>
                         <div class="form-group col-lg-4">
                             <label>สถานะคำขอ :</label>
-                            @Html.DropDownList("ReqStatus", new List<SelectListItem>
-                                                {
-                                                    new SelectListItem() {Text="Approve", Value="S1"},
-                                                    new SelectListItem() {Text="Reject", Value="S2"},
-                                                    new SelectListItem(){Text="Waiting",Value="S3"}
-                                                }, "สถานะคำขอ", new { @class = "custom-select", @id = "reqStatus" })
+                            @Html.DropDownList("ReqStatus", new SelectList(ViewBag.ReqSta, "LookValue", "LookDesc"), "สถานะคำขอ", new { @class = "custom-select", @id = "reqStatus" })
                         </div>
                         <div class="form-group col-lg-4">
                             <label>เริ่มวันที่ :</label>
@@ -67,7 +57,7 @@
                         </div>
                         <div class="form-group col-lg-4">
                             <label>แผนก :</label>
-                            @Html.DropDownList("Department", new SelectList(ViewBag.DepartmentList, "Value", "Text"), "เลือกหน่วยงาน", new { @class = "custom-select", @id = "department-selector" })
+                            @Html.DropDownList("Department", new SelectList(ViewBag.DepartmentList, "LookValue", "LookDesc"), "เลือกหน่วยงาน", new { @class = "custom-select", @id = "department-selector" })
                         </div>
                         <div class="form-group col-lg-4">
                             <label>รหัสคำขอ :</label>
@@ -115,15 +105,19 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @{
+                                int i = 0;
+                            }
                             @foreach (var leave in Model)
                             {
+                                i++;
                                 <tr>
+                                    <td>@i</td>
                                     <td>@leave.ReqNo</td>
-                                    <td>@leave.ReqId</td>
                                     <td>@(leave.ReqDate?.ToString("dd/MM/yyyy")??"")</td>
                                     <td class="text-center">@leave.ReqType</td>
                                     <td class="text-center">@leave.Empname</td>
-                                    <td class="text-center">@leave.ReqType</td>
+                                    <td class="text-center">@leave.LeaveType</td>
                                     <td>@(leave.StartDate?.ToString("dd/MM/yyyy")??"")</td>
                                     <td>@(leave.EndDate?.ToString("dd/MM/yyyy")??"")</td>
                                     <td class="text-center">@leave.NumDay</td>
@@ -174,12 +168,38 @@
         format: "dd/mm/yyyy",
         autoclose: true
     });
-    $(document).on('change', '#LeaveType-selector', function () {
-        DropdownReqTyp();
-    });
-    function DropdownReqTyp() {
-    $.ajax({
-            url: '@Url.Action("GetLeavetype", "Leave")',
+    //$(document).on('change', '#LeaveType-selector', function () {
+    //    DropdownReqTyp();
+    //});
+    function DropdownReqTyp()
+    {
+        $.ajax({
+                url: '@Url.Action("GetLeavetype", "Leave")',
+                data: {
+
+                },
+                type: 'POST',
+                dataType: 'JSON',
+                success: function (data) {
+                    if (data.message == 'Y') {
+                        var select = $('#reqType-selector');
+                        select.children().remove();
+                        select.append($('<option>').val(null).text('เลือกประเภทการร้องขอ'))
+                        $(data.LeaveType).each(function (index, item) {
+                            select.append($('<option>').val(item.RequestID).text(item.Description));
+                        });
+
+                    }
+                    else {
+                        console.log('Message Type: ' + data.message);
+                    }
+                }
+            });
+    }
+
+    function GetReqStatus() {
+        $.ajax({
+            url: '@Url.Action("GetReqStatus", "Leave")',
             data: {
 
             },
@@ -187,16 +207,15 @@
             dataType: 'JSON',
             success: function (data) {
                 if (data.message == 'Y') {
-                    var select = $('#reqType-selector');
+                    var select = $('#reqStatus');
                     select.children().remove();
-                    select.append($('<option>').val(0).text('เลือกประเภทการร้องขอ'))
-                    $(data.LeaveType).each(function (index, item) {
-                        select.append($('<option>').val(item.RequestID).text(item.Description));
+                    select.append($('<option>').val(null).text('สถานะคำขอ'));
+                    $(data.ReqSta).each(function (index, item) {
+                        select.append($('<option>').val(item.LookValue).text(item.LookDesc));
                     });
-                    select.val(0).trigger('change');
                 }
                 else {
-                    console.log('Message Type: ' + data.message);
+                    console.log('Getstatus Error: ' + data.message);
                 }
             }
         });
@@ -221,11 +240,10 @@
             ordering: false,
             select: false,
             language: {
-                info: "แสดง _START_ ถึง _END_ จากทั้งหมด _TOTAL_ คน"
+                info: "แสดง _START_ ถึง _END_ จากทั้งหมด _TOTAL_ คำร้องขอ",
+                infoEmpty: "ไม่มีข้อมูลให้แสดง"
             }
         });
-
-
     });
 </script>
 
@@ -241,7 +259,16 @@
         $(document).ready(function () {
             setTimeout(function () {
                 LoadingHide();
-            }, 1500); // หน่วงเวลา (2 วินาที)
+            }, 1500);
+        });
+    </script>
+}
+@if (ViewBag.ErrorMessage != null)
+{
+    <script>
+        $(document).ready(function () {
+            LoadingHide();
+            alert("@ViewBag.ErrorMessage");
         });
     </script>
 }

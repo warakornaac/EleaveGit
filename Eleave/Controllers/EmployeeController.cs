@@ -21,6 +21,7 @@ namespace Eleave.Controllers
             GetEmployee = new GetProfileList().GetProfileListS();
 
             ViewBag.EmployeeList = GetEmployee;
+
             LoadDepartments();
             LoadEmployeeLevel();
             return View();
@@ -42,7 +43,7 @@ namespace Eleave.Controllers
             }
             if (!string.IsNullOrEmpty(Department))
             {
-                GetEmployee = GetEmployee.Where(emp => emp.DeptName.ToString().ToTrim() == Department).ToList();
+                GetEmployee = GetEmployee.Where(emp => emp.DeptNameShort.ToString().ToTrim() == Department.Trim()).ToList();
             }
             if (!string.IsNullOrEmpty(Name))
             {
@@ -87,6 +88,7 @@ namespace Eleave.Controllers
             {
                 model = modelData.FirstOrDefault();
             }
+            LoadStatusEmp();
             LoadDirector();
             LoadEmployeeLevel();
             LoadDepartments();
@@ -110,6 +112,7 @@ namespace Eleave.Controllers
                 string usr = Session["EmpId"].ToString();
                 updateEmployee = new UpdateProfileEmployee().Update(store, usr);
                 ViewBag.UpdateStatus = "Success";
+                LoadStatusEmp();
                 LoadDirector();
                 LoadDepartments();
                 LoadEmpType();
@@ -205,7 +208,7 @@ namespace Eleave.Controllers
                     GrpvID.Add(new
                     {
                         ApprGrpId = reader["ApprGrpId"].ToString(),
-                        ApprGrpNm = reader["ApprGrpNm"].ToString()
+                        ApprGrpName = reader["ApprGrpName"].ToString()
                     });
 
                 }
@@ -273,7 +276,7 @@ namespace Eleave.Controllers
                     {
                         Company = reader["Company"].ToString(),
                         CountryCode = reader["CountryCode"].ToString(),
-                        EmpId = int.Parse(reader["EmpId"].ToString().Trim()),
+                        EmpId = reader["EmpId"].ToString().Trim(),
                         Fullname = reader["Fullname"].ToString(),
                         DeptId = reader["DeptId"].ToString(),
                         Position = reader["Position"].ToString(),
@@ -441,6 +444,12 @@ namespace Eleave.Controllers
 
             return Json(new { message = message, empH }, JsonRequestBehavior.AllowGet);
         }
+        public void LoadStatusEmp()
+        {
+            var EMP_STS = new List<StoreGetLookupData>();
+            EMP_STS = new GetLookupData().GetLookupDataStore("EMP_STS");
+            ViewBag.EmpSta = EMP_STS;
+        }
         public void LoadEmployeeLevel()
         {
             var EMP_LVL = new List<StoreGetLookupData>();
@@ -467,28 +476,8 @@ namespace Eleave.Controllers
         }
         private List<ApprovalFlow> LoadGroupApprovalDropdown()
         {
-            var connectionString = ConfigurationManager.ConnectionStrings["HRIS_DB"].ConnectionString;
-            SqlConnection conn = new SqlConnection(connectionString);
-            conn.Open();
-            List<ApprovalFlow> apprvFlow = new List<ApprovalFlow>();
-            SqlCommand cmd = new SqlCommand("SELECT *  FROM [HRIS].[dbo].[ApprovalFlow] order by ApprGrpId,ApprStep", conn);
-            SqlDataReader reader = cmd.ExecuteReader();
-            while (reader.Read())
-            {
-                apprvFlow.Add(new ApprovalFlow()
-                {
-                    CountryCode = reader["CountryCode"].ToString(),
-                    ApprGrpId = reader["ApprGrpID"].ToString(),
-                    ApprGrpNm = reader["ApprGrpNm"].ToString(),
-                    DepId = reader["DepID"].ToString(),
-                    ApprStep = reader["ApprStep"] != DBNull.Value ? Convert.ToInt32(reader["ApprStep"]) : 0,
-                    EmpId = reader["EmpID"] != DBNull.Value ? Convert.ToInt32(reader["EmpID"]) : 0,
-                    ActionType = reader["ActionType"].ToString(),
-                });
-            }
-            reader.Close();
-            reader.Dispose();
-            conn.Close();
+            var apprvFlow = new List<ApprovalFlow>();
+            apprvFlow = new GetApprovalFlowList().Get();
             return apprvFlow;
         }
         private void LoadDirector()
@@ -510,7 +499,7 @@ namespace Eleave.Controllers
                     {
                         Company = reader["Company"].ToString(),
                         CountryCode = reader["CountryCode"].ToString(),
-                        EmpId = int.Parse(reader["EmpId"].ToString().Trim()),
+                        EmpId = reader["EmpId"].ToString().Trim(),
                         Fullname = reader["Fullname"].ToString(),
                         DeptId = reader["DeptId"].ToString(),
                         Position = reader["Position"].ToString(),

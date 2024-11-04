@@ -203,7 +203,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 @Html.Label("รหัสกลุ่มอนุมัติ")
-                                @Html.DropDownList("ApprvGrp", new SelectList(ViewBag.apprvFlow, "ApprGrpId", "ApprGrpNm"), "ALL", new { @class = "custom-select", @id = "apprv-search" })
+                                @Html.DropDownList("ApprvGrp", new SelectList(ViewBag.apprvFlow, "ApprGrpId", "ApprGrpName"), "ALL", new { @class = "custom-select", @id = "apprv-search" })
                             </div>
                         </div>
                         <div class="col-md-4 d-md-flex align-items-md-center justify-content-between">
@@ -238,10 +238,10 @@
                                 {
                                     <tr>
                                         <td class="text-center">@aprflow.ApprGrpId</td>
-                                        <td class="text-center">@aprflow.ApprGrpNm</td>
+                                        <td class="text-center">@aprflow.ApprGrpName</td>
                                         <td class="text-center">@aprflow.DepId</td>
                                         <td class="text-center">@aprflow.ApprStep</td>
-                                        <td class="text-center">@aprflow.EmpId</td>
+                                        <td class="text-center">@aprflow.EmpName</td>
                                         <td class="text-center">@aprflow.ActionType</td>
                                         <td class="text-center"><a href="#" data-apprv="@aprflow.ApprGrpId" id="editApprv-@aprflow.ApprGrpId">แก้ไข</a></td>
                                     </tr>
@@ -443,7 +443,7 @@
             success: function (res) {
                 if (res.message === "Y") {
                     if (res.getApproval && res.getApproval.length > 0) {
-                        $('#groupName-edit').val(res.getApproval[0].ApprGrpNm);
+                        $('#groupName-edit').val(res.getApproval[0].ApprGrpName);
                         var dept = res.getApproval[0].DepId.trim();
 
                         var shortDept = dept.substring(0, 3);
@@ -552,7 +552,7 @@
                         var select = $('#group-list');
                         select.children().remove();
                         $(data.GrpvID).each(function (index, item) {
-                            select.append($('<option>').val(item.ApprGrpId).text(item.ApprGrpNm));
+                            select.append($('<option>').val(item.ApprGrpId).text(item.ApprGrpName));
                         });
                     }
                     else {

@@ -190,11 +190,7 @@
                     <div class="col-md-4 col-lg-4">
                         <div class="form-group">
                             @Html.LabelFor(model => model.EmpStatus, "สถานะพนักนักงาน")
-                            @Html.DropDownListFor(model => model.EmpStatus, new List<SelectListItem>
-                                                                           {
-                                                                                new SelectListItem() {Text="Active", Value="1"},
-                                                                                new SelectListItem(){Text="Inactive",Value="0"}
-                                                                           }, new { @class = "custom-select", @id = "empStatusDropdown" })
+                            @Html.DropDownListFor(model => model.EmpStatus, new SelectList(ViewBag.EmpSta, "LookValue", "LookDesc"), new { @class = "custom-select", @id = "empStatusDropdown" })
                         </div>
                     </div>
 

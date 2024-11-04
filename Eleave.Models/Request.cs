@@ -11,7 +11,7 @@ namespace Eleave.Models
         public string ReqNo { get; set; }
         public string ReqType { get; set; }
         public int CountryCode { get; set; }
-        public int EmpId { get; set; }
+        public string EmpId { get; set; }
         public int ReqId { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }

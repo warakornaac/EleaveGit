@@ -9,11 +9,11 @@ namespace Eleave.Models
     public class RequestList
     {
         public string ReqNo { get; set; }
-        public string ReqId { get; set; }
         public string ReqType { get; set; }
         public string CountryCode { get; set; }
-        public int EmpId { get; set; }
+        public string EmpId { get; set; }
         public string Empname { get; set; }
+        public string LeaveType { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         public decimal NumDay { get; set; }

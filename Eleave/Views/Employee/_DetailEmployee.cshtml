@@ -48,8 +48,6 @@
                     <div> @dataEmp.DirectorId </div>
                 </div>
             </div>
-
-
         </div>
         <div class="row">
             <div class="col-xs-6 col-sm-4">
@@ -118,11 +116,11 @@
                     <h5>สถานะพนักนักงาน</h5>
                     @if (dataEmp.EmpStatus == "Active")
                     {
-                        <div class="text-white badge badge-success"><i class="fa fa-check-circle-o" aria-hidden="true"></i><span>Active</span></div>
+                        <div class="text-white badge badge-success rounded-pill"><i class="fa fa-check-circle-o" aria-hidden="true"></i><span>ทำงาน/Working</span></div>
                     }
                     else
                     {
-                        <div class="text-white badge badge-danger"><i class="fa fa-times-circle-o" aria-hidden="true"></i><span>Inactive</span></div>
+                        <div class="text-white badge badge-danger rounded-pill"><i class="fa fa-times-circle-o" aria-hidden="true"></i><span>ลาออก/Resigned</span></div>
                     }
                     @*<div> @dataEmp.StartDate </div>*@
                 </div>

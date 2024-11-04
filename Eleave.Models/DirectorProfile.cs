@@ -10,7 +10,7 @@ namespace Eleave.Models
     {
         public string Company { get; set; }
         public string CountryCode { get; set; }
-        public int EmpId { get; set; }
+        public string EmpId { get; set; }
         public string Fullname { get; set; }
         public string Gender { get; set; }
         public string DeptId { get; set; }
