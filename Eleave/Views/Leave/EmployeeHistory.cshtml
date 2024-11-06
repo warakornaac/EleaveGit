@@ -81,7 +81,7 @@
                             <tr>
                                 <th>#</th>
                                 <th class="text-center">รหัสคำขอ</th>
-                                <th class="text-center">วันที่ขอ</th>
+                                <th class="text-center">วันที่ร้องขอ</th>
                                 <th class="text-center">ประเภทการขอ</th>
                                 <th class="text-center">ผู้ร้องขอ</th>
                                 <th class="text-center">ประเภทการลา</th>
@@ -89,10 +89,12 @@
                                 <th class="text-center">วันที่ลา(สิ้นสุด)</th>
                                 <th class="text-center">รวมขอลา</th>
                                 <th class="text-center">สถานะคำขอ</th>
+                                <th class="text-center">หมายเหตุการลา</th>
                                 <th class="text-center">ผู้อนุมัติ</th>
                                 <th class="text-center">วันที่อนุมัติ</th>
-                                <th class="text-center">ผู้รับอนุมัติ</th>
+                                <th class="text-center">HR ผู้รับอนุมัติ</th>
                                 <th class="text-center">วันที่ HR รับอนุมัติ</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -112,7 +114,13 @@
                                     <td>@(leave.StartDate?.ToString("dd/MM/yyyy")??"")</td>
                                     <td>@(leave.EndDate?.ToString("dd/MM/yyyy")??"")</td>
                                     <td class="text-center">@leave.NumDay</td>
-                                    @if (leave.ReqStatus == "1")
+                                    @if (leave.ReqStatus == "0")
+                                    {
+                                        <td class="text-center">
+                                            <div class="text-warning"><i class="fa fa-repeat" aria-hidden="true"></i><span>@leave.ReqStaDesc</span></div>
+                                        </td>
+                                    }
+                                    else if (leave.ReqStatus == "1")
                                     {
                                         <td class="text-center">
                                             <div class="text-success"><i class="fa fa-check" aria-hidden="true"></i><span>@leave.ReqStaDesc</span></div>
@@ -125,22 +133,112 @@
                                             <div class="text-danger"><i class="fa fa-times" aria-hidden="true"></i><span>@leave.ReqStaDesc</span></div>
                                         </td>
                                     }
-                                    else if (leave.ReqStatus == "0")
+                                    else if (leave.ReqStatus == "3")
                                     {
                                         <td class="text-center">
-                                            <div class="text-warning"><i class="fa fa-repeat" aria-hidden="true"></i><span>@leave.ReqStaDesc</span></div>
+                                            <div class="text-success"><i class="fa fa-check" aria-hidden="true"></i><span>@leave.ReqStaDesc</span></div>
                                         </td>
                                     }
+                                    else if (leave.ReqStatus == "4")
+                                    {
+                                        <td class="text-center">
+                                            <div class="text-danger"><i class="fa fa-ban" aria-hidden="true"></i><span>@leave.ReqStaDesc</span></div>
+                                        </td>
+                                    }
+
+                                    <td style="max-width: 200px;">
+                                        <p class="p-0 m-0 text-truncate">@leave.Remark</p>
+                                    </td>
                                     <td class="text-center">@leave.AcceptBy</td>
                                     <td>@(leave.AcceptDate?.ToString("dd/MM/yyyy")??"")</td>
-                                    <td class="text-center">@leave.UpdatedBy</td>
-                                    <td>@(leave.UpdateDate?.ToString("dd/MM/yyyy")??"")</td>
+                                    @*<td class="text-center">@leave.UpdatedBy</td>
+                                        <td>@(leave.UpdateDate?.ToString("dd/MM/yyyy")??"")</td>*@
+                                    <td></td>
+                                    <td></td>
+                                    @if (leave.EmpId.ToString() == Session["EmpId"].ToString() && leave.ReqStatus == "0")
+                                    {
+                                        <td class="text-center"><a href="#" id="cancelbtn_@leave.ReqNo" data-reqno="@leave.ReqNo">Cancel</a></td>
+                                    }
+                                    else
+                                    {
+                                        <td></td>
+                                    }
                                 </tr>
                             }
 
                         </tbody>
                     </table>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="CancelRequestModal" tabindex="-1" aria-labelledby="ModalCancel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ModalCancel">ต้องการยกเลิก Request หรือไม่?</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>รหัสคำขอ: </label>
+                            <p class="border-0 p-0 m-0" name="ReqId" id="cancel_reqid"></p>
+                            <input type="hidden" name="ReqIdHide" value="" id="cancel_reqid_val" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>วันที่ร้องขอ: </label>
+                            <p class="border-0 p-0 m-0" name="ReqDate" id="cancel_reqdate"></p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>ประเภทการขอ: </label>
+                            <p class="border-0 p-0 m-0" name="ReqTyp" id="cancel_reqtyp"></p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>ประเภทการลา: </label>
+                            <p class="border-0 p-0 m-0" name="LevTyp" id="cancel_levtyp"></p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>วันที่ลา(เริ่ม): </label>
+                            <p class="border-0 p-0 m-0" name="StartDate" id="cancel_startdate"></p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>วันที่ลา(สิ้นสุด): </label>
+                            <p class="border-0 p-0 m-0" name="EndDate" id="cancel_enddate"></p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>สถานะคำขอ: </label>
+                            <div id="cancel_sta"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>หมายเหตุการลา</label>
+                            <p class="border-0 p-0 m-0 mb-1" name="Remark" id="cancel_remark"></p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">ไม่</button>
+                <button type="button" class="btn btn-danger" id="cancel_submit">ใช่</button>
             </div>
         </div>
     </div>
@@ -160,6 +258,92 @@
     $(document).on('change', '#LeaveType-selector', function () {
         DropdownReqTyp();
     });
+    //$('a[id^="cancelbtn_"]').on('click', function () {
+    //    $(this).data();
+    //    $('#CancelRequestModal').modal('show');
+    //});
+
+    $(document).on('click', '[id^="cancelbtn_"]', function (e) {
+        e.preventDefault();
+        var reqNo = $(this).data('reqno');
+        //console.log(reqNo);
+        $('#CancelRequestModal').modal('show');
+        GetReqDetail(reqNo);
+    });
+    $(document).on('click', '#cancel_submit', function () {
+        var reqno = $('#cancel_reqid_val').val()
+        $.ajax({
+            url: '@Url.Action("CancelRequest", "Leave")',
+            data: {
+                ReqNo: reqno
+            },
+            type: 'POST',
+            dataType: 'JSON',
+            success: function (data) {
+                if (data.message == 'Y') {
+                    $('#CancelRequestModal').modal('hide');
+                    Swal.fire({
+                        title: "Success!!!",
+                        text: "ยกเลิกคำร้องสำเร็จ ",
+                        icon: "success"
+                    }).then(() => {
+                        location.reload();
+                    });
+                }
+                else {
+                    $('#CancelRequestModal').modal('hide');
+                    Swal.fire({
+                        title: "Error!!!",
+                        text: "Cancel Failed : " + data.message,
+                        icon: "error"
+                    });
+                }
+            }
+        });
+    });
+
+    function GetReqDetail(REQ) {
+        $.ajax({
+            url: '@Url.Action("GetRequestDetail", "Leave")',
+            data: {
+                ReqNO: REQ
+            },
+            type: 'POST',
+            dataType: 'JSON',
+            beforeSend: function () {
+                $('#cancel_reqid').text('');
+                $('#cancel_reqid_val').val('');
+                $('#cancel_reqdate').text('');
+                $('#cancel_reqtyp').text('');
+                $('#cancel_levtyp').text('');
+                $('#cancel_startdate').text('');
+                $('#cancel_enddate').text('');
+                $('#cancel_remark').text('');
+                $('#cancel_sta').html('');
+            },
+            success: function (data) {
+                if (data.message == "Y") {
+                    if (data.ReqDetail.length != 0) {
+                        $('#cancel_reqid').text(data.ReqDetail[0].ReqNo);
+                        $('#cancel_reqid_val').val(data.ReqDetail[0].ReqNo);
+                        $('#cancel_reqdate').text(data.ReqDetail[0].ReqDate);
+                        $('#cancel_reqtyp').text(data.ReqDetail[0].ReqType);
+                        $('#cancel_levtyp').text(data.ReqDetail[0].LeaveType);
+                        $('#cancel_startdate').text(data.ReqDetail[0].StartDate);
+                        $('#cancel_enddate').text(data.ReqDetail[0].EndDate);
+                        $('#cancel_remark').text(data.ReqDetail[0].Remark);
+                        if (data.ReqDetail[0].ReqStatus == "0") {
+                            $('#cancel_sta').html('<div class="text-warning"><i class="fa fa-repeat" aria-hidden="true"></i><span>' + data.ReqDetail[0].ReqStaDesc +'</span></div>');
+                        }
+                    }
+                }
+                else {
+                    console.log('Detail Err: ' + data.message);
+                }
+            }
+        });
+    }
+
     function DropdownReqTyp()
     {
         $.ajax({
@@ -210,8 +394,6 @@
                 infoEmpty: "ไม่มีข้อมูลให้แสดง"
             }
         });
-
-
     });
 </script>
 

@@ -21,6 +21,7 @@ namespace Eleave.Models
         public string ApprGrpID { get; set; }
         public string ReqStatus { get; set; }
         public string ReqStaDesc { get; set; }
+        public string Remark { get; set; }
         public string AcceptBy { get; set; }
         public DateTime? AcceptDate { get; set; }
         public string UpdatedBy { get; set; }

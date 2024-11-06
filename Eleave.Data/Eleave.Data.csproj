@@ -50,6 +50,7 @@
     <Compile Include="GetLookupData.cs" />
     <Compile Include="GetProfile.cs" />
     <Compile Include="GetProfileList.cs" />
+    <Compile Include="GetRequestDetail.cs" />
     <Compile Include="GetRequestList.cs" />
     <Compile Include="GetUpdateProfile.cs" />
     <Compile Include="GetUserPermisstion.cs" />

@@ -227,6 +227,7 @@
                                 <th class="text-center">วันที่ลา(สิ้นสุด)</th>
                                 <th class="text-center">รวมขอลา</th>
                                 <th class="text-center">สถานะคำขอ</th>
+                                <th class="text-center">หมายเหตุการลา</th>
                                 <th class="text-center">ผู้อนุมัติ</th>
                                 <th class="text-center">วันที่อนุมัติ</th>
                                 <th class="text-center">ผู้รับอนุมัติ</th>
@@ -250,11 +251,18 @@
                                     <td>@(leave.StartDate?.ToString("dd/MM/yyyy")??"")</td>
                                     <td>@(leave.EndDate?.ToString("dd/MM/yyyy")??"")</td>
                                     <td class="text-center">@leave.NumDay</td>
-                                    @if (leave.ReqStatus == "1")
+                                    @if (leave.ReqStatus == "0")
+                                    {
+                                        <td class="text-center">
+                                            <div class="text-warning"><i class="fa fa-repeat" aria-hidden="true"></i><span>@leave.ReqStaDesc</span></div>
+                                        </td>
+                                    }
+                                    else if (leave.ReqStatus == "1")
                                     {
                                         <td class="text-center">
                                             <div class="text-success"><i class="fa fa-check" aria-hidden="true"></i><span>@leave.ReqStaDesc</span></div>
                                         </td>
+
                                     }
                                     else if (leave.ReqStatus == "2")
                                     {
@@ -262,16 +270,27 @@
                                             <div class="text-danger"><i class="fa fa-times" aria-hidden="true"></i><span>@leave.ReqStaDesc</span></div>
                                         </td>
                                     }
-                                    else if (leave.ReqStatus == "0")
+                                    else if (leave.ReqStatus == "3")
                                     {
                                         <td class="text-center">
-                                            <div class="text-warning"><i class="fa fa-repeat" aria-hidden="true"></i><span>@leave.ReqStaDesc</span></div>
+                                            <div class="text-primary"><i class="fa fa-check" aria-hidden="true"></i><span>@leave.ReqStaDesc</span></div>
                                         </td>
                                     }
+                                    else if (leave.ReqStatus == "4")
+                                    {
+                                        <td class="text-center">
+                                            <div class="text-danger"><i class="fa fa-ban" aria-hidden="true"></i><span>@leave.ReqStaDesc</span></div>
+                                        </td>
+                                    }
+                                    <td style="max-width: 200px;">
+                                        <p class="p-0 m-0 text-truncate">@leave.Remark</p>
+                                    </td>
                                     <td class="text-center">@leave.AcceptBy</td>
                                     <td>@(leave.AcceptDate?.ToString("dd/MM/yyyy")??"")</td>
-                                    <td class="text-center">@leave.UpdatedBy</td>
-                                    <td>@(leave.UpdateDate?.ToString("dd/MM/yyyy")??"")</td>
+                                    @*<td class="text-center">@leave.UpdatedBy</td>
+                                        <td>@(leave.UpdateDate?.ToString("dd/MM/yyyy")??"")</td>*@
+                                    <td></td>
+                                    <td></td>
                                 </tr>
                             }
                         </tbody>
