@@ -382,9 +382,11 @@
     <Content Include="Views\Include\MenuEmployee.cshtml" />
     <Content Include="Views\Include\MenuMgr.cshtml" />
     <Content Include="Views\Employee\ApprovflowSetting.cshtml" />
-    <Content Include="Views\Leave\RequestForm.cshtml" />
     <Content Include="Views\Include\MenuHr.cshtml" />
     <Content Include="Views\Error\Index.cshtml" />
+    <Content Include="Views\Leave\RequestForm.cshtml" />
+		<Content Include="Views\Employee\ApprovflowSetting.cshtml" />
+
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
