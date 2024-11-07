@@ -26,7 +26,7 @@ namespace Eleave.Controllers
 
             return View();
         }
-        [HttpPost]
+        //[HttpPost]
         //public ActionResult SaveRequestForm(List<StoreUpdateRequest> request)
         //{
 
