@@ -163,7 +163,13 @@
                     <div class="col-md-4 col-lg-4">
                         <div class="form-group">
                             @Html.LabelFor(model => model.DirectorId, "หัวหน้างาน")
-                            @Html.TextBoxFor(model => model.DirectorId, new { @class = "form-control" })
+                            @Html.TextBoxFor(model => model.DirectorId, new { @class = "form-control", list = "directors-list" })
+                            <datalist id="directors-list">
+                                @foreach (var director in ViewBag.Directors)
+                                {
+                                    <option value="@director.EmpId">@director.Fullname</option>
+                                }
+                            </datalist>
                         </div>
                     </div>
                     <div class="col-md-4 col-lg-4">
@@ -184,11 +190,7 @@
                     <div class="col-md-4 col-lg-4">
                         <div class="form-group">
                             @Html.LabelFor(model => model.EmpStatus, "สถานะพนักนักงาน")
-                            @Html.DropDownListFor(model => model.EmpStatus, new List<SelectListItem>
-                                                                           {
-                                                                                new SelectListItem() {Text="Active", Value="1"},
-                                                                                new SelectListItem(){Text="Inactive",Value="0"}
-                                                                           }, new { @class = "custom-select", @id = "empStatusDropdown" })
+                            @Html.DropDownListFor(model => model.EmpStatus, new SelectList(ViewBag.EmpSta, "LookValue", "LookDesc"), new { @class = "custom-select", @id = "empStatusDropdown" })
                         </div>
                     </div>
 
@@ -199,19 +201,21 @@
     </div>
 </div>
 <script>
-    if ("@ViewBag.Error" !== "") {
+    if ('@ViewBag.Error' != '') {
         Swal.fire({
-            title: "The Internet?",
-            text: "@ViewBag.Error",
-            icon: "question"
+            title: 'Error',
+            html: '@ViewBag.Error',
+            icon: 'error'
         });
     }
     if ("@ViewBag.UpdateStatus" == "Success") {
         Swal.fire({
-    title: "@ViewBag.UpdateStatus",
-    text: "@ViewBag.UpdateStatus",
-    icon: "success"
-});
+            title: "@ViewBag.UpdateStatus",
+            text: "Update ข้อมูลพนักงานสำเร็จ",
+            icon: "success"
+        }).then(() => {
+            window.location.href = "@Url.Action("ManagerEmployee", "Employee")";
+        });
     }
     $('#department-selector').select2({
         width: '100%'

@@ -13,6 +13,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using static Eleave.Models.ModelLogin;
+using Eleave.Data;
 
 namespace Eleave.Controllers
 {
@@ -21,8 +22,29 @@ namespace Eleave.Controllers
         // GET: Home
         public ActionResult Index()
         {
-            var leaveHis = Demodata();
-            return View(leaveHis);
+            string EmpID = string.Empty;
+            string EmpType = string.Empty;
+            if (Session["EmpId"] != null)
+            {
+                EmpID = Session["EmpId"].ToString();
+                EmpType = Session["UserType"].ToString();
+            }
+            else
+            {
+                return RedirectToAction("Login", "Home");
+            }
+            var HisRequest = new List<RequestList>();
+
+            try
+            {
+                HisRequest = new GetRequestList().GetRequests(EmpID, EmpType);
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+            return View(HisRequest);
         }
         [HttpGet]
         public ActionResult Login()
@@ -59,7 +81,8 @@ namespace Eleave.Controllers
                     {
                         var dateCheckLogin = CheckLoginEmployee(EmpId, "");
                         UserType = dateCheckLogin.Item2;
-                        if (!string.IsNullOrEmpty(UserType)) { 
+                        if (!string.IsNullOrEmpty(UserType))
+                        {
                             return RedirectToAction("Index", "Home");
                         }
                         ModelState.AddModelError("", "ไม่พบข้อมูลพนักงานของท่านในระบบ HR | Username or password ไม่ถูกต้อง");
@@ -79,7 +102,8 @@ namespace Eleave.Controllers
             }
             return View(loginUser);
         }
-        public (string, string, string, string) CheckLoginEmployee(string Username, string Password) {
+        public (string, string, string, string) CheckLoginEmployee(string Username, string Password)
+        {
             this.Session["EmpId"] = null;
             this.Session["UserType"] = null;
             this.Session["FullName"] = null;

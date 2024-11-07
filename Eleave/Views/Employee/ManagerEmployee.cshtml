@@ -185,6 +185,7 @@
                         <thead>
                             <tr>
                                 <th>#</th>
+                                <th class="text-center">บริษัท</th>
                                 <th class="text-center">รหัสพนักงาน</th>
                                 <th class="text-center">ชื่อ-สกุล</th>
                                 <th class="text-center">หน่วยงาน</th>
@@ -201,6 +202,7 @@
                                     ++rowData;
                                     <tr>
                                         <td>@rowData</td>
+                                        <td class="text-center">@dataItem.Company</td>
                                         <td>@dataItem.EmpId</td>
                                         <td>@dataItem.Fullname</td>
                                         <td>@dataItem.DeptName</td>
@@ -208,7 +210,8 @@
                                         @if (dataItem.EmpStatus == "Active")
                                         {
                                             <td class="text-center">
-                                                <div class="text-white badge badge-success"><i class="fa fa-check-circle-o" aria-hidden="true"></i><span>Active</span></div>
+                                                <div class="text-white badge badge-success rounded-pill"><i class="fa fa-check-circle-o" aria-hidden="true"></i><span>ทำงาน/Working</span></div>
+                                                @*<div class="text-white badge badge-success"><i class="fa fa-check-circle-o" aria-hidden="true"></i><span>ทำงาน/Working</span></div>*@
                                                 @*<div class="text-center">
                                                         <label class="switch">
                                                             <input type="checkbox" checked disabled>
@@ -220,7 +223,7 @@
                                         else
                                         {
                                             <td class="text-center">
-                                                <div class="text-white badge badge-danger"><i class="fa fa-times-circle-o" aria-hidden="true"></i><span>Inactive</span></div>
+                                                <div class="text-white badge badge-danger rounded-pill"><i class="fa fa-times-circle-o" aria-hidden="true"></i><span>ลาออก/Resigned</span></div>
                                                 @*<div class="text-center">
                                                         <label class="switch">
                                                             <input type="checkbox" disabled>
@@ -263,7 +266,8 @@
             ordering: false,
             select: false,
             language: {
-                info: "แสดง _START_ ถึง _END_ จากทั้งหมด _TOTAL_ คน"
+                info: "แสดง _START_ ถึง _END_ จากทั้งหมด _TOTAL_ คน",
+                infoEmpty: "ไม่มีข้อมูลให้แสดง"
             }
         });
     });

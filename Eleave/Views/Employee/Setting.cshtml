@@ -1,4 +1,4 @@
-﻿
+﻿@model IEnumerable<Eleave.Models.UserPermission>
 @{
     ViewBag.Title = "สิทธิ์การเข้าใช้งาน";
 }
@@ -32,23 +32,23 @@
                                     <th class="text-center">คำอธิบายผู้ใช้งาน</th>
                                     <th class="text-center">อนุมัติ</th>
                                     <th class="text-center">ร้องขอ</th>
-                                    <th class="text-center">แก้ไขข้อมูล	</th>
                                     <th class="text-center">รับรายการร้องขอ	</th>
-                                    <th class="text-center">ตั้งค่าระบบ</th>
+                                    <th class="text-center">แก้ไขข้อมูล	</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @for (var i = 1; i <= 4; i++)
+                                @foreach (var item in Model)
                                 {
                                     <tr class="text-center">
-                                        <td>@i</td>
-                                        <td>USER</td>
-                                        <td>พนักงาน</td>
+                                        <td>@item.UsrPerID</td>
+                                        <td>@item.UsrType</td>
+                                        <td>@item.UsrDesc</td>
                                         <td>
                                             <div class="chk-option">
                                                 <label class="check-task custom-control custom-checkbox d-flex justify-content-center done-task">
-                                                    @Html.CheckBox("Approve", false, new { @class = "custom-control-input" })
-                                                    @Html.Label("Approve", "", new { @class = "custom-control-label" })
+
+                                                    @Html.CheckBox("Approve_" + item.UsrPerID, item.Approval, new { @class = "custom-control-input", @disabled = "disabled" })
+                                                    @Html.Label("Approve_" + item.UsrPerID, "", new { @class = "custom-control-label" })
                                                     <input type="checkbox" class="custom-control-input">
                                                     <span class="custom-control-label"></span>
                                                 </label>
@@ -57,8 +57,8 @@
                                         <td>
                                             <div class="chk-option">
                                                 <label class="check-task custom-control custom-checkbox d-flex justify-content-center done-task">
-                                                    @Html.CheckBox("Request", true, new { @class = "custom-control-input" })
-                                                    @Html.Label("Request", "", new { @class = "custom-control-label" })
+                                                    @Html.CheckBox("Request_" + item.UsrPerID, item.Request, new { @class = "custom-control-input", @disabled = "disabled" })
+                                                    @Html.Label("Request_" + item.UsrPerID, "", new { @class = "custom-control-label" })
                                                     <input type="checkbox" class="custom-control-input">
                                                     <span class="custom-control-label"></span>
                                                 </label>
@@ -67,8 +67,8 @@
                                         <td>
                                             <div class="chk-option">
                                                 <label class="check-task custom-control custom-checkbox d-flex justify-content-center done-task">
-                                                    @Html.CheckBox("Edit", true, new { @class = "custom-control-input" })
-                                                    @Html.Label("Edit", "", new { @class = "custom-control-label" })
+                                                    @Html.CheckBox("Actknowlege_" + item.UsrPerID, item.Actknowledge, new { @class = "custom-control-input", @disabled = "disabled" })
+                                                    @Html.Label("Actknowlege_" + item.UsrPerID, "", new { @class = "custom-control-label" })
                                                     <input type="checkbox" class="custom-control-input">
                                                     <span class="custom-control-label"></span>
                                                 </label>
@@ -77,18 +77,8 @@
                                         <td>
                                             <div class="chk-option">
                                                 <label class="check-task custom-control custom-checkbox d-flex justify-content-center done-task">
-                                                    @Html.CheckBox("AcceptRequest", true, new { @class = "custom-control-input" })
-                                                    @Html.Label("AcceptRequest", "", new { @class = "custom-control-label" })
-                                                    <input type="checkbox" class="custom-control-input">
-                                                    <span class="custom-control-label"></span>
-                                                </label>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="chk-option">
-                                                <label class="check-task custom-control custom-checkbox d-flex justify-content-center done-task">
-                                                    @Html.CheckBox("Setting", true, new { @class = "custom-control-input" })
-                                                    @Html.Label("Setting", "", new { @class = "custom-control-label" })
+                                                    @Html.CheckBox("Setting_" + item.UsrPerID, item.Setting, new { @class = "custom-control-input", @disabled = "disabled" })
+                                                    @Html.Label("Setting_" + item.UsrPerID, "", new { @class = "custom-control-label" })
                                                     <input type="checkbox" class="custom-control-input">
                                                     <span class="custom-control-label"></span>
                                                 </label>
@@ -101,12 +91,12 @@
                         </table>
                     </div>
                 </div>
-                <div class="card-footer">
-                    <div class="form-group float-end m-2">
+                @*<div class="card-footer">
+                        <div class="form-group float-end m-2">
 
-                        <input type="submit" value="Search" class="btn btn-success" />
-                    </div>
-                </div>
+                            <input type="submit" value="Search" class="btn btn-success" />
+                        </div>
+                    </div>*@
             }
         </div>
     </div>

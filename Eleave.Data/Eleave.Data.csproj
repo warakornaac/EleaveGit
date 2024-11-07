@@ -45,12 +45,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GetApprovalFlowEdit.cs" />
+    <Compile Include="GetApprovalFlowList.cs" />
+    <Compile Include="GetLeaveType.cs" />
     <Compile Include="GetLookupData.cs" />
     <Compile Include="GetProfile.cs" />
     <Compile Include="GetProfileList.cs" />
+    <Compile Include="GetRequestDetail.cs" />
+    <Compile Include="GetRequestList.cs" />
     <Compile Include="GetUpdateProfile.cs" />
+    <Compile Include="GetUserPermisstion.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SearchEmployee.cs" />
+    <Compile Include="SearchHistoryRequest.cs" />
     <Compile Include="UpdateProfileEmployee.cs" />
     <Compile Include="UpdateRequest.cs" />
   </ItemGroup>

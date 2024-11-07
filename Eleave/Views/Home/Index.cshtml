@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Eleave.Models.LeaveHisDemo>
+﻿@model IEnumerable<Eleave.Models.RequestList>
 @{
     ViewBag.Title = "หน้าแรก";
 }
@@ -19,11 +19,15 @@
     <!-- table card-1 start -->
     <div class="col-md-12 col-xl-4">
         <div class="card flat-card">
+            <div class="card-header">
+                <h5>วันลาที่เหลือ</h5>
+            </div>
             <div class="row-table">
-                <div class="col-sm-6 card-body br">
+                <div class="col-sm-6 card-body br ">
                     <div class="row">
                         <div class="col-sm-4">
-                            <i class="icon feather icon-eye text-c-green mb-1 d-block"></i>
+                            @*<i class="icon feather icon-eye text-c-green mb-1 d-block"></i>*@
+                            <i class="fa fa-medkit text-c-green mb-1 d-block"></i>
                         </div>
                         <div class="col-sm-8 text-md-center">
                             <h5>2</h5>
@@ -31,10 +35,11 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-6 card-body">
+                <div class="col-sm-6 card-body ">
                     <div class="row">
                         <div class="col-sm-4">
-                            <i class="icon feather icon-music text-c-red mb-1 d-block"></i>
+                            @*<i class="icon feather icon-music text-c-red mb-1 d-block"></i>*@
+                            <i class="icon feather icon-file-text text-c-blue mb-1 d-block"></i>
                         </div>
                         <div class="col-sm-8 text-md-center">
                             <h5>1</h5>
@@ -44,10 +49,11 @@
                 </div>
             </div>
             <div class="row-table">
-                <div class="col-sm-6 card-body br">
+                <div class="col-sm-6 card-body br border-top">
                     <div class="row">
                         <div class="col-sm-4">
-                            <i class="icon feather icon-file-text text-c-blue mb-1 d-block"></i>
+                            @*<i class="icon feather icon-file-text text-c-red mb-1 d-block"></i>*@
+                            <i class="fa fa-map-marker text-c-yellow mb-1 d-block"></i>
                         </div>
                         <div class="col-sm-8 text-md-center">
                             <h5>2</h5>
@@ -55,10 +61,11 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-6 card-body">
+                <div class="col-sm-6 card-body border-top">
                     <div class="row">
                         <div class="col-sm-4">
-                            <i class="icon feather icon-mail text-c-yellow mb-1 d-block"></i>
+                            @*<i class="icon feather icon-mail text-c-yellow mb-1 d-block"></i>*@
+                            <i class="icon feather icon-rotate-ccw text-c-red mb-1 d-block"></i>
                         </div>
                         <div class="col-sm-8 text-md-center">
                             <h5>5</h5>
@@ -86,50 +93,57 @@
     <!-- table card-2 start -->
     <div class="col-md-12 col-xl-4">
         <div class="card flat-card">
-            <div class="row-table">
-                <div class="col-sm-6 card-body br">
-                    <div class="row">
-                        <div class="col-sm-4">
-                            <i class="icon feather icon-share-2 text-c-blue mb-1 d-block"></i>
-                        </div>
-                        <div class="col-sm-8 text-md-center">
-                            <h5>1000</h5>
-                            <span>Shares</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-6 card-body">
-                    <div class="row">
-                        <div class="col-sm-4">
-                            <i class="icon feather icon-wifi text-c-blue mb-1 d-block"></i>
-                        </div>
-                        <div class="col-sm-8 text-md-center">
-                            <h5>600</h5>
-                            <span>Network</span>
-                        </div>
-                    </div>
-                </div>
+            <div class="card-header">
+                <h5>วันลาทั้งหมด</h5>
             </div>
             <div class="row-table">
                 <div class="col-sm-6 card-body br">
                     <div class="row">
                         <div class="col-sm-4">
-                            <i class="icon feather icon-rotate-ccw text-c-blue mb-1 d-block"></i>
+                            @*<i class="icon feather icon-share-2 text-c-blue mb-1 d-block"></i>*@
+                            <i class="fa fa-medkit text-c-green mb-1 d-block"></i>
                         </div>
                         <div class="col-sm-8 text-md-center">
-                            <h5>3550</h5>
-                            <span>Returns</span>
+                            <h5>1000</h5>
+                            <span>ลาป่วย</span>
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-6 card-body">
                     <div class="row">
                         <div class="col-sm-4">
-                            <i class="icon feather icon-shopping-cart text-c-blue mb-1 d-blockz"></i>
+                            @*<i class="icon feather icon-wifi text-c-blue mb-1 d-block"></i>*@
+                            <i class="icon feather icon-file-text text-c-blue mb-1 d-block"></i>
+                        </div>
+                        <div class="col-sm-8 text-md-center">
+                            <h5>600</h5>
+                            <span>ลากิจ</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row-table">
+                <div class="col-sm-6 card-body br border-top">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            @*<i class="icon feather icon-rotate-ccw text-c-blue mb-1 d-block"></i>*@
+                            <i class="fa fa-map-marker text-c-blue mb-1 d-block"></i>
+                        </div>
+                        <div class="col-sm-8 text-md-center">
+                            <h5>3550</h5>
+                            <span>ลาพักร้อน</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 card-body border-top">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            @*<i class="icon feather icon-shopping-cart text-c-blue mb-1 d-blockz"></i>*@
+                            <i class="icon feather icon-rotate-ccw text-c-blue mb-1 d-block"></i>
                         </div>
                         <div class="col-sm-8 text-md-center">
                             <h5>100%</h5>
-                            <span>Order</span>
+                            <span>วันลาทั้งหมด</span>
                         </div>
                     </div>
                 </div>
@@ -163,15 +177,15 @@
                 <div class="row text-center">
                     <div class="col">
                         <h4 class="m-0 text-white">10</h4>
-                        <span>Open</span>
+                        <span>Over Time</span>
                     </div>
                     <div class="col">
                         <h4 class="m-0 text-white">5</h4>
-                        <span>Running</span>
+                        <span>Work From Home</span>
                     </div>
                     <div class="col">
                         <h4 class="m-0 text-white">3</h4>
-                        <span>Solved</span>
+                        <span>Outside Job</span>
                     </div>
                 </div>
             </div>
@@ -213,6 +227,7 @@
                                 <th class="text-center">วันที่ลา(สิ้นสุด)</th>
                                 <th class="text-center">รวมขอลา</th>
                                 <th class="text-center">สถานะคำขอ</th>
+                                <th class="text-center">หมายเหตุการลา</th>
                                 <th class="text-center">ผู้อนุมัติ</th>
                                 <th class="text-center">วันที่อนุมัติ</th>
                                 <th class="text-center">ผู้รับอนุมัติ</th>
@@ -228,40 +243,56 @@
                                 i++;
                                 <tr>
                                     <td>@i</td>
-                                    <td>@leave.LeavId</td>
-                                    <td>@leave.ReqDate.ToString("dd/MM/yyyy")</td>
+                                    <td>@leave.ReqNo</td>
+                                    <td>@(leave.ReqDate?.ToString("dd/MM/yyyy")??"")</td>
                                     <td class="text-center">@leave.ReqType</td>
-                                    <td class="text-center">@leave.ReqBy</td>
+                                    <td class="text-center">@leave.Empname</td>
                                     <td class="text-center">@leave.LeaveType</td>
-                                    <td>@leave.StartDate.ToString("dd/MM/yyyy")</td>
-                                    <td>@leave.EndDate.ToString("dd/MM/yyyy")</td>
-                                    <td class="text-center">@leave.TotalReq</td>
-                                    @if (leave.ReqStatus == "S1")
+                                    <td>@(leave.StartDate?.ToString("dd/MM/yyyy")??"")</td>
+                                    <td>@(leave.EndDate?.ToString("dd/MM/yyyy")??"")</td>
+                                    <td class="text-center">@leave.NumDay</td>
+                                    @if (leave.ReqStatus == "0")
                                     {
                                         <td class="text-center">
-                                            <div class="text-success"><i class="fa fa-check" aria-hidden="true"></i><span>อนุมัติ</span></div>
+                                            <div class="text-warning"><i class="fa fa-repeat" aria-hidden="true"></i><span>@leave.ReqStaDesc</span></div>
+                                        </td>
+                                    }
+                                    else if (leave.ReqStatus == "1")
+                                    {
+                                        <td class="text-center">
+                                            <div class="text-success"><i class="fa fa-check" aria-hidden="true"></i><span>@leave.ReqStaDesc</span></div>
                                         </td>
 
                                     }
-                                    else if (leave.ReqStatus == "S2")
+                                    else if (leave.ReqStatus == "2")
                                     {
                                         <td class="text-center">
-                                            <div class="text-danger"><i class="fa fa-times" aria-hidden="true"></i><span>ไม่อนุมัติ</span></div>
+                                            <div class="text-danger"><i class="fa fa-times" aria-hidden="true"></i><span>@leave.ReqStaDesc</span></div>
                                         </td>
                                     }
-                                    else
+                                    else if (leave.ReqStatus == "3")
                                     {
                                         <td class="text-center">
-                                            <div class="text-warning"><i class="fa fa-repeat" aria-hidden="true"></i><span>รอดำเนินงาน</span></div>
+                                            <div class="text-primary"><i class="fa fa-check" aria-hidden="true"></i><span>@leave.ReqStaDesc</span></div>
                                         </td>
                                     }
-                                    <td class="text-center">@leave.ApprvBy</td>
-                                    <td>@leave.ApprDate.ToString("dd/MM/yyyy")</td>
-                                    <td class="text-center">@leave.HrBy</td>
-                                    <td>@leave.HrDate.ToString("dd/MM/yyyy")</td>
+                                    else if (leave.ReqStatus == "4")
+                                    {
+                                        <td class="text-center">
+                                            <div class="text-danger"><i class="fa fa-ban" aria-hidden="true"></i><span>@leave.ReqStaDesc</span></div>
+                                        </td>
+                                    }
+                                    <td style="max-width: 200px;">
+                                        <p class="p-0 m-0 text-truncate">@leave.Remark</p>
+                                    </td>
+                                    <td class="text-center">@leave.AcceptBy</td>
+                                    <td>@(leave.AcceptDate?.ToString("dd/MM/yyyy")??"")</td>
+                                    @*<td class="text-center">@leave.UpdatedBy</td>
+                                        <td>@(leave.UpdateDate?.ToString("dd/MM/yyyy")??"")</td>*@
+                                    <td></td>
+                                    <td></td>
                                 </tr>
                             }
-
                         </tbody>
                     </table>
                 </div>
@@ -279,7 +310,8 @@
             ordering: false,
             select: false,
             language: {
-                info: "แสดง _START_ ถึง _END_ จากทั้งหมด _TOTAL_ การร้องขอ"
+                info: "แสดง _START_ ถึง _END_ จากทั้งหมด _TOTAL_ การร้องขอ",
+                infoEmpty: "ไม่มีข้อมูลให้แสดง"
             }
         });
     })
