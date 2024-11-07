@@ -27,26 +27,33 @@ namespace Eleave.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult SaveRequestForm(string ReqNo)
-        {
+        //public ActionResult SaveRequestForm(List<StoreUpdateRequest> request)
+        //{
 
-            string fileNameNew = string.Empty;
-            if (Request.Files != null)
-            {
-                for (int i = 0; i < Request.Files.Count; i++)
-                {
-                    var file = Request.Files[i];
-                    var originalFileName = Path.GetFileName(file.FileName);
-                    var fileExtension = Path.GetExtension(originalFileName);
+        //    string fileNameNew = string.Empty;
+        //    var UpdateRequest = new List<StoreUpdateRequest>();
+        //    foreach (var listData in (List<StoreUpdateRequest>)request)
+        //    {
+        //        //data
+        //        UpdateRequest = new UpdateRequest().Save(listData.ReqNo, listData.EmpId, listData.LeaveType, listData.StartDate, listData.EndDate, listData.NumDay, listData.NumHour, listData.Remark);
+        //        //file
+        //        if (Request.Files != null)
+        //        {
+        //            for (int i = 0; i < Request.Files.Count; i++)
+        //            {
+        //                var file = Request.Files[i];
+        //                var originalFileName = Path.GetFileName(file.FileName);
+        //                var fileExtension = Path.GetExtension(originalFileName);
 
-                    fileNameNew = ReqNo + "-" + (i + 1) + fileExtension;
-                    var path = Path.Combine(Server.MapPath("~/FileUpload/"), fileNameNew);
-                    file.SaveAs(path);
-                }
-            }
+        //                fileNameNew = listData.ReqNo + "-" + (i + 1) + fileExtension;
+        //                var path = Path.Combine(Server.MapPath("~/FileUpload/"), fileNameNew);
+        //                file.SaveAs(path);
+        //            }
+        //        }
+        //    }
 
-            return View("RequestForm");
-        }
+        //    return View("RequestForm");
+        //}
         public ActionResult ManagerHistory()
         {
             string EmpID = string.Empty;

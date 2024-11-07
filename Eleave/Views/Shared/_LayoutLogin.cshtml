@@ -4,7 +4,6 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover">
     <title>@ViewBag.Title</title>
-    @Styles.Render("~/Content/css")
 
     <!-- Stylesheets -->
     <link href="~/Content/style-flat.css" rel="stylesheet" />
@@ -27,10 +26,10 @@
 
 </head>
 
-    @RenderBody()
-    @*@RenderSection("Scripts", required: false)*@
+@RenderBody()
 
 </html>
+<script type="text/javascript" src="~/Scripts/LoadingOverlay.js"></script>
 <!-- Core  -->
 <script src="~/Scripts/login/babel-external-helpers.js"></script>
 <script src="~/Scripts/login/jquery.js"></script>
@@ -60,4 +59,5 @@
             Site.run();
         });
     })(document, window, jQuery);
+
 </script>

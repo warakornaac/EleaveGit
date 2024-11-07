@@ -58,6 +58,7 @@
     <Compile Include="SearchEmployee.cs" />
     <Compile Include="SearchHistoryRequest.cs" />
     <Compile Include="UpdateProfileEmployee.cs" />
+    <Compile Include="UpdateRequest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Eleave.Library\Eleave.Library.csproj">

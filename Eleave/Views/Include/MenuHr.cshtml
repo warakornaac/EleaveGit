@@ -1,0 +1,41 @@
+﻿
+@{
+    Layout = null;
+}
+
+<ul class="nav pcoded-inner-navbar">
+    <li class="nav-item pt-2">
+        <a href="@Url.Action("Index","Home")" class="nav-link "><span class="pcoded-micon"><i class="feather icon-home"></i></span><span class="pcoded-mtext">หน้าแรก</span></a>
+    </li>
+    <li class="nav-item pcoded-menu-caption pt-1">
+        <label>หัวข้อหลัก</label>
+    </li>
+    <li class="nav-item">
+        <a href="@Url.Action("RequestForm","Leave")" class="nav-link "><span class="pcoded-micon"><i class="feather icon-file-plus"></i></span><span class="pcoded-mtext">บันทึกการลา</span></a>
+    </li>
+    <li class="nav-item">
+        <a href="@Url.Action("ManagerHistory","Leave")" class="nav-link "><span class="pcoded-micon"><i class="feather icon-grid"></i></span><span class="pcoded-mtext">ประวัติการลา</span></a>
+    </li>
+    <li class="nav-item pcoded-menu-caption pt-1">
+        <label>ผู้ดูแลระบบ</label>
+    </li>
+    <li class="nav-item">
+        <a href="@Url.Action("ManagerEmployee","Employee")" class="nav-link "><span class="pcoded-micon"><i class="feather icon-user"></i></span><span class="pcoded-mtext">จัดการผู้ใช้งาน</span></a>
+    </li>
+    <li class="nav-item pcoded-hasmenu">
+        <a href="#" class="nav-link "><span class="pcoded-micon"><i class="fa fa-cog"></i></span><span class="pcoded-mtext">ตั่งค่า</span></a>
+        <ul class="pcoded-submenu">
+            <li><a href="@Url.Action("Setting","Employee")" target="">สิทธิ์เข้าใช้งาน</a></li>
+            <li><a href="@Url.Action("ApprovflowSetting","Employee")" target="">ลำดับการอนุมัติ</a></li>
+        </ul>
+    </li>
+    <li class="nav-item pcoded-menu-caption">
+        <label>รายงาน</label>
+    <li class="nav-item pcoded-hasmenu">
+        <a href="#!" class="nav-link "><span class="pcoded-micon"><i class="feather icon-lock"></i></span><span class="pcoded-mtext">รายงาน</span></a>
+        <ul class="pcoded-submenu">
+            <li><a href="auth-signup.html" target="_blank">รายงาน 1</a></li>
+            <li><a href="auth-signin.html" target="_blank">รายงาน 2</a></li>
+        </ul>
+    </li>
+</ul>
