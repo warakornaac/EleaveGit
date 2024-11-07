@@ -7,7 +7,7 @@
         <div class="row align-items-center">
             <div class="col-md-12">
                 <div class="page-header-title">
-                    <h5 class="m-b-10">ข้อมูลการลา</h5>
+                    <h5 class="m-b-10">Leave Info | ข้อมูลการลา</h5>
                 </div>
             </div>
         </div>
@@ -197,7 +197,7 @@
     <div class="col-xl-12 col-md-12">
         <div class="card table-card">
             <div class="card-header">
-                <h5>รายการลาทั้งหมด</h5>
+                <h5>Request Lists | รายการร้องขอทั้งหมด</h5>
                 <div class="card-header-right">
                     <div class="btn-group card-option">
                         <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -218,20 +218,20 @@
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th class="text-center">รหัสคำขอ</th>
-                                <th class="text-center">วันที่ขอ</th>
-                                <th class="text-center">ประเภทการขอ</th>
-                                <th class="text-center">ผู้ร้องขอ</th>
-                                <th class="text-center">ประเภทการลา</th>
-                                <th class="text-center">วันที่ลา(เริ่ม)</th>
-                                <th class="text-center">วันที่ลา(สิ้นสุด)</th>
-                                <th class="text-center">รวมขอลา</th>
-                                <th class="text-center">สถานะคำขอ</th>
-                                <th class="text-center">หมายเหตุการลา</th>
-                                <th class="text-center">ผู้อนุมัติ</th>
-                                <th class="text-center">วันที่อนุมัติ</th>
-                                <th class="text-center">ผู้รับอนุมัติ</th>
-                                <th class="text-center">วันที่ HR รับอนุมัติ</th>
+                                <th class="text-center">Req No | รหัสคำขอ</th>
+                                <th class="text-center">Req Date | วันที่ขอ</th>
+                                <th class="text-center">Req Type | ประเภทการขอ</th>
+                                <th class="text-center">Req By | ผู้ร้องขอ</th>
+                                <th class="text-center">Req Cate | ประเภทการลา</th>
+                                <th class="text-center">From Date | วันที่เริ่มต้น</th>
+                                <th class="text-center">End Date | วันที่สิ้นสุด</th>
+                                <th class="text-center">Tot Date | รวมขอลา</th>
+                                <th class="text-center">Req Status | สถานะคำขอ</th>
+                                <th class="text-center">Remark | หมายเหตุการลา</th>
+                                <th class="text-center">Appr By | ผู้อนุมัติ</th>
+                                <th class="text-center">Appr Date | วันที่อนุมัติ</th>
+                                <th class="text-center">ACK By | ผู้รับอนุมัติ</th>
+                                <th class="text-center">ACK Date | วันที่ HR รับอนุมัติ</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -243,8 +243,8 @@
                                 i++;
                                 <tr>
                                     <td>@i</td>
-                                    <td>@leave.ReqNo</td>
-                                    <td>@(leave.ReqDate?.ToString("dd/MM/yyyy")??"")</td>
+                                    <td class="text-center">@leave.ReqNo</td>
+                                    <td class="text-center">@(leave.ReqDate?.ToString("dd/MM/yyyy")??"")</td>
                                     <td class="text-center">@leave.ReqType</td>
                                     <td class="text-center">@leave.Empname</td>
                                     <td class="text-center">@leave.LeaveType</td>
@@ -254,32 +254,32 @@
                                     @if (leave.ReqStatus == "0")
                                     {
                                         <td class="text-center">
-                                            <div class="text-warning"><i class="fa fa-repeat" aria-hidden="true"></i><span>@leave.ReqStaDesc</span></div>
+                                            <div class="text-warning"><i class="fa fa-repeat" aria-hidden="true"></i><span> @leave.ReqStaDesc</span></div>
                                         </td>
                                     }
                                     else if (leave.ReqStatus == "1")
                                     {
                                         <td class="text-center">
-                                            <div class="text-success"><i class="fa fa-check" aria-hidden="true"></i><span>@leave.ReqStaDesc</span></div>
+                                            <div class="text-success"><i class="fa fa-check" aria-hidden="true"></i><span> @leave.ReqStaDesc</span></div>
                                         </td>
 
                                     }
                                     else if (leave.ReqStatus == "2")
                                     {
                                         <td class="text-center">
-                                            <div class="text-danger"><i class="fa fa-times" aria-hidden="true"></i><span>@leave.ReqStaDesc</span></div>
+                                            <div class="text-danger"><i class="fa fa-times" aria-hidden="true"></i><span> @leave.ReqStaDesc</span></div>
                                         </td>
                                     }
                                     else if (leave.ReqStatus == "3")
                                     {
                                         <td class="text-center">
-                                            <div class="text-primary"><i class="fa fa-check" aria-hidden="true"></i><span>@leave.ReqStaDesc</span></div>
+                                            <div class="text-primary"><i class="fa fa-check" aria-hidden="true"></i><span> @leave.ReqStaDesc</span></div>
                                         </td>
                                     }
                                     else if (leave.ReqStatus == "4")
                                     {
                                         <td class="text-center">
-                                            <div class="text-danger"><i class="fa fa-ban" aria-hidden="true"></i><span>@leave.ReqStaDesc</span></div>
+                                            <div class="text-danger"><i class="fa fa-ban" aria-hidden="true"></i><span> @leave.ReqStaDesc</span></div>
                                         </td>
                                     }
                                     <td style="max-width: 200px;">

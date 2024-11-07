@@ -3,7 +3,12 @@
 @{
     ViewBag.Title = "ประวัติการลา";
 }
-
+<style>    
+    .vcenter {
+        vertical-align: middle;
+        text-align: -webkit-center;
+    }
+</style>
 <div class="page-header">
     <div class="page-block">
         <div class="row align-items-center">
@@ -28,8 +33,8 @@
 
                     @Html.AntiForgeryToken()
                     <div class="row">
-                        <div class="form-group col-lg-4">
-                            <label>ประเภทร้องขอ :</label>
+                        <div class="form-group col-lg-3">
+                            <label class="font-weight-bold">ประเภทร้องขอ :</label>
                             @Html.DropDownList("LeaveType", new List<SelectListItem>
                                                 {
                                                     new SelectListItem() {Text="ลาป่วย", Value="ลาป่วย"},
@@ -38,33 +43,33 @@
                                                 }, "ลา", new { @class = "custom-select", @id = "LeaveType-selector", @disabled = "disabled" })
 
                         </div>
-                        <div class="form-group col-lg-4">
-                            <label>ประเภทการลา :</label>
+                        <div class="form-group col-lg-3">
+                            <label class="font-weight-bold">ประเภทการลา :</label>
                             @Html.DropDownList("reqType", new SelectList(ViewBag.Leavetype, "RequestID", "Description"), "ประเภทการลา", new { @class = "custom-select", @id = "reqType-selector" })
 
                         </div>
-                        <div class="form-group col-lg-4">
-                            <label>สถานะคำขอ :</label>
+                        <div class="form-group col-lg-3">
+                            <label class="font-weight-bold">สถานะคำขอ :</label>
                             @Html.DropDownList("ReqStatus", new SelectList(ViewBag.ReqSta, "LookValue", "LookDesc"), "สถานะคำขอ", new { @class = "custom-select", @id = "reqStatus" })
                         </div>
-                        <div class="form-group col-lg-4">
-                            <label>เริ่มวันที่ :</label>
+                        <div class="form-group col-lg-3">
+                            <label class="font-weight-bold">เริ่มวันที่ :</label>
                             @Html.TextBox("ReqStart", null, new { @class = "form-control", @id = "reqStart", @placeholder = "--/--/--" })
                         </div>
-                        <div class="form-group col-lg-4">
-                            <label>ถึงวันที่ :</label>
+                        <div class="form-group col-lg-3">
+                            <label class="font-weight-bold">ถึงวันที่ :</label>
                             @Html.TextBox("ReqEnd", null, new { @class = "form-control", @id = "reqEnd", @placeholder = "--/--/--" })
                         </div>
-                        <div class="form-group col-lg-4">
-                            <label>แผนก :</label>
+                        <div class="form-group col-lg-3">
+                            <label class="font-weight-bold">แผนก :</label>
                             @Html.DropDownList("Department", new SelectList(ViewBag.DepartmentList, "LookValue", "LookDesc"), "เลือกหน่วยงาน", new { @class = "custom-select", @id = "department-selector" })
                         </div>
-                        <div class="form-group col-lg-4">
-                            <label>รหัสคำขอ :</label>
+                        <div class="form-group col-lg-3">
+                            <label class="font-weight-bold">รหัสคำขอ :</label>
                             @Html.TextBox("reqId", null, new { @class = "form-control", @id = "reqId", @placeholder = "รหัสคำขอ" })
                         </div>
-                        <div class="form-group col-lg-4">
-                            <label>ชื่อพนักงาน :</label>
+                        <div class="form-group col-lg-3">
+                            <label class="font-weight-bold">ชื่อพนักงาน :</label>
                             @Html.TextBox("empName", null, new { @class = "form-control", @id = "empName", @placeholder = "ชื่อพนักงาน" })
                         </div>
 
@@ -73,8 +78,8 @@
                 <div class="card-footer p-0">
                     <div class="col-lg-12">
                         <div class="form-group float-end m-2">
-                            <input type="button" value="Reset" class="btn btn-danger" id="reset-btn" />
-                            <input type="submit" value="Search" class="btn btn-success" />
+                            <input type="button" value="Reset" class="btn btn-secondary" id="reset-btn" />
+                            <input type="submit" value="Search" class="btn btn-primary" />
                         </div>
                     </div>
                 </div>
@@ -89,6 +94,7 @@
                         <thead>
                             <tr>
                                 <th>#</th>
+                                <th class="text-center">จัดการ</th>
                                 <th class="text-center">รหัสคำขอ</th>
                                 <th class="text-center">วันที่ขอ</th>
                                 <th class="text-center">ประเภทการขอ</th>
@@ -103,7 +109,6 @@
                                 <th class="text-center">วันที่อนุมัติ</th>
                                 <th class="text-center">HR ผู้รับอนุมัติ</th>
                                 <th class="text-center">วันที่ HR รับอนุมัติ</th>
-                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -113,66 +118,68 @@
                             @foreach (var leave in Model)
                             {
                                 i++;
-                                <tr>
-                                    <td>@i</td>
-                                    <td>@leave.ReqNo</td>
-                                    <td>@(leave.ReqDate?.ToString("dd/MM/yyyy")??"")</td>
-                                    <td class="text-center">@leave.ReqType</td>
-                                    <td class="text-center">@leave.Empname</td>
-                                    <td class="text-center">@leave.LeaveType</td>
-                                    <td>@(leave.StartDate?.ToString("dd/MM/yyyy")??"")</td>
-                                    <td>@(leave.EndDate?.ToString("dd/MM/yyyy")??"")</td>
-                                    <td class="text-center">@leave.NumDay</td>
-                                    @if (leave.ReqStatus == "0")
-                                    {
-                                        <td class="text-center">
-                                            <div class="text-warning"><i class="fa fa-repeat" aria-hidden="true"></i><span>@leave.ReqStaDesc</span></div>
-                                        </td>
-                                    }
-                                    else if (leave.ReqStatus == "1")
-                                    {
-                                        <td class="text-center">
-                                            <div class="text-success"><i class="fa fa-check" aria-hidden="true"></i><span>@leave.ReqStaDesc</span></div>
-                                        </td>
+                                var colorStatus = string.Empty;
+                                var iconStatus = string.Empty;
+                            <tr>
+                                <td class="vcenter">@i</td>
+                                <td class="text-center vcenter">
+                                    <div class="btn btn-info btn-xs p-1" id="btnview_@leave.ReqNo" data-reqno="@leave.ReqNo"><span class="fa fa-eye p-1"></span></div>
+                                    @*@if (leave.ReqStatus == "0")
+                                    {  
+                                        <div class="btn btn-danger btn-xs p-1" id="cancelbtn_@leave.ReqNo" data-reqno="@leave.ReqNo"><span class="fa fa-times p-1"></span></div> 
+                                    }*@
 
-                                    }
-                                    else if (leave.ReqStatus == "2")
-                                    {
-                                        <td class="text-center">
-                                            <div class="text-danger"><i class="fa fa-times" aria-hidden="true"></i><span>@leave.ReqStaDesc</span></div>
-                                        </td>
-                                    }
-                                    else if (leave.ReqStatus == "3")
-                                    {
-                                        <td class="text-center">
-                                            <div class="text-success"><i class="fa fa-check" aria-hidden="true"></i><span>@leave.ReqStaDesc</span></div>
-                                        </td>
-                                    }
-                                    else if (leave.ReqStatus == "4")
-                                    {
-                                        <td class="text-center">
-                                            <div class="text-danger"><i class="fa fa-ban" aria-hidden="true"></i><span>@leave.ReqStaDesc</span></div>
-                                        </td>
-                                    }
-                                    <td style="max-width: 200px;">
-                                        <p class="p-0 m-0 text-truncate">@leave.Remark</p>
-                                    </td>
-                                    <td class="text-center">@leave.AcceptBy</td>
-                                    <td>@(leave.AcceptDate?.ToString("dd/MM/yyyy")??"")</td>
-                                    @*<td class="text-center">@leave.UpdatedBy</td>
-                                        <td>@(leave.UpdateDate?.ToString("dd/MM/yyyy")??"")</td>*@
-                                    <td></td>
-                                    <td></td>
-                                    @if (leave.EmpId.ToString() == Session["EmpId"].ToString() && leave.ReqStatus == "0")
-                                    {
-                                        <td class="text-center"><a href="#" id="cancelbtn_@leave.ReqNo" data-reqno="@leave.ReqNo">Cancel</a></td>
-                                    }
-                                    else
-                                    {
-                                        <td></td>
-                                    }
+                                </td>
+                                <td class="vcenter">@leave.ReqNo</td>
+                                <td class="vcenter">@(leave.ReqDate?.ToString("dd/MM/yyyy")??"")</td>
+                                <td class="text-center">@leave.ReqType</td>
+                                <td class="text-center">@leave.Empname</td>
+                                <td class="text-center">@leave.LeaveType</td>
+                                <td>@(leave.StartDate?.ToString("dd/MM/yyyy")??"")</td>
+                                <td>@(leave.EndDate?.ToString("dd/MM/yyyy")??"")</td>
+                                <td class="text-center">@leave.NumDay</td>
+                                @if (leave.ReqStatus == "0")
+                                {
+                                    colorStatus = "text-warning";
+                                    iconStatus = "fa fa-repeat";
 
-                                </tr>
+                                }
+                                else if (leave.ReqStatus == "1")
+                                {
+                                    colorStatus = "text-success";
+                                    iconStatus = "fa fa-check";
+
+                                }
+                                else if (leave.ReqStatus == "2")
+                                {
+                                    colorStatus = "text-danger";
+                                    iconStatus = "fa fa-times";
+                                }
+                                else if (leave.ReqStatus == "3")
+                                {
+                                    colorStatus = "text-success";
+                                    iconStatus = "fa fa-check";
+                                }
+                                else if (leave.ReqStatus == "4")
+                                {
+                                    colorStatus = "text-danger";
+                                    iconStatus = "fa fa-ban";
+                                }
+                                <td class="text-center">
+                                    <div class="@colorStatus badge" style="font-size: 14px;"><i class="@iconStatus" aria-hidden="true"></i><span> @leave.ReqStaDesc</span></div>
+                                </td>
+
+                                <td style="max-width: 200px;">
+                                    <p class="p-0 m-0 text-truncate">@leave.Remark</p>
+                                </td>
+                                <td class="text-center">@leave.AcceptBy</td>
+                                <td>@(leave.AcceptDate?.ToString("dd/MM/yyyy")??"")</td>
+                                @*<td class="text-center">@leave.UpdatedBy</td>
+        <td>@(leave.UpdateDate?.ToString("dd/MM/yyyy")??"")</td>*@
+                                <td></td>
+                                <td></td>
+
+                            </tr>
                             }
                         </tbody>
                     </table>
@@ -183,12 +190,14 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="CancelRequestModal" tabindex="-1" aria-labelledby="ModalCancel" aria-hidden="true">
+<div class="modal fade" id="RequestDetailModal" tabindex="-1" aria-labelledby="ModalCancel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="ModalCancel">ต้องการยกเลิก Request หรือไม่?</h5>
-                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-header pb-2">
+                <div class="col-sm-10 col-md-10">
+                    <h4 class="modal-title" id="myModalLabel">รายละเอียด</h4>
+                </div>
+                <div class="col-sm-2 col-md-2 text-right"><button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">ปิด</button></div>
             </div>
             <div class="modal-body">
                 <div class="row">
@@ -268,11 +277,11 @@
     //$(document).on('change', '#LeaveType-selector', function () {
     //    DropdownReqTyp();
     //});
-    $(document).on('click', '[id^="cancelbtn_"]', function (e) {
+    $(document).on('click', '[id^="btnview_"]', function (e) {
         e.preventDefault();
         var reqNo = $(this).data('reqno');
         //console.log(reqNo);
-        $('#CancelRequestModal').modal('show');
+        $('#RequestDetailModal').modal('show');
         GetReqDetail(reqNo);
     });
 
@@ -328,7 +337,7 @@
             dataType: 'JSON',
             success: function (data) {
                 if (data.message == 'Y') {
-                    $('#CancelRequestModal').modal('hide');
+                    $('#RequestDetailModal').modal('hide');
                     Swal.fire({
                         title: "Success!!!",
                         text: "ยกเลิกคำร้องสำเร็จ ",
@@ -338,7 +347,7 @@
                     });
                 }
                 else {
-                    $('#CancelRequestModal').modal('hide');
+                    $('#RequestDetailModal').modal('hide');
                     Swal.fire({
                         title: "Error!!!",
                         text: "Cancel Failed : " + data.message,
@@ -425,12 +434,17 @@
 </script>
 
 <script type="text/javascript">
-    $(document).ready(function () {
-        LoadingShow();
-    });
+    document.onreadystatechange = function () {
+        if (document.readyState === 'interactive') {
+            LoadingShow();
+        }
+        if (document.readyState === "complete") {
+            LoadingHide();
+        }
+    }
 </script>
 
-@if (Model != null)
+@*@if (Model != null)
 {
     <script type="text/javascript">
         $(document).ready(function () {
@@ -439,7 +453,7 @@
             }, 1500);
         });
     </script>
-}
+}*@
 @if (ViewBag.ErrorMessage != null)
 {
     <script>

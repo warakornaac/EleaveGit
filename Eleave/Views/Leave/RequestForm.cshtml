@@ -28,7 +28,8 @@
     <div class="col-sm-12">
         <div class="card">
             <div class="card-header">
-                <h5>เลขที่การลา <span class="badge badge-light-secondary" style="font-size: 16px;"> @ViewBag.DocumentRequest </span></h5>
+                <h5>เลขที่การลา </h5>
+                @*<span class="badge badge-light-secondary" style="font-size: 16px;"> @ViewBag.DocumentRequest </span>*@
             </div>
             <div class="card-body">
                 <div class="form-row">
@@ -39,17 +40,16 @@
                             <option selected>เลือกประเภทร้องขอ</option>
                             @foreach (var type in ViewBag.REQ_T)
                             {
-                                <option value="@type.LookValue">@type.LookDesc</option>
+                                if (type.LookValue == "1") { 
+                                    <option value="@type.LookValue">@type.LookDesc</option>
+                                }
                             }
                         </select>
                     </div>
                     <div class="col-md-9 mb-9">
                         <label for="validationTooltip03" class="font-weight-bold">ประเภทการลา</label>
                         <select id="leaveType" name="leaveType" class="form-control" onchange="getConditionLeaveType(this.value);">
-                            <option value="0" selected>โปรดเลือก</option>
-                            @*<option value="1">ลาป่วย</option>
-                                <option value="2">ลากิจ</option>
-                                <option value="AL02">ลาพักร้อน</option>*@
+                            <option value="0" selected>เลือกประเภทการลา</option>
                         </select>
                     </div>
                 </div>
@@ -144,7 +144,11 @@
 <script src="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@5.5.0/js/fileinput.min.js"></script>
 
 <script defer>
+    //$(function () {
 
+    //});
+
+    //เลือกประเภทการร้องขอ
     function dropDownRequest() {
         $.ajax({
             url: '@Url.Action("GetLeavetype", "Leave")',
@@ -169,7 +173,21 @@
             }
         });
     }
-
+    //เลือกประเภทกวารลา
+    function getConditionLeaveType(leaveId) {
+        var setMinDate = 0;
+        console.log("leaveId = " + leaveId);
+        if (leaveId != "SL01") { //ไม่ใช่ลาป่วยต้องลาล่วงหน้า 1 วัน
+            setMinDate = 1;
+        }
+        setDateStart(setMinDate);
+        if (leaveId == 0) {
+            $("#divDatePicker").fadeOut(100);
+        } else {
+            $("#divDatePicker").fadeIn(100);
+        }
+    }
+    //ปุ่มบันทึก
     function btnSubmitRequest() {
         var ReqNo = $("#reqNo").val();
         var EmpId = @this.Session["EmpId"].ToString();
@@ -178,11 +196,11 @@
         var StartDate = $("#startDateDiv").val();
         var EndDate = $("#endDateDiv").val();
         var PeriodTime = $("#periodTime option:selected").val();
-        var NumDay = $("#numDay").val();
-        var NumHour = $("#numHour").val();
-        var Remark = $("#remark").val();
+        var NumDay = $("#numDay").val() || 0;
+        var NumHour = $("#numHour").val() || 0;
+        var Remark = $("#remark").val() || "";
 
-        console.log("startDate = " + startDate + " endDate = " + endDate);
+        console.log("startDate = " + StartDate + " endDate = " + EndDate);
 
         var formData = new FormData();
         var totalFiles = document.getElementById("file_upload_multi").files.length;
@@ -190,12 +208,16 @@
             var file = document.getElementById("file_upload_multi").files[i];
             formData.append("file_upload_multi", file);
         }
-        formData.append('reqNo', reqNo);
-        formData.append('reqType', reqType);
-        formData.append('leaveType', leaveType);
-        formData.append('startDate', startDate);
-        formData.append('endDate', endDate);
-        formData.append('periodTime', periodTime);
+        formData.append('ReqNo', ReqNo);
+        formData.append('EmpId', EmpId);
+        formData.append('ReqType', ReqType);
+        formData.append('LeaveType', LeaveType);
+        formData.append('StartDate', StartDate);
+        formData.append('EndDate', EndDate);
+        formData.append('PeriodTime', PeriodTime);
+        formData.append('NumDay', NumDay);
+        formData.append('NumHour', NumHour);
+        formData.append('Remark', Remark);
 
         if (formData.entries() != null) {
             for (var pair of formData.entries()) {
@@ -216,10 +238,11 @@
             beforeSend: function () {
                 LoadingShow();
             },
-            success: function (res) {
-                if (!res.status) {
+            success: function (result) {
+                console.log("result.status = " + result.status);
+                if (result.status != "success") {
                     Swal.fire({
-                        html: res.msg,
+                        title: 'เกิดข้อผิดพลาด',
                         icon: 'error',
                         confirmButtonColor: '#d33',
                         confirmButtonText: 'ปิด',
@@ -231,45 +254,44 @@
                             text: 'Please Wait',
                             timer: location.reload(),
                             allowOutsideClick: false,
-                            focusConfirm: false,
-                            onOpen: () => {
-                                swal.showLoading();
-                            }
+                            focusConfirm: false
                         })
                     });
                 } else {
-                    Swal.fire({
-                        title: 'Success',
-                        html: res.msg,
+                      Swal.fire({
+                        title: 'บันทึกเรียบร้อย',
                         icon: 'success',
-                        timer: location.reload(),
-                        showConfirmButton: false,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'ปิด',
                         allowOutsideClick: false,
                         focusConfirm: false,
-                        onOpen: () => {
-                            swal.showLoading();
+                        timer: 5000,
+                        timerProgressBar: true,
+                        onClose: () => {
+                            LoadingHide();
                         }
-                    })
+                     }).then((result) => {
+                         LoadingShow();
+                         window.location.href = '@Url.Action("ManagerHistory", "Leave")';
+                     });
                 }
             },
             complete: function () {
                 LoadingHide();
             },
         }).fail(function (error) {
-            alert(error.status);
-            //Swal.fire({
-            //    icon: 'error',
-            //    title: 'เกิดข้อผิดพลาด กรุณาแจ้งผู้ดูแลระบบ (' + error.status + ')',
-            //    html: '<p>btnSubmitRequest :</p><p>' + error.responseText + '</p>',
-            //    confirmButtonColor: '#d33',
-            //    confirmButtonText: 'ปิด',
-            //    allowOutsideClick: false,
-            //    focusConfirm: false,
-            //});
+            Swal.fire({
+                icon: 'error',
+                title: 'ระบบทำงานผิดพลาด()',
+                html: 'กรุณาแจ้งผู้ดูแลระบบ<br>โดยการแคปหน้าจอและก๊อปปี้ Error ด่านล่างนี้<br>btnSubmitRequest<br><br>',
+                confirmButtonColor: '#d33',
+                confirmButtonText: 'ปิด',
+                allowOutsideClick: false,
+                focusConfirm: false,
+            });
         });
     }
-
-    //ประเภทวการลา
+    //upload file
     $('#file_upload_multi').fileinput({
         fileActionSettings: {
             //showUpload: false,
@@ -298,7 +320,7 @@
         //deleteUrl: "/Home/FileDelete",
         //uploadUrl: '@Url.Action("Leave", "SaveRequestForm")',
         maxFileCount: 3,
-        maxFileSize: 500,
+        maxFileSize: 5120, //5mb
         maxFilePreviewSize: 10240,
         //initialPreview: true,
         //initialPreviewAsData: true,
@@ -346,20 +368,6 @@
         }
     });
 
-    function getConditionLeaveType(leaveId) {
-        var setMinDate = 0;
-        console.log("leaveId = " + leaveId);
-        if (leaveId == "AL02") { //ลาพักร้อน
-            setMinDate = 1;
-        }
-        setDate(setMinDate);
-        if (leaveId == 0) {
-            $("#divDatePicker").fadeOut(100);
-        } else {
-            $("#divDatePicker").fadeIn(100);
-        }
-        //$('input[name="daterange"]').daterangepicker("option", "minDate", moment().subtract('days', -1));
-    }
 
     function setMinMaxDate(element) {
         // Store current date - setting max/min date seems to destroy time component
@@ -378,8 +386,7 @@
         $(element).val(val);
     }
 
-    //var diffDays = Math.abs((firstDate.getTime() - secondDate.getTime())/(oneDay));
-     function setDate(setMinDate) {
+     function setDateStart(setMinDate) {
             if (setMinDate != 0) {
                 setMinDate = "-" + setMinDate;
             } else {
@@ -387,10 +394,10 @@
             }
             $('input[name="daterange"]').daterangepicker({
             startDate: moment().subtract('days', 7),
-            endDate: moment(),
+            endDate: moment().subtract('days', setMinDate),
             minDate: moment().subtract('days', setMinDate),
             maxDate: '12/31/2024',
-            dateLimit: { days: 7 },
+            dateLimit: { days: 10 },
             //showDropdowns: true,
             //showWeekNumbers: true,
             //timePicker: true,
@@ -426,8 +433,8 @@
             }
         }, function (start, end) {
             console.log("Callback has been called!");
-            $("#startDateDiv").val(start.format('DD/MM/YYYY'))
-            $("#endDateDiv").val(end.format('DD/MM/YYYY'))
+            $("#startDateDiv").val(start.format('YYYY-MM-DD'));
+            $("#endDateDiv").val(end.format('YYYY-MM-DD'));
             $('#numDay').val(end.diff(start, "days") + 1);
             console.log(start.format('DD/MM/YYYY') + ' - ' + end.format('DD/MM/YYYY'));
         });

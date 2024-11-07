@@ -20,40 +20,48 @@ namespace Eleave.Controllers
         // GET: Leave
         public ActionResult RequestForm()
         {
-            var DocumentRequest = Utils.GetDocumentRequest("");
+            //var DocumentRequest = Utils.GetDocumentRequest("");
             LoadRequestType();
-            ViewBag.DocumentRequest = DocumentRequest;
+            ViewBag.DocumentRequest = "0";
 
             return View();
         }
         [HttpPost]
-        //public ActionResult SaveRequestForm(List<StoreUpdateRequest> request)
-        //{
+        public ActionResult SaveRequestForm(string ReqNo, string EmpId, string ReqType, string LeaveType, string StartDate, string EndDate, string PeriodTime, double NumDay, int NumHour, string Remark)
+        {
+            string fileNameNew = string.Empty;
+            //data
+            var UpdateRequest = new List<StoreUpdateRequest>();
+            try
+            {
+                if (ReqNo == "0") { 
+                     ReqNo = Utils.GetDocumentRequest("");
+                }
+                UpdateRequest = new UpdateRequest().Save(ReqNo, EmpId, ReqType, LeaveType, StartDate, EndDate, PeriodTime, NumDay, NumHour, Remark);
+                //file
+                if (Request.Files != null)
+                {
+                    for (int i = 0; i < Request.Files.Count; i++)
+                    {
+                        var file = Request.Files[i];
+                        var originalFileName = Path.GetFileName(file.FileName);
+                        var fileExtension = Path.GetExtension(originalFileName);
 
-        //    string fileNameNew = string.Empty;
-        //    var UpdateRequest = new List<StoreUpdateRequest>();
-        //    foreach (var listData in (List<StoreUpdateRequest>)request)
-        //    {
-        //        //data
-        //        UpdateRequest = new UpdateRequest().Save(listData.ReqNo, listData.EmpId, listData.LeaveType, listData.StartDate, listData.EndDate, listData.NumDay, listData.NumHour, listData.Remark);
-        //        //file
-        //        if (Request.Files != null)
-        //        {
-        //            for (int i = 0; i < Request.Files.Count; i++)
-        //            {
-        //                var file = Request.Files[i];
-        //                var originalFileName = Path.GetFileName(file.FileName);
-        //                var fileExtension = Path.GetExtension(originalFileName);
+                        fileNameNew = ReqNo + "-" + (i + 1) + fileExtension;
+                        var path = Path.Combine(Server.MapPath("~/FileUpload/"), fileNameNew);
+                        file.SaveAs(path);
 
-        //                fileNameNew = listData.ReqNo + "-" + (i + 1) + fileExtension;
-        //                var path = Path.Combine(Server.MapPath("~/FileUpload/"), fileNameNew);
-        //                file.SaveAs(path);
-        //            }
-        //        }
-        //    }
-
-        //    return View("RequestForm");
-        //}
+                        var UpdateRequestFile = new List<StoreUpdateRequestFile>();
+                        UpdateRequestFile = new UpdateRequestFile().Save(ReqNo, fileNameNew, path, (i + 1), EmpId);
+                    }
+                }
+                return Json(new { status = "success", message = "SaveRequestForm updated" });
+            }
+            catch (Exception ex)
+            { 
+                return Json(new { status = "error", message = ex.Message });
+            }
+        }
         public ActionResult ManagerHistory()
         {
             string EmpID = string.Empty;

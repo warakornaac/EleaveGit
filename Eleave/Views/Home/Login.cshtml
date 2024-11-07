@@ -25,35 +25,43 @@
                 <div class="logo-mobile">
                     <img src="~/Images/Logo/logo_tru.png" style="width: 100px;">
                 </div>
-                <h3 class="font-size-24">E-Request Sign In</h3>
-                <p>Signin with Account Company.</p>
+                <h3 class="font-size-24">HRIS E-Leave Sign In</h3>
+                <h4 class="" style="margin-top: -10px;">ระบบบริหารจัดการข้อมูลพนักงาน</h4>
+                <p>Sign-in with computer account or employee id.</p>
+                <p style="margin-top: -10px;">เข้าใช้งานด้วยบัญชีใช้งานคอมพิวเตอร์บริษัทหรือรหัสพนักงาน</p>
 
                 @using (Html.BeginForm("Login", "Home", FormMethod.Post, new { onsubmit = "JsLoadingOverlay.show();" }))
                 {
-                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                    <div class="form-group mb-3">
-                        @Html.LabelFor(model => model.User, "Username")
-                        @Html.EditorFor(model => model.User, new { htmlAttributes = new { @class = "form-control", @id = "Email", @placeholder = "Username" } })
-                        @Html.ValidationMessageFor(model => model.User, "", new { @class = "text-danger" })
-                    </div>
-                    <div class="form-group mb-4">
-                        @Html.LabelFor(model => model.Password, "Password")
-                        @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", @id = "Password", @placeholder = "Password" } })
-                        @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
-                    </div>
-                    @Html.AntiForgeryToken()
-                    <button class="btn btn-block btn-md btn-info mb-4">Signin</button>
-                    @*s<input type="submit" value="Login" class="btn btn-block btn-primary mb-4" />*@
-                    @*<hr>
-                    <p class="mb-2 text-muted">Forgot password? <a href="auth-reset-password.html" class="f-w-400">Reset</a></p>
-                    <hr>*@
-                }
-                <footer class="page-copyright">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <div class="form-group mb-3">
+                            @Html.LabelFor(model => model.User, "Username | ชื่อผู้ใช้งาน")
+                            @Html.EditorFor(model => model.User, new { htmlAttributes = new { @class = "form-control", @id = "Email", @placeholder = "Username | ชื่อผู้ใช้งาน" } })
+                            @Html.ValidationMessageFor(model => model.User, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="form-group mb-4">
+                            @Html.LabelFor(model => model.Password, "Password | รหัสผ่าน")
+                            @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", @id = "Password", @placeholder = "Password | รหัสผ่าน" } })
+                            @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                        </div>
+                            @Html.AntiForgeryToken()
+                            <button class="btn btn-block btn-md btn-info mb-4">Sign In | เข้าสู่ระบบ</button> @*s<input type="submit" value="Login" class="btn btn-block btn-primary mb-4" />*@ @*<hr>
+                        <p class="mb-2 text-muted">Forgot password? <a href="auth-reset-password.html" class="f-w-400">Reset</a></p>
+                        <hr>*@}
+                    <footer class="page-copyright">
                     <p>&copy; @DateTime.Now.Year - MIS</p>
                     <p>TRUAUTOMOTIVE COMPANY ALL RIGHT RESERVED.</p>
                 </footer>
             </div>
         </div>
     </div>
-
 </body>
+<script defer>
+    document.onreadystatechange = function () {
+        if (document.readyState === 'interactive') {
+            //JsLoadingOverlay.show();
+        }
+        if (document.readyState === "complete") {
+            JsLoadingOverlay.hide();
+        }
+    }
+</script>

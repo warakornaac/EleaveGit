@@ -58,6 +58,7 @@
     <Compile Include="SearchEmployee.cs" />
     <Compile Include="SearchHistoryRequest.cs" />
     <Compile Include="UpdateProfileEmployee.cs" />
+    <Compile Include="UpdateRequestFile.cs" />
     <Compile Include="UpdateRequest.cs" />
   </ItemGroup>
   <ItemGroup>

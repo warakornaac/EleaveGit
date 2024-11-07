@@ -39,7 +39,7 @@ namespace Eleave.Controllers
             {
                 HisRequest = new GetRequestList().GetRequests(EmpID, EmpType);
             }
-            catch (Exception ex)
+            catch
             {
 
             }

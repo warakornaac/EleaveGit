@@ -53,6 +53,7 @@
     <Compile Include="StoreGetProfile.cs" />
     <Compile Include="StoreUpdateEmployeeProfile.cs" />
     <Compile Include="StoreUpdateRequest.cs" />
+    <Compile Include="StoreUpdateRequestFile.cs" />
     <Compile Include="UserAD.cs" />
     <Compile Include="UserPermission.cs" />
   </ItemGroup>
