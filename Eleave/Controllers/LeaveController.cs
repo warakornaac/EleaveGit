@@ -26,6 +26,7 @@ namespace Eleave.Controllers
 
             return View();
         }
+<<<<<<< HEAD
         [HttpPost]
         public ActionResult SaveRequestForm(string ReqNo, string EmpId, string ReqType, string LeaveType, string StartDate, string EndDate, string PeriodTime, double NumDay, int NumHour, string Remark)
         {
@@ -46,6 +47,11 @@ namespace Eleave.Controllers
                         var file = Request.Files[i];
                         var originalFileName = Path.GetFileName(file.FileName);
                         var fileExtension = Path.GetExtension(originalFileName);
+=======
+        //[HttpPost]
+        //public ActionResult SaveRequestForm(List<StoreUpdateRequest> request)
+        //{
+>>>>>>> 81b045d9308d9c75cf07e54e9da77e84905745da
 
                         fileNameNew = ReqNo + "-" + (i + 1) + fileExtension;
                         var path = Path.Combine(Server.MapPath("~/FileUpload/"), fileNameNew);

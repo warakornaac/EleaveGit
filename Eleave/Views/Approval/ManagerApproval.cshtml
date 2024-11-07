@@ -1,0 +1,448 @@
+﻿@model IEnumerable<Eleave.Models.ApprovalRequest>
+
+@{
+    ViewBag.Title = "การอนุมัติ";
+
+    string DepartAppver = Session["DeptName"].ToString();
+    string EmployeeID = Session["EmpId"].ToString();
+}
+
+<div class="page-header">
+    <div class="page-block">
+        <div class="row align-items-center">
+            <div class="col-lg-12">
+                <div class="page-header-title">
+                    <h5 class="m-b-10">การอนุมัติ</h5>
+                </div>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index","Home")"><i class="feather icon-home"></i></a></li>
+                    <li class="breadcrumb-item"><a href="@Url.Action("ManagerApproval","Approval")">การอนุมัติ</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card">
+            @using (Html.BeginForm("ManagerApproval", "Approval", FormMethod.Post, new { @id = "formSearch" }))
+            {
+                <div class="card-body p-3 m-0">
+
+                    @Html.AntiForgeryToken()
+                    <div class="row">
+                        <div class="form-group col-lg-4">
+                            <label>ประเภทร้องขอ :</label>
+                            @Html.DropDownList("LeaveType", new List<SelectListItem>
+                                                {
+                                                    new SelectListItem() {Text="ลาป่วย", Value="ลาป่วย"},
+                                                    new SelectListItem() {Text="ลากิจ", Value="ลากิจ"},
+                                                    new SelectListItem(){Text="ลาพักร้อน",Value="ลาพักร้อน"}
+                                                }, "ลา", new { @class = "custom-select", @id = "LeaveType-selector", @disabled = "disabled" })
+
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <label>ประเภทการลา :</label>
+                            @Html.DropDownList("reqType", new SelectList(ViewBag.Leavetype, "RequestID", "Description"), "ประเภทการลา", new { @class = "custom-select", @id = "reqType-selector" })
+
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <label>สถานะคำขอ :</label>
+                            @Html.DropDownList("ReqStatus", new SelectList(ViewBag.ReqSta, "LookValue", "LookDesc", "0"), "สถานะคำขอทั้งหมด", new { @class = "custom-select", @id = "reqStatus" })
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <label>เริ่มวันที่ :</label>
+                            @Html.TextBox("ReqStart", DateTime.Now.ToString("dd/MM/yyyy"), new { @class = "form-control", @id = "reqStart", @placeholder = "--/--/--" })
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <label>ถึงวันที่ :</label>
+                            @Html.TextBox("ReqEnd", DateTime.Now.AddDays(3).ToString("dd/MM/yyyy"), new { @class = "form-control", @id = "reqEnd", @placeholder = "--/--/--" })
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <label>แผนก :</label>
+                            @Html.Hidden("Dept", DepartAppver)
+                            @Html.DropDownList("Dept",
+                                               new SelectList(ViewBag.DepartmentList, "LookValue", "LookDesc", DepartAppver),
+                                               "เลือกหน่วยงาน",
+                                               new { @class = "custom-select", @id = "department-selector", @disabled = "disabled" })
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <label>รหัสคำขอ :</label>
+                            @Html.TextBox("reqId", null, new { @class = "form-control", @id = "reqId", @placeholder = "รหัสคำขอ" })
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <label>ชื่อพนักงาน :</label>
+                            @Html.TextBox("empName", null, new { @class = "form-control", @id = "empName", @placeholder = "ชื่อพนักงาน" })
+                        </div>
+
+                    </div>
+                </div>
+                <div class="card-footer p-0">
+                    <div class="col-lg-12">
+                        <div class="form-group float-end m-2">
+                            <input type="button" value="Reset" class="btn btn-danger" id="reset-btn" />
+                            <input type="submit" value="Search" class="btn btn-success" />
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="col-xl-12">
+        <div class="card p-0">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped m-0" id="request-table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th class="text-center">รหัสคำขอ</th>
+                                <th class="text-center">วันที่ขอ</th>
+                                <th class="text-center">ประเภทการขอ</th>
+                                <th class="text-center">ผู้ร้องขอ</th>
+                                <th class="text-center">ประเภทการลา</th>
+                                <th class="text-center">วันที่ลา(เริ่ม)</th>
+                                <th class="text-center">วันที่ลา(สิ้นสุด)</th>
+                                <th class="text-center">รวมขอลา</th>
+                                <th class="text-center">สถานะคำขอ</th>
+                                <th class="text-center">หมายเหตุการลา</th>
+                                <th class="text-center">ผู้อนุมัติ</th>
+                                <th class="text-center">วันที่อนุมัติ</th>
+                                <th class="text-center">HR ผู้รับอนุมัติ</th>
+                                <th class="text-center">วันที่ HR รับอนุมัติ</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                int i = 0;
+                            }
+                            @foreach (var request in Model)
+                            {
+                                i++;
+                                <tr>
+                                    <td>@i</td>
+                                    <td>@request.ReqNo</td>
+                                    <td>@(request.ReqDate?.ToString("dd/MM/yyyy")??"")</td>
+                                    <td class="text-center">@request.ReqType</td>
+                                    <td class="text-center">@request.Empname</td>
+                                    <td class="text-center">@request.LeaveType</td>
+                                    <td>@(request.StartDate?.ToString("dd/MM/yyyy")??"")</td>
+                                    <td>@(request.EndDate?.ToString("dd/MM/yyyy")??"")</td>
+                                    <td class="text-center">@request.NumDay</td>
+                                    @if (request.ReqStatus == "0")
+                                    {
+                                        <td class="text-center">
+                                            <div class="text-warning"><i class="fa fa-repeat" aria-hidden="true"></i><span>@request.ReqStaDesc</span></div>
+                                        </td>
+                                    }
+                                    else if (request.ReqStatus == "1")
+                                    {
+                                        <td class="text-center">
+                                            <div class="text-success"><i class="fa fa-check" aria-hidden="true"></i><span>@request.ReqStaDesc</span></div>
+                                        </td>
+
+                                    }
+                                    else if (request.ReqStatus == "2")
+                                    {
+                                        <td class="text-center">
+                                            <div class="text-danger"><i class="fa fa-times" aria-hidden="true"></i><span>@request.ReqStaDesc</span></div>
+                                        </td>
+                                    }
+                                    else if (request.ReqStatus == "3")
+                                    {
+                                        <td class="text-center">
+                                            <div class="text-success"><i class="fa fa-check" aria-hidden="true"></i><span>@request.ReqStaDesc</span></div>
+                                        </td>
+                                    }
+                                    else if (request.ReqStatus == "4")
+                                    {
+                                        <td class="text-center">
+                                            <div class="text-danger"><i class="fa fa-ban" aria-hidden="true"></i><span>@request.ReqStaDesc</span></div>
+                                        </td>
+                                    }
+                                    <td style="max-width: 200px;">
+                                        <p class="p-0 m-0 text-truncate">@request.Remark</p>
+                                    </td>
+                                    <td class="text-center">@request.AcceptBy</td>
+                                    <td>@(request.AcceptDate?.ToString("dd/MM/yyyy")??"")</td>
+                                    @*<td class="text-center">@leave.UpdatedBy</td>
+                                        <td>@(request.UpdateDate?.ToString("dd/MM/yyyy")??"")</td>*@
+                                    <td></td>
+                                    <td></td>
+                                    @if (EmployeeID == request.ApproverId)
+                                    {
+                                        <td class="text-center"><a href="#" id="aprvbtn_@request.ReqNo" data-reqno="@request.ReqNo">Approv</a></td>
+
+                                    }
+                                    else
+                                    {
+                                        <td></td>
+                                    }
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="ApprovRequestModal" tabindex="-1" aria-labelledby="ModalApprov" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ModalApprov">การอนุมัติคำขอ</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>รหัสคำขอ: </label>
+                            <p class="border-0 p-0 m-0" name="ReqId" id="Approv_reqid"></p>
+                            <input type="hidden" name="ReqIdHide" value="" id="Approv_reqid_val" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>วันที่ร้องขอ: </label>
+                            <p class="border-0 p-0 m-0" name="ReqDate" id="Approv_reqdate"></p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>ประเภทการขอ: </label>
+                            <p class="border-0 p-0 m-0" name="ReqTyp" id="Approv_reqtyp"></p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>ประเภทการลา: </label>
+                            <p class="border-0 p-0 m-0" name="LevTyp" id="Approv_levtyp"></p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>วันที่ลา(เริ่ม): </label>
+                            <p class="border-0 p-0 m-0" name="StartDate" id="Approv_startdate"></p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>วันที่ลา(สิ้นสุด): </label>
+                            <p class="border-0 p-0 m-0" name="EndDate" id="Approv_enddate"></p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>สถานะคำขอ: </label>
+                            <div id="Approv_sta"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>หมายเหตุการลา</label>
+                            <p class="border-0 p-0 m-0 mb-1" name="Remark" id="Approv_remark"></p>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label>ความเห็นผู้อนุมัติ</label>
+                            <textarea class="form-control" id="apprv_comment"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">อนุมัติ/Approve</button>
+                <button type="button" class="btn btn-danger" id="Approv_submit">ปฎิเสท/Reject</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script defer>
+
+    $('#department-selector').select2({
+        width: '100%'
+    });
+    $('#reqStart').inputmask('99/99/9999');
+    $('#reqEnd').inputmask('99/99/9999');
+    $('#reqStart').datepicker({
+        orientation: "bottom auto",
+        format: "dd/mm/yyyy",
+        autoclose: true
+    });
+    $('#reqEnd').datepicker({
+        orientation: "bottom auto",
+        format: "dd/mm/yyyy",
+        autoclose: true
+    });
+    //$(document).on('change', '#LeaveType-selector', function () {
+    //    DropdownReqTyp();
+    //});
+    $(document).on('click', '[id^="aprvbtn_"]', function (e) {
+        e.preventDefault();
+        var reqNo = $(this).data('reqno');
+        //console.log(reqNo);
+        $('#ApprovRequestModal').modal('show');
+        GetReqDetail(reqNo);
+    });
+
+    function GetReqDetail(REQ) {
+    $.ajax({
+        url: '@Url.Action("GetRequestDetail", "Approval")',
+        data: {
+            ReqNO: REQ
+        },
+        type: 'POST',
+        dataType: 'JSON',
+        beforeSend: function () {
+            $('#Approv_reqid').text('');
+            $('#Approv_reqid_val').val('');
+            $('#Approv_reqdate').text('');
+            $('#Approv_reqtyp').text('');
+            $('#Approv_levtyp').text('');
+            $('#Approv_startdate').text('');
+            $('#Approv_enddate').text('');
+            $('#Approv_remark').text('');
+            $('#Approv_sta').html('');
+        },
+        success: function (data) {
+            if (data.message == "Y") {
+                if (data.ReqDetail.length != 0) {
+                    $('#Approv_reqid').text(data.ReqDetail[0].ReqNo);
+                    $('#Approv_reqid_val').val(data.ReqDetail[0].ReqNo);
+                    $('#Approv_reqdate').text(data.ReqDetail[0].ReqDate);
+                    $('#Approv_reqtyp').text(data.ReqDetail[0].ReqType);
+                    $('#Approv_levtyp').text(data.ReqDetail[0].LeaveType);
+                    $('#Approv_startdate').text(data.ReqDetail[0].StartDate);
+                    $('#Approv_enddate').text(data.ReqDetail[0].EndDate);
+                    $('#Approv_remark').text(data.ReqDetail[0].Remark);
+                    if (data.ReqDetail[0].ReqStatus == "0") {
+                        $('#Approv_sta').html('<div class="text-warning"><i class="fa fa-repeat" aria-hidden="true"></i><span>' + data.ReqDetail[0].ReqStaDesc +'</span></div>');
+                    }
+                }
+            }
+            else {
+                console.log('Detail Err: ' + data.message);
+            }
+        }
+    });
+    }
+    $(document).on('click', '#Approv_submit', function () {
+        var reqno = $('#Approv_reqid_val').val()
+        $.ajax({
+            url: '@Url.Action("ApprovRequest", "Leave")',
+            data: {
+                ReqNo: reqno
+            },
+            type: 'POST',
+            dataType: 'JSON',
+            success: function (data) {
+                if (data.message == 'Y') {
+                    $('#ApprovRequestModal').modal('hide');
+                    Swal.fire({
+                        title: "Success!!!",
+                        text: "ทำการอนุมัติเสร็จสิ้น",
+                        icon: "success"
+                    }).then(() => {
+                        location.reload();
+                    });
+                }
+                else {
+                    $('#ApprovRequestModal').modal('hide');
+                    Swal.fire({
+                        title: "Error!!!",
+                        text: "Approv Failed : " + data.message,
+                        icon: "error"
+                    });
+                }
+            }
+        });
+    });
+
+    function DropdownReqTyp()
+    {
+        $.ajax({
+                url: '@Url.Action("GetLeavetype", "Leave")',
+                data: {
+
+                },
+                type: 'POST',
+                dataType: 'JSON',
+                success: function (data) {
+                    if (data.message == 'Y') {
+                        var select = $('#reqType-selector');
+                        select.children().remove();
+                        select.append($('<option>').val(null).text('เลือกประเภทการร้องขอ'))
+                        $(data.LeaveType).each(function (index, item) {
+                            select.append($('<option>').val(item.RequestID).text(item.Description));
+                        });
+
+                    }
+                    else {
+                        console.log('Message Type: ' + data.message);
+                    }
+                }
+            });
+    }
+    $(document).on("click", "#reset-btn", function () {
+        $('#reqId').val('');                      // รหัสคำขอ
+        $('#reqType-selector').val('').trigger('change'); // ประเภทคำขอ
+        $('#reqDate').val('');                    // วันที่แจ้ง
+        $('#reqStart').val('');                   // เริ่มวันที่
+        $('#reqEnd').val('');                     // ถึงวันที่
+        $('#reqStatus').val('0').trigger('change'); // สถานะคำขอ
+        //$('#department-selector').val('').trigger('change');
+        console.log("dept" + $('#department-selector').val());
+    });
+    $(document).ready(function () {
+        console.log("DepartName :"+"@DepartAppver");
+        //$('#reqStatus').val('0').trigger('change');
+        //$('#department-selector').val('@DepartAppver').trigger('change');
+        $('#request-table').dataTable({
+            paging: true,
+            pageLength: 50,
+            lengthChange: false,
+            searching: false,
+            ordering: false,
+            select: false,
+            language: {
+                info: "แสดง _START_ ถึง _END_ จากทั้งหมด _TOTAL_ คำร้องขอ",
+                infoEmpty: "ไม่มีข้อมูลให้แสดง"
+            }
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        LoadingShow();
+    });
+</script>
+
+@if (Model != null)
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            setTimeout(function () {
+                LoadingHide();
+            }, 1500);
+        });
+    </script>
+}
+@if (ViewBag.ErrorMessage != null)
+{
+    <script>
+        $(document).ready(function () {
+            LoadingHide();
+            alert("@ViewBag.ErrorMessage");
+        });
+    </script>
+}
