@@ -1,7 +1,8 @@
 ﻿@model Eleave.Models.ModelLogin.LoginUserModels
-@{ ViewBag.Title = "Login E-Leave";
-                Layout = "~/Views/Shared/_LayoutLogin.cshtml"; 
-    }
+@{ 
+    ViewBag.Title = "Login E-Request";
+    Layout = "~/Views/Shared/_LayoutLogin.cshtml"; 
+}
 <script src="https://sso.buu.ac.th/plugins/sso/breakpoints/breakpoints.js"></script>
 <script>
     Breakpoints();
@@ -27,7 +28,7 @@
                 <h3 class="font-size-24">E-Request Sign In</h3>
                 <p>Signin with Account Company.</p>
 
-                @using (Html.BeginForm("Login", "Home", FormMethod.Post))
+                @using (Html.BeginForm("Login", "Home", FormMethod.Post, new { onsubmit = "JsLoadingOverlay.show();" }))
                 {
                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                     <div class="form-group mb-3">

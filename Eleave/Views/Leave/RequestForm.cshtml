@@ -1,9 +1,4 @@
-<<<<<<< HEAD
 ﻿@{ ViewBag.Title = "บันทึกการลา"; }
-=======
-﻿@*@model Eleave.Models.FileUploadModel*@
-@{ ViewBag.Title = "บันทึกการลา"; }
->>>>>>> 53c0cf86fd3ebe05f1dd9ab00d7e620be7841a89
 <style>
     .filepond--credits {
         display: none;
@@ -35,10 +30,10 @@
             </div>
             <div class="card-body">
                 <div class="form-row">
-                    <input type="hidden" id="ReqNo" value="@ViewBag.DocumentRequest">
+                    <input type="hidden" id="reqNo" value="@ViewBag.DocumentRequest">
                     <div class="col-md-3 mb-3">
                         <label for="validationTooltip02" class="font-weight-bold">ประเภทการร้องขอ</label>
-                        <select id="inputState" class="form-control">
+                        <select id="reqType" name="reqType" class="form-control">
                             <option selected>Leave</option>
                             <option>Leave2</option>
                             <option>Leave3</option>
@@ -46,66 +41,67 @@
                     </div>
                     <div class="col-md-9 mb-9">
                         <label for="validationTooltip03" class="font-weight-bold">ประเภทการลา</label>
-                        <select id="ReqId" name="ReqId" class="form-control" onchange="getConditionReq(this.value);">
-                            <option value="1" selected>ลาป่วย</option>
+                        <select id="leaveType" name="leaveType" class="form-control" onchange="getConditionLeaveType(this.value);">
+                            <option value="0" selected>โปรดเลือก</option>
+                            <option value="1">ลาป่วย</option>
                             <option value="2">ลากิจ</option>
-                            <option value="3">ลาพักร้อน</option>
+                            <option value="AL02">ลาพักร้อน</option>
                         </select>
                     </div>
                 </div>
-                <div class="form-row">
-                    <div class="col-md-6 mb-6">
-                        <label for="validationTooltip04" class="font-weight-bold">วันที่ลา(จาก-ถึง)</label>
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="inputGroupPrepend"><i class="fa fa-calendar"></i></span>
-                            </div>
-                            <input type="text" class="form-control" name="daterange" id="dates-available-from" placeholder="จาก" aria-describedby="inputGroupPrepend" required>
-                            @*<div class="input-group-prepend">
+                <div id="divDatePicker" style="display:none;">
+                    <div class="row">
+                        <div class="col-md-6 mb-6">
+                            <label for="validationTooltip04" class="font-weight-bold">วันที่ลา(จาก-ถึง)</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
                                     <span class="input-group-text" id="inputGroupPrepend"><i class="fa fa-calendar"></i></span>
                                 </div>
-                                <input type="text" class="form-control" id="endDate" placeholder="ถึง" aria-describedby="inputGroupPrepend" required>*@
+                                <input type="text" class="form-control" name="daterange" id="dates-available-from" placeholder="จาก" aria-describedby="inputGroupPrepend" required>
+                                <input type="hidden" id="startDateDiv">
+                                <input type="hidden" id="endDateDiv">
+                                @*<div class="input-group-prepend">
+                                        <span class="input-group-text" id="inputGroupPrepend"><i class="fa fa-calendar"></i></span>
+                                    </div>
+                                    <input type="text" class="form-control" id="endDate" placeholder="ถึง" aria-describedby="inputGroupPrepend" required>*@
+                            </div>
+                        </div>
+
+                        <div class="col-md-2 mb-2">
+                            <label for="validationTooltip03" class="font-weight-bold">ช่วงเวลา</label>
+                            <select id="periodTime" name="periodTime" class="form-control">
+                                <option value="1" selected>ทั้งวัน</option>
+                                <option value="2">ช่วงเช้า</option>
+                                <option value="3">ช่วงบ่าย</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2 mb-2">
+                            <label for="validationTooltip03" class="font-weight-bold">จำนวนวัน</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="inputGroupPrepend"><i class="fa fa-calendar-plus-o"></i></span>
+                                </div>
+                                <input type="text" class="form-control" name="numDay" id="numDay" placeholder="วัน">
+                            </div>
+                        </div>
+                        <div class="col-md-2 mb-2">
+                            <label for="validationTooltip03" class="font-weight-bold">จำนวนชั่วโมง</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="inputGroupPrepend"><i class="fa fa-clock-o"></i></span>
+                                </div>
+                                <input type="text" class="form-control" name="numHour" id="numHour" placeholder="ชั่วโมง">
+                            </div>
+
                         </div>
                     </div>
-                    <div class="col-md-3 mb-3">
-                        <label for="validationTooltip03" class="font-weight-bold">ช่วงเวลา</label>
-                        <select id="inputState" class="form-control">
-                            <option selected>ทั้งวัน</option>
-                            <option>ช่วงเช้า</option>
-                            <option>ช่วงบ่าย</option>
-                        </select>
-                    </div>
-                    <div class="col-md-3 mb-3">
-                        <label for="validationTooltip03" class="font-weight-bold">จำนวนวัน</label>
-                        <input type="text" class="form-control" name="NumDay" id="NumDay" placeholder="จำนวนวัน">
-                    </div>
                 </div>
-
-                <!--<div class="form-row">
-                    <div class="col-md-12 mb-12">
-                        <label for="validationTooltip04" class="font-weight-bold">วันที่ลา(ถึง)</label>
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="inputGroupPrepend"><i class="fa fa-calendar"></i></span>
-                            </div>
-                            <input type="text" class="form-control" name="daterange" id="dates-available-from" placeholder="จาก" aria-describedby="inputGroupPrepend" required>-->
-                @*<div class="input-group-prepend">
-                        <span class="input-group-text" id="inputGroupPrepend">ถึง</span>
-                    </div>
-                    <input type="text" class="form-control" name="end" id="dates-available-to" placeholder="ถึง" aria-describedby="inputGroupPrepend" required>
-                    <div class="input-group-prepend">
-                        <span class="input-group-text" id="inputGroupPrepend"><i class="fa fa-calendar"></i></span>
-                    </div>*@
-                <!--</div>
-
-                    </div>
-                </div>-->
 
                 <div class="form-row">
                     <div class="col-md-12 mb-12">
                         <label for="exampleFormControlTextarea1" class="font-weight-bold">หมายเหตุการลา</label>
                         <div class="form-group">
-                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                            <textarea class="form-control" name="remark" id="remark" rows="3"></textarea>
                         </div>
                     </div>
                 </div>
@@ -118,7 +114,6 @@
                                 <div class="file-loading">
                                     <input id="file_upload_multi" name="file_upload_multi[]" type="file" multiple="multiple">
                                 </div>
-
                             </div>
                         </div>
                     </div>
@@ -146,14 +141,38 @@
 
 <script defer>
     function btnSubmitRequest() {
-        var ReqNo = $("#ReqNo").val();
+        var ReqNo = $("#reqNo").val();
+        var EmpId = @this.Session["EmpId"].ToString();
+        var ReqType = $("#reqType option:selected").val();
+        var LeaveType = $("#leaveType option:selected").val();
+        var StartDate = $("#startDateDiv").val();
+        var EndDate = $("#endDateDiv").val();
+        var PeriodTime = $("#periodTime option:selected").val();
+        var NumDay = $("#numDay").val();
+        var NumHour = $("#numHour").val();
+        var Remark = $("#remark").val();
+
+        console.log("startDate = " + startDate + " endDate = " + endDate);
+
         var formData = new FormData();
         var totalFiles = document.getElementById("file_upload_multi").files.length;
         for (var i = 0; i < totalFiles; i++) {
             var file = document.getElementById("file_upload_multi").files[i];
             formData.append("file_upload_multi", file);
         }
-        formData.append('ReqNo', ReqNo);
+        formData.append('reqNo', reqNo);
+        formData.append('reqType', reqType);
+        formData.append('leaveType', leaveType);
+        formData.append('startDate', startDate);
+        formData.append('endDate', endDate);
+        formData.append('periodTime', periodTime);
+
+        if (formData.entries() != null) {
+            for (var pair of formData.entries()) {
+                console.log(pair[0] + ', ' + pair[1]);
+            }
+        }
+
         $.ajax({
             url: '@Url.Action("SaveRequestForm", "Leave")',
             type: 'post',
@@ -223,10 +242,15 @@
     //ประเภทวการลา
     $('#file_upload_multi').fileinput({
         fileActionSettings: {
-            showUpload: false,
-            showDelete: true,
+            //showUpload: false,
+            //showDelete: true,
+            //showRemove: false
+            showRemove: true,
+            showUpload: false, //This remove the upload button
+            showZoom: true,
+            showDrag: false
         },
-        showRemove: true,
+        showRemove: false,
         previewFileType: 'image',
         dropZoneEnabled: true,
         browseOnZoneClick: true,
@@ -251,7 +275,6 @@
         overwriteInitial: false,
         preferIconicPreview: true,
         previewFileIconSettings: {
-            // configure your icon file extensions
             'doc': '<i class="fas fa-file-word text-primary"></i>',
             'xls': '<i class="fas fa-file-excel text-success"></i>',
             'ppt': '<i class="fas fa-file-powerpoint text-danger"></i>',
@@ -292,76 +315,57 @@
             }
         }
     });
-    function getConditionReq(ReqId) {
-        console.log("ReqId = " + ReqId);
+
+    function getConditionLeaveType(leaveId) {
+        var setMinDate = 0;
+        console.log("leaveId = " + leaveId);
+        if (leaveId == "AL02") { //ลาพักร้อน
+            setMinDate = 1;
+        }
+        setDate(setMinDate);
+        if (leaveId == 0) {
+            $("#divDatePicker").fadeOut(100);
+        } else {
+            $("#divDatePicker").fadeIn(100);
+        }
+        //$('input[name="daterange"]').daterangepicker("option", "minDate", moment().subtract('days', -1));
     }
+
+    function setMinMaxDate(element) {
+        // Store current date - setting max/min date seems to destroy time component
+        var val = element;
+
+        if (element.id == 'endDate') {
+            var x = $('#startDate').daterangepicker("getDate");
+            $(element).datetimepicker("option", "minDate", x);
+        }
+        else if (element.id == 'startDate') {
+            var x = $('#endDate').daterangepicker("getDate");
+            $(element).datetimepicker("option", "maxDate", x);
+        }
+
+        // Restore date
+        $(element).val(val);
+    }
+
     //var diffDays = Math.abs((firstDate.getTime() - secondDate.getTime())/(oneDay));
-    $(document).ready(function () {
-        //$("#startDate").datepicker({
-        //    language: "th",
-        //    format: 'dd/mm/yyyy',
-        //    startDate: new Date(),
-        //    autoclose: true,
-        //}).on('changeDate', function (selected) {
-        //    var minDate = new Date(selected.date.valueOf());
-        //    $('#endDate').datepicker('setStartDate', minDate);
-        //});
-
-        //$("#endDate").datepicker({
-        //    language: "th",
-        //    format: 'dd/mm/yyyy',
-        //    autoclose: true,
-        //}).on('changeDate', function (selected) {
-        //    var minDate = new Date(selected.date.valueOf());
-        //    $('#startDate').datepicker('setEndDate', minDate);
-        //});
-
-        //$('.input-daterange').datepicker({
-        //    language: "th",
-        //    //todayHighlight: true,
-        //    format: 'dd/mm/yyyy',
-        //    startDate: new Date(),
-        //});
-
-        //var fromDate = new Date();
-        //$('input[id="dates-available-from"]').daterangepicker({
-        //    //singleDatePicker: true,
-        //    //showDropdowns: true,
-        //    //autoApply: true,
-        //    drops: 'down',
-        //    showDropdowns: true,
-        //    singleDatePicker: true,
-        //    autoApply: true,
-        //    timePicker: false,
-        //    minimumNights: 0,
-        //    minDate: moment().format('DD/MM/YYYY'),
-        //    locale: {
-        //        format: 'DD/MM/YYYY'
-        //    },
-        //    minDate: new Date()
-        //}, function (start, end, label) {
-        //    fromDate = start.format('DD/MM/YYYY');
-        //    $('input[id="dates-available-to"]').daterangepicker({
-        //        singleDatePicker: true,
-        //        showDropdowns: true,
-        //        autoApply: true,
-        //        locale: {
-        //            format: 'DD/MM/YYYY'
-        //        },
-        //        minDate: fromDate
-        //    });
-        //});
-        $('input[name="daterange"]').daterangepicker({
+     function setDate(setMinDate) {
+            if (setMinDate != 0) {
+                setMinDate = "-" + setMinDate;
+            } else {
+                setMinDate = 0;
+            }
+            $('input[name="daterange"]').daterangepicker({
             startDate: moment().subtract('days', 7),
             endDate: moment(),
-            minDate: moment().subtract('days', 0),
+            minDate: moment().subtract('days', setMinDate),
             maxDate: '12/31/2024',
             dateLimit: { days: 7 },
             //showDropdowns: true,
             //showWeekNumbers: true,
-            timePicker: true,
-            timePickerIncrement: 2,
-            timePicker12Hour: true,
+            //timePicker: true,
+            //timePickerIncrement: 60,
+            //timePicker24Hour: true,
             //ranges: {
             //    'Today': [moment(), moment()],
             //    'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
@@ -392,11 +396,11 @@
             }
         }, function (start, end) {
             console.log("Callback has been called!");
-            $('#reportrange span').html(start.format('D MMMM YYYY') + ' - ' + end.format('D MMMM YYYY'));
+            $("#startDateDiv").val(start.format('DD/MM/YYYY'))
+            $("#endDateDiv").val(end.format('DD/MM/YYYY'))
+            $('#numDay').val(end.diff(start, "days") + 1);
             console.log(start.format('DD/MM/YYYY') + ' - ' + end.format('DD/MM/YYYY'));
+        });
+     }
 
-        }
-        );
-
-    });
 </script>

@@ -55,18 +55,7 @@ namespace Eleave.Controllers
                     string DepartmentAd = directoryEntry.Properties["Department"].Value.ToString();
                     string EmpId = directoryEntry.Properties["PhysicalDeliveryOfficeName"].Value.ToString();
                     conn.Open();
-                    if (result == null)
-                    {
-                        if (ModelState.IsValid)
-                        {
-                            return RedirectToAction("Index", "Login");
-                        }
-                        else
-                        {
-                            ModelState.AddModelError("", "Username or password ไม่ถูกต้อง");
-                        }
-                    }
-                    else //User/Pass มีบน AD
+                    if (result != null)
                     {
                         var dateCheckLogin = CheckLoginEmployee(EmpId, "");
                         UserType = dateCheckLogin.Item2;

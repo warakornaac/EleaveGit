@@ -319,6 +319,7 @@
       <DependentUpon>Contact.aspx</DependentUpon>
     </Compile>
     <Compile Include="Controllers\EleaveController.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LeaveController.cs" />
     <Compile Include="Controllers\EmployeeController.cs" />
@@ -369,7 +370,6 @@
     <Content Include="Scripts\jquery-3.4.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.4.1.min.map" />
     <Content Include="Views\Employee\ViewProfile.cshtml" />
-    <Content Include="Views\Leave\RequestForm.cshtml" />
     <Content Include="Views\Employee\ManagerEmployee.cshtml" />
     <Content Include="Views\Employee\UpdateEmployee.cshtml" />
     <Content Include="Views\Leave\ManagerHistory.cshtml" />
@@ -382,6 +382,9 @@
     <Content Include="Views\Include\MenuEmployee.cshtml" />
     <Content Include="Views\Include\MenuMgr.cshtml" />
     <Content Include="Views\Employee\ApprovflowSetting.cshtml" />
+    <Content Include="Views\Leave\RequestForm.cshtml" />
+    <Content Include="Views\Include\MenuHr.cshtml" />
+    <Content Include="Views\Error\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
