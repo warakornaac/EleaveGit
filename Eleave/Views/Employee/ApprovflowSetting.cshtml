@@ -31,7 +31,7 @@
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">เพิ่ม Approve Flow</h5>
 
-                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close">ปิด</button>
 
             </div>
             <div class="modal-body">
@@ -102,8 +102,8 @@
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="addApprove-btn">Add</button>
+                @*<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>*@
+                <button type="button" class="btn btn-primary" id="addApprove-btn">ยืนยัน</button>
             </div>
         </div>
     </div>
@@ -116,7 +116,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="editformModel">แก้ไข Approve Flow</h5>
-                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close">ปิด</button>
             </div>
             <div class="modal-body">
                 <div class="row">
@@ -180,8 +180,8 @@
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" onclick="UpdateApprvFlow();">Save changes</button>
+                @*<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>*@
+                <button type="button" class="btn btn-primary" onclick="UpdateApprvFlow();">ยืนยัน</button>
             </div>
         </div>
     </div>
@@ -229,7 +229,7 @@
                                 <th class="text-center">ลำดับการอนุมัติ</th>
                                 <th class="text-center">พนักงานผู้อนุมัติ</th>
                                 <th class="text-center">ประเภทอนุมัติ</th>
-                                <th class="text-center">เพิ่ม/แก้ไข/ลบ</th>
+                                <th class="text-center">แก้ไข</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -415,10 +415,10 @@
                 if (data.message == 'Y') {
 
                     $('#department-selector-add').val(data.DepID).trigger('change');
-                    //$('#department-selector-add').prop('disabled', true);
+                    $('#department-selector-add').prop('disabled', true);
                 }
                 else {
-                    //$('#department-selector-add').prop('disabled', true);
+                    $('#department-selector-add').prop('disabled', true);
                     $('#addFormModal').modal('hide');
                     Swal.fire({
                         title: "Error!!!",

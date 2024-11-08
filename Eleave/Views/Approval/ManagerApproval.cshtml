@@ -80,8 +80,8 @@
                 <div class="card-footer p-0">
                     <div class="col-lg-12">
                         <div class="form-group float-end m-2">
-                            <input type="button" value="Reset" class="btn btn-danger" id="reset-btn" />
-                            <input type="submit" value="Search" class="btn btn-success" />
+                            <input type="button" value="ล้าง" class="btn btn-secondary" id="reset-btn" />
+                            <input type="submit" value="ค้นหา" class="btn btn-primary" />
                         </div>
                     </div>
                 </div>
@@ -171,14 +171,14 @@
                                     <td></td>
                                     <td></td>
                                     @*@if (EmployeeID == request.ApproverId)
-                                    {*@
-                                        <td class="text-center"><a href="#" id="aprvbtn_@request.ReqNo" data-reqno="@request.ReqNo">Approv</a></td>
+                                        {*@
+                                    <td class="text-center"><a href="#" id="aprvbtn_@request.ReqNo" data-reqno="@request.ReqNo">Approv</a></td>
 
                                     @*}
-                                    else
-                                    {
-                                        <td></td>
-                                    }*@
+                                        else
+                                        {
+                                            <td></td>
+                                        }*@
                                 </tr>
                             }
                         </tbody>
