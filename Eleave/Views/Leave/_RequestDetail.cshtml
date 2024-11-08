@@ -1,9 +1,6 @@
 ﻿@*@using Eleave.Models;*@
 @{
     Layout = null;
-    //var employees = ViewBag.ReqDetail as List<RequestList>;
-    //var getlist = ViewBag.ReqDetail as IEnumerable<RequestList>;
-    //var myList = ViewBag.ReqDetail == null ? new List<RequestList>() : (List<RequestList>)ViewBag.ReqDetail;
     var reqDetails = ViewBag.ReqDetail;
 
 }
@@ -26,7 +23,15 @@
                         <label class="control-label font-weight-bold" for="">รหัสคำขอ : </label>
                         <div class="form-control-static">
                             <p class="border-0 p-0 m-0" name="ReqId" id="cancel_reqid"> @reqDetail.ReqNo </p>
-                            <input type="hidden" name="ReqIdHide" value="" id="cancel_reqid_val" />
+                            <input type="hidden" name="ReqIdHide" value="@reqDetail.ReqNo" id="cancel_reqid_val" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3 col-md-3">
+                    <div class="form-group highlight-addon hide-errors">
+                        <label class="control-label font-weight-bold" for="">ชื่อพนักงาน	 : </label>
+                        <div class="form-control-static">
+                            <span style="white-space: nowrap;"><p class="border-0 p-0 m-0" name="Empname" id="Empname"> @reqDetail.Empname </p></span>
                         </div>
                     </div>
                 </div>
@@ -73,9 +78,17 @@
                 </div>
                 <div class="col-sm-3 col-md-3">
                     <div class="form-group highlight-addon hide-errors">
+                        <label class="control-label font-weight-bold" for="">จำนวนวัน	 : </label>
+                        <divs class="form-control-static">
+                            <p class="border-0 p-0 m-0" name="NumDay" id="NumDay"> @reqDetail.NumDay </p>
+                        </divs>
+                    </div>
+                </div>
+                <div class="col-sm-3 col-md-3">
+                    <div class="form-group highlight-addon hide-errors">
                         <label class="control-label font-weight-bold" for="">สถานะคำขอ	 : </label>
                         <divs class="form-control-static">
-                            <p class="border-0 p-0 m-0" name="CancelStatus" id="cancel_status"> @reqDetail.Remark </p>
+                            <p class="border-0 p-0 m-0" name="CancelStatus" id="cancel_status"> @reqDetail.ReqStaDesc </p>
                         </divs>
                     </div>
                 </div>
@@ -91,13 +104,14 @@
             </div>
             <div class="row">
                 <hr />
-            </div> 
+            </div>
             <div class="row">
                 <div class="col-sm-6 col-md-6 text-left">
                     <span class="badge badge-light-secondary" style="font-size: 16px;"> Attach File </span>
                 </div>
             </div>
             <br>
+            @Html.Partial("_RequestFileDetail", new { });
             <div class="row">
                 <hr />
             </div>
@@ -173,3 +187,36 @@
     }
 </body>
 </html>
+<script defer>
+   $(document).on('click', '#cancel_submit', function () {
+        var reqno = $('#cancel_reqid_val').val()
+        $.ajax({
+            url: '@Url.Action("CancelRequest", "Leave")',
+            data: {
+                ReqNo: reqno
+            },
+            type: 'POST',
+            dataType: 'JSON',
+            success: function (data) {
+                if (data.message == 'Y') {
+                    $('#RequestDetailModal').modal('hide');
+                    Swal.fire({
+                        title: "Success",
+                        text: "ยกเลิกคำร้องสำเร็จ ",
+                        icon: "success"
+                    }).then(() => {
+                        location.reload();
+                    });
+                }
+                else {
+                    $('#RequestDetailModal').modal('hide');
+                    Swal.fire({
+                        title: "Error!!!",
+                        text: "Cancel Failed : " + data.message,
+                        icon: "error"
+                    });
+                }
+            }
+        });
+   });
+</script>

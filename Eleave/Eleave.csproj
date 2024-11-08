@@ -388,6 +388,7 @@
     <Content Include="Views\Leave\RequestForm.cshtml" />
     <Content Include="Views\Approval\ManagerApproval.cshtml" />
     <Content Include="Views\Leave\_RequestDetail.cshtml" />
+    <Content Include="Views\Leave\_RequestFileDetail.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
