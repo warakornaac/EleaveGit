@@ -31,8 +31,8 @@
 
                     @Html.AntiForgeryToken()
                     <div class="row">
-                        <div class="form-group col-lg-4">
-                            <label>ประเภทร้องขอ :</label>
+                        <div class="form-group col-lg-3">
+                            <label class="font-weight-bold">ประเภทร้องขอ :</label>
                             @Html.DropDownList("LeaveType", new List<SelectListItem>
                                                 {
                                                     new SelectListItem() {Text="ลาป่วย", Value="ลาป่วย"},
@@ -41,37 +41,37 @@
                                                 }, "ลา", new { @class = "custom-select", @id = "LeaveType-selector", @disabled = "disabled" })
 
                         </div>
-                        <div class="form-group col-lg-4">
-                            <label>ประเภทการลา :</label>
+                        <div class="form-group col-lg-3">
+                            <label class="font-weight-bold">ประเภทการลา :</label>
                             @Html.DropDownList("reqType", new SelectList(ViewBag.Leavetype, "RequestID", "Description"), "ประเภทการลา", new { @class = "custom-select", @id = "reqType-selector" })
 
                         </div>
-                        <div class="form-group col-lg-4">
-                            <label>สถานะคำขอ :</label>
+                        <div class="form-group col-lg-3">
+                            <label class="font-weight-bold">สถานะคำขอ :</label>
                             @Html.DropDownList("ReqStatus", new SelectList(ViewBag.ReqSta, "LookValue", "LookDesc", "0"), "สถานะคำขอทั้งหมด", new { @class = "custom-select", @id = "reqStatus" })
                         </div>
-                        <div class="form-group col-lg-4">
-                            <label>เริ่มวันที่ :</label>
+                        <div class="form-group col-lg-3">
+                            <label class="font-weight-bold">เริ่มวันที่ :</label>
                             @Html.TextBox("ReqStart", DateTime.Now.ToString("dd/MM/yyyy"), new { @class = "form-control", @id = "reqStart", @placeholder = "--/--/--" })
                         </div>
-                        <div class="form-group col-lg-4">
-                            <label>ถึงวันที่ :</label>
+                        <div class="form-group col-lg-3">
+                            <label class="font-weight-bold">ถึงวันที่ :</label>
                             @Html.TextBox("ReqEnd", DateTime.Now.AddDays(3).ToString("dd/MM/yyyy"), new { @class = "form-control", @id = "reqEnd", @placeholder = "--/--/--" })
                         </div>
-                        <div class="form-group col-lg-4">
-                            <label>แผนก :</label>
+                        <div class="form-group col-lg-3">
+                            <label class="font-weight-bold">แผนก :</label>
                             @Html.Hidden("Dept", DepartAppver)
                             @Html.DropDownList("Dept",
                                                new SelectList(ViewBag.DepartmentList, "LookValue", "LookDesc", DepartAppver),
                                                "เลือกหน่วยงาน",
                                                new { @class = "custom-select", @id = "department-selector", @disabled = "disabled" })
                         </div>
-                        <div class="form-group col-lg-4">
-                            <label>รหัสคำขอ :</label>
+                        <div class="form-group col-lg-3">
+                            <label class="font-weight-bold">รหัสคำขอ :</label>
                             @Html.TextBox("reqId", null, new { @class = "form-control", @id = "reqId", @placeholder = "รหัสคำขอ" })
                         </div>
-                        <div class="form-group col-lg-4">
-                            <label>ชื่อพนักงาน :</label>
+                        <div class="form-group col-lg-3">
+                            <label class="font-weight-bold">ชื่อพนักงาน :</label>
                             @Html.TextBox("empName", null, new { @class = "form-control", @id = "empName", @placeholder = "ชื่อพนักงาน" })
                         </div>
 
@@ -80,8 +80,8 @@
                 <div class="card-footer p-0">
                     <div class="col-lg-12">
                         <div class="form-group float-end m-2">
-                            <input type="button" value="Reset" class="btn btn-danger" id="reset-btn" />
-                            <input type="submit" value="Search" class="btn btn-success" />
+                            <input type="button" value="ล้าง" class="btn btn-secondary" id="reset-btn" />
+                            <input type="submit" value="ค้นหา" class="btn btn-primary" />
                         </div>
                     </div>
                 </div>
@@ -96,7 +96,7 @@
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th class="text-center">รหัสคำขอ</th>
+                                <th class="text-center">จัดการ</th>
                                 <th class="text-center">วันที่ขอ</th>
                                 <th class="text-center">ประเภทการขอ</th>
                                 <th class="text-center">ผู้ร้องขอ</th>
@@ -110,7 +110,6 @@
                                 <th class="text-center">วันที่อนุมัติ</th>
                                 <th class="text-center">HR ผู้รับอนุมัติ</th>
                                 <th class="text-center">วันที่ HR รับอนุมัติ</th>
-                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -121,7 +120,10 @@
                             {
                                 i++;
                                 <tr>
-                                    <td>@i</td>
+                                    <td class="text-center">@i</td>
+                                    <td class="text-center">
+                                        <div class="btn btn-warning btn-xs p-1" id="aprvbtn_@request.ReqNo" data-reqno="@request.ReqNo"><span class="fa fa-eye p-1"></span></div>
+                                    </td>
                                     <td>@request.ReqNo</td>
                                     <td>@(request.ReqDate?.ToString("dd/MM/yyyy")??"")</td>
                                     <td class="text-center">@request.ReqType</td>
@@ -133,32 +135,32 @@
                                     @if (request.ReqStatus == "0")
                                     {
                                         <td class="text-center">
-                                            <div class="text-warning"><i class="fa fa-repeat" aria-hidden="true"></i><span>@request.ReqStaDesc</span></div>
+                                            <div class="text-warning badge" style="font-size: 14px;"><i class="fa fa-repeat" aria-hidden="true"></i><span> @request.ReqStaDesc</span></div>
                                         </td>
                                     }
                                     else if (request.ReqStatus == "1")
                                     {
                                         <td class="text-center">
-                                            <div class="text-success"><i class="fa fa-check" aria-hidden="true"></i><span>@request.ReqStaDesc</span></div>
+                                            <div class="text-success badge" style="font-size: 14px;"><i class="fa fa-check" aria-hidden="true"></i><span> @request.ReqStaDesc</span></div>
                                         </td>
 
                                     }
                                     else if (request.ReqStatus == "2")
                                     {
                                         <td class="text-center">
-                                            <div class="text-danger"><i class="fa fa-times" aria-hidden="true"></i><span>@request.ReqStaDesc</span></div>
+                                            <div class="text-danger badge" style="font-size: 14px;"><i class="fa fa-times" aria-hidden="true"></i><span> @request.ReqStaDesc</span></div>
                                         </td>
                                     }
                                     else if (request.ReqStatus == "3")
                                     {
                                         <td class="text-center">
-                                            <div class="text-success"><i class="fa fa-check" aria-hidden="true"></i><span>@request.ReqStaDesc</span></div>
+                                            <div class="text-success badge" style="font-size: 14px;"><i class="fa fa-check" aria-hidden="true"></i><span> @request.ReqStaDesc</span></div>
                                         </td>
                                     }
                                     else if (request.ReqStatus == "4")
                                     {
                                         <td class="text-center">
-                                            <div class="text-danger"><i class="fa fa-ban" aria-hidden="true"></i><span>@request.ReqStaDesc</span></div>
+                                            <div class="text-danger badge" style="font-size: 14px;"><i class="fa fa-ban" aria-hidden="true"></i><span> @request.ReqStaDesc</span></div>
                                         </td>
                                     }
                                     <td style="max-width: 200px;">
@@ -169,10 +171,8 @@
                                     @*<td class="text-center">@leave.UpdatedBy</td>
                                         <td>@(request.UpdateDate?.ToString("dd/MM/yyyy")??"")</td>*@
                                     <td></td>
-                                    <td></td>
                                     @*@if (EmployeeID == request.ApproverId)
                                     {*@
-                                        <td class="text-center"><a href="#" id="aprvbtn_@request.ReqNo" data-reqno="@request.ReqNo">Approv</a></td>
 
                                     @*}
                                     else
@@ -191,11 +191,11 @@
 
 <!-- Modal -->
 <div class="modal fade" id="ApprovRequestModal" tabindex="-1" aria-labelledby="ModalApprov" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="ModalApprov">การอนุมัติคำขอ</h5>
-                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                <div class="col-sm-2 col-md-2 text-right"><button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">ปิด</button></div>
             </div>
             <div class="modal-body">
                 <div class="row">
@@ -290,51 +290,79 @@
         e.preventDefault();
         var reqNo = $(this).data('reqno');
         //console.log(reqNo);
-        $('#ApprovRequestModal').modal('show');
+        //$('#ApprovRequestModal').modal('show');
         GetReqDetail(reqNo);
     });
 
-    function GetReqDetail(REQ) {
-    $.ajax({
-        url: '@Url.Action("GetRequestDetail", "Approval")',
-        data: {
-            ReqNO: REQ
-        },
-        type: 'POST',
-        dataType: 'JSON',
-        beforeSend: function () {
-            $('#Approv_reqid').text('');
-            $('#Approv_reqid_val').val('');
-            $('#Approv_reqdate').text('');
-            $('#Approv_reqtyp').text('');
-            $('#Approv_levtyp').text('');
-            $('#Approv_startdate').text('');
-            $('#Approv_enddate').text('');
-            $('#Approv_remark').text('');
-            $('#Approv_sta').html('');
-        },
-        success: function (data) {
-            if (data.message == "Y") {
-                if (data.ReqDetail.length != 0) {
-                    $('#Approv_reqid').text(data.ReqDetail[0].ReqNo);
-                    $('#Approv_reqid_val').val(data.ReqDetail[0].ReqNo);
-                    $('#Approv_reqdate').text(data.ReqDetail[0].ReqDate);
-                    $('#Approv_reqtyp').text(data.ReqDetail[0].ReqType);
-                    $('#Approv_levtyp').text(data.ReqDetail[0].LeaveType);
-                    $('#Approv_startdate').text(data.ReqDetail[0].StartDate);
-                    $('#Approv_enddate').text(data.ReqDetail[0].EndDate);
-                    $('#Approv_remark').text(data.ReqDetail[0].Remark);
-                    if (data.ReqDetail[0].ReqStatus == "0") {
-                        $('#Approv_sta').html('<div class="text-warning"><i class="fa fa-repeat" aria-hidden="true"></i><span>' + data.ReqDetail[0].ReqStaDesc +'</span></div>');
-                    }
-                }
+     function GetReqDetail(REQ) {
+        $.ajax({
+            url: '@Url.Action("GetRequestDetail", "Leave")',
+            data: {
+                ReqNO: REQ,
+                Flag: "approve"
+            },
+            type: 'POST',
+            dataType: 'HTML',
+            beforeSend: function () {
+                LoadingShow();
+                $('#ApprovRequestModal').find('.modal-body').html("");
+                //$('#cancel_reqid').text('');
+                //$('#cancel_reqid_val').val('');
+                //$('#cancel_reqdate').text('');
+                //$('#cancel_reqtyp').text('');
+                //$('#cancel_levtyp').text('');
+                //$('#cancel_startdate').text('');
+                //$('#cancel_enddate').text('');
+                //$('#cancel_remark').text('');
+                //$('#cancel_sta').html('');
+            },
+            success: function (data) {
+                $('#ApprovRequestModal').find('.modal-body').html(data);
+                $('#ApprovRequestModal').modal('show');
+                //if (data.message == "Y") {
+                //    if (data.ReqDetail.length != 0) {
+                //        $('#cancel_reqid').text(data.ReqDetail[0].ReqNo);
+                //        $('#cancel_reqid_val').val(data.ReqDetail[0].ReqNo);
+                //        $('#cancel_reqdate').text(data.ReqDetail[0].ReqDate);
+                //        $('#cancel_reqtyp').text(data.ReqDetail[0].ReqType);
+                //        $('#cancel_levtyp').text(data.ReqDetail[0].LeaveType);
+                //        $('#cancel_startdate').text(data.ReqDetail[0].StartDate);
+                //        $('#cancel_enddate').text(data.ReqDetail[0].EndDate);
+                //        $('#cancel_remark').text(data.ReqDetail[0].Remark);
+                //        if (data.ReqDetail[0].ReqStatus == "0") {
+                //            $('#cancel_sta').html('<div class="text-warning"><i class="fa fa-repeat" aria-hidden="true"></i><span>' + data.ReqDetail[0].ReqStaDesc +'</span></div>');
+                //        }
+                //    }
+                //}
+                //else {
+                //    console.log('Detail Err: ' + data.message);
+                //}
+            },complete: function (res) {
+                LoadingHide();
+            },
+            error: function (er) {
+                Swal.fire({
+                    icon: 'error',
+                    html: '<p>GetReqDetail :</p><p>' + er.error + '</p>',
+                    confirmButtonColor: '#d33',
+                    confirmButtonText: 'ปิด',
+                    allowOutsideClick: false,
+                    focusConfirm: false,
+                });
             }
-            else {
-                console.log('Detail Err: ' + data.message);
-            }
-        }
-    });
+        }).fail(function (error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'เกิดข้อผิดพลาด กรุณาแจ้งผู้ดูแลระบบ (' + error.status + ')',
+                html: '<p>GetReqDetail :</p><p>' + error.responseText + '</p>',
+                confirmButtonColor: '#d33',
+                confirmButtonText: 'ปิด',
+                allowOutsideClick: false,
+                focusConfirm: false,
+            });
+        });
     }
+
     $(document).on('click', '#Approv_submit', function () {
         var reqno = $('#Approv_reqid_val').val()
         $.ajax({
