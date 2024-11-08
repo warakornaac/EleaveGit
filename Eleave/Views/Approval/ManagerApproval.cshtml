@@ -12,11 +12,11 @@
         <div class="row align-items-center">
             <div class="col-lg-12">
                 <div class="page-header-title">
-                    <h5 class="m-b-10">การอนุมัติ</h5>
+                    <h5 class="m-b-10">รายการอนุมัติ</h5>
                 </div>
                 <ul class="breadcrumb">
                     <li class="breadcrumb-item"><a href="@Url.Action("Index","Home")"><i class="feather icon-home"></i></a></li>
-                    <li class="breadcrumb-item"><a href="@Url.Action("ManagerApproval","Approval")">การอนุมัติ</a></li>
+                    <li class="breadcrumb-item"><a href="@Url.Action("ManagerApproval","Approval")">รายการอนุมัติ</a></li>
                 </ul>
             </div>
         </div>
@@ -170,15 +170,15 @@
                                         <td>@(request.UpdateDate?.ToString("dd/MM/yyyy")??"")</td>*@
                                     <td></td>
                                     <td></td>
-                                    @if (EmployeeID == request.ApproverId)
-                                    {
+                                    @*@if (EmployeeID == request.ApproverId)
+                                    {*@
                                         <td class="text-center"><a href="#" id="aprvbtn_@request.ReqNo" data-reqno="@request.ReqNo">Approv</a></td>
 
-                                    }
+                                    @*}
                                     else
                                     {
                                         <td></td>
-                                    }
+                                    }*@
                                 </tr>
                             }
                         </tbody>

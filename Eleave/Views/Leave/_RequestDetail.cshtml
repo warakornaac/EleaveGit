@@ -1,0 +1,175 @@
+﻿@*@using Eleave.Models;*@
+@{
+    Layout = null;
+    //var employees = ViewBag.ReqDetail as List<RequestList>;
+    //var getlist = ViewBag.ReqDetail as IEnumerable<RequestList>;
+    //var myList = ViewBag.ReqDetail == null ? new List<RequestList>() : (List<RequestList>)ViewBag.ReqDetail;
+    var reqDetails = ViewBag.ReqDetail;
+
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>_RequestDetail</title>
+</head>
+<body>
+    @if (ViewBag.ReqDetail != null)
+    {
+        foreach (var reqDetail in ViewBag.ReqDetail)
+        {
+            <div class="row">
+                <div class="col-sm-3 col-md-3">
+                    <div class="form-group highlight-addon hide-errors">
+                        <label class="control-label font-weight-bold" for="">รหัสคำขอ : </label>
+                        <div class="form-control-static">
+                            <p class="border-0 p-0 m-0" name="ReqId" id="cancel_reqid"> @reqDetail.ReqNo </p>
+                            <input type="hidden" name="ReqIdHide" value="" id="cancel_reqid_val" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3 col-md-3">
+                    <div class="form-group highlight-addon hide-errors">
+                        <label class="control-label font-weight-bold" for="">วันที่ขอ	 : </label>
+                        <div class="form-control-static">
+                            <p class="border-0 p-0 m-0" name="ReqId" id="cancel_reqid"> @reqDetail.ReqDate </p>
+                            <input type="hidden" name="ReqIdHide" value="" id="cancel_reqdate" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3 col-md-3">
+                    <div class="form-group highlight-addon hide-errors">
+                        <label class="control-label font-weight-bold" for="">ประเภทการขอ	 : </label>
+                        <divs class="form-control-static">
+                            <p class="border-0 p-0 m-0" name="ReqId" id="cancel_reqtyp"> @reqDetail.ReqType </p>
+                        </divs>
+                    </div>
+                </div>
+                <div class="col-sm-3 col-md-3">
+                    <div class="form-group highlight-addon hide-errors">
+                        <label class="control-label font-weight-bold" for="">ประเภทการลา	 : </label>
+                        <divs class="form-control-static">
+                            <p class="border-0 p-0 m-0" name="LevTyp" id="cancel_levtyp"> @reqDetail.LeaveType </p>
+                        </divs>
+                    </div>
+                </div>
+                <div class="col-sm-3 col-md-3">
+                    <div class="form-group highlight-addon hide-errors">
+                        <label class="control-label font-weight-bold" for="">วันที่ลา(เริ่ม)	 : </label>
+                        <divs class="form-control-static">
+                            <p class="border-0 p-0 m-0" name="StartDate" id="cancel_startdate"> @reqDetail.StartDate </p>
+                        </divs>
+                    </div>
+                </div>
+                <div class="col-sm-3 col-md-3">
+                    <div class="form-group highlight-addon hide-errors">
+                        <label class="control-label font-weight-bold" for="">วันที่ลา(สิ้นสุด)	 : </label>
+                        <divs class="form-control-static">
+                            <p class="border-0 p-0 m-0" name="EndDate" id="cancel_enddate"> @reqDetail.EndDate </p>
+                        </divs>
+                    </div>
+                </div>
+                <div class="col-sm-3 col-md-3">
+                    <div class="form-group highlight-addon hide-errors">
+                        <label class="control-label font-weight-bold" for="">สถานะคำขอ	 : </label>
+                        <divs class="form-control-static">
+                            <p class="border-0 p-0 m-0" name="CancelStatus" id="cancel_status"> @reqDetail.Remark </p>
+                        </divs>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-12">
+                    <div class="form-group highlight-addon hide-errors">
+                        <label class="control-label font-weight-bold" for="">หมายเหตุการลา	 : </label>
+                        <divs class="form-control-static">
+                            <p class="border-0 p-0 m-0" name="Remark" id="cancel_remark"> @reqDetail.Remark </p>
+                        </divs>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <hr />
+            </div> 
+            <div class="row">
+                <div class="col-sm-6 col-md-6 text-left">
+                    <span class="badge badge-light-secondary" style="font-size: 16px;"> Attach File </span>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <hr />
+            </div>
+            <div class="row">
+                <div class="col-sm-6 col-md-6 text-left">
+                </div>
+                <div class="col-sm-6 col-md-6 text-right">
+                    @if (@reqDetail.ReqStatus == "0")
+                    {
+                        <button type="button" class="btn btn-warning" id="cancel_submit"><i class="fa fa-times"></i> ยกเลิกรายการ</button>
+                    }
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">ปิด</button>
+                </div>
+            </div>
+            //old
+            @*<div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>รหัสคำขอ: </label>
+                            <p class="border-0 p-0 m-0" name="ReqId" id="cancel_reqid"> @reqDetail.ReqNo </p>
+                            <input type="hidden" name="ReqIdHide" value="" id="cancel_reqid_val" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>วันที่ขอ : </label>
+                            <p class="border-0 p-0 m-0" name="ReqDate" id="cancel_reqdate"> @reqDetail.ReqNo </p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>ประเภทการขอ: </label>
+                            <p class="border-0 p-0 m-0" name="ReqTyp" id="cancel_reqtyp"> @reqDetail.ReqNo</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>ประเภทการลา: </label>
+                            <p class="border-0 p-0 m-0" name="LevTyp" id="cancel_levtyp">@reqDetail.ReqNo</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>วันที่ลา(เริ่ม): </label>
+                            <p class="border-0 p-0 m-0" name="StartDate" id="cancel_startdate">@reqDetail.ReqNo</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>วันที่ลา(สิ้นสุด): </label>
+                            <p class="border-0 p-0 m-0" name="EndDate" id="cancel_enddate">@reqDetail.ReqNo</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>สถานะคำขอ: </label>
+                            <div id="cancel_sta"> @reqDetail.ReqNo</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>หมายเหตุการลา</label>
+                            <p class="border-0 p-0 m-0 mb-1" name="Remark" id="cancel_remark">@reqDetail.ReqNo</p>
+                        </div>
+
+                    </div>
+                </div>*@
+        }
+    }
+    else
+    {
+        <div class="alert alert-danger text-center" style="font-size: 16px; font-weight: bold;"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> ไม่พบข้อมูล</div>
+    }
+</body>
+</html>

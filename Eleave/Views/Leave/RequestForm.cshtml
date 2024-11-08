@@ -25,6 +25,84 @@
 @*@using (Html.BeginForm("SaveRequestForm", "Leave", /*new { userID = @Model.ProPit_User.userID },*/ FormMethod.Post, new { enctype = "multipart/form-data" }))
     {*@
 <div class="row">
+    <!-- table card-1 start -->
+    <div class="col-md-12">
+        <div class="card flat-card">
+            <div class="row-table">
+                <div class="col-sm-4 card-body br ">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <i class="fa fa-medkit text-c-green mb-1 d-block"></i>
+                        </div>
+                        <div class="col-sm-8 text-md-center">
+                            <h5>2</h5>
+                            <span>ลาป่วย</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4 card-body border-right">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <i class="icon feather icon-file-text text-c-blue mb-1 d-block"></i>
+                        </div>
+                        <div class="col-sm-8 text-md-center">
+                            <h5>1</h5>
+                            <span>ลากิจ</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4 card-body ">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <i class="icon feather icon-file-text text-c-blue mb-1 d-block"></i>
+                        </div>
+                        <div class="col-sm-8 text-md-center">
+                            <h5>1</h5>
+                            <span>ลากิจ</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row-table">
+                <div class="col-sm-4 card-body br border-top">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <i class="fa fa-map-marker text-c-yellow mb-1 d-block"></i>
+                        </div>
+                        <div class="col-sm-8 text-md-center">
+                            <h5>2</h5>
+                            <span>ลาพักร้อน</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4 card-body border-right">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <i class="icon feather icon-file-text text-c-blue mb-1 d-block"></i>
+                        </div>
+                        <div class="col-sm-8 text-md-center">
+                            <h5>1</h5>
+                            <span>ลากิจ</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4 card-body border-top">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <i class="icon feather icon-rotate-ccw text-c-red mb-1 d-block"></i>
+                        </div>
+                        <div class="col-sm-8 text-md-center">
+                            <h5>5</h5>
+                            <span>ลาทั้งหมด</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
     <div class="col-sm-12">
         <div class="card">
             <div class="card-header">
@@ -40,7 +118,8 @@
                             <option selected>เลือกประเภทร้องขอ</option>
                             @foreach (var type in ViewBag.REQ_T)
                             {
-                                if (type.LookValue == "1") { 
+                                if (type.LookValue == "1")
+                                {
                                     <option value="@type.LookValue">@type.LookDesc</option>
                                 }
                             }

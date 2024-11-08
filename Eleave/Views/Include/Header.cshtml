@@ -5,10 +5,10 @@
 <header class="navbar pcoded-header navbar-expand-lg navbar-light header-dark" style="max-height: 65px;">
     <div class="m-header">
         <a class="mobile-menu" id="mobile-collapse" href="#!"><span></span></a>
-        <a href="@Url.Action("Index","Home")" class="b-brand" style="font-size: 20px;">
+        <a href="@Url.Action("Index", "Home")" class="b-brand" style="font-size: 20px;">
             <!-- ========   change your logo hear   ============ -->
             <img src="~/Images/Logo/logo_tru.png" alt="" class="logo" style="width: 45px;">
-            <span class="pl-1 font-weight-bold" style="color: #ffdede; font-style: italic;"> E-Request </span>
+            <span class="pl-1 font-weight-bold" style="color: #ffdede; font-style: italic;"> E-Leave </span>
         </a>
         <a href="#!" class="mob-toggler">
             <i class="feather icon-more-vertical"></i>
@@ -19,7 +19,30 @@
             <li>
                 <div class="dropdown">
                     <a class="dropdown-toggle" href="#" data-toggle="dropdown">
-                        <span> UserType = @Session["UserType"].ToString() </span>
+                        <span>
+                            @{
+                                string typeName = "";
+                                if (Session["UserType"] != null)
+                                {
+                                    switch (Session["UserType"].ToString())
+                                    {
+                                        case "1": //Employee
+                                            typeName = "(Employee)";
+                                            break;
+                                        case "2": //Hr
+                                            typeName = "(Admin)";
+                                            break;
+                                        case "3": //Approve
+                                            typeName = "(Manager)";
+                                            break;
+                                        default: //SuperAdmin (IT)
+                                            typeName = "(Supper)";
+                                            break;
+                                    }
+                                }
+                                @typeName
+                            }
+                        </span>
                     </a>
                     <a class="dropdown-toggle" href="#" data-toggle="dropdown">
                         <i class="fa fa-bell"></i>

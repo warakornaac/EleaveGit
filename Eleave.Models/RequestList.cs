@@ -14,10 +14,10 @@ namespace Eleave.Models
         public string EmpId { get; set; }
         public string Empname { get; set; }
         public string LeaveType { get; set; }
-        public DateTime? StartDate { get; set; }
-        public DateTime? EndDate { get; set; }
+        public string StartDate { get; set; }
+        public string EndDate { get; set; }
         public decimal NumDay { get; set; }
-        public DateTime? ReqDate { get; set; }
+        public string ReqDate { get; set; }
         public string ApprGrpID { get; set; }
         public string ReqStatus { get; set; }
         public string ReqStaDesc { get; set; }

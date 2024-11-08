@@ -26,7 +26,6 @@ namespace Eleave.Controllers
 
             return View();
         }
-<<<<<<< HEAD
         [HttpPost]
         public ActionResult SaveRequestForm(string ReqNo, string EmpId, string ReqType, string LeaveType, string StartDate, string EndDate, string PeriodTime, double NumDay, int NumHour, string Remark)
         {
@@ -35,8 +34,9 @@ namespace Eleave.Controllers
             var UpdateRequest = new List<StoreUpdateRequest>();
             try
             {
-                if (ReqNo == "0") { 
-                     ReqNo = Utils.GetDocumentRequest("");
+                if (ReqNo == "0")
+                {
+                    ReqNo = Utils.GetDocumentRequest("");
                 }
                 UpdateRequest = new UpdateRequest().Save(ReqNo, EmpId, ReqType, LeaveType, StartDate, EndDate, PeriodTime, NumDay, NumHour, Remark);
                 //file
@@ -47,12 +47,6 @@ namespace Eleave.Controllers
                         var file = Request.Files[i];
                         var originalFileName = Path.GetFileName(file.FileName);
                         var fileExtension = Path.GetExtension(originalFileName);
-=======
-        //[HttpPost]
-        //public ActionResult SaveRequestForm(List<StoreUpdateRequest> request)
-        //{
->>>>>>> 81b045d9308d9c75cf07e54e9da77e84905745da
-
                         fileNameNew = ReqNo + "-" + (i + 1) + fileExtension;
                         var path = Path.Combine(Server.MapPath("~/FileUpload/"), fileNameNew);
                         file.SaveAs(path);
@@ -64,7 +58,7 @@ namespace Eleave.Controllers
                 return Json(new { status = "success", message = "SaveRequestForm updated" });
             }
             catch (Exception ex)
-            { 
+            {
                 return Json(new { status = "error", message = ex.Message });
             }
         }
@@ -254,37 +248,44 @@ namespace Eleave.Controllers
             }
             return Json(new { message = message }, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult GetRequestDetail(string ReqNO)
+        public ActionResult GetRequestDetail(string ReqNO)
         {
             var ReqDetail = new List<RequestList>();
             string message = string.Empty;
             try
             {
                 ReqDetail = new GetRequestDetail().Get(ReqNO);
-                var reqDetailFormatted = ReqDetail.Select(x => new
-                {
-                    x.ReqNo,
-                    x.ReqType,
-                    x.CountryCode,
-                    x.EmpId,
-                    x.LeaveType,
-                    ReqDate = x.ReqDate.HasValue ? x.ReqDate.Value.ToString("dd/MM/yyyy") : "",  // ตรวจสอบ null ก่อนแปลง
-                    StartDate = x.StartDate.HasValue ? x.StartDate.Value.ToString("dd/MM/yyyy") : "",  // ตรวจสอบ null ก่อนแปลง
-                    EndDate = x.EndDate.HasValue ? x.EndDate.Value.ToString("dd/MM/yyyy") : "",  // ตรวจสอบ null ก่อนแปลง
-                    x.ReqStatus,
-                    x.ReqStaDesc,
-                    x.Remark
-                }).ToList();
+                //var reqDetailFormatted = ReqDetail.Select(x => new
+                //{
+                //    x.ReqNo,
+                //    x.ReqType,
+                //    x.CountryCode,
+                //    x.EmpId,
+                //    x.LeaveType,
+                //    ReqDate = x.ReqDate.HasValue ? x.ReqDate.Value.ToString("dd/MM/yyyy") : "",  // ตรวจสอบ null ก่อนแปลง
+                //    StartDate = x.StartDate.HasValue ? x.StartDate.Value.ToString("dd/MM/yyyy") : "",  // ตรวจสอบ null ก่อนแปลง
+                //    EndDate = x.EndDate.HasValue ? x.EndDate.Value.ToString("dd/MM/yyyy") : "",  // ตรวจสอบ null ก่อนแปลง
+                //    x.ReqStatus,
+                //    x.ReqStaDesc,
+                //    x.Remark
+                //}).ToList();
 
                 message = "Y";
-                return Json(new { message = message, ReqDetail = reqDetailFormatted }, JsonRequestBehavior.AllowGet);
+                //return Json(new { message = message, ReqDetail = reqDetailFormatted }, JsonRequestBehavior.AllowGet);
+                ViewBag.ReqDetail = ReqDetail;
             }
             catch (Exception ex)
             {
                 message = ex.Message;
-                return Json(new { message = message, ReqDetail = new List<object>() }, JsonRequestBehavior.AllowGet);
+                //return Json(new { message = message, ReqDetail = new List<object>() }, JsonRequestBehavior.AllowGet);
+                ViewBag.ReqDetail = new List<object>();
             }
-
+            ViewBag.Message = message;
+            return PartialView("_RequestDetail", new
+            {
+                @ViewBag.Message,
+                @ViewBag.ReqDetail
+            });
         }
 
         public JsonResult GetLeavetype()

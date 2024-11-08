@@ -244,12 +244,12 @@
                                 <tr>
                                     <td>@i</td>
                                     <td class="text-center">@leave.ReqNo</td>
-                                    <td class="text-center">@(leave.ReqDate?.ToString("dd/MM/yyyy")??"")</td>
+                                    <td class="text-center">@(leave.ReqDate)</td>
                                     <td class="text-center">@leave.ReqType</td>
                                     <td class="text-center">@leave.Empname</td>
                                     <td class="text-center">@leave.LeaveType</td>
-                                    <td>@(leave.StartDate?.ToString("dd/MM/yyyy")??"")</td>
-                                    <td>@(leave.EndDate?.ToString("dd/MM/yyyy")??"")</td>
+                                    <td>@(leave.StartDate)</td>
+                                    <td>@(leave.EndDate)</td>
                                     <td class="text-center">@leave.NumDay</td>
                                     @if (leave.ReqStatus == "0")
                                     {
