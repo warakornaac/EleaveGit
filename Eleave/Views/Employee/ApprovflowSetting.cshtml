@@ -31,7 +31,7 @@
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">เพิ่ม Approve Flow</h5>
 
-                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close">ปิด</button>
 
             </div>
             <div class="modal-body">
@@ -102,8 +102,8 @@
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="addApprove-btn">Add</button>
+                @*<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>*@
+                <button type="button" class="btn btn-primary" id="addApprove-btn">ยืนยัน</button>
             </div>
         </div>
     </div>
@@ -116,7 +116,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="editformModel">แก้ไข Approve Flow</h5>
-                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close">ปิด</button>
             </div>
             <div class="modal-body">
                 <div class="row">
@@ -180,8 +180,8 @@
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" onclick="UpdateApprvFlow();">Save changes</button>
+                @*<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>*@
+                <button type="button" class="btn btn-primary" onclick="UpdateApprvFlow();">ยืนยัน</button>
             </div>
         </div>
     </div>
@@ -206,11 +206,17 @@
                                 @Html.DropDownList("ApprvGrp", new SelectList(ViewBag.apprvFlow, "ApprGrpId", "ApprGrpName"), "ALL", new { @class = "custom-select", @id = "apprv-search" })
                             </div>
                         </div>
-                        <div class="col-md-4 d-md-flex align-items-md-center justify-content-between">
 
-                            <button class="btn btn-success" type="submit">Search</button>
-                            <button class="btn btn-info float-end" type="button" id="addFlowbtn">ADD/เพิ่ม</button>
-                        </div>
+                    </div>
+                </div>
+                <div class="card-footer p-1">
+
+                    <div class="form-group float-start m-2">
+                        <button class="btn btn-secondary float-start m-1" type="button" id="addFlowbtn">ADD/เพิ่ม</button>
+                    </div>
+                    <div class="form-group float-end m-2">
+                        <input type="button" value="ล้าง" class="btn btn-secondary" id="reset-btn" />
+                        <input type="submit" value="ค้นหา" class="btn btn-primary" />
                     </div>
                 </div>
             }
@@ -229,7 +235,7 @@
                                 <th class="text-center">ลำดับการอนุมัติ</th>
                                 <th class="text-center">พนักงานผู้อนุมัติ</th>
                                 <th class="text-center">ประเภทอนุมัติ</th>
-                                <th class="text-center">เพิ่ม/แก้ไข/ลบ</th>
+                                <th class="text-center">แก้ไข</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -279,6 +285,7 @@
         width: '100%'
     });
     $(document).ready(function () {
+
         $('#apprv-flow-table').dataTable({
             paging: true,
             pageLength: 50,
@@ -394,8 +401,43 @@
 
     $(document).on('focusout', '#groupId-add', function () {
         var grpID = $(this).val();
+        if (grpID != '' ) {
+            GetDepartForEdit(grpID);
+        }
         GenerateApprvStep(grpID);
     });
+    function GetDepartForEdit(GropID) {
+        $.ajax({
+            url: '@Url.Action("GetDepartmentEditApprvFlow", "Employee")',
+            data: {
+                GrpId: GropID
+            },
+            type: 'POST',
+            dataType: 'JSON',
+            beforeSend: function () {
+                $('#department-selector-add').prop('disabled', false);
+            },
+            success: function (data) {
+                if (data.message == 'Y') {
+
+                    $('#department-selector-add').val(data.DepID).trigger('change');
+                    $('#department-selector-add').prop('disabled', true);
+                }
+                else {
+                    $('#department-selector-add').prop('disabled', true);
+                    $('#addFormModal').modal('hide');
+                    Swal.fire({
+                        title: "Error!!!",
+                        text: data.message,
+                        icon: "error"
+                    }).then(() => {
+                        $('#addFormModal').modal('show');
+                    });
+
+                }
+            }
+        })
+    }
     $(document).on('change', '#department-selector-add', function () {
         var depart = $(this).val();
         var selectApprv = $('#select-addApprv').val();
@@ -407,15 +449,22 @@
         }
 
     });
+    $(document).on('click', '#reset-btn', function () {
+        $('#department-search').val('').trigger('change');
+        $('#apprv-search').val('').trigger('change');
+
+    }),
     $(document).on('change', '#select-addApprv', function () {
         var selectVal = $(this).val();
         var em = ''
         if (selectVal == 2) {
             $('#groupId-add').removeAttr('readonly');
+            $('#department-selector-add').attr('disabled',true);
             GetApprovalID(em);
         }
         else {
-            $('#groupId-add').attr('readonly',true);
+            $('#groupId-add').attr('readonly', true);
+            $('#department-selector-add').removeAttr('disabled');
         }
 
     });
