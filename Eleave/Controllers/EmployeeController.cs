@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Services.Description;
 using Eleave.Data;
 using Eleave.Library;
 using Eleave.Models;
@@ -391,7 +392,34 @@ namespace Eleave.Controllers
             return Json(new { message = message }, JsonRequestBehavior.AllowGet);
         }
 
-
+        public JsonResult GetDepartmentEditApprvFlow(string GrpId)
+        {
+            string message = string.Empty;
+            string DepId = string.Empty;
+            var connectionString = ConfigurationManager.ConnectionStrings["HRIS_DB"].ConnectionString;
+            SqlConnection conn = new SqlConnection(connectionString);
+            conn.Open();
+            try
+            {
+                var cmd = new SqlCommand("P_Get_Department_Edit_ApprvFlow", conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@inGrpId", GrpId);
+                SqlDataReader reader = cmd.ExecuteReader();
+                if (reader.Read())
+                {
+                    DepId = reader[0].ToString();
+                }
+                message = "Y";
+                cmd.Dispose();
+                conn.Close();
+            }
+            catch (Exception ex)
+            {
+                conn.Close();
+                message = ex.Message;
+            }
+            return Json(new { message = message, DepID = DepId.Trim() }, JsonRequestBehavior.AllowGet);
+        }
 
         public ActionResult DetailEmployee(string EMPID)
         {
