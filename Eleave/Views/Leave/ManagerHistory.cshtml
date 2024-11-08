@@ -78,8 +78,8 @@
                 <div class="card-footer p-0">
                     <div class="col-lg-12">
                         <div class="form-group float-end m-2">
-                            <input type="button" value="Reset" class="btn btn-secondary" id="reset-btn" />
-                            <input type="submit" value="Search" class="btn btn-primary" />
+                            <input type="button" value="ล้าง" class="btn btn-secondary" id="reset-btn" />
+                            <input type="submit" value="ค้นหา" class="btn btn-primary" />
                         </div>
                     </div>
                 </div>
@@ -302,7 +302,7 @@
         });
     }
 
-    $(document).on('click', '#cancel_submit', function () {
+    @*$(document).on('click', '#cancel_submit', function () {
         var reqno = $('#cancel_reqid_val').val()
         $.ajax({
             url: '@Url.Action("CancelRequest", "Leave")',
@@ -332,7 +332,7 @@
                 }
             }
         });
-    });
+    });*@
     function DropdownReqTyp()
     {
         $.ajax({
