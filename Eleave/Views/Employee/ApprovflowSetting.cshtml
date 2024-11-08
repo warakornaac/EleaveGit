@@ -206,11 +206,17 @@
                                 @Html.DropDownList("ApprvGrp", new SelectList(ViewBag.apprvFlow, "ApprGrpId", "ApprGrpName"), "ALL", new { @class = "custom-select", @id = "apprv-search" })
                             </div>
                         </div>
-                        <div class="col-md-4 d-md-flex align-items-md-center justify-content-between">
 
-                            <button class="btn btn-success" type="submit">Search</button>
-                            <button class="btn btn-info float-end" type="button" id="addFlowbtn">ADD/เพิ่ม</button>
-                        </div>
+                    </div>
+                </div>
+                <div class="card-footer p-1">
+
+                    <div class="form-group float-start m-2">
+                        <button class="btn btn-secondary float-start m-1" type="button" id="addFlowbtn">ADD/เพิ่ม</button>
+                    </div>
+                    <div class="form-group float-end m-2">
+                        <input type="button" value="ล้าง" class="btn btn-secondary" id="reset-btn" />
+                        <input type="submit" value="ค้นหา" class="btn btn-primary" />
                     </div>
                 </div>
             }
@@ -443,6 +449,11 @@
         }
 
     });
+    $(document).on('click', '#reset-btn', function () {
+        $('#department-search').val('').trigger('change');
+        $('#apprv-search').val('').trigger('change');
+
+    }),
     $(document).on('change', '#select-addApprv', function () {
         var selectVal = $(this).val();
         var em = ''
