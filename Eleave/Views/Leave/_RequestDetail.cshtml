@@ -24,12 +24,13 @@
                         <div class="form-control-static">
                             <p class="border-0 p-0 m-0" name="ReqId" id="cancel_reqid"> @reqDetail.ReqNo </p>
                             <input type="hidden" name="ReqIdHide" value="@reqDetail.ReqNo" id="cancel_reqid_val" />
+                            <input type="hidden" id="ReqStatus" name="ReqStatus" value="@reqDetail.ReqStatus" />
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-3 col-md-3">
                     <div class="form-group highlight-addon hide-errors">
-                        <label class="control-label font-weight-bold" for="">ชื่อพนักงาน	 : </label>
+                        <label class="control-label font-weight-bold" for="">ชื่อพนักงาน : </label>
                         <div class="form-control-static">
                             <span style="white-space: nowrap;"><p class="border-0 p-0 m-0" name="Empname" id="Empname"> @reqDetail.Empname </p></span>
                         </div>
@@ -37,7 +38,7 @@
                 </div>
                 <div class="col-sm-3 col-md-3">
                     <div class="form-group highlight-addon hide-errors">
-                        <label class="control-label font-weight-bold" for="">วันที่ขอ	 : </label>
+                        <label class="control-label font-weight-bold" for="">วันที่ขอ : </label>
                         <div class="form-control-static">
                             <p class="border-0 p-0 m-0" name="ReqId" id="cancel_reqid"> @reqDetail.ReqDate </p>
                             <input type="hidden" name="ReqIdHide" value="" id="cancel_reqdate" />
@@ -86,7 +87,7 @@
                 </div>
                 <div class="col-sm-3 col-md-3">
                     <div class="form-group highlight-addon hide-errors">
-                        <label class="control-label font-weight-bold" for="">สถานะคำขอ	 : </label>
+                        <label class="control-label font-weight-bold" for="">สถานะคำขอ : </label>
                         <divs class="form-control-static">
                             <p class="border-0 p-0 m-0" name="CancelStatus" id="cancel_status"> @reqDetail.ReqStaDesc </p>
                         </divs>
@@ -100,8 +101,96 @@
                         </divs>
                     </div>
                 </div>
-
             </div>
+            if (ViewBag.Flag == "approve")
+            { 
+                <div class="row">
+                    <hr />
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 col-md-6 text-left">
+                        <span class="badge badge-light-secondary" style="font-size: 16px;"> สิทธิ์การลาทั้งหมด </span>
+                    </div>
+                </div>
+                <div class="row pt-2">
+                    <!-- table card-1 start -->
+                    <div class="col-md-12">
+                        <div class="card flat-card">
+                            <div class="row-table">
+                                <div class="col-sm-4 card-body br ">
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <i class="fa fa-medkit text-c-green mb-1 d-block"></i>
+                                        </div>
+                                        <div class="col-sm-8 text-md-center">
+                                            <h5>30/2</h5>
+                                            <span>ลาป่วย</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 card-body border-right">
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <i class="fa fa-umbrella text-c-blue mb-1 d-block"></i>
+                                        </div>
+                                        <div class="col-sm-8 text-md-center">
+                                            <h5>10/1</h5>
+                                            <span>ลาพักร้อน</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 card-body ">
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <i class="fa fa-bank text-c-blue mb-1 d-block"></i>
+                                        </div>
+                                        <div class="col-sm-8 text-md-center">
+                                            <h5>10/2</h5>
+                                            <span>ลากิจ</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row-table">
+                                <div class="col-sm-4 card-body br border-top">
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <i class="icon feather icon-file-text text-c-blue mb-1 d-block"></i>
+                                        </div>
+                                        <div class="col-sm-8 text-md-center">
+                                            <h5>10/2</h5>
+                                            <span>ลากิจส่วนตัว</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 card-body border-right">
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <i class="fa fa-list-alt text-c-blue mb-1 d-block"></i>
+                                        </div>
+                                        <div class="col-sm-8 text-md-center">
+                                            <h5>10/3</h5>
+                                            <span>ลาอื่นๆ</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 card-body border-top">
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <i class="fa fa-plus-square text-c-red mb-1 d-block"></i>
+                                        </div>
+                                        <div class="col-sm-8 text-md-center">
+                                            <h5>5</h5>
+                                            <span>ลาทั้งหมด</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+
             <div class="row">
                 <hr />
             </div>
@@ -110,13 +199,12 @@
                     <span class="badge badge-light-secondary" style="font-size: 16px;"> Attach File </span>
                 </div>
             </div>
-            <br>
 
             @Html.Partial("_RequestFileDetail", new { });
 
 
-
-            if(ViewBag.Flag == "approve") {  
+            if (ViewBag.Flag == "approve")
+            {
                 <div class="row">
                     <hr />
                 </div>
@@ -130,7 +218,7 @@
                         <textarea class="form-control" id="apprv_comment"></textarea>
                     </div>
                 </div>
-             }
+            }
 
             @*<div class="row">
                     <hr />
@@ -208,6 +296,14 @@
 </body>
 </html>
 <script defer>
+    $(document).ready(function () {
+        var ReqStatus = $("#ReqStatus").val() || 0;
+        if (ReqStatus > 0) {
+            $("#cancel_submit").css("display", "none");
+        } else {
+            $("#cancel_submit").css("display", "block");
+        }
+    });
    @*$(document).on('click', '#cancel_submit', function () {
         var reqno = $('#cancel_reqid_val').val()
         $.ajax({

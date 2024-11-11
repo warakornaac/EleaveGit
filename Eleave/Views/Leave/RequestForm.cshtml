@@ -43,7 +43,7 @@
                 <div class="col-sm-4 card-body border-right">
                     <div class="row">
                         <div class="col-sm-4">
-                            <i class="icon feather icon-file-text text-c-blue mb-1 d-block"></i>
+                            <i class="fa fa-umbrella text-c-blue mb-1 d-block"></i>
                         </div>
                         <div class="col-sm-8 text-md-center">
                             <h5>10/1</h5>
@@ -54,7 +54,7 @@
                 <div class="col-sm-4 card-body ">
                     <div class="row">
                         <div class="col-sm-4">
-                            <i class="icon feather icon-file-text text-c-blue mb-1 d-block"></i>
+                            <i class="fa fa-bank text-c-blue mb-1 d-block"></i>
                         </div>
                         <div class="col-sm-8 text-md-center">
                             <h5>10/2</h5>
@@ -78,7 +78,7 @@
                 <div class="col-sm-4 card-body border-right">
                     <div class="row">
                         <div class="col-sm-4">
-                            <i class="icon feather icon-file-text text-c-blue mb-1 d-block"></i>
+                            <i class="fa fa-list-alt text-c-blue mb-1 d-block"></i>
                         </div>
                         <div class="col-sm-8 text-md-center">
                             <h5>10/3</h5>
@@ -89,7 +89,7 @@
                 <div class="col-sm-4 card-body border-top">
                     <div class="row">
                         <div class="col-sm-4">
-                            <i class="icon feather icon-rotate-ccw text-c-red mb-1 d-block"></i>
+                            <i class="fa fa-plus-square text-c-red mb-1 d-block"></i>
                         </div>
                         <div class="col-sm-8 text-md-center">
                             <h5>5</h5>
@@ -102,7 +102,7 @@
     </div>
 </div>
 
-<div class="row">
+<div class="row" style="margin-top: -20px;">
     <div class="col-sm-12">
         <div class="card">
             <div class="card-header">
@@ -518,5 +518,12 @@
             console.log(start.format('DD/MM/YYYY') + ' - ' + end.format('DD/MM/YYYY'));
         });
      }
-
+    document.onreadystatechange = function () {
+        if (document.readyState === 'interactive') {
+            LoadingShow();
+        }
+        if (document.readyState === "complete") {
+            LoadingHide();
+        }
+    }
 </script>

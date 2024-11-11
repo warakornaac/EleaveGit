@@ -97,6 +97,7 @@
                             <tr>
                                 <th>#</th>
                                 <th class="text-center">จัดการ</th>
+                                <th class="text-center">รหัสคำขอ</th>
                                 <th class="text-center">วันที่ขอ</th>
                                 <th class="text-center">ประเภทการขอ</th>
                                 <th class="text-center">ผู้ร้องขอ</th>
@@ -171,6 +172,8 @@
                                     @*<td class="text-center">@leave.UpdatedBy</td>
                                         <td>@(request.UpdateDate?.ToString("dd/MM/yyyy")??"")</td>*@
                                     <td></td>
+                                    <td></td>
+
                                 </tr>
                             }
                         </tbody>
@@ -252,8 +255,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">อนุมัติ/Approve</button>
-                <button type="button" class="btn btn-danger" id="Approv_submit">ปฎิเสท/Reject</button>
+                <button type="button" class="btn btn-success" data-dismiss="modal">อนุมัติ/Approve</button>
+                <button type="button" class="btn btn-danger" id="Approv_submit">ปฎิเสธ/Reject</button>
             </div>
         </div>
     </div>
@@ -442,12 +445,20 @@
 </script>
 
 <script type="text/javascript">
-    $(document).ready(function () {
-        LoadingShow();
-    });
+    //$(document).ready(function () {
+    //    LoadingShow();
+    //});
+    document.onreadystatechange = function () {
+        if (document.readyState === 'interactive') {
+            LoadingShow();
+        }
+        if (document.readyState === "complete") {
+            LoadingHide();
+        }
+    }
 </script>
 
-@if (Model != null)
+@*@if (Model != null)
 {
     <script type="text/javascript">
         $(document).ready(function () {
@@ -456,7 +467,7 @@
             }, 1500);
         });
     </script>
-}
+}*@
 @if (ViewBag.ErrorMessage != null)
 {
     <script>

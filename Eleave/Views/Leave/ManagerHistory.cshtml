@@ -131,7 +131,7 @@
 
                                     </td>
                                     <td class="vcenter">@leave.ReqNo</td>
-                                    <td class="vcenter">@leave.ReqDate</td>
+                                    <td class="vcenter">@(leave.ReqDate)</td>
                                     <td class="text-center">@leave.ReqType</td>
                                     <td class="text-center">@leave.Empname</td>
                                     <td class="text-center">@leave.LeaveType</td>
@@ -203,8 +203,8 @@
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-warning" id="cancel_submit"><i class="fa fa-times"></i> ยกเลิกรายการ</button>
-                <button type="button" class="btn btn-danger" data-dismiss="modal">ปิด</button>
+                <button type="button" class="btn btn-warning" id="cancel_submit"><i class="fa fa-times"></i> ยกเลิกรายการ </button>
+                @*<button type="button" class="btn btn-danger" data-dismiss="modal">ปิด</button>*@
             </div>
         </div>
     </div>
@@ -392,9 +392,9 @@
         $('#reqStatus').val('').trigger('change'); // สถานะคำขอ
         $('#department-selector').val('').trigger('change');
     });
+    $('#reqStart').inputmask('99/99/9999');
+    $('#reqEnd').inputmask('99/99/9999');
     $(document).ready(function () {
-        $('#reqStart').inputmask('99/99/9999');
-        $('#reqEnd').inputmask('99/99/9999');
         $('#leave-his-table').dataTable({
             paging: true,
             pageLength: 50,
