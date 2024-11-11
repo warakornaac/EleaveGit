@@ -55,11 +55,11 @@ namespace Eleave.Controllers
                         UpdateRequestFile = new UpdateRequestFile().Save(ReqNo, fileNameNew, path, (i + 1), EmpId);
                     }
                 }
-                return Json(new { status = "success", message = "SaveRequestForm updated" });
+                return Json(new { status = "success", message = "SaveRequestForm updated", getReqNo = ReqNo });
             }
             catch (Exception ex)
             {
-                return Json(new { status = "error", message = ex.Message });
+                return Json(new { status = "error", message = ex.Message, getReqNo = ReqNo });
             }
         }
         public ActionResult ManagerHistory()
@@ -248,7 +248,7 @@ namespace Eleave.Controllers
             }
             return Json(new { message = message }, JsonRequestBehavior.AllowGet);
         }
-        public ActionResult GetRequestDetail(string ReqNO)
+        public ActionResult GetRequestDetail(string ReqNO, string Flag)
         {
             var ReqDetail = new List<RequestList>();
             string message = string.Empty;
@@ -281,10 +281,12 @@ namespace Eleave.Controllers
                 ViewBag.ReqDetail = new List<object>();
             }
             ViewBag.Message = message;
+            ViewBag.Flag = Flag;
             return PartialView("_RequestDetail", new
             {
                 @ViewBag.Message,
-                @ViewBag.ReqDetail
+                @ViewBag.ReqDetail,
+                @ViewBag.Flag,
             });
         }
 

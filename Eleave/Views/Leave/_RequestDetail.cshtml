@@ -111,21 +111,41 @@
                 </div>
             </div>
             <br>
+
             @Html.Partial("_RequestFileDetail", new { });
-            <div class="row">
-                <hr />
-            </div>
-            <div class="row">
-                <div class="col-sm-6 col-md-6 text-left">
+
+
+
+            if(ViewBag.Flag == "approve") {  
+                <div class="row">
+                    <hr />
                 </div>
-                <div class="col-sm-6 col-md-6 text-right">
-                    @if (@reqDetail.ReqStatus == "0")
-                    {
-                        <button type="button" class="btn btn-warning" id="cancel_submit"><i class="fa fa-times"></i> ยกเลิกรายการ</button>
-                    }
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">ปิด</button>
+                <div class="row">
+                    <div class="col-sm-6 col-md-6 text-left">
+                        <span class="badge badge-light-secondary" style="font-size: 16px;"> คาวมเห็นผู้อนุมัติ </span>
+                    </div>
                 </div>
-            </div>
+                <div class="row pt-2">
+                    <div class="col-12">
+                        <textarea class="form-control" id="apprv_comment"></textarea>
+                    </div>
+                </div>
+             }
+
+            @*<div class="row">
+                    <hr />
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 col-md-6 text-left">
+                    </div>
+                    <div class="col-sm-6 col-md-6 text-right">
+                        @if (@reqDetail.ReqStatus == "0")
+                        {
+                            <button type="button" class="btn btn-warning" id="cancel_submit"><i class="fa fa-times"></i> ยกเลิกรายการ</button>
+                        }
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">ปิด</button>
+                    </div>
+                </div>*@
             //old
             @*<div class="row">
                     <div class="col-md-6">
@@ -188,7 +208,7 @@
 </body>
 </html>
 <script defer>
-   $(document).on('click', '#cancel_submit', function () {
+   @*$(document).on('click', '#cancel_submit', function () {
         var reqno = $('#cancel_reqid_val').val()
         $.ajax({
             url: '@Url.Action("CancelRequest", "Leave")',
@@ -218,5 +238,5 @@
                 }
             }
         });
-   });
+   });*@
 </script>
