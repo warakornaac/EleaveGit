@@ -111,94 +111,24 @@
                 </div>
             </div>
             <br>
-
-            @Html.Partial("_RequestFileDetail", new { });
-
-
-
-            if(ViewBag.Flag == "approve") {  
-                <div class="row">
-                    <hr />
-                </div>
-                <div class="row">
-                    <div class="col-sm-6 col-md-6 text-left">
-                        <span class="badge badge-light-secondary" style="font-size: 16px;"> คาวมเห็นผู้อนุมัติ </span>
+            if (ViewBag.Flag == "approve")
+            {
+                <div id="area-comment-form" hidden>
+                    <div class="row">
+                        <hr />
                     </div>
-                </div>
-                <div class="row pt-2">
-                    <div class="col-12">
-                        <textarea class="form-control" id="apprv_comment"></textarea>
+                    <div class="row">
+                        <div class="col-sm-6 col-md-6 text-left">
+                            <span class="badge badge-light-secondary" style="font-size: 16px;"> คาวมเห็นผู้อนุมัติ </span>
+                        </div>
+                    </div>
+                    <div class="row pt-2">
+                        <div class="col-12">
+                            <textarea class="form-control" id="apprv_comment"></textarea>
+                        </div>
                     </div>
                 </div>
-             }
-
-            @*<div class="row">
-                    <hr />
-                </div>
-                <div class="row">
-                    <div class="col-sm-6 col-md-6 text-left">
-                    </div>
-                    <div class="col-sm-6 col-md-6 text-right">
-                        @if (@reqDetail.ReqStatus == "0")
-                        {
-                            <button type="button" class="btn btn-warning" id="cancel_submit"><i class="fa fa-times"></i> ยกเลิกรายการ</button>
-                        }
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">ปิด</button>
-                    </div>
-                </div>*@
-            //old
-            @*<div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label>รหัสคำขอ: </label>
-                            <p class="border-0 p-0 m-0" name="ReqId" id="cancel_reqid"> @reqDetail.ReqNo </p>
-                            <input type="hidden" name="ReqIdHide" value="" id="cancel_reqid_val" />
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label>วันที่ขอ : </label>
-                            <p class="border-0 p-0 m-0" name="ReqDate" id="cancel_reqdate"> @reqDetail.ReqNo </p>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label>ประเภทการขอ: </label>
-                            <p class="border-0 p-0 m-0" name="ReqTyp" id="cancel_reqtyp"> @reqDetail.ReqNo</p>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label>ประเภทการลา: </label>
-                            <p class="border-0 p-0 m-0" name="LevTyp" id="cancel_levtyp">@reqDetail.ReqNo</p>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label>วันที่ลา(เริ่ม): </label>
-                            <p class="border-0 p-0 m-0" name="StartDate" id="cancel_startdate">@reqDetail.ReqNo</p>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label>วันที่ลา(สิ้นสุด): </label>
-                            <p class="border-0 p-0 m-0" name="EndDate" id="cancel_enddate">@reqDetail.ReqNo</p>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label>สถานะคำขอ: </label>
-                            <div id="cancel_sta"> @reqDetail.ReqNo</div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label>หมายเหตุการลา</label>
-                            <p class="border-0 p-0 m-0 mb-1" name="Remark" id="cancel_remark">@reqDetail.ReqNo</p>
-                        </div>
-
-                    </div>
-                </div>*@
+            }
         }
     }
     else
@@ -208,35 +138,5 @@
 </body>
 </html>
 <script defer>
-   @*$(document).on('click', '#cancel_submit', function () {
-        var reqno = $('#cancel_reqid_val').val()
-        $.ajax({
-            url: '@Url.Action("CancelRequest", "Leave")',
-            data: {
-                ReqNo: reqno
-            },
-            type: 'POST',
-            dataType: 'JSON',
-            success: function (data) {
-                if (data.message == 'Y') {
-                    $('#RequestDetailModal').modal('hide');
-                    Swal.fire({
-                        title: "Success",
-                        text: "ยกเลิกคำร้องสำเร็จ ",
-                        icon: "success"
-                    }).then(() => {
-                        location.reload();
-                    });
-                }
-                else {
-                    $('#RequestDetailModal').modal('hide');
-                    Swal.fire({
-                        title: "Error!!!",
-                        text: "Cancel Failed : " + data.message,
-                        icon: "error"
-                    });
-                }
-            }
-        });
-   });*@
+
 </script>

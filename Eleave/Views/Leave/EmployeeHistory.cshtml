@@ -29,7 +29,7 @@
                     @Html.AntiForgeryToken()
                     <div class="row">
                         <div class="form-group col-lg-4">
-                            <label>ประเภทร้องขอ :</label>
+                            <label class="font-weight-bold">ประเภทร้องขอ :</label>
                             @Html.DropDownList("LeaveType", new List<SelectListItem>
                                                 {
                                                     new SelectListItem() {Text="ลาป่วย", Value="ลาป่วย"},
@@ -39,23 +39,23 @@
 
                         </div>
                         <div class="form-group col-lg-4">
-                            <label>ประเภทการลา :</label>
+                            <label class="font-weight-bold">ประเภทการลา :</label>
                             @Html.DropDownList("reqType", new SelectList(ViewBag.Leavetype, "RequestID", "Description"), "ประเภทการลา", new { @class = "custom-select", @id = "reqType-selector" })
                         </div>
                         <div class="form-group col-lg-4">
-                            <label>สถานะคำขอ :</label>
+                            <label class="font-weight-bold">สถานะคำขอ :</label>
                             @Html.DropDownList("ReqStatus", new SelectList(ViewBag.ReqSta, "LookValue", "LookDesc"), "สถานะคำขอ", new { @class = "custom-select", @id = "reqStatus" })
                         </div>
                         <div class="form-group col-lg-4">
-                            <label>เริ่มวันที่ :</label>
+                            <label class="font-weight-bold">เริ่มวันที่ :</label>
                             @Html.TextBox("ReqStart", null, new { @class = "form-control", @id = "reqStart", @placeholder = "--/--/--" })
                         </div>
                         <div class="form-group col-lg-4">
-                            <label>ถึงวันที่ :</label>
+                            <label class="font-weight-bold">ถึงวันที่ :</label>
                             @Html.TextBox("ReqEnd", null, new { @class = "form-control", @id = "reqEnd", @placeholder = "--/--/--" })
                         </div>
                         <div class="form-group col-lg-4">
-                            <label>รหัสคำขอ :</label>
+                            <label class="font-weight-bold">รหัสคำขอ :</label>
                             @Html.TextBox("reqId", null, new { @class = "form-control", @id = "reqId" })
                         </div>
 
@@ -107,12 +107,12 @@
                                 <tr>
                                     <td>@i</td>
                                     <td>@leave.ReqNo</td>
-                                    <td>@(leave.ReqDate?.ToString("dd/MM/yyyy")??"")</td>
+                                    <td>@leave.ReqDate</td>
                                     <td class="text-center">@leave.ReqType</td>
                                     <td class="text-center">@leave.Empname</td>
                                     <td class="text-center">@leave.LeaveType</td>
-                                    <td>@(leave.StartDate?.ToString("dd/MM/yyyy")??"")</td>
-                                    <td>@(leave.EndDate?.ToString("dd/MM/yyyy")??"")</td>
+                                    <td>@leave.StartDate</td>
+                                    <td>@leave.EndDate</td>
                                     <td class="text-center">@leave.NumDay</td>
                                     @if (leave.ReqStatus == "0")
                                     {
@@ -150,7 +150,7 @@
                                         <p class="p-0 m-0 text-truncate">@leave.Remark</p>
                                     </td>
                                     <td class="text-center">@leave.AcceptBy</td>
-                                    <td>@(leave.AcceptDate?.ToString("dd/MM/yyyy")??"")</td>
+                                    <td>@leave.AcceptDate</td>
                                     @*<td class="text-center">@leave.UpdatedBy</td>
                                         <td>@(leave.UpdateDate?.ToString("dd/MM/yyyy")??"")</td>*@
                                     <td></td>
@@ -244,7 +244,10 @@
     </div>
 </div>
 <script defer>
-    $('#department-selector').select2()
+    $(document).ready(function () {
+        $('#department-selector').select2()
+    });
+
     $('#reqStart').datepicker({
         orientation: "bottom auto",
         format: "dd/mm/yyyy",
@@ -378,10 +381,10 @@
         $('#reqStart').val('');                   // เริ่มวันที่
         $('#reqEnd').val('');                     // ถึงวันที่
     });
-
+    $('#reqStart').inputmask('99/99/9999');
+    $('#reqEnd').inputmask('99/99/9999');
     $(document).ready(function () {
-        $('#reqStart').inputmask('99/99/9999');
-        $('#reqEnd').inputmask('99/99/9999');
+
         $('#leave-his-table').dataTable({
             paging: true,
             pageLength: 50,

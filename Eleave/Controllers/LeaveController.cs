@@ -128,10 +128,23 @@ namespace Eleave.Controllers
             return View(HisRequest);
         }
         [HttpPost]
-        public ActionResult ManagerSearchHistory(string LeaveType, string reqType, string ReqStatus, string ReqStart, string ReqEnd, string Department, string reqId, string empName)
+        public ActionResult ManagerSearchHistory(string LeaveType, string reqType, string ReqStatus, string ReqStart, string ReqEnd, string reqId)
         {
             DateTime? startDate = null;
             DateTime? endDate = null;
+            string EmpID = string.Empty;
+            string EmpName = string.Empty;
+            string EmpDept = string.Empty;
+            if (Session["EmpId"] != null)
+            {
+                EmpID = Session["EmpId"].ToString();
+                EmpName = Session["FullName"].ToString();
+                EmpDept = Session["DeptName"].ToString();
+            }
+            else
+            {
+                return RedirectToAction("Login", "Home");
+            }
 
             // แปลง ReqStart เป็น DateTime 
             if (!string.IsNullOrEmpty(ReqStart))
@@ -153,7 +166,7 @@ namespace Eleave.Controllers
             var leaveHis = new List<RequestList>();
             try
             {
-                leaveHis = new SearchHistoryRequest().GetHis(LeaveType, reqType, ReqStatus, startDate, endDate, Department, reqId, empName);
+                leaveHis = new SearchHistoryRequest().GetHis(LeaveType, reqType, ReqStatus, startDate, endDate, EmpDept, reqId, EmpName);
             }
             catch (Exception ex)
             {

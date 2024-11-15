@@ -1,0 +1,270 @@
+﻿@model IEnumerable<Eleave.Models.ApprovalRequest>
+@{
+    ViewBag.Title = "รับทราบการอนุมัติ";
+
+}
+<div class="page-header">
+    <div class="page-block">
+        <div class="row align-items-center">
+            <div class="col-lg-12">
+                <div class="page-header-title">
+                    <h5 class="m-b-10">รับทราบการอนุมัติ</h5>
+                </div>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index","Home")"><i class="feather icon-home"></i></a></li>
+                    <li class="breadcrumb-item"><a href="@Url.Action("AdminAcknowledge","Acknowledge")">รับทราบการอนุมัติ</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card">
+            @using (Html.BeginForm("ManagerApproval", "Approval", FormMethod.Post, new { @id = "formSearch" }))
+            {
+                <div class="card-body p-3 m-0">
+
+                    @Html.AntiForgeryToken()
+                    <div class="row">
+                        <div class="form-group col-lg-3">
+                            <label class="font-weight-bold">ประเภทร้องขอ :</label>
+                            @Html.DropDownList("LeaveType", new List<SelectListItem>
+                                                {
+                                                    new SelectListItem() {Text="ลาป่วย", Value="ลาป่วย"},
+                                                    new SelectListItem() {Text="ลากิจ", Value="ลากิจ"},
+                                                    new SelectListItem(){Text="ลาพักร้อน",Value="ลาพักร้อน"}
+                                                }, "ลา", new { @class = "custom-select", @id = "LeaveType-selector", @disabled = "disabled" })
+                        </div>
+                        <div class="form-group col-lg-3">
+                            <label class="font-weight-bold">ประเภทการลา :</label>
+                            @Html.DropDownList("reqType", new SelectList(ViewBag.Leavetype, "RequestID", "Description"), "ประเภทการลา", new { @class = "custom-select", @id = "reqType-selector" })
+
+                        </div>
+                        <div class="form-group col-lg-3">
+                            <label class="font-weight-bold">สถานะคำขอ :</label>
+                            @Html.DropDownList("ReqStatus", new SelectList(ViewBag.ReqSta, "LookValue", "LookDesc"), "สถานะคำขอทั้งหมด", new { @class = "custom-select", @id = "reqStatus" })
+                        </div>
+                        <div class="form-group col-lg-3">
+                            <label class="font-weight-bold">เริ่มวันที่ :</label>
+                            @Html.TextBox("ReqStart", null, new { @class = "form-control", @id = "reqStart", @placeholder = "--/--/--" })
+                        </div>
+                        <div class="form-group col-lg-3">
+                            <label class="font-weight-bold">ถึงวันที่ :</label>
+                            @Html.TextBox("ReqEnd", null, new { @class = "form-control", @id = "reqEnd", @placeholder = "--/--/--" })
+                        </div>
+                        <div class="form-group col-lg-3">
+                            <label class="font-weight-bold">แผนก :</label>
+                            @Html.DropDownList("Dept",
+                                               new SelectList(ViewBag.DepartmentList, "LookValue", "LookDesc"),
+                                               "เลือกหน่วยงาน",
+                                               new { @class = "custom-select", @id = "department-selector" })
+                        </div>
+                        <div class="form-group col-lg-3">
+                            <label class="font-weight-bold">รหัสคำขอ :</label>
+                            @Html.TextBox("reqId", null, new { @class = "form-control", @id = "reqId", @placeholder = "รหัสคำขอ" })
+                        </div>
+                        <div class="form-group col-lg-3">
+                            <label class="font-weight-bold">ชื่อพนักงาน :</label>
+                            @Html.TextBox("empName", null, new { @class = "form-control", @id = "empName", @placeholder = "ชื่อพนักงาน" })
+                        </div>
+                        <div class="form-group col-lg-3">
+                            <div class="custom-control custom-checkbox">
+                                @Html.CheckBox("actionFlag", true, new { @class = "custom-control-input", @id = "actionFlag" })
+                                <label class="custom-control-label" for="actionFlag">รายการที่ต้องดำเนินการ</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer p-0">
+                    <div class="col-lg-12">
+                        <div class="form-group float-end m-2">
+                            <input type="button" value="ล้าง" class="btn btn-secondary" id="reset-btn" />
+                            <input type="submit" value="ค้นหา" class="btn btn-primary" />
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="col-xl-12">
+        <div class="card p-0">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped m-0" id="request-table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th class="text-center">ดำเนินการ</th>
+                                <th class="text-center">รหัสคำขอ</th>
+                                <th class="text-center">วันที่ขอ</th>
+                                <th class="text-center">ประเภทการขอ</th>
+                                <th class="text-center">ผู้ร้องขอ</th>
+                                <th class="text-center">ประเภทการลา</th>
+                                <th class="text-center">วันที่ลา(เริ่ม)</th>
+                                <th class="text-center">วันที่ลา(สิ้นสุด)</th>
+                                <th class="text-center">รวมขอลา</th>
+                                <th class="text-center">สถานะคำขอ</th>
+                                <th class="text-center">หมายเหตุการลา</th>
+                                <th class="text-center">ผู้อนุมัติ</th>
+                                <th class="text-center">วันที่อนุมัติ</th>
+                                <th class="text-center">HR ผู้รับอนุมัติ</th>
+                                <th class="text-center">วันที่ HR รับอนุมัติ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                int i = 0;
+                            }
+                            @foreach (var item in Model)
+                            {
+                                i++;
+                                var colorStatus = string.Empty;
+                                var iconStatus = string.Empty;
+                                <tr>
+                                    <td class="text-center">@i</td>
+                                    <td class="text-center">
+                                        <div class="btn btn-warning btn-xs p-1" id="ackbtn_@item.ReqNo" data-reqno="@item.ReqNo"><span class="fa fa-eye p-1"></span></div>
+                                    </td>
+                                    <td class="text-center">@item.ReqNo</td>
+                                    <td class="text-center">@(item.ReqDate?.ToString("dd/MM/yyyy")??"")</td>
+                                    <td class="text-center">@item.ReqType</td>
+                                    <td class="text-center">@item.Empname</td>
+                                    <td class="text-center">@item.LeaveType</td>
+                                    <td class="text-center">@(item.StartDate?.ToString("dd/MM/yyyy")??"")</td>
+                                    <td class="text-center">@(item.EndDate?.ToString("dd/MM/yyyy")??"")</td>
+                                    <td class="text-center">@item.NumDay</td>
+                                    @if (item.ReqStatus == "0")
+                                    {
+                                        colorStatus = "text-warning";
+                                        iconStatus = "fa fa-repeat";
+
+                                    }
+                                    else if (item.ReqStatus == "1")
+                                    {
+                                        colorStatus = "text-success";
+                                        iconStatus = "fa fa-check";
+
+                                    }
+                                    else if (item.ReqStatus == "2")
+                                    {
+                                        colorStatus = "text-danger";
+                                        iconStatus = "fa fa-times";
+                                    }
+                                    else if (item.ReqStatus == "3")
+                                    {
+                                        colorStatus = "text-success";
+                                        iconStatus = "fa fa-check";
+                                    }
+                                    else if (item.ReqStatus == "4")
+                                    {
+                                        colorStatus = "text-danger";
+                                        iconStatus = "fa fa-ban";
+                                    }
+                                    <td class="text-center">
+                                        <div class="@colorStatus badge" style="font-size: 14px;"><i class="@iconStatus" aria-hidden="true"></i><span> @item.ReqStaDesc</span></div>
+                                    </td>
+                                    <td style="max-width: 200px;">
+                                        <p class="p-0 m-0 text-truncate">@item.Remark</p>
+                                    </td>
+                                    <td class="text-center">@item.ApproveBy</td>
+                                    <td>@(item.ApproveDate?.ToString("dd/MM/yyyy")??"")</td>
+                                    <td>@item.AcknowledgeBy</td>
+                                    <td>@(item.AcknowledgeDate?.ToString("dd/MM/yyyy")??"")</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+ModalAck
+
+<div class="modal fade" id="AckRequestModal" tabindex="-1" aria-labelledby="ModalAck" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ModalAck">การรับทราบคำขอ</h5>
+                <div class="col-sm-2 col-md-2 text-right"><button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">ปิด</button></div>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <div id="btn-ack-form">
+                    <button type="button" class="btn btn-success" id="acknowledge-btn">รับทราบ/Acknowledge</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('#reqStart').inputmask('99/99/9999');
+    $('#reqEnd').inputmask('99/99/9999');
+    $('#reqStart').datepicker({
+        orientation: "bottom auto",
+        format: "dd/mm/yyyy",
+        autoclose: true
+    });
+    $('#reqEnd').datepicker({
+        orientation: "bottom auto",
+        format: "dd/mm/yyyy",
+        autoclose: true
+    });
+    $(document).ready(function () {
+        $('#department-selector').select2({
+            width: '100%'
+        });
+        $('#request-table').dataTable({
+            paging: true,
+            pageLength: 50,
+            lengthChange: false,
+            searching: false,
+            ordering: false,
+            select: false,
+            language: {
+                info: "แสดง _START_ ถึง _END_ จากทั้งหมด _TOTAL_ คำร้องขอ",
+                infoEmpty: "ไม่มีข้อมูลให้แสดง"
+            }
+        });
+    });
+    $(document).on('click', '[id^="ackbtn_"]', function (e) {
+        e.preventDefault();
+        var ReqNo = $(this).data('reqno');
+        console.log("Detail ReqNo: " + ReqNo);
+        GetDetailAcknowledge(ReqNo);
+    });
+
+
+    function GetDetailAcknowledge(REQ) {
+        $.ajax({
+            url: '@Url.Action("GetDetailAcknowledge", "Acknowledge")',
+            data: {
+                ReqNo: REQ
+            },
+            type: 'POST',
+            dataType: 'HTML',
+            beforeSend: function () {
+                LoadingShow();
+                $('#AckRequestModal').find('.modal-body').html("");
+            },
+            success: function (data) {
+                $('#AckRequestModal').find('.modal-body').html(data);
+                $('#AckRequestModal').modal('show');
+            }, complete: function (res) {
+                LoadingHide();
+            },
+            error: function (er) {
+                Swal.fire({
+                    icon: 'error',
+                    html: '<p>GetReqDetail :</p><p>' + er.error + '</p>',
+                    confirmButtonColor: '#d33',
+                    confirmButtonText: 'ปิด',
+                    allowOutsideClick: false,
+                    focusConfirm: false,
+                });
+            }
+        });
+    }
+</script>

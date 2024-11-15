@@ -299,14 +299,14 @@ namespace Eleave.Controllers
             return Json(new { message = message, getDirector }, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetApprovflowSettingEdit(string ApprvGrp)
+        public JsonResult GetApprovflowSettingEdit(string ApprvGrp, string ApprvName, string ApprvStep)
         {
             string message = string.Empty;
             var getApproval = new List<ApprovalFlow>();
             try
             {
 
-                getApproval = new GetApprovalFlowEdit().GetApprovalFlows(ApprvGrp);
+                getApproval = new GetApprovalFlowEdit().GetApprovalFlows(ApprvGrp, ApprvName, ApprvStep);
                 message = "Y";
 
 
@@ -356,7 +356,7 @@ namespace Eleave.Controllers
             return Json(new { message = message }, JsonRequestBehavior.AllowGet);
         }
         //UpdateFlow
-        public JsonResult UpdateApprvFlow(string apprvID, string apprvName, string dept, string step, string empId, string action, string desc)
+        public JsonResult UpdateApprvFlow(string apprvID, string oldApprvName, string apprvName, string dept, string step, string oldStep, string empId, string action, string desc)
         {
             string message = string.Empty;
             string username = Session["EmpId"].ToString();
@@ -368,8 +368,10 @@ namespace Eleave.Controllers
                 var cmd = new SqlCommand("P_Update_ApprovalFlow", conn);
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@inApprvID", apprvID);
+                cmd.Parameters.AddWithValue("@inOldApprvName", oldApprvName);
                 cmd.Parameters.AddWithValue("@inApprvName", apprvName);
                 cmd.Parameters.AddWithValue("@inDept", dept);
+                cmd.Parameters.AddWithValue("@inOldStep", oldStep);
                 cmd.Parameters.AddWithValue("@inStep", step);
                 cmd.Parameters.AddWithValue("@inEmpID", empId);
                 cmd.Parameters.AddWithValue("@inAction", action);

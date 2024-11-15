@@ -318,6 +318,7 @@
     <Compile Include="Contact.aspx.designer.cs">
       <DependentUpon>Contact.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Controllers\AcknowledgeController.cs" />
     <Compile Include="Controllers\ApprovalController.cs" />
     <Compile Include="Controllers\EleaveController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
@@ -389,6 +390,8 @@
     <Content Include="Views\Approval\ManagerApproval.cshtml" />
     <Content Include="Views\Leave\_RequestDetail.cshtml" />
     <Content Include="Views\Leave\_RequestFileDetail.cshtml" />
+    <Content Include="Views\Acknowledge\AdminAcknowledge.cshtml" />
+    <Content Include="Views\Acknowledge\_DetailAcknowledge.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

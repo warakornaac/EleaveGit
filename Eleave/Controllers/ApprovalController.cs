@@ -2,10 +2,15 @@
 using Eleave.Models;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
+using System.Drawing.Imaging;
 using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Services.Description;
 
 namespace Eleave.Controllers
 {
@@ -38,7 +43,7 @@ namespace Eleave.Controllers
             string Department = Session["DeptName"].ToString();
             try
             {
-                RequestApprv = new GetApprovalRequest().GetRequests(Department);
+                RequestApprv = new GetApprovalRequest().GetRequests(EmpID, Department);
             }
             catch (Exception ex)
             {
@@ -56,6 +61,17 @@ namespace Eleave.Controllers
         {
             DateTime? startDate = null;
             DateTime? endDate = null;
+            string EmpID = string.Empty;
+            string EmpType = string.Empty;
+            if (Session["EmpId"] != null)
+            {
+                EmpID = Session["EmpId"].ToString();
+                EmpType = Session["UserType"].ToString();
+            }
+            else
+            {
+                return RedirectToAction("Login", "Home");
+            }
 
             // แปลง ReqStart เป็น DateTime 
             if (!string.IsNullOrEmpty(ReqStart))
@@ -77,7 +93,7 @@ namespace Eleave.Controllers
             var requestOrder = new List<ApprovalRequest>();
             try
             {
-                requestOrder = new SearchApprovalRequest().SearchApprv(LeaveType, reqType, ReqStatus, startDate, endDate, Dept, reqId, empName);
+                requestOrder = new SearchApprovalRequest().SearchApprv(EmpID, LeaveType, reqType, ReqStatus, startDate, endDate, Dept, reqId, empName);
             }
             catch (Exception ex)
             {
@@ -90,6 +106,42 @@ namespace Eleave.Controllers
             LoadLeavetype();
             LoadReqStatus();
             return View(requestOrder);
+        }
+        public JsonResult UpdateApproval(string ReqNo, string ApprvStatus, string ApprvComment)
+        {
+            string message = string.Empty;
+            string EmpID = string.Empty;
+            string EmpType = string.Empty;
+            if (Session["EmpId"] != null)
+            {
+                EmpID = Session["EmpId"].ToString();
+                EmpType = Session["UserType"].ToString();
+            }
+            var connectionString = ConfigurationManager.ConnectionStrings["HRIS_DB"].ConnectionString;
+            SqlConnection conn = new SqlConnection(connectionString);
+            conn.Open();
+            try
+            {
+                var cmd = new SqlCommand("P_Save_Approval_Request", conn);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@inReqNo", ReqNo.Trim());
+                cmd.Parameters.AddWithValue("@inUser", EmpID);
+                cmd.Parameters.AddWithValue("@inReqSta", ApprvStatus);
+                cmd.Parameters.AddWithValue("@inComment", ApprvComment);
+                SqlParameter p = new SqlParameter("@OutGenstatus", SqlDbType.NVarChar, 100);
+                p.Direction = ParameterDirection.Output;
+                cmd.Parameters.Add(p);
+                cmd.ExecuteNonQuery();
+                message = cmd.Parameters["@OutGenstatus"].Value.ToString();
+                conn.Close();
+                cmd.Dispose();
+            }
+            catch (Exception ex)
+            {
+                message = ex.Message;
+                conn.Close();
+            }
+            return Json(new { message = message }, JsonRequestBehavior.AllowGet);
         }
         public JsonResult GetRequestDetail(string ReqNO)
         {
@@ -122,6 +174,40 @@ namespace Eleave.Controllers
                 return Json(new { message = message, ReqDetail = new List<object>() }, JsonRequestBehavior.AllowGet);
             }
 
+        }
+        public JsonResult CheckApproval(string ReqNo)
+        {
+            string message = string.Empty;
+            string EmpID = string.Empty;
+            string EmpType = string.Empty;
+            if (Session["EmpId"] != null)
+            {
+                EmpID = Session["EmpId"].ToString();
+                EmpType = Session["UserType"].ToString();
+            }
+            var connectionString = ConfigurationManager.ConnectionStrings["HRIS_DB"].ConnectionString;
+            SqlConnection conn = new SqlConnection(connectionString);
+            conn.Open();
+            try
+            {
+                var cmd = new SqlCommand("P_Check_Approv_Request", conn);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@inReqNo", ReqNo);
+                cmd.Parameters.AddWithValue("@inUser", EmpID);
+                SqlParameter p = new SqlParameter("@OutGenstatus", SqlDbType.NVarChar, 100);
+                p.Direction = ParameterDirection.Output;
+                cmd.Parameters.Add(p);
+                cmd.ExecuteNonQuery();
+                message = cmd.Parameters["@OutGenstatus"].Value.ToString();
+                conn.Close();
+                cmd.Dispose();
+            }
+            catch (Exception ex)
+            {
+                conn.Close();
+                message = ex.Message;
+            }
+            return Json(new { message = message }, JsonRequestBehavior.AllowGet);
         }
         public JsonResult GetLeavetype()
         {

@@ -52,11 +52,11 @@
                         </div>
                         <div class="form-group col-lg-3">
                             <label class="font-weight-bold">เริ่มวันที่ :</label>
-                            @Html.TextBox("ReqStart", DateTime.Now.ToString("dd/MM/yyyy"), new { @class = "form-control", @id = "reqStart", @placeholder = "--/--/--" })
+                            @Html.TextBox("ReqStart",@*DateTime.Now.AddDays(-3).ToString("dd/MM/yyyy")*@null, new { @class = "form-control", @id = "reqStart", @placeholder = "--/--/--" })
                         </div>
                         <div class="form-group col-lg-3">
                             <label class="font-weight-bold">ถึงวันที่ :</label>
-                            @Html.TextBox("ReqEnd", DateTime.Now.AddDays(3).ToString("dd/MM/yyyy"), new { @class = "form-control", @id = "reqEnd", @placeholder = "--/--/--" })
+                            @Html.TextBox("ReqEnd",@*DateTime.Now.AddDays(3).ToString("dd/MM/yyyy")*@null, new { @class = "form-control", @id = "reqEnd", @placeholder = "--/--/--" })
                         </div>
                         <div class="form-group col-lg-3">
                             <label class="font-weight-bold">แผนก :</label>
@@ -97,6 +97,7 @@
                             <tr>
                                 <th>#</th>
                                 <th class="text-center">จัดการ</th>
+                                <th class="text-center">รหัสคำขอ</th>
                                 <th class="text-center">วันที่ขอ</th>
                                 <th class="text-center">ประเภทการขอ</th>
                                 <th class="text-center">ผู้ร้องขอ</th>
@@ -166,11 +167,10 @@
                                     <td style="max-width: 200px;">
                                         <p class="p-0 m-0 text-truncate">@request.Remark</p>
                                     </td>
-                                    <td class="text-center">@request.AcceptBy</td>
-                                    <td>@(request.AcceptDate?.ToString("dd/MM/yyyy")??"")</td>
-                                    @*<td class="text-center">@leave.UpdatedBy</td>
-                                        <td>@(request.UpdateDate?.ToString("dd/MM/yyyy")??"")</td>*@
-                                    <td></td>
+                                    <td class="text-center">@request.ApproveBy</td>
+                                    <td>@(request.ApproveDate?.ToString("dd/MM/yyyy")??"")</td>
+                                    <td>@request.AcknowledgeBy</td>
+                                    <td>@(request.AcknowledgeDate?.ToString("dd/MM/yyyy")??"")</td>
                                 </tr>
                             }
                         </tbody>
@@ -196,6 +196,7 @@
                             <label>รหัสคำขอ: </label>
                             <p class="border-0 p-0 m-0" name="ReqId" id="Approv_reqid"></p>
                             <input type="hidden" name="ReqIdHide" value="" id="Approv_reqid_val" />
+
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -243,7 +244,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-12">
+                    <div class="col-12" id="area-comment-form" hidden>
                         <div class="form-group">
                             <label>ความเห็นผู้อนุมัติ</label>
                             <textarea class="form-control" id="apprv_comment"></textarea>
@@ -252,16 +253,20 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">อนุมัติ/Approve</button>
-                <button type="button" class="btn btn-danger" id="Approv_submit">ปฎิเสท/Reject</button>
+                <div id="btn-apprv-form" hidden>
+                    <button type="button" class="btn btn-secondary" id="Approv_submit" value="1">อนุมัติ/Approve</button>
+                    <button type="button" class="btn btn-danger" id="Approv_reject" value="2">ปฎิเสท/Reject</button>
+                </div>
+
             </div>
         </div>
     </div>
 </div>
 <script defer>
-
-    $('#department-selector').select2({
-        width: '100%'
+    $(document).ready(function () {
+        $('#department-selector').select2({
+            width: '100%'
+        });
     });
     $('#reqStart').inputmask('99/99/9999');
     $('#reqEnd').inputmask('99/99/9999');
@@ -283,9 +288,82 @@
         var reqNo = $(this).data('reqno');
         //console.log(reqNo);
         //$('#ApprovRequestModal').modal('show');
-        GetReqDetail(reqNo);
-    });
 
+        $('#apprv_comment').val('');
+        $('#Approv_reqid_val').val(reqNo);
+        GetReqDetail(reqNo);
+        CheckApprovalReq(reqNo);
+
+    });
+    $(document).on('click', '[id^="Approv_"]', function (e) {
+        e.preventDefault();
+        var status = $(this).val();
+        console.log("Status Btn: " + status);
+        ApproveSubmit(status)
+    });
+    function ApproveSubmit(Sta) {
+        var comment = $('#apprv_comment').val();
+        var reqno = $('#cancel_reqid').text()
+        console.log('ReqNo Sub:' + reqno);
+        $.ajax({
+            url: '@Url.Action("UpdateApproval", "Approval")',
+            data: {
+                ReqNo: reqno,
+                ApprvStatus: Sta,
+                ApprvComment: comment
+            },
+            type: 'POST',
+            dataType: 'JSON',
+            success: function (data) {
+                if (data.message == 'Y') {
+                    $('#ApprovRequestModal').modal('hide');
+                    Swal.fire({
+                        title: "Success!!!",
+                        text: "ทำการอนุมัติเสร็จสิ้น",
+                        icon: "success"
+                    }).then(() => {
+                        location.reload();
+                    });
+                }
+                else {
+                    $('#ApprovRequestModal').modal('hide');
+                    Swal.fire({
+                        title: "Error!!!",
+                        text: data.message,
+                        icon: "error"
+                    }).then(() => {
+                        $('#ApprovRequestModal').modal('show');
+                    });
+                }
+            }
+        })
+    }
+    function CheckApprovalReq(REQ) {
+        $.ajax({
+            url: '@Url.Action("CheckApproval", "Approval")',
+            data: {
+                ReqNo: REQ
+            },
+            type: 'POST',
+            dataType: 'JSON',
+            beforeSend: function () {
+
+            },
+            success: function (res) {
+                if (res.message == 'Y') {
+                    $('#area-comment-form').removeAttr('hidden');
+                    $('#btn-apprv-form').removeAttr('hidden');
+                }
+                else if (res.message == 'N') {
+                    $('#area-comment-form').attr('hidden',true);
+                    $('#btn-apprv-form').attr('hidden', true);
+                }
+                else {
+                    console.log('Error :' + res.message);
+                }
+            }
+        });
+    }
      function GetReqDetail(REQ) {
         $.ajax({
             url: '@Url.Action("GetRequestDetail", "Leave")',
@@ -355,7 +433,7 @@
         });
     }
 
-    $(document).on('click', '#Approv_submit', function () {
+    @*$(document).on('click', '#Approv_submit', function () {
         var reqno = $('#Approv_reqid_val').val()
         $.ajax({
             url: '@Url.Action("ApprovRequest", "Leave")',
@@ -385,7 +463,7 @@
                 }
             }
         });
-    });
+    });*@
 
     function DropdownReqTyp()
     {

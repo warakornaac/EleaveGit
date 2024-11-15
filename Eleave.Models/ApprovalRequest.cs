@@ -23,9 +23,9 @@ namespace Eleave.Models
         public string ReqStatus { get; set; }
         public string ReqStaDesc { get; set; }
         public string Remark { get; set; }
-        public string AcceptBy { get; set; }
-        public DateTime? AcceptDate { get; set; }
-        public string UpdatedBy { get; set; }
-        public DateTime? UpdateDate { get; set; }
+        public string ApproveBy { get; set; }
+        public DateTime? ApproveDate { get; set; }
+        public string AcknowledgeBy { get; set; }
+        public DateTime? AcknowledgeDate { get; set; }
     }
 }

@@ -15,9 +15,10 @@ namespace Eleave.Data
         {
 
         }
-        public List<ApprovalRequest> SearchApprv(string LeaveType, string reqType, string ReqStatus, DateTime? ReqStart, DateTime? ReqEnd, string Department, string reqId, string empName)
+        public List<ApprovalRequest> SearchApprv(string user, string LeaveType, string reqType, string ReqStatus, DateTime? ReqStart, DateTime? ReqEnd, string Department, string reqId, string empName)
         {
             var p = new SqlParameters();
+            p.AddParams("@inUser", user);
             p.AddParams("@inReqSub", reqType);
             p.AddParams("@inReqSta", ReqStatus);
             p.AddParams("@inStartDate", ReqStart);
