@@ -140,7 +140,7 @@
                     @Html.AntiForgeryToken()
                     <div class="row">
                         <div class="form-group col-md-3">
-                            <label>บริษัท :</label>
+                            <label class="font-weight-bold">บริษัท :</label>
                             @Html.DropDownList("Company", new List<SelectListItem>
                                                 {
                                                     new SelectListItem() {Text="AAC", Value="AAC"},
@@ -150,15 +150,15 @@
                         </div>
 
                         <div class="form-group col-md-3">
-                            <label>หน่วยงาน :</label>
+                            <label class="font-weight-bold">หน่วยงาน :</label>
                             @Html.DropDownList("Department", new SelectList(ViewBag.DepartmentList, "LookValue", "LookDesc"), "เลือกหน่วยงาน", new { @class = "custom-select", @id = "department-selector" })
                         </div>
                         <div class="form-group col-md-3">
-                            <label>รหัสพนักงาน :</label>
+                            <label class="font-weight-bold">รหัสพนักงาน :</label>
                             @Html.TextBox("EmpID", null, new { @class = "form-control", @id = "empID" })
                         </div>
                         <div class="form-group col-md-3">
-                            <label>ชื่อพนักงาน :</label>
+                            <label class="font-weight-bold">ชื่อพนักงาน :</label>
                             @Html.TextBox("Name", null, new { @class = "form-control", @id = "empName" })
                         </div>
                     </div>
@@ -166,8 +166,8 @@
                 <div class="card-footer p-0">
                     <div class="col-md-12">
                         <div class="form-group float-end m-2">
-                            <input type="button" value="Reset" class="btn btn-danger" id="reset-btn" />
-                            <input type="submit" value="Search" class="btn btn-success" />
+                            <input type="button" value="ล้าง" class="btn btn-secondary" id="reset-btn" />
+                            <input type="submit" value="ค้นหา" class="btn btn-primary" />
                         </div>
                     </div>
                 </div>
@@ -201,12 +201,12 @@
                                 {
                                     ++rowData;
                                     <tr>
-                                        <td>@rowData</td>
+                                        <td class="text-center">@rowData</td>
                                         <td class="text-center">@dataItem.Company</td>
-                                        <td>@dataItem.EmpId</td>
+                                        <td class="text-center">@dataItem.EmpId</td>
                                         <td>@dataItem.Fullname</td>
-                                        <td>@dataItem.DeptName</td>
-                                        <td>@dataItem.Position</td>
+                                        <td class="text-center">@dataItem.DeptName</td>
+                                        <td class="text-center">@dataItem.Position</td>
                                         @if (dataItem.EmpStatus == "Active")
                                         {
                                             <td class="text-center">
@@ -298,12 +298,20 @@
 </script>
 
 <script type="text/javascript">
-    $(document).ready(function () {
-        LoadingShow();
-    });
+    //$(document).ready(function () {
+    //    LoadingShow();
+    //});
+    document.onreadystatechange = function () {
+        if (document.readyState === 'interactive') {
+            LoadingShow();
+        }
+        if (document.readyState === "complete") {
+            LoadingHide();
+        }
+    }
 </script>
 
-@if (ViewBag.EmployeeList != null)
+@*@if (ViewBag.EmployeeList != null)
 {
     <script type="text/javascript">
         $(document).ready(function () {
@@ -312,4 +320,4 @@
             }, 1500); // หน่วงเวลา (2 วินาที)
         });
     </script>
-}
+}*@

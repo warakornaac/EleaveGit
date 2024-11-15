@@ -167,10 +167,20 @@
                                     <td style="max-width: 200px;">
                                         <p class="p-0 m-0 text-truncate">@request.Remark</p>
                                     </td>
+<<<<<<< HEAD
                                     <td class="text-center">@request.ApproveBy</td>
                                     <td>@(request.ApproveDate?.ToString("dd/MM/yyyy")??"")</td>
                                     <td>@request.AcknowledgeBy</td>
                                     <td>@(request.AcknowledgeDate?.ToString("dd/MM/yyyy")??"")</td>
+=======
+                                    <td class="text-center">@request.AcceptBy</td>
+                                    <td>@(request.AcceptDate?.ToString("dd/MM/yyyy")??"")</td>
+                                    @*<td class="text-center">@leave.UpdatedBy</td>
+                                        <td>@(request.UpdateDate?.ToString("dd/MM/yyyy")??"")</td>*@
+                                    <td></td>
+                                    <td></td>
+
+>>>>>>> 8d4bf2a67ee644b93e10349bc1ed13069be265e2
                                 </tr>
                             }
                         </tbody>
@@ -253,11 +263,16 @@
                 </div>
             </div>
             <div class="modal-footer">
+<<<<<<< HEAD
                 <div id="btn-apprv-form" hidden>
                     <button type="button" class="btn btn-secondary" id="Approv_submit" value="1">อนุมัติ/Approve</button>
                     <button type="button" class="btn btn-danger" id="Approv_reject" value="2">ปฎิเสท/Reject</button>
                 </div>
 
+=======
+                <button type="button" class="btn btn-success" data-dismiss="modal">อนุมัติ/Approve</button>
+                <button type="button" class="btn btn-danger" id="Approv_submit">ปฎิเสธ/Reject</button>
+>>>>>>> 8d4bf2a67ee644b93e10349bc1ed13069be265e2
             </div>
         </div>
     </div>
@@ -520,12 +535,20 @@
 </script>
 
 <script type="text/javascript">
-    $(document).ready(function () {
-        LoadingShow();
-    });
+    //$(document).ready(function () {
+    //    LoadingShow();
+    //});
+    document.onreadystatechange = function () {
+        if (document.readyState === 'interactive') {
+            LoadingShow();
+        }
+        if (document.readyState === "complete") {
+            LoadingHide();
+        }
+    }
 </script>
 
-@if (Model != null)
+@*@if (Model != null)
 {
     <script type="text/javascript">
         $(document).ready(function () {
@@ -534,7 +557,7 @@
             }, 1500);
         });
     </script>
-}
+}*@
 @if (ViewBag.ErrorMessage != null)
 {
     <script>
