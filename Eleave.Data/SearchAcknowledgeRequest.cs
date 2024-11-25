@@ -9,13 +9,10 @@ using System.Threading.Tasks;
 
 namespace Eleave.Data
 {
-    public class SearchApprovalRequest : MsSQL
+    public class SearchAcknowledgeRequest : MsSQL
     {
-        public SearchApprovalRequest() : base(Utils.GetConfig("HRIS_DB"))
-        {
-
-        }
-        public List<ApprovalRequest> SearchApprv(string user, string LeaveType, string reqType, string ReqStatus, DateTime? ReqStart, DateTime? ReqEnd, string Department, string reqId, string empName, string flag)
+        public SearchAcknowledgeRequest() : base(Utils.GetConfig("HRIS_DB")) { }
+        public List<ApprovalRequest> GetAck(string user, string LeaveType, string reqType, string ReqStatus, DateTime? ReqStart, DateTime? ReqEnd, string Department, string reqId, string empName, string flag)
         {
             var p = new SqlParameters();
             p.AddParams("@inUser", user);
@@ -28,9 +25,8 @@ namespace Eleave.Data
             p.AddParams("@inEmpName", empName);
             p.AddParams("@inSchFlag", flag);
 
-            var table = GetData(CmdStore("P_Search_Approval_Request", p));
-            return ConvertExtension.ConvertDataTable<ApprovalRequest>(GetData(CmdStore("P_Search_Approval_Request", p)));
-
+            var table = GetData(CmdStore("P_Search_Acknowledge_Request", p));
+            return ConvertExtension.ConvertDataTable<ApprovalRequest>(GetData(CmdStore("P_Search_Acknowledge_Request", p)));
         }
     }
 }

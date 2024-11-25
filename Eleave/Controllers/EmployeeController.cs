@@ -133,7 +133,13 @@ namespace Eleave.Controllers
         public ActionResult ApprovflowSetting()
         {
             var list = LoadGroupApprovalDropdown();
+            var flow = LoadGroupApprovalDropdown();
+            flow = flow
+                    .GroupBy(emp => emp.ApprGrpId) // Group by value
+                    .Select(group => group.First()) // เลือกรายการแรก
+                    .ToList();
             ViewBag.apprvFlow = list.ToArray();
+            ViewBag.apprvFlowSelect = flow.ToArray();
             LoadDepartments();
             return View();
         }
@@ -141,6 +147,7 @@ namespace Eleave.Controllers
         public ActionResult ApprovflowSetting(string DeptID, string ApprvGrp)
         {
             var list = LoadGroupApprovalDropdown();
+            var flow = LoadGroupApprovalDropdown();
             LoadDepartments();
             if (!string.IsNullOrEmpty(DeptID))
             {
@@ -150,7 +157,16 @@ namespace Eleave.Controllers
             {
                 list = list.Where(emp => emp.ApprGrpId.Trim() == ApprvGrp).ToList();
             }
+            if (!string.IsNullOrEmpty(DeptID))
+            {
+                flow = flow.Where(emp => emp.DepId.Trim() == DeptID.Trim()).ToList();
+            }
+            flow = flow
+                    .GroupBy(emp => emp.ApprGrpId) // Group by value
+                    .Select(group => group.First()) // เลือกรายการแรก
+                    .ToList();
             ViewBag.apprvFlow = list.ToList();
+            ViewBag.apprvFlowSelect = flow.ToArray();
             return View();
         }
         //ApprvFlowSetting 

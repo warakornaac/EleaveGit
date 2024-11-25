@@ -96,24 +96,74 @@
             </div>
         </div>
         <br>
-        @*if (ViewBag.Flag == "approve")
-            {
-                <div id="area-comment-form" hidden>
-                    <div class="row">
-                        <hr />
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-6 col-md-6 text-left">
-                            <span class="badge badge-light-secondary" style="font-size: 16px;"> คาวมเห็นผู้อนุมัติ </span>
-                        </div>
-                    </div>
-                    <div class="row pt-2">
-                        <div class="col-12">
-                            <textarea class="form-control" id="apprv_comment"></textarea>
-                        </div>
-                    </div>
+        <div class="row">
+            <hr />
+        </div>
+        if (ViewBag.CommentAppv.Count > 0)
+        {
+            <div class="row">
+                <div class="col-sm-6 col-md-6 text-left">
+                    <span class="badge badge-light-secondary" style="font-size: 16px;"> ความเห็นของผู้อนุมัติ </span>
                 </div>
-            }*@
+            </div>
+        }
+
+        <div class="row">
+            @if (ViewBag.CommentAppv.Count > 0)
+            {
+                int i = 0;
+                foreach (var comm in ViewBag.CommentAppv)
+                {
+                    i++;
+                    string colorSta = string.Empty;
+                    string iconSta = string.Empty;
+                    if (comm.RequestStatus == "1")
+                    {
+                        colorSta = "text-success";
+                        iconSta = "fa fa-check";
+                    }
+                    else if (comm.RequestStatus == "2")
+                    {
+                        colorSta = "text-danger";
+                        iconSta = "fa fa-times";
+                    }
+                    else if (comm.RequestStatus == "3")
+                    {
+                        colorSta = "text-success";
+                        iconSta = "fa fa-check";
+                    }
+                    else if (comm.RequestStatus == "4")
+                    {
+                        colorSta = "text-danger";
+                        iconSta = "fa fa-ban";
+                    }
+                    <div class="col-12">
+                        <div class="form-group highlight-addon hide-errors">
+                            <label class="control-label font-weight-bold" for="">ผู้อนุมัติคนที่ @i : @comm.ApproveBy</label>
+                            <div class="@colorSta badge" style="font-size: 14px;"><i class="@iconSta" aria-hidden="true"></i><span> @comm.ReqStaDesc</span></div>
+                            <div class="form-control-static">
+                                @*<p class="border-0 p-0 m-0" id="appr_comm_@i">  </p>*@
+                                <textarea class="form-control" id="apprv_comment_@i" style="resize: none;" readonly>@comm.ApprComment</textarea>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            <hr />
+        </div>
+        <div id="ack-comment-div">
+            <div class="row">
+                <div class="col-sm-6 col-md-6 text-left">
+                    <span class="badge badge-light-secondary" style="font-size: 16px;"> ความเห็นของผู้รับทราบ</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <textarea class="form-control" id="ack-comment"></textarea>
+                </div>
+            </div>
+        </div>
+
     }
 }
 else

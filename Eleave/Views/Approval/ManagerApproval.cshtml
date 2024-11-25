@@ -48,7 +48,7 @@
                         </div>
                         <div class="form-group col-lg-3">
                             <label class="font-weight-bold">สถานะคำขอ :</label>
-                            @Html.DropDownList("ReqStatus", new SelectList(ViewBag.ReqSta, "LookValue", "LookDesc", "0"), "สถานะคำขอทั้งหมด", new { @class = "custom-select", @id = "reqStatus" })
+                            @Html.DropDownList("ReqStatus", new SelectList(ViewBag.ReqSta, "LookValue", "LookDesc"), "สถานะคำขอทั้งหมด", new { @class = "custom-select", @id = "reqStatus" })
                         </div>
                         <div class="form-group col-lg-3">
                             <label class="font-weight-bold">เริ่มวันที่ :</label>
@@ -74,7 +74,12 @@
                             <label class="font-weight-bold">ชื่อพนักงาน :</label>
                             @Html.TextBox("empName", null, new { @class = "form-control", @id = "empName", @placeholder = "ชื่อพนักงาน" })
                         </div>
-
+                        <div class="form-group col-lg-3">
+                            <div class="custom-control custom-checkbox">
+                                @Html.CheckBox("actionFlag", true, new { @class = "custom-control-input", @id = "actionFlag" })
+                                <label class="custom-control-label" for="actionFlag">รายการที่ต้องดำเนินการ</label>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="card-footer p-0">
@@ -126,12 +131,12 @@
                                         <div class="btn btn-warning btn-xs p-1" id="aprvbtn_@request.ReqNo" data-reqno="@request.ReqNo"><span class="fa fa-eye p-1"></span></div>
                                     </td>
                                     <td>@request.ReqNo</td>
-                                    <td>@(request.ReqDate?.ToString("dd/MM/yyyy")??"")</td>
+                                    <td>@(request.ReqDate )</td>
                                     <td class="text-center">@request.ReqType</td>
                                     <td class="text-center">@request.Empname</td>
                                     <td class="text-center">@request.LeaveType</td>
-                                    <td>@(request.StartDate?.ToString("dd/MM/yyyy")??"")</td>
-                                    <td>@(request.EndDate?.ToString("dd/MM/yyyy")??"")</td>
+                                    <td>@(request.StartDate )</td>
+                                    <td>@(request.EndDate )</td>
                                     <td class="text-center">@request.NumDay</td>
                                     @if (request.ReqStatus == "0")
                                     {
@@ -167,20 +172,12 @@
                                     <td style="max-width: 200px;">
                                         <p class="p-0 m-0 text-truncate">@request.Remark</p>
                                     </td>
-<<<<<<< HEAD
-                                    <td class="text-center">@request.ApproveBy</td>
-                                    <td>@(request.ApproveDate?.ToString("dd/MM/yyyy")??"")</td>
-                                    <td>@request.AcknowledgeBy</td>
-                                    <td>@(request.AcknowledgeDate?.ToString("dd/MM/yyyy")??"")</td>
-=======
-                                    <td class="text-center">@request.AcceptBy</td>
-                                    <td>@(request.AcceptDate?.ToString("dd/MM/yyyy")??"")</td>
-                                    @*<td class="text-center">@leave.UpdatedBy</td>
-                                        <td>@(request.UpdateDate?.ToString("dd/MM/yyyy")??"")</td>*@
-                                    <td></td>
-                                    <td></td>
 
->>>>>>> 8d4bf2a67ee644b93e10349bc1ed13069be265e2
+                                    <td class="text-center">@request.ApproveBy</td>
+                                    <td>@(request.ApproveDate )</td>
+                                    <td class="text-center">@request.AcknowledgeBy</td>
+                                    <td>@(request.AcknowledgeDate )</td>
+
                                 </tr>
                             }
                         </tbody>
@@ -263,16 +260,10 @@
                 </div>
             </div>
             <div class="modal-footer">
-<<<<<<< HEAD
                 <div id="btn-apprv-form" hidden>
                     <button type="button" class="btn btn-secondary" id="Approv_submit" value="1">อนุมัติ/Approve</button>
                     <button type="button" class="btn btn-danger" id="Approv_reject" value="2">ปฎิเสท/Reject</button>
                 </div>
-
-=======
-                <button type="button" class="btn btn-success" data-dismiss="modal">อนุมัติ/Approve</button>
-                <button type="button" class="btn btn-danger" id="Approv_submit">ปฎิเสธ/Reject</button>
->>>>>>> 8d4bf2a67ee644b93e10349bc1ed13069be265e2
             </div>
         </div>
     </div>
@@ -298,17 +289,21 @@
     //$(document).on('change', '#LeaveType-selector', function () {
     //    DropdownReqTyp();
     //});
-    $(document).on('click', '[id^="aprvbtn_"]', function (e) {
+    $(document).on('click', '[id^="aprvbtn_"]', async function (e) {
         e.preventDefault();
         var reqNo = $(this).data('reqno');
-        //console.log(reqNo);
-        //$('#ApprovRequestModal').modal('show');
 
         $('#apprv_comment').val('');
         $('#Approv_reqid_val').val(reqNo);
-        GetReqDetail(reqNo);
-        CheckApprovalReq(reqNo);
 
+        try {
+
+            await GetReqDetail(reqNo);
+
+            await CheckApprovalReq(reqNo);
+        } catch (error) {
+            console.error("Error during approval process:", error);
+        }
     });
     $(document).on('click', '[id^="Approv_"]', function (e) {
         e.preventDefault();
@@ -354,7 +349,7 @@
         })
     }
     function CheckApprovalReq(REQ) {
-        $.ajax({
+        return $.ajax({
             url: '@Url.Action("CheckApproval", "Approval")',
             data: {
                 ReqNo: REQ
@@ -379,8 +374,8 @@
             }
         });
     }
-     function GetReqDetail(REQ) {
-        $.ajax({
+    function GetReqDetail(REQ) {
+        return $.ajax({
             url: '@Url.Action("GetRequestDetail", "Leave")',
             data: {
                 ReqNO: REQ,
@@ -549,15 +544,15 @@
 </script>
 
 @*@if (Model != null)
-{
-    <script type="text/javascript">
-        $(document).ready(function () {
-            setTimeout(function () {
-                LoadingHide();
-            }, 1500);
-        });
-    </script>
-}*@
+    {
+        <script type="text/javascript">
+            $(document).ready(function () {
+                setTimeout(function () {
+                    LoadingHide();
+                }, 1500);
+            });
+        </script>
+    }*@
 @if (ViewBag.ErrorMessage != null)
 {
     <script>

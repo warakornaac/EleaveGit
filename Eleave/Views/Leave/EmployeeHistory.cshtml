@@ -149,12 +149,10 @@
                                     <td style="max-width: 200px;">
                                         <p class="p-0 m-0 text-truncate">@leave.Remark</p>
                                     </td>
-                                    <td class="text-center">@leave.AcceptBy</td>
-                                    <td>@leave.AcceptDate</td>
-                                    @*<td class="text-center">@leave.UpdatedBy</td>
-                                        <td>@(leave.UpdateDate?.ToString("dd/MM/yyyy")??"")</td>*@
-                                    <td></td>
-                                    <td></td>
+                                    <td class="text-center">@leave.ApproveBy</td>
+                                    <td>@(leave.ApproveDate)</td>
+                                    <td class="text-center"> @leave.AcknowledgeBy</td>
+                                    <td>@leave.AcknowledgeDate</td>
                                     @if (leave.EmpId.ToString() == Session["EmpId"].ToString() && leave.ReqStatus == "0")
                                     {
                                         <td class="text-center"><a href="#" id="cancelbtn_@leave.ReqNo" data-reqno="@leave.ReqNo">Cancel</a></td>

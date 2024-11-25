@@ -48,62 +48,62 @@
                 <div class="col-sm-3 col-md-3">
                     <div class="form-group highlight-addon hide-errors">
                         <label class="control-label font-weight-bold" for="">ประเภทการขอ	 : </label>
-                        <divs class="form-control-static">
+                        <div class="form-control-static">
                             <p class="border-0 p-0 m-0" name="ReqId" id="cancel_reqtyp"> @reqDetail.ReqType </p>
-                        </divs>
+                        </div>
                     </div>
                 </div>
                 <div class="col-sm-3 col-md-3">
                     <div class="form-group highlight-addon hide-errors">
                         <label class="control-label font-weight-bold" for="">ประเภทการลา	 : </label>
-                        <divs class="form-control-static">
+                        <div class="form-control-static">
                             <p class="border-0 p-0 m-0" name="LevTyp" id="cancel_levtyp"> @reqDetail.LeaveType </p>
-                        </divs>
+                        </div>
                     </div>
                 </div>
                 <div class="col-sm-3 col-md-3">
                     <div class="form-group highlight-addon hide-errors">
                         <label class="control-label font-weight-bold" for="">วันที่ลา(เริ่ม)	 : </label>
-                        <divs class="form-control-static">
+                        <div class="form-control-static">
                             <p class="border-0 p-0 m-0" name="StartDate" id="cancel_startdate"> @reqDetail.StartDate </p>
-                        </divs>
+                        </div>
                     </div>
                 </div>
                 <div class="col-sm-3 col-md-3">
                     <div class="form-group highlight-addon hide-errors">
                         <label class="control-label font-weight-bold" for="">วันที่ลา(สิ้นสุด)	 : </label>
-                        <divs class="form-control-static">
+                        <div class="form-control-static">
                             <p class="border-0 p-0 m-0" name="EndDate" id="cancel_enddate"> @reqDetail.EndDate </p>
-                        </divs>
+                        </div>
                     </div>
                 </div>
                 <div class="col-sm-3 col-md-3">
                     <div class="form-group highlight-addon hide-errors">
                         <label class="control-label font-weight-bold" for="">จำนวนวัน	 : </label>
-                        <divs class="form-control-static">
+                        <div class="form-control-static">
                             <p class="border-0 p-0 m-0" name="NumDay" id="NumDay"> @reqDetail.NumDay </p>
-                        </divs>
+                        </div>
                     </div>
                 </div>
                 <div class="col-sm-3 col-md-3">
                     <div class="form-group highlight-addon hide-errors">
                         <label class="control-label font-weight-bold" for="">สถานะคำขอ : </label>
-                        <divs class="form-control-static">
+                        <div class="form-control-static">
                             <p class="border-0 p-0 m-0" name="CancelStatus" id="cancel_status"> @reqDetail.ReqStaDesc </p>
-                        </divs>
+                        </div>
                     </div>
                 </div>
                 <div class="col-sm-12 col-md-12">
                     <div class="form-group highlight-addon hide-errors">
                         <label class="control-label font-weight-bold" for="">หมายเหตุการลา	 : </label>
-                        <divs class="form-control-static">
+                        <div class="form-control-static">
                             <p class="border-0 p-0 m-0" name="Remark" id="cancel_remark"> @reqDetail.Remark </p>
-                        </divs>
+                        </div>
                     </div>
                 </div>
             </div>
             if (ViewBag.Flag == "approve")
-            { 
+            {
                 <div class="row">
                     <hr />
                 </div>
@@ -190,7 +190,61 @@
                     </div>
                 </div>
             }
+            <div class="row">
+                <hr />
+            </div>
+            if (ViewBag.ApprvComment.Count > 0)
+            {
+                <div class="row">
+                    <div class="col-sm-6 col-md-6 text-left">
+                        <span class="badge badge-light-secondary" style="font-size: 16px;"> คาวมเห็นผู้อนุมัติ </span>
+                    </div>
+                </div>
+            }
+            <div class="row">
+                @if (ViewBag.ApprvComment != null)
+                {
+                    int i = 0;
+                    foreach (var comm in ViewBag.ApprvComment)
+                    {
+                        i++;
+                        string colorSta = string.Empty;
+                        string iconSta = string.Empty;
+                        if (comm.RequestStatus == "1")
+                        {
+                            colorSta = "text-success";
+                            iconSta = "fa fa-check";
+                        }
+                        else if (comm.RequestStatus == "2")
+                        {
+                            colorSta = "text-danger";
+                            iconSta = "fa fa-times";
+                        }
+                        else if (comm.RequestStatus == "3")
+                        {
+                            colorSta = "text-success";
+                            iconSta = "fa fa-check";
+                        }
+                        else if (comm.RequestStatus == "4")
+                        {
+                            colorSta = "text-danger";
+                            iconSta = "fa fa-ban";
+                        }
+                        <div class="col-12">
+                            <div class="form-group highlight-addon hide-errors">
+                                <label class="control-label font-weight-bold" for="">ผู้อนุมัติคนที่ @i : @comm.ApproveBy</label>
+                                <div class="@colorSta badge" style="font-size: 14px;"><i class="@iconSta" aria-hidden="true"></i><span> @comm.ReqStaDesc</span></div>
+                                <div class="form-control-static">
+                                    @*<p class="border-0 p-0 m-0" id="appr_comm_@i">  </p>*@
+                                    <textarea class="form-control" id="apprv_comment_@i" style="resize: none;" readonly>@comm.ApprComment</textarea>
+                                </div>
+                            </div>
+                        </div>
+                    }
 
+                }
+            </div>
+            <br />
             <div class="row">
                 <hr />
             </div>
@@ -198,12 +252,13 @@
                 <div class="col-sm-6 col-md-6 text-left">
                     <span class="badge badge-light-secondary" style="font-size: 16px;"> Attach File </span>
                 </div>
-            </div>
-<<<<<<< HEAD
-            <br>
-            if (ViewBag.Flag == "approve")
-            {
-                <div id="area-comment-form" hidden>
+            </div><br>
+
+            @Html.Partial("_RequestFileDetail", new { });
+
+
+            @*if (ViewBag.Flag == "approve")
+                {
                     <div class="row">
                         <hr />
                     </div>
@@ -217,15 +272,8 @@
                             <textarea class="form-control" id="apprv_comment"></textarea>
                         </div>
                     </div>
-                </div>
-            }
-=======
-
-            @Html.Partial("_RequestFileDetail", new { });
-
-
-            if (ViewBag.Flag == "approve")
-            {
+                }*@
+            <div id="area-comment-form" hidden>
                 <div class="row">
                     <hr />
                 </div>
@@ -239,7 +287,7 @@
                         <textarea class="form-control" id="apprv_comment"></textarea>
                     </div>
                 </div>
-            }
+            </div>
 
             @*<div class="row">
                     <hr />
@@ -308,7 +356,6 @@
 
                     </div>
                 </div>*@
->>>>>>> 8d4bf2a67ee644b93e10349bc1ed13069be265e2
         }
     }
     else
@@ -318,9 +365,6 @@
 </body>
 </html>
 <script defer>
-<<<<<<< HEAD
-
-=======
     $(document).ready(function () {
         var ReqStatus = $("#ReqStatus").val() || 0;
         if (ReqStatus > 0) {
@@ -360,5 +404,4 @@
             }
         });
    });*@
->>>>>>> 8d4bf2a67ee644b93e10349bc1ed13069be265e2
 </script>

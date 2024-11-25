@@ -21,7 +21,7 @@
 <div class="row">
     <div class="col-xl-12">
         <div class="card">
-            @using (Html.BeginForm("ManagerApproval", "Approval", FormMethod.Post, new { @id = "formSearch" }))
+            @using (Html.BeginForm("AdminAcknowledge", "Acknowledge", FormMethod.Post, new { @id = "formSearch" }))
             {
                 <div class="card-body p-3 m-0">
 
@@ -127,12 +127,12 @@
                                         <div class="btn btn-warning btn-xs p-1" id="ackbtn_@item.ReqNo" data-reqno="@item.ReqNo"><span class="fa fa-eye p-1"></span></div>
                                     </td>
                                     <td class="text-center">@item.ReqNo</td>
-                                    <td class="text-center">@(item.ReqDate?.ToString("dd/MM/yyyy")??"")</td>
+                                    <td class="text-center">@(item.ReqDate )</td>
                                     <td class="text-center">@item.ReqType</td>
                                     <td class="text-center">@item.Empname</td>
                                     <td class="text-center">@item.LeaveType</td>
-                                    <td class="text-center">@(item.StartDate?.ToString("dd/MM/yyyy")??"")</td>
-                                    <td class="text-center">@(item.EndDate?.ToString("dd/MM/yyyy")??"")</td>
+                                    <td class="text-center">@(item.StartDate )</td>
+                                    <td class="text-center">@(item.EndDate )</td>
                                     <td class="text-center">@item.NumDay</td>
                                     @if (item.ReqStatus == "0")
                                     {
@@ -168,9 +168,9 @@
                                         <p class="p-0 m-0 text-truncate">@item.Remark</p>
                                     </td>
                                     <td class="text-center">@item.ApproveBy</td>
-                                    <td>@(item.ApproveDate?.ToString("dd/MM/yyyy")??"")</td>
+                                    <td>@(item.ApproveDate )</td>
                                     <td>@item.AcknowledgeBy</td>
-                                    <td>@(item.AcknowledgeDate?.ToString("dd/MM/yyyy")??"")</td>
+                                    <td>@(item.AcknowledgeDate )</td>
                                 </tr>
                             }
                         </tbody>
@@ -180,7 +180,7 @@
         </div>
     </div>
 </div>
-ModalAck
+@*ModalAck*@
 
 <div class="modal fade" id="AckRequestModal" tabindex="-1" aria-labelledby="ModalAck" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -192,7 +192,7 @@ ModalAck
             <div class="modal-body">
             </div>
             <div class="modal-footer">
-                <div id="btn-ack-form">
+                <div id="btn-ack-form" hidden>
                     <button type="button" class="btn btn-success" id="acknowledge-btn">รับทราบ/Acknowledge</button>
                 </div>
             </div>
@@ -229,16 +229,120 @@ ModalAck
             }
         });
     });
-    $(document).on('click', '[id^="ackbtn_"]', function (e) {
+    $(document).on('click', '#reset-btn', function () {
+        $('#reqType-selector').val('').trigger('change');
+        $('#reqStatus').val('').trigger('change');
+        $('#reqStart').val('');
+        $('#reqEnd').val('');
+        $('#reqStatus').val('').trigger('change');
+        $('#department-selector').val('').trigger('change');
+        $('#reqId').val('');
+        $('#empName').val('');
+
+    });
+    $(document).on('click', '[id^="ackbtn_"]', async function (e) {
         e.preventDefault();
         var ReqNo = $(this).data('reqno');
         console.log("Detail ReqNo: " + ReqNo);
-        GetDetailAcknowledge(ReqNo);
-    });
+        try {
+            await GetDetailAcknowledge(ReqNo);
 
+            await CheckAcknowledge(ReqNo);
+        }
+        catch(error) {
+            console.error("Error during acknowledge process:", error);
+        }
+    });
+    $(document).on('click', '#acknowledge-btn', function (e) {
+        e.preventDefault();
+        var ReqNo = $('#ack_reqid').text();
+        var Ack_comment = $('#ack-comment').val();
+        console.log('Req :' + ReqNo);
+        console.log('Comment :' + Ack_comment);
+        SaveAcknowledge(ReqNo, Ack_comment);
+    });
+    function SaveAcknowledge(REQ, ack_comm) {
+        $.ajax({
+            url: '@Url.Action("SaveAcknowledge", "Acknowledge")',
+            data: {
+                ReqNo: REQ,
+                AckComment: ack_comm
+            },
+            type: 'POST',
+            dataType: 'JSON',
+            success: function (res) {
+                if (res.message == 'Y') {
+                    $('#AckRequestModal').modal('hide');
+                    Swal.fire({
+                        title: "Success!!!",
+                        text: "ทำการอนุมัติเสร็จสิ้น",
+                        icon: "success"
+                    }).then(() => {
+                        location.reload();
+                    });
+                }
+                else {
+                    $('#AckRequestModal').modal('hide');
+                    Swal.fire({
+                        title: "Error!!!",
+                        text: res.message,
+                        icon: "error"
+                    }).then(() => {
+                        $('#AckRequestModal').modal('show');
+                    });
+                }
+            }
+        });
+    }
+    function CheckAcknowledge(REQ) {
+        return $.ajax({
+            url: '@Url.Action("CheckAcknowledge", "Acknowledge")',
+            data: {
+                ReqNo:REQ
+            },
+            type: 'POST',
+            dataType: 'JSON',
+            cache: false,
+            beforeSend: function () {
+                LoadingShow();
+            },
+            success: function (res) {
+                if (res.message === "Y") {
+                    $('#ack-comment-div').removeClass('d-none');
+                    $('#btn-ack-form').removeClass('d-none');
+                }
+                else if (res.message === "N") {
+                    $('#ack-comment-div').addClass('d-none');
+                    $('#btn-ack-form').addClass('d-none');
+                }
+                else {
+                    Swal.fire({
+                        icon: 'error',
+                        html: '<p>Error :</p><p>' + res.message + '</p>',
+                        confirmButtonColor: '#d33',
+                        confirmButtonText: 'ปิด',
+                        allowOutsideClick: false,
+                        focusConfirm: false,
+                    });
+                }
+            }, complete: function (res) {
+                LoadingHide();
+            },
+            error: function (er) {
+                Swal.fire({
+                    icon: 'error',
+                    html: '<p>GetReqDetail :</p><p>' + er.error + '</p>',
+                    confirmButtonColor: '#d33',
+                    confirmButtonText: 'ปิด',
+                    allowOutsideClick: false,
+                    focusConfirm: false,
+                });
+            }
+        });
+    }
 
     function GetDetailAcknowledge(REQ) {
-        $.ajax({
+        return $.ajax({
             url: '@Url.Action("GetDetailAcknowledge", "Acknowledge")',
             data: {
                 ReqNo: REQ

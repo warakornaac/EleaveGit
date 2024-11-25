@@ -123,21 +123,11 @@
                                 var iconStatus = string.Empty;
                                 <tr>
                                     <td class="vcenter">@i</td>
-                                    @if (leave.ReqStatus == "0")
-                                    {
-                                        <td class="text-center vcenter">
-                                            <div class="btn btn-info btn-xs p-1" id="btnview_@leave.ReqNo" data-reqno="@leave.ReqNo"><span class="fa fa-eye p-1"></span></div>
-                                            @*@if (leave.ReqStatus == "0")
-                                                {
-                                                    <div class="btn btn-danger btn-xs p-1" id="cancelbtn_@leave.ReqNo" data-reqno="@leave.ReqNo"><span class="fa fa-times p-1"></span></div>
-                                                }*@
 
-                                        </td>
-                                    }
-                                    else
-                                    {
-                                        <td></td>
-                                    }
+                                    <td class="text-center vcenter">
+                                        <div class="btn btn-info btn-xs p-1" id="btnview_@leave.ReqNo" data-reqno="@leave.ReqNo"><span class="fa fa-eye p-1"></span></div>
+
+                                    </td>
 
                                     <td class="vcenter">@leave.ReqNo</td>
                                     <td class="vcenter">@(leave.ReqDate)</td>
@@ -181,12 +171,10 @@
                                     <td style="max-width: 200px;">
                                         <p class="p-0 m-0 text-truncate">@leave.Remark</p>
                                     </td>
-                                    <td class="text-center">@leave.AcceptBy</td>
-                                    <td>@(leave.AcceptDate?.ToString("dd/MM/yyyy")??"")</td>
-                                    @*<td class="text-center">@leave.UpdatedBy</td>
-                                        <td>@(leave.UpdateDate?.ToString("dd/MM/yyyy")??"")</td>*@
-                                    <td></td>
-                                    <td></td>
+                                    <td class="text-center">@leave.ApproveBy</td>
+                                    <td>@(leave.ApproveDate)</td>
+                                    <td class="text-center">@leave.AcknowledgeBy</td>
+                                    <td>@(leave.AcknowledgeDate)</td>
 
                                 </tr>
                             }
@@ -407,10 +395,6 @@
     $('#reqStart').inputmask('99/99/9999');
     $('#reqEnd').inputmask('99/99/9999');
     $(document).ready(function () {
-<<<<<<< HEAD
-
-=======
->>>>>>> 8d4bf2a67ee644b93e10349bc1ed13069be265e2
         $('#leave-his-table').dataTable({
             paging: true,
             pageLength: 50,

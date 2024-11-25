@@ -57,12 +57,13 @@ namespace Eleave.Controllers
             return View(RequestApprv);
         }
         [HttpPost]
-        public ActionResult ManagerApproval(string LeaveType, string reqType, string ReqStatus, string ReqStart, string ReqEnd, string Dept, string reqId, string empName)
+        public ActionResult ManagerApproval(string LeaveType, string reqType, string ReqStatus, string ReqStart, string ReqEnd, string Dept, string reqId, string empName, bool actionFlag)
         {
             DateTime? startDate = null;
             DateTime? endDate = null;
             string EmpID = string.Empty;
             string EmpType = string.Empty;
+            string flag = actionFlag ? "1" : "0";
             if (Session["EmpId"] != null)
             {
                 EmpID = Session["EmpId"].ToString();
@@ -93,7 +94,7 @@ namespace Eleave.Controllers
             var requestOrder = new List<ApprovalRequest>();
             try
             {
-                requestOrder = new SearchApprovalRequest().SearchApprv(EmpID, LeaveType, reqType, ReqStatus, startDate, endDate, Dept, reqId, empName);
+                requestOrder = new SearchApprovalRequest().SearchApprv(EmpID, LeaveType, reqType, ReqStatus, startDate, endDate, Dept, reqId, empName, flag);
             }
             catch (Exception ex)
             {
@@ -146,10 +147,12 @@ namespace Eleave.Controllers
         public JsonResult GetRequestDetail(string ReqNO)
         {
             var ReqDetail = new List<RequestList>();
+
             string message = string.Empty;
             try
             {
                 ReqDetail = new GetRequestDetail().Get(ReqNO);
+
                 var reqDetailFormatted = ReqDetail.Select(x => new
                 {
                     x.ReqNo,
