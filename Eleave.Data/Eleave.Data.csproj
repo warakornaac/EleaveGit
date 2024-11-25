@@ -47,6 +47,7 @@
     <Compile Include="GetApprovalFlowEdit.cs" />
     <Compile Include="GetApprovalFlowList.cs" />
     <Compile Include="GetApprovalRequest.cs" />
+    <Compile Include="GetCommentAcknowledge.cs" />
     <Compile Include="GetCommentApprover.cs" />
     <Compile Include="GetLeaveType.cs" />
     <Compile Include="GetLookupData.cs" />

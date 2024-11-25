@@ -98,10 +98,12 @@ namespace Eleave.Controllers
         {
             var Request = new List<RequestList>();
             var Comment = new List<ApproveCommentRequest>();
+            var AckComment = new List<ApproveCommentRequest>();
             try
             {
                 Request = new GetRequestDetail().Get(ReqNo);
                 Comment = new GetCommentApprover().GetComment(ReqNo);
+                AckComment = new GetCommentAcknowledge().GetComment(ReqNo);
             }
             catch (Exception ex)
             {
@@ -109,6 +111,7 @@ namespace Eleave.Controllers
             }
             ViewBag.ReqDetail = Request;
             ViewBag.CommentAppv = Comment;
+            ViewBag.AckComment = AckComment;
 
             return PartialView("_DetailAcknowledge", new
             {

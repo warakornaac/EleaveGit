@@ -264,13 +264,15 @@ namespace Eleave.Controllers
         public ActionResult GetRequestDetail(string ReqNO, string Flag)
         {
             var ReqDetail = new List<RequestList>();
-            var Comment = new List<ApproveCommentRequest>();
+            var AppComment = new List<ApproveCommentRequest>();
+            var AckComment = new List<ApproveCommentRequest>();
             string message = string.Empty;
             try
             {
 
                 ReqDetail = new GetRequestDetail().Get(ReqNO);
-                Comment = new GetCommentApprover().GetComment(ReqNO);
+                AppComment = new GetCommentApprover().GetComment(ReqNO);
+                AckComment = new GetCommentAcknowledge().GetComment(ReqNO);
                 //var reqDetailFormatted = ReqDetail.Select(x => new
                 //{
                 //    x.ReqNo,
@@ -289,7 +291,8 @@ namespace Eleave.Controllers
                 message = "Y";
                 //return Json(new { message = message, ReqDetail = reqDetailFormatted }, JsonRequestBehavior.AllowGet);
                 ViewBag.ReqDetail = ReqDetail;
-                ViewBag.ApprvComment = Comment;
+                ViewBag.ApprvComment = AppComment;
+                ViewBag.AckComment = AckComment;
             }
             catch (Exception ex)
             {
