@@ -84,7 +84,7 @@ namespace Eleave.Controllers
 
             try
             {
-                HisRequest = new GetRequestList().GetRequests(EmpID, EmpType);
+                HisRequest = new GetRequestList().GetRequests(EmpID, EmpType, "");
             }
             catch (Exception ex)
             {
@@ -114,7 +114,7 @@ namespace Eleave.Controllers
 
             try
             {
-                HisRequest = new GetRequestList().GetRequests(EmpID, EmpType);
+                HisRequest = new GetRequestList().GetRequests(EmpID, EmpType, "");
             }
             catch (Exception ex)
             {

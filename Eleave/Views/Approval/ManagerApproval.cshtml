@@ -268,11 +268,20 @@
         </div>
     </div>
 </div>
-<script defer>
+
+<script>
+    const queryString = decodeURIComponent(window.location.search);
+    const params = new URLSearchParams(queryString);
+    const page = params.get('req');
     $(document).ready(function () {
         $('#department-selector').select2({
             width: '100%'
         });
+        console.log('Param :' + page);
+        if (page) {
+            $('#aprvbtn_' + page).click();
+            console.log('click:' + page);
+        }
     });
     $('#reqStart').inputmask('99/99/9999');
     $('#reqEnd').inputmask('99/99/9999');
@@ -528,7 +537,6 @@
         });
     });
 </script>
-
 <script type="text/javascript">
     //$(document).ready(function () {
     //    LoadingShow();

@@ -1,4 +1,7 @@
-﻿@if (ViewBag.ReqDetail != null)
+﻿@{
+    string EMPID = Session["EmpId"].ToString();
+}
+@if (ViewBag.ReqDetail != null)
 {
     foreach (var reqDetail in ViewBag.ReqDetail)
     {
@@ -200,9 +203,23 @@
                 </div>
             }
         </div>
+        <div id="app-comment-form" class="d-none">
+            <div class="row">
+                <hr />
+            </div>
+            <div class="row">
+                <div class="col-sm-6 col-md-6 text-left">
+                    <span class="badge badge-light-secondary" style="font-size: 16px;"> คาวมเห็นผู้อนุมัติ </span>
+                </div>
+            </div>
+            <div class="row pt-2">
+                <div class="col-12">
+                    <textarea class="form-control" id="apprv_comment"></textarea>
+                </div>
+            </div>
+        </div>
 
-
-        <div id="ack-comment-div">
+        <div id="ack-comment-div" class="d-none">
             <div class="row">
                 <div class="col-sm-6 col-md-6 text-left">
                     <span class="badge badge-light-secondary" style="font-size: 16px;"> ความเห็นของผู้รับทราบ</span>
@@ -214,10 +231,27 @@
                 </div>
             </div>
         </div>
-
     }
 }
 else
 {
     <div class="alert alert-danger text-center" style="font-size: 16px; font-weight: bold;"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> ไม่พบข้อมูล</div>
 }
+
+<script>
+    $(document).ready(function () {
+        var ReqStatus = $("#ReqStatus").val() || 0;
+        var EmpString = $('#ReqEmpId').val();
+        if (EmpString == '@EMPID') {
+            if (ReqStatus > 0) {
+                $("#cancel_alt_submit").css("display", "none");
+            }
+            else {
+                $("#cancel_alt_submit").css("display", "block");
+            }
+        }
+        else {
+            $("#cancel_alt_submit").css("display", "none");
+        }
+    });
+</script>

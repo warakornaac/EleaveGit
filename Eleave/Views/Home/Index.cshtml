@@ -96,72 +96,39 @@
             <div class="card-header">
                 <h5>Leave Benefits | สิทธิ์วันลา</h5>
             </div>
-            <div class="row-table">
-                <div class="col-sm-6 card-body br">
-                    <div class="row">
-                        <div class="col-sm-4">
-                            @*<i class="icon feather icon-share-2 text-c-blue mb-1 d-block"></i>*@
-                            <i class="fa fa-medkit text-c-green mb-1 d-block"></i>
-                        </div>
-                        <div class="col-sm-8 text-md-center">
-                            <h5>10</h5>
-                            <span>ลาป่วย</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-6 card-body">
-                    <div class="row">
-                        <div class="col-sm-4">
-                            @*<i class="icon feather icon-wifi text-c-blue mb-1 d-block"></i>*@
-                            <i class="icon feather icon-file-text text-c-blue mb-1 d-block"></i>
-                        </div>
-                        <div class="col-sm-8 text-md-center">
-                            <h5>60</h5>
-                            <span>ลากิจ</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row-table">
-                <div class="col-sm-6 card-body br border-top">
-                    <div class="row">
-                        <div class="col-sm-4">
-                            @*<i class="icon feather icon-rotate-ccw text-c-blue mb-1 d-block"></i>*@
-                            <i class="fa fa-map-marker text-c-blue mb-1 d-block"></i>
-                        </div>
-                        <div class="col-sm-8 text-md-center">
-                            <h5>3</h5>
-                            <span>ลาพักร้อน</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-6 card-body border-top">
-                    <div class="row">
-                        <div class="col-sm-4">
-                            @*<i class="icon feather icon-shopping-cart text-c-blue mb-1 d-blockz"></i>*@
-                            <i class="icon feather icon-rotate-ccw text-c-blue mb-1 d-block"></i>
-                        </div>
-                        <div class="col-sm-8 text-md-center">
-                            <h5>10%</h5>
-                            <span>วันลาทั้งหมด</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- widget-success-card start -->
-        @*<div class="card flat-card widget-purple-card">
+            @{
+                var iconMapping = new Dictionary<int, string>
+                            {
+                    { 1, "fa fa-medkit" },
+                    { 2, "fa fa-map-marker" },
+                    { 3, "icon feather icon-rotate-ccw" },
+                    { 4, "icon feather icon-rotate-ccw" },
+                };
+
+                string defaultIcon = "icon feather icon-file-text"; // Default icon
+            }
+            @for (int k = 0; k < ViewBag.LeaveOverview.Count; k += 2)
+            {
                 <div class="row-table">
-                    <div class="col-sm-3 card-body">
-                        <i class="fas fa-trophy"></i>
-                    </div>
-                    <div class="col-sm-9">
-                        <h4>17</h4>
-                        <h6>Achievements</h6>
-                    </div>
+                    @for (int j = k; j < k + 2 && j < ViewBag.LeaveOverview.Count; j++)
+                    {
+                        var over = ViewBag.LeaveOverview[j];
+                        var icon = iconMapping.ContainsKey(j) ? iconMapping[j] : defaultIcon;
+                        <div class="col-sm-6 card-body @(j % 2 == 0 ? "br" : "")">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <i class="@icon text-c-green mb-1 d-block"></i>
+                                </div>
+                                <div class="col-sm-8 text-md-center">
+                                    <h5>@over.TotalCount</h5>
+                                    <span>@over.LeaveType</span>
+                                </div>
+                            </div>
+                        </div>
+                    }
                 </div>
-            </div>*@
-        <!-- widget-success-card end -->
+            }
+        </div>
     </div>
     <!-- table card-2 end -->
     <!-- Widget primary-success card start -->

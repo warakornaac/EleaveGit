@@ -14,6 +14,8 @@ using System.Web.Mvc;
 using System.Web.Security;
 using static Eleave.Models.ModelLogin;
 using Eleave.Data;
+using System.Web.Services.Description;
+using System.Drawing.Imaging;
 
 namespace Eleave.Controllers
 {
@@ -34,15 +36,17 @@ namespace Eleave.Controllers
                 return RedirectToAction("Login", "Home");
             }
             var HisRequest = new List<RequestList>();
-
+            var OverviewLeave = new List<LeaveOverview>();
             try
             {
-                HisRequest = new GetRequestList().GetRequests(EmpID, EmpType);
+                HisRequest = new GetRequestList().GetRequests(EmpID, EmpType, "");
+                OverviewLeave = new GetLeaveConsumptionOverview().Get(EmpID);
             }
             catch
             {
 
             }
+            ViewBag.LeaveOverview = OverviewLeave;
 
             return View(HisRequest);
         }
@@ -155,8 +159,82 @@ namespace Eleave.Controllers
             Session.Abandon();
             return RedirectToAction("Login", "Home");
         }
+        public JsonResult GetAlertApproval()
+        {
+            string message = string.Empty;
+            string EmpID = string.Empty;
+            string EmpType = string.Empty;
+            string Dept = string.Empty;
+            var RequestApprv = new List<ApprovalRequest>();
+            try
+            {
+                if (Session["EmpId"] != null)
+                {
+                    EmpID = Session["EmpId"].ToString();
+                    EmpType = Session["UserType"].ToString();
+                    Dept = Session["DeptName"].ToString();
+                }
+                RequestApprv = new GetApprovalRequest().GetRequests(EmpID, Dept);
+                message = "Y";
+            }
+            catch (Exception ex)
+            {
+                message = ex.Message;
+            }
 
-        //public JsonResult GetAlert
+            return Json(new { message = message, RequestApprv }, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult GetAlertAcknowledge()
+        {
+            string message = string.Empty;
+            string EmpID = string.Empty;
+            string EmpType = string.Empty;
+            string Dept = string.Empty;
+            var RequestAck = new List<ApprovalRequest>();
+            try
+            {
+                if (Session["EmpId"] != null)
+                {
+                    EmpID = Session["EmpId"].ToString();
+                    EmpType = Session["UserType"].ToString();
+                    Dept = Session["DeptName"].ToString();
+                }
+                RequestAck = new GetRequestAcknowledge().GetRequestsAck(EmpID);
+                message = "Y";
+            }
+            catch (Exception ex)
+            {
+                message = ex.Message;
+            }
+
+            return Json(new { message = message, RequestAck }, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetAlertEmp()
+        {
+            string message = string.Empty;
+            string EmpID = string.Empty;
+            string EmpType = string.Empty;
+            string Dept = string.Empty;
+            var REQ = new List<RequestList>();
+            try
+            {
+                if (Session["EmpId"] != null)
+                {
+                    EmpID = Session["EmpId"].ToString();
+                    EmpType = Session["UserType"].ToString();
+                    Dept = Session["DeptName"].ToString();
+                }
+                REQ = new GetRequestList().GetRequests(EmpID, EmpType, "0");
+                message = "Y";
+            }
+            catch (Exception ex)
+            {
+                message = ex.Message;
+            }
+            return Json(new { message = message, REQ }, JsonRequestBehavior.AllowGet);
+
+        }
         private bool TestLogin(string username, string password)
         {
             return (username == "testuser" && password == "password123");

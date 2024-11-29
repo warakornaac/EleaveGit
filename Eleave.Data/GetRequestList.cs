@@ -15,11 +15,12 @@ namespace Eleave.Data
         {
 
         }
-        public List<RequestList> GetRequests(string empId, string UsrTyp)
+        public List<RequestList> GetRequests(string empId, string UsrTyp, string Sta)
         {
             var p = new SqlParameters();
             p.AddParams("@inEmpId", empId);
             p.AddParams("@inUsrTyp", UsrTyp);
+            p.AddParams("@inSta", Sta);
 
             var table = GetData(CmdStore("P_Get_Request", p));
             return ConvertExtension.ConvertDataTable<RequestList>(GetData(CmdStore("P_Get_Request", p)));

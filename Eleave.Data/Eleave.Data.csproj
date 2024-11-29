@@ -49,6 +49,7 @@
     <Compile Include="GetApprovalRequest.cs" />
     <Compile Include="GetCommentAcknowledge.cs" />
     <Compile Include="GetCommentApprover.cs" />
+    <Compile Include="GetLeaveConsumptionOverview.cs" />
     <Compile Include="GetLeaveType.cs" />
     <Compile Include="GetLookupData.cs" />
     <Compile Include="GetProfile.cs" />

@@ -2,7 +2,7 @@
 @{
     Layout = null;
     var reqDetails = ViewBag.ReqDetail;
-
+    string EMPID = Session["EmpId"].ToString();
 }
 
 <!DOCTYPE html>
@@ -25,6 +25,7 @@
                             <p class="border-0 p-0 m-0" name="ReqId" id="cancel_reqid"> @reqDetail.ReqNo </p>
                             <input type="hidden" name="ReqIdHide" value="@reqDetail.ReqNo" id="cancel_reqid_val" />
                             <input type="hidden" id="ReqStatus" name="ReqStatus" value="@reqDetail.ReqStatus" />
+                            <input type="hidden" id="ReqEmpId" name="ReqEmpId" value="@reqDetail.EmpId" />
                         </div>
                     </div>
                 </div>
@@ -341,75 +342,6 @@
                     </div>
                 </div>
             </div>
-
-
-            @*<div class="row">
-                    <hr />
-                </div>
-                <div class="row">
-                    <div class="col-sm-6 col-md-6 text-left">
-                    </div>
-                    <div class="col-sm-6 col-md-6 text-right">
-                        @if (@reqDetail.ReqStatus == "0")
-                        {
-                            <button type="button" class="btn btn-warning" id="cancel_submit"><i class="fa fa-times"></i> ยกเลิกรายการ</button>
-                        }
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">ปิด</button>
-                    </div>
-                </div>*@
-            //old
-            @*<div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label>รหัสคำขอ: </label>
-                            <p class="border-0 p-0 m-0" name="ReqId" id="cancel_reqid"> @reqDetail.ReqNo </p>
-                            <input type="hidden" name="ReqIdHide" value="" id="cancel_reqid_val" />
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label>วันที่ขอ : </label>
-                            <p class="border-0 p-0 m-0" name="ReqDate" id="cancel_reqdate"> @reqDetail.ReqNo </p>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label>ประเภทการขอ: </label>
-                            <p class="border-0 p-0 m-0" name="ReqTyp" id="cancel_reqtyp"> @reqDetail.ReqNo</p>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label>ประเภทการลา: </label>
-                            <p class="border-0 p-0 m-0" name="LevTyp" id="cancel_levtyp">@reqDetail.ReqNo</p>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label>วันที่ลา(เริ่ม): </label>
-                            <p class="border-0 p-0 m-0" name="StartDate" id="cancel_startdate">@reqDetail.ReqNo</p>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label>วันที่ลา(สิ้นสุด): </label>
-                            <p class="border-0 p-0 m-0" name="EndDate" id="cancel_enddate">@reqDetail.ReqNo</p>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label>สถานะคำขอ: </label>
-                            <div id="cancel_sta"> @reqDetail.ReqNo</div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label>หมายเหตุการลา</label>
-                            <p class="border-0 p-0 m-0 mb-1" name="Remark" id="cancel_remark">@reqDetail.ReqNo</p>
-                        </div>
-
-                    </div>
-                </div>*@
         }
     }
     else
@@ -421,10 +353,32 @@
 <script defer>
     $(document).ready(function () {
         var ReqStatus = $("#ReqStatus").val() || 0;
-        if (ReqStatus > 0) {
+        var EmpString = $('#ReqEmpId').val();
+        if (EmpString == '@EMPID') {
+            if (ReqStatus > 0) {
+                $("#cancel_submit").css("display", "none");
+            }
+            else {
+                $("#cancel_submit").css("display", "block");
+            }
+        }
+        else {
             $("#cancel_submit").css("display", "none");
-        } else {
-            $("#cancel_submit").css("display", "block");
+        }
+    });
+    $(document).ready(function () {
+        var ReqStatus = $("#ReqStatus").val() || 0;
+        var EmpString = $('#ReqEmpId').val();
+        if (EmpString == '@EMPID') {
+            if (ReqStatus > 0) {
+                $("#cancel_alt_submit").css("display", "none");
+            }
+            else {
+                $("#cancel_alt_submit").css("display", "block");
+            }
+        }
+        else {
+            $("#cancel_alt_submit").css("display", "none");
         }
     });
    @*$(document).on('click', '#cancel_submit', function () {

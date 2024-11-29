@@ -192,7 +192,7 @@
             <div class="modal-body">
             </div>
             <div class="modal-footer">
-                <div id="btn-ack-form" hidden>
+                <div id="btn-ack-form">
                     <button type="button" class="btn btn-success" id="acknowledge-btn">รับทราบ/Acknowledge</button>
                 </div>
             </div>
@@ -200,6 +200,10 @@
     </div>
 </div>
 <script>
+    const queryString = decodeURIComponent(window.location.search);
+    const params = new URLSearchParams(queryString);
+    const page = params.get('req');
+
     $('#reqStart').inputmask('99/99/9999');
     $('#reqEnd').inputmask('99/99/9999');
     $('#reqStart').datepicker({
@@ -213,6 +217,7 @@
         autoclose: true
     });
     $(document).ready(function () {
+        console.log("Page Param: " + page);
         $('#department-selector').select2({
             width: '100%'
         });
@@ -228,6 +233,12 @@
                 infoEmpty: "ไม่มีข้อมูลให้แสดง"
             }
         });
+
+        if (page) {
+            $('#ackbtn_' + page).click();
+            console.log('click:' + page);
+        }
+
     });
     $(document).on('click', '#reset-btn', function () {
         $('#reqType-selector').val('').trigger('change');
