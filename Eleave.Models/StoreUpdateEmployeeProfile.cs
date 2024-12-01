@@ -24,7 +24,7 @@ namespace Eleave.Models
         public string EmpLvl { get; set; }
         public string EmpTypeId { get; set; }
         public string ApprGrpID { get; set; }
-        public DateTime StartDate { get; set; }
+        public string StartDate { get; set; }
         public string EmpStatus { get; set; }
         public string DirectorId { get; set; }
 

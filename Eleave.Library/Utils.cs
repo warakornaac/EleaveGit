@@ -264,8 +264,30 @@ namespace Eleave.Library
                 int INSID = cmdSearch.ExecuteNonQuery();
                 getDocumentNo = cmdSearch.Parameters["@outResult"].Value.ToString();
                 cmdSearch.Dispose();
+                Connection.Close();
             }
             return getDocumentNo;
+        }
+        public static string deleteFile(string IdFile)
+        {
+            string getResult = "";
+
+            using (SqlConnection Connection = new SqlConnection(GetConfig("HRIS_DB")))
+            {
+                Connection.Open();
+                var cmdSearch = new SqlCommand("P_Delete_Request_File", Connection);
+
+                cmdSearch.CommandType = CommandType.StoredProcedure;
+                cmdSearch.Parameters.AddWithValue("@inIdFile", IdFile);
+                SqlParameter returnResult = new SqlParameter("@outResult", SqlDbType.NVarChar, 1000);
+                returnResult.Direction = ParameterDirection.Output;
+                cmdSearch.Parameters.Add(returnResult);
+                int INSID = cmdSearch.ExecuteNonQuery();
+                getResult = cmdSearch.Parameters["@outResult"].Value.ToString();
+                cmdSearch.Dispose();
+                Connection.Close();
+            }
+            return getResult;
         }
     }
 }

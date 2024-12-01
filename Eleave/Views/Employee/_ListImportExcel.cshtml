@@ -1,0 +1,56 @@
+﻿@using Eleave.Models;
+<div class="card card-success">
+    <div class="card-header with-border" style="font-weight: bold;"><i class="fa fa-file-excel-o" aria-hidden="true"></i> </div>
+    <div class="card-body p-0" style="margin-bottom: -17px;">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover" style="text-align: center;">
+                <thead>
+                    <tr>
+                        <th style="width: 100px;">Company</th>
+                        <th style="width: 100px;">CountryCode</th>
+                        <th style="width: 100px;">Employee Id</th>
+                        <th style="width: 100px;">Title Name</th>
+                        <th style="width: 100px;">First Name</th>
+                        <th style="width: 100px;">LastName</th>
+                        <th style="width: 100px;">Gender</th>
+                        <th style="width: 100px;">Department</th>
+                        <th style="width: 100px;">Position</th>
+                        <th style="width: 100px;">Level</th>
+                        <th style="width: 100px;">Employee Type</th>
+                        <th style="width: 100px;">StartDate</th>
+                        <th style="width: 100px;">Email</th>
+                        <th style="width: 100px;">Employee Status</th>
+                        <th style="width: 100px;">UserType</th>
+                        <th style="width: 100px;">DirectorId</th>
+                    </tr>
+                </thead>
+                <tbody> 
+                    @if (ViewBag.listEmployee != null)
+                    {
+                        foreach (var rowEmployee in (List<StoreGetProfile>)ViewBag.listEmployee)
+                        {
+                            <tr style="background: #ffff99;">
+                                <td>@rowEmployee.Company</td>
+                                <td>TH</td>
+                                <td>@rowEmployee.EmpId</td>
+                                <td>@rowEmployee.TitleName</td>
+                                <td>@rowEmployee.LastName</td>
+                                <td>@rowEmployee.LastName</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>@rowEmployee.Position</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>@rowEmployee.StartDate</td>
+                                <td>-</td>
+                                <td>@rowEmployee.EmpStatus</td>
+                                <td>-</td>
+                                <td>@rowEmployee.DirectorId</td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

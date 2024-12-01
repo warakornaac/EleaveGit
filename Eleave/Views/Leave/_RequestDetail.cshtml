@@ -1,4 +1,4 @@
-﻿@*@using Eleave.Models;*@
+﻿@using Eleave.Models;
 @{
     Layout = null;
     var reqDetails = ViewBag.ReqDetail;
@@ -49,7 +49,7 @@
                     <div class="form-group highlight-addon hide-errors">
                         <label class="control-label font-weight-bold" for="">ประเภทการขอ	 : </label>
                         <divs class="form-control-static">
-                            <p class="border-0 p-0 m-0" name="ReqId" id="cancel_reqtyp"> @reqDetail.ReqType </p>
+                           <p class="border-0 p-0 m-0" name="ReqId" id="cancel_reqtyp"> @reqDetail.ReqType </p>
                         </divs>
                     </div>
                 </div>
@@ -200,7 +200,7 @@
                 </div>
             </div>
 
-            @Html.Partial("_RequestFileDetail", new { });
+            @Html.Partial("_RequestFileDetail", (List<RequestFile>)ViewBag.ReqFile);
 
 
             if (ViewBag.Flag == "approve")

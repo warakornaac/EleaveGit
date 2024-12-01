@@ -11,6 +11,8 @@ using System.Web.Services.Description;
 using Eleave.Data;
 using Eleave.Library;
 using Eleave.Models;
+using System.Data.OleDb;
+using System.IO;
 
 namespace Eleave.Controllers
 {
@@ -129,6 +131,113 @@ namespace Eleave.Controllers
                 LoadEmployeeLevel();
                 return View(store);
             }
+        }
+        //import excel
+        public ActionResult ImportExcel()
+        {
+            return View();
+        }
+        public ActionResult SaveImportExcel(HttpPostedFileBase fileInput, string empId)
+        {
+            List<string> empIdList = new List<string>();
+            List<StoreUpdateEmployeeProfile> listEmployee = new List<StoreUpdateEmployeeProfile>();
+            string filePath = string.Empty;
+            string exerror = string.Empty;
+            string txtMessage = string.Empty;
+            string txtStatus = string.Empty;
+            var rowInsert = 0;
+            var GetProfile = new List<StoreGetProfile>();
+            try
+            {
+                if (fileInput != null)
+                {
+                    string path = Server.MapPath("~/FileExcel/");
+                    if (!Directory.Exists(path))
+                    {
+                        Directory.CreateDirectory(path);
+                    }
+
+                    filePath = path + Path.GetFileName(fileInput.FileName);
+                    string extension = Path.GetExtension(fileInput.FileName);
+                    fileInput.SaveAs(filePath);
+                    string conString = string.Empty;
+
+                    var connectionString = Utils.GetConfig("HRIS_DB");
+                    SqlConnection Connection = new SqlConnection(connectionString);
+                    Connection.Open();
+                    switch (extension)
+                    {
+                        case ".xls": //Excel 97-03.
+                            conString = Utils.GetConfig("HRIS_EXCEL03");
+                            break;
+                        case ".xlsx": //Excel 07 and above.
+                            conString = Utils.GetConfig("HRIS_EXCEL07");
+                            break;
+                    }
+
+                    DataTable dt = new DataTable();
+                    conString = string.Format(conString, filePath);
+                    OleDbConnection excelConnection = new OleDbConnection(conString);
+                    OleDbCommand cmd = new OleDbCommand("Select * from [Employee Template$]", excelConnection);
+                    excelConnection.Open();
+                    OleDbDataReader dReader;
+
+                    dReader = cmd.ExecuteReader();
+              
+                    while (dReader.Read())
+                    {
+                        //stkcod = dReader.GetValue(0);
+                        if (dReader.GetValue(0).ToString() != "" && dReader.GetValue(1).ToString() != "")
+                        {
+                            var ImportEmployee = new List<StoreUpdateEmployeeProfile>();
+                            try
+                            {
+                                ImportEmployee = new ImportExcelEmployee().Save(dReader.GetValue(0).ToString(), dReader.GetValue(1).ToString(), dReader.GetValue(2).ToString(), dReader.GetValue(3).ToString(), dReader.GetValue(4).ToString(), dReader.GetValue(5).ToString(), dReader.GetValue(6).ToString(), dReader.GetValue(7).ToString(), dReader.GetValue(8).ToString(), dReader.GetValue(9).ToString(), dReader.GetValue(10).ToString(), dReader.GetValue(11).ToString(), dReader.GetValue(12).ToString(), dReader.GetValue(13).ToString(), dReader.GetValue(14).ToString(), dReader.GetValue(15).ToString(), empId.ToString());
+                                txtStatus = "success";
+                                //listEmployee.Add(new StoreUpdateEmployeeProfile()
+                                //{
+                                //    Company = ImportEmployee[0].Company,
+                                //    EmpId = ImportEmployee[0].EmpId, 
+                                //    TitleName = ImportEmployee[0].TitleName,   
+                                //    FirstName = ImportEmployee[0].FirstName,
+                                //    LastName = ImportEmployee[0].LastName,
+                                //    DeptId = ImportEmployee[0].DeptId,
+                                //    Position = ImportEmployee[0].Position,
+                                //    EmpLvl = ImportEmployee[0].EmpLvl,
+                                //    EmpTypeId = ImportEmployee[0].EmpTypeId,
+                                //    StartDate = ImportEmployee[0].StartDate,
+                                //    EmpStatus = ImportEmployee[0].EmpStatus,
+                                //    DirectorId = ImportEmployee[0].TitleName
+                                //});
+                                //rowInsert++;
+                                empIdList.Add(dReader.GetValue(2).ToString());
+                            }
+                            catch (Exception ex) {
+                                txtStatus = "error";
+                                txtMessage = ex.Message;
+                            }
+                        }
+                    }
+                    if (empIdList != null)
+                    {
+                        string empIdArray = string.Join(",", empIdList.ToArray());
+                        GetProfile = new GetProfile().GetStoreGetProfile(empIdArray);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                txtMessage = ex.Message + '/' + ex.Source + '/' + ex.HelpLink + '/' + ex.HResult;
+            }
+            ViewBag.status = txtStatus;
+            ViewBag.message = txtMessage;
+            ViewBag.listEmployee = GetProfile;
+            return PartialView("_ListImportExcel", new
+            {
+                @ViewBag.status,
+                @ViewBag.message,
+                @ViewBag.listEmployee,
+            });
         }
         public ActionResult ApprovflowSetting()
         {

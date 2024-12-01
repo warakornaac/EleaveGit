@@ -20,11 +20,31 @@ namespace Eleave.Controllers
         // GET: Leave
         public ActionResult RequestForm()
         {
+            string EmpID = string.Empty;
+            string EmpType = string.Empty;
+            if (Session["EmpId"] != null)
+            {
+                EmpID = Session["EmpId"].ToString();
+                EmpType = Session["UserType"].ToString();
+            }
+            else
+            {
+                return RedirectToAction("Login", "Home");
+            }
             //var DocumentRequest = Utils.GetDocumentRequest("");
             LoadRequestType();
             ViewBag.DocumentRequest = "0";
+            ViewBag.listLeaveBalance = GetLeaveBalance(EmpID);
 
             return View();
+        }
+        [HttpPost]
+        public List<StoreGetLeaveBalance> GetLeaveBalance(string empId)
+        {
+            var listLeaveBalance = new List<StoreGetLeaveBalance>();
+            listLeaveBalance = new GetLeaveBalance().LeaveBalance(empId);
+
+            return listLeaveBalance;
         }
         [HttpPost]
         public ActionResult SaveRequestForm(string ReqNo, string EmpId, string ReqType, string LeaveType, string StartDate, string EndDate, string PeriodTime, double NumDay, int NumHour, string Remark)
@@ -60,6 +80,31 @@ namespace Eleave.Controllers
             catch (Exception ex)
             {
                 return Json(new { status = "error", message = ex.Message, getReqNo = ReqNo });
+            }
+        }
+        [HttpPost]
+        public ActionResult DeleteFile(string IdFile, string NameFile)
+        {
+            string messageResult = string.Empty;
+            try
+            {
+                if (IdFile != null) 
+                {
+                    messageResult = Utils.deleteFile(IdFile);
+                    if (messageResult == "Y")
+                    {
+                        string fullPath = Request.MapPath("~/FileUpload/" + NameFile);
+                        if (System.IO.File.Exists(fullPath))
+                        {
+                            System.IO.File.Delete(fullPath);
+                        }
+                    }
+                }
+                return Json(new { status = "success", message = "ลบไฟล์ [" + NameFile + "] เรียบร้อย" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { status = "error", message = ex.Message });
             }
         }
         public ActionResult ManagerHistory()
@@ -251,34 +296,24 @@ namespace Eleave.Controllers
         public ActionResult GetRequestDetail(string ReqNO, string Flag)
         {
             var ReqDetail = new List<RequestList>();
+            var ReqFile = new List<RequestFile>();
             string message = string.Empty;
             try
             {
                 ReqDetail = new GetRequestDetail().Get(ReqNO);
-                //var reqDetailFormatted = ReqDetail.Select(x => new
-                //{
-                //    x.ReqNo,
-                //    x.ReqType,
-                //    x.CountryCode,
-                //    x.EmpId,
-                //    x.LeaveType,
-                //    ReqDate = x.ReqDate.HasValue ? x.ReqDate.Value.ToString("dd/MM/yyyy") : "",  // ตรวจสอบ null ก่อนแปลง
-                //    StartDate = x.StartDate.HasValue ? x.StartDate.Value.ToString("dd/MM/yyyy") : "",  // ตรวจสอบ null ก่อนแปลง
-                //    EndDate = x.EndDate.HasValue ? x.EndDate.Value.ToString("dd/MM/yyyy") : "",  // ตรวจสอบ null ก่อนแปลง
-                //    x.ReqStatus,
-                //    x.ReqStaDesc,
-                //    x.Remark
-                //}).ToList();
+                ReqFile = new GetRequestFile().GetFile(ReqNO);
+
 
                 message = "Y";
-                //return Json(new { message = message, ReqDetail = reqDetailFormatted }, JsonRequestBehavior.AllowGet);
                 ViewBag.ReqDetail = ReqDetail;
+                ViewBag.ReqFile = ReqFile;
             }
             catch (Exception ex)
             {
                 message = ex.Message;
-                //return Json(new { message = message, ReqDetail = new List<object>() }, JsonRequestBehavior.AllowGet);
                 ViewBag.ReqDetail = new List<object>();
+                ViewBag.ReqFile = new List<object>();
+
             }
             ViewBag.Message = message;
             ViewBag.Flag = Flag;
@@ -286,6 +321,7 @@ namespace Eleave.Controllers
             {
                 @ViewBag.Message,
                 @ViewBag.ReqDetail,
+                @ViewBag.ReqFile,
                 @ViewBag.Flag,
             });
         }

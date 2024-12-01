@@ -8,7 +8,7 @@ namespace Eleave.Models
 {
     public class LeaveTypeModel
     {
-        public string RequestID { get; set; }
+        public string LeaveType { get; set; }
         public string RequestType { get; set; }
         public string Description { get; set; }
         public string RequestGroup { get; set; }

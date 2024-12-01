@@ -1,10 +1,55 @@
-﻿@{
+﻿@using Eleave.Models;
+@{
     ViewBag.Title = "บันทึกการลา";
+    var countListBalance = ((List<StoreGetLeaveBalance>)ViewBag.listLeaveBalance).Count();
 }
 <style>
     .filepond--credits {
         display: none;
     }
+    small, .small {
+        font-size: 100%;
+    }
+
+    .star {
+        height: 40px;
+        width: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #eee;
+        margin-right: 10px;
+        border-radius: 5px;
+        font-weight: 700;
+    }
+
+    .time-text {
+        font-size: 12px;
+        color: #989898;
+    }
+
+    .dots {
+        height: 7px;
+        width: 7px;
+        background-color: #eee;
+        display: flex;
+        border-radius: 50%;
+        margin-left: 7px;
+        margin-right: 7px;
+    }
+
+    .content-text-1 {
+        height: 40px;
+        width: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+        background-color: #e3f3e1;
+        color: #0c8916;
+        font-weight: 700;
+    }
+
 </style>
 
 <div class="page-header">
@@ -15,121 +60,57 @@
                     <h5 class="m-b-10">บันทึกการลา</h5>
                 </div>
                 <ul class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="@Url.Action("Index","Home")"><i class="feather icon-home"></i></a></li>
-                    <li class="breadcrumb-item"><a href="@Url.Action("RequestForm","Leave")">บันทึกการลา</a></li>
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home")"><i class="feather icon-home"></i></a></li>
+                    <li class="breadcrumb-item"><a href="@Url.Action("RequestForm", "Leave")">บันทึกการลา</a></li>
                 </ul>
             </div>
         </div>
     </div>
 </div>
-@*@using (Html.BeginForm("SaveRequestForm", "Leave", /*new { userID = @Model.ProPit_User.userID },*/ FormMethod.Post, new { enctype = "multipart/form-data" }))
-    {*@
-<div class="row">
-    <!-- table card-1 start -->
-    <div class="col-md-12">
-        <div class="card flat-card">
-            <div class="row-table">
-                <div class="col-sm-4 card-body br ">
-                    <div class="row">
-                        <div class="col-sm-4">
-                            <i class="fa fa-medkit text-c-green mb-1 d-block"></i>
-                        </div>
-                        <div class="col-sm-8 text-md-center">
-                            <h5>30/2</h5>
-                            <span>ลาป่วย</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-4 card-body border-right">
-                    <div class="row">
-                        <div class="col-sm-4">
-                            <i class="fa fa-umbrella text-c-blue mb-1 d-block"></i>
-                        </div>
-                        <div class="col-sm-8 text-md-center">
-                            <h5>10/1</h5>
-                            <span>ลาพักร้อน</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-4 card-body ">
-                    <div class="row">
-                        <div class="col-sm-4">
-                            <i class="fa fa-bank text-c-blue mb-1 d-block"></i>
-                        </div>
-                        <div class="col-sm-8 text-md-center">
-                            <h5>10/2</h5>
-                            <span>ลากิจ</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row-table">
-                <div class="col-sm-4 card-body br border-top">
-                    <div class="row">
-                        <div class="col-sm-4">
-                            <i class="icon feather icon-file-text text-c-blue mb-1 d-block"></i>
-                        </div>
-                        <div class="col-sm-8 text-md-center">
-                            <h5>10/2</h5>
-                            <span>ลากิจส่วนตัว</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-4 card-body border-right">
-                    <div class="row">
-                        <div class="col-sm-4">
-                            <i class="fa fa-list-alt text-c-blue mb-1 d-block"></i>
-                        </div>
-                        <div class="col-sm-8 text-md-center">
-                            <h5>10/3</h5>
-                            <span>ลาอื่นๆ</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-4 card-body border-top">
-                    <div class="row">
-                        <div class="col-sm-4">
-                            <i class="fa fa-plus-square text-c-red mb-1 d-block"></i>
-                        </div>
-                        <div class="col-sm-8 text-md-center">
-                            <h5>5</h5>
-                            <span>ลาทั้งหมด</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
-<div class="row" style="margin-top: -20px;">
-    <div class="col-sm-12">
+<div class="row">
+    <div class="col-lg-8 col-md-12">
         <div class="card">
             <div class="card-header">
-                <h5>เลขที่การลา </h5>
+                <h5>คำขออนุมัติลา </h5>
                 @*<span class="badge badge-light-secondary" style="font-size: 16px;"> @ViewBag.DocumentRequest </span>*@
             </div>
             <div class="card-body">
-                <div class="form-row">
+                <div class="row">
                     <input type="hidden" id="reqNo" value="@ViewBag.DocumentRequest">
-                    <div class="col-md-3 mb-3">
+                    <div class="col-md-4 mb-4">
                         <label for="validationTooltip02" class="font-weight-bold">ประเภทการร้องขอ</label>
-                        <select id="reqType" class="form-control" onchange="dropDownRequest();">
-                            <option selected>เลือกประเภทร้องขอ</option>
-                            @foreach (var type in ViewBag.REQ_T)
-                            {
-                                if (type.LookValue == "1")
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="inputGroupPrepend"><i class="fa fa-list"></i></span>
+                            </div>
+                            <select id="reqType" class="form-control" onchange="dropDownRequest(this.value);">
+                                <option value="0" selected>เลือกประเภทร้องขอ</option>
+                                @foreach (var type in ViewBag.REQ_T)
                                 {
                                     <option value="@type.LookValue">@type.LookDesc</option>
                                 }
-                            }
-                        </select>
+                            </select>
+                        </div>
                     </div>
-                    <div class="col-md-9 mb-9">
-                        <label for="validationTooltip03" class="font-weight-bold">ประเภทการลา</label>
-                        <select id="leaveType" name="leaveType" class="form-control" onchange="getConditionLeaveType(this.value);">
-                            <option value="0" selected>เลือกประเภทการลา</option>
-                        </select>
+                    <div id="divDateleaveType" class="col-md-8 mb-8">
+
+                        <label for="validationTooltip02" class="font-weight-bold">ประเภทการลา</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="inputGroupPrepend"><i class="fa fa-file-text-o"></i></span>
+                            </div>
+                            <select id="leaveType" name="leaveType" class="form-control" onchange="getConditionLeaveType(this.value);">
+                                <option value="0" selected>เลือกประเภทการลา</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: -5px;">
+                    <div class="col-md-12">
+                        <div class="alert alert-warning p-1" role="alert">
+                            <b>เงื่อไนขการลา : </b> พนักงานที่ประสงค์จะลาหยุดงาน จะต้องกรอกข้อมูลการลาในระบบและยื่นต่อผู้บังคับบัญชาตามลำดับชั้น และจะลาได้ก็ต่อเมื่อผู้บังคับบัญชาได้อนุมัติการลาเท่านั้น
+                        </div>
                     </div>
                 </div>
                 <div id="divDatePicker" style="display:none;">
@@ -182,7 +163,7 @@
 
                 <div class="form-row">
                     <div class="col-md-12 mb-12">
-                        <label for="exampleFormControlTextarea1" class="font-weight-bold">หมายเหตุการลา</label>
+                        <label for="exampleFormControlTextarea1" class="font-weight-bold">รายละเอียด/เหตุผลการลา</label>
                         <div class="form-group">
                             <textarea class="form-control" name="remark" id="remark" rows="3"></textarea>
                         </div>
@@ -191,7 +172,7 @@
 
                 <div class="form-row">
                     <div class="col-md-12 mb-12">
-                        <label for="validationTooltip03" class="font-weight-bold">Attach File</label>
+                        <label for="validationTooltip03" class="font-weight-bold">ไฟล์แนบ/Attach File</label>
                         <div class="row">
                             <div class="col">
                                 <div class="file-loading">
@@ -199,6 +180,7 @@
                                 </div>
                             </div>
                         </div>
+                        <label id="r" class="text-success">อัปโหลดไฟล์ jpg, jped, png, pdf ขนาดไม่เกิน 5 MB (สามารถเลือกได้หลายไฟล์)</label>
                     </div>
                 </div>
             </div>
@@ -212,6 +194,104 @@
             </div>
         </div>
     </div>
+    <div class="col-lg-4 col-md-12">
+        <div class="card border-0 p-2">
+            <div class="card-header p-2" style="border-bottom: 1px solid #e5c1be;">
+                <h5 class="text-success"> สิทธิคงเหลือ </h5>
+            </div>
+            @{
+                if (countListBalance == 0)
+                {
+                    <div class="mt-3">
+                        <div class="time-text text-center">
+                            <small>ไม่พบข้อมูล</small>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    foreach (var rowItem in (List<StoreGetLeaveBalance>)ViewBag.listLeaveBalance)
+                    {
+                        <div class="mt-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="d-flex flex-row align-items-center">
+                                    @*<span class="star"><i class="fa fa-star yellow"></i></span>*@
+                                    <span class="star font-bold">@rowItem.AccuredLeave</span>
+                                    <div class="d-flex flex-column">
+                                        <span>@rowItem.Description</span>
+                                        <div class="d-flex flex-row align-items-center time-text">
+                                            <small>ใช้สิทธิแล้ว (@rowItem.LeaveTaken)</small>
+                                            <span class="dots"></span>
+                                            <small>รออนุมัติ (@rowItem.WaitApprove)</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <span class="content-text-1">@rowItem.ClosingBal</span>
+                            </div>
+                        </div>
+                    }
+                }
+            }
+        </div>
+    </div>
+    @*<div class="col-lg-4 col-md-12">
+            <div class="card chat-card">
+                <div class="card-header">
+                    <h5>สิทธิคงเหลือ</h5>
+                    <div class="card-header-right">
+                        <div class="btn-group card-option">
+                            <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="feather icon-more-horizontal"></i>
+                            </button>
+                            <ul class="list-unstyled card-option dropdown-menu dropdown-menu-right">
+                                <li class="dropdown-item full-card"><a href="#!"><span><i class="feather icon-maximize"></i> maximize</span><span style="display:none"><i class="feather icon-minimize"></i> Restore</span></a></li>
+                                <li class="dropdown-item minimize-card"><a href="#!"><span><i class="feather icon-minus"></i> collapse</span><span style="display:none"><i class="feather icon-plus"></i> expand</span></a></li>
+                                <li class="dropdown-item reload-card"><a href="#!"><i class="feather icon-refresh-cw"></i> reload</a></li>
+                                <li class="dropdown-item close-card"><a href="#!"><i class="feather icon-trash"></i> remove</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th scope="col" align="center"></th>
+                                    <th scope="col" align="center"></th>
+                                    <th scope="col" align="center">ใช้สิทธิแล้ว</th>
+                                    <th scope="col" align="center">คงเหลือ</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+
+                                    if (countListBalance == 0)
+                                    {
+                                        <tr>
+                                            <td colspan="4" align="center"> <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> ไม่พบข้อมูล </td>
+                                        </tr>
+                                    }
+                                    else
+                                    {
+                                        foreach (var rowItem in (List<StoreGetLeaveBalance>)ViewBag.listLeaveBalance)
+                                        {
+                                            <tr>
+                                                <th scope="row">@rowItem.Description</th>
+                                                <td align="right">@rowItem.AccuredLeave</td>
+                                                <td align="right">@rowItem.LeaveTaken</td>
+                                                <td align="right">@rowItem.ClosingBal</td>
+                                            </tr>
+                                        }
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>*@
+
 </div>
 @* } *@
 @* krajee *@
@@ -223,51 +303,67 @@
 <script src="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@5.5.0/js/fileinput.min.js"></script>
 
 <script defer>
-    //$(function () {
-
-    //});
-
+    //js get date curent
+    function getTodayDate() {
+        var tdate = new Date();
+        var dd = tdate.getDate(); //yields day
+        var MM = tdate.getMonth(); //yields month
+        var yyyy = tdate.getFullYear(); //yields year
+        var currentDate = yyyy + "-" + MM + "-" + dd;
+        return currentDate;
+    }
     //เลือกประเภทการร้องขอ
-    function dropDownRequest() {
-        $.ajax({
-            url: '@Url.Action("GetLeavetype", "Leave")',
-            data: {
-
-            },
-            type: 'POST',
-            dataType: 'JSON',
-            success: function (data) {
-                if (data.message == 'Y') {
-                    var select = $('#leaveType');
-                    select.children().remove();
-                    select.append($('<option>').val(0).text('เลือกประเภทการลา'))
-                    $(data.LeaveType).each(function (index, item) {
-                        select.append($('<option>').val(item.RequestID).text(item.Description));
-                    });
-                    select.val(0).trigger('change');
+    function dropDownRequest(reqType) {
+        console.log("reqType = " + reqType);
+        if (reqType == 2) {
+            $("#divDateleaveType").fadeOut(100);
+        } else {
+            $("#divDateleaveType").fadeIn(100);
+            $.ajax({
+                url: '@Url.Action("GetLeavetype", "Leave")',
+                type: 'POST',
+                dataType: 'JSON',
+                success: function (data) {
+                    if (data.message == 'Y') {
+                        var select = $('#leaveType');
+                        select.children().remove();
+                        select.append($('<option>').val(0).text('เลือกประเภทการลา'))
+                        $(data.LeaveType).each(function (index, item) {
+                            select.append($('<option>').val(item.LeaveType).text(item.Description));
+                        });
+                        select.val(0).trigger('change');
+                    } else {
+                        console.log('Message Type: ' + data.message);
+                    }
                 }
-                else {
-                    console.log('Message Type: ' + data.message);
-                }
-            }
-        });
+            });
+        }
     }
     //เลือกประเภทกวารลา
     function getConditionLeaveType(leaveId) {
+        var todayDate = getTodayDate();
         var setMinDate = 0;
         console.log("leaveId = " + leaveId);
         if (leaveId != "SL01") { //ไม่ใช่ลาป่วยต้องลาล่วงหน้า 1 วัน
             setMinDate = 1;
         }
         setDateStart(setMinDate);
-        if (leaveId == 0) {
+        //set datediff defalut
+        console.log('todayDate = ' + todayDate);
+        $("#startDateDiv").val(todayDate);
+        $("#endDateDiv").val(todayDate);
+        $('#numDay').val(1);
+        if (leaveId == 0) { //hide
             $("#divDatePicker").fadeOut(100);
-        } else {
+        } else { //show
             $("#divDatePicker").fadeIn(100);
         }
     }
+
     //ปุ่มบันทึก
     function btnSubmitRequest() {
+        let error = 0;
+        let textMsg = "";
         var ReqNo = $("#reqNo").val();
         var EmpId = @this.Session["EmpId"].ToString();
         var ReqType = $("#reqType option:selected").val();
@@ -278,6 +374,24 @@
         var NumDay = $("#numDay").val() || 0;
         var NumHour = $("#numHour").val() || 0;
         var Remark = $("#remark").val() || "";
+        //alert(ReqType + " LeaveType = " + LeaveType);
+        //return false;
+        if (ReqType == 0) {
+            error++;
+            textMsg += error + '. กรุณาเลือกประเภทการร้องขอ <br/>';
+        }
+        if (ReqType == 1 && LeaveType == 0) {
+            error++;
+            textMsg += error + '. กรุณาเลือกประเภทการลา <br/>';
+        }
+        if (error > 0) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'กรุณาตรวจสอบข้อมูลดังต่อไปนี้ และลองใหม่อีกครั้ง',
+                html: '<div class="text-left">' + textMsg + '</div>',
+            });
+            return false;
+        }
 
         console.log("startDate = " + StartDate + " endDate = " + EndDate);
 
@@ -303,71 +417,81 @@
                 console.log(pair[0] + ', ' + pair[1]);
             }
         }
-
-        $.ajax({
-            url: '@Url.Action("SaveRequestForm", "Leave")',
-            type: 'post',
-            enctype: 'multipart/form-data',
-            data: formData,
-            dataType: 'json',
-            async: true,
-            cache: false,
-            contentType: false,
-            processData: false,
-            beforeSend: function () {
-                LoadingShow();
-            },
-            success: function (result) {
-                console.log("result.status = " + result.status);
-                if (result.status != "success") {
+        Swal.fire({
+            icon: 'question',
+            title: 'ต้องการบันทึกใช่หรือไม่',
+            html: '',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'ยืนยัน',
+            showCancelButton: true,
+            cancelButtonColor: '#d33',
+            cancelButtonText: 'ยกเลิก',
+            allowOutsideClick: false,
+            focusConfirm: false,
+        }).then(async (result) => {
+            if (result.value) {
+                 $.ajax({
+                    url: '@Url.Action("SaveRequestForm", "Leave")',
+                    type: 'post',
+                    enctype: 'multipart/form-data',
+                    data: formData,
+                    dataType: 'json',
+                    async: true,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    beforeSend: function () {
+                        LoadingShow();
+                    },
+                    success: function (result) {
+                        console.log("result.status = " + result.status);
+                        if (result.status != "success") {
+                            Swal.fire({
+                                title: 'เกิดข้อผิดพลาด',
+                                icon: 'error',
+                                html: 'กรุณาแจ้งผู้ดูแลระบบ<br>โดยการแคปหน้าจอและก๊อปปี้ Error ด่านล่างนี้<br>' + result.message +'<br><br>',
+                                confirmButtonColor: '#d33',
+                                confirmButtonText: 'ปิด',
+                                allowOutsideClick: false,
+                                focusConfirm: false,
+                            }).then((result) => {
+                                LoadingShow();
+                                location.reload();
+                            });
+                        } else {
+                              Swal.fire({
+                                title: 'บันทึกเรียบร้อย <br> ' + result.getReqNo ,
+                                icon: 'success',
+                                confirmButtonColor: '#3085d6',
+                                confirmButtonText: 'ปิด',
+                                allowOutsideClick: false,
+                                focusConfirm: false,
+                                timer: 5000,
+                                timerProgressBar: true,
+                                onClose: () => {
+                                    LoadingHide();
+                                }
+                             }).then((result) => {
+                                 LoadingShow();
+                                 window.location.href = '@Url.Action("ManagerHistory", "Leave")';
+                             });
+                        }
+                    },
+                    complete: function () {
+                        LoadingHide();
+                    },
+                }).fail(function (error) {
                     Swal.fire({
-                        title: 'เกิดข้อผิดพลาด',
                         icon: 'error',
+                        title: 'ระบบทำงานผิดพลาด()',
+                        html: 'กรุณาแจ้งผู้ดูแลระบบ<br>โดยการแคปหน้าจอและก๊อปปี้ Error ด่านล่างนี้<br>btnSubmitRequest<br><br>',
                         confirmButtonColor: '#d33',
                         confirmButtonText: 'ปิด',
                         allowOutsideClick: false,
                         focusConfirm: false,
-                    }).then((result) => {
-                        Swal.fire({
-                            title: 'Loading',
-                            text: 'Please Wait',
-                            timer: location.reload(),
-                            allowOutsideClick: false,
-                            focusConfirm: false
-                        })
                     });
-                } else {
-                      Swal.fire({
-                        title: 'บันทึกเรียบร้อย <br> ' + result.getReqNo ,
-                        icon: 'success',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'ปิด',
-                        allowOutsideClick: false,
-                        focusConfirm: false,
-                        timer: 5000,
-                        timerProgressBar: true,
-                        onClose: () => {
-                            LoadingHide();
-                        }
-                     }).then((result) => {
-                         LoadingShow();
-                         window.location.href = '@Url.Action("ManagerHistory", "Leave")';
-                     });
-                }
-            },
-            complete: function () {
-                LoadingHide();
-            },
-        }).fail(function (error) {
-            Swal.fire({
-                icon: 'error',
-                title: 'ระบบทำงานผิดพลาด()',
-                html: 'กรุณาแจ้งผู้ดูแลระบบ<br>โดยการแคปหน้าจอและก๊อปปี้ Error ด่านล่างนี้<br>btnSubmitRequest<br><br>',
-                confirmButtonColor: '#d33',
-                confirmButtonText: 'ปิด',
-                allowOutsideClick: false,
-                focusConfirm: false,
-            });
+                });
+            }
         });
     }
     //upload file
@@ -398,7 +522,7 @@
         //uploadUrl: "/Home/FileUpload",
         //deleteUrl: "/Home/FileDelete",
         //uploadUrl: '@Url.Action("Leave", "SaveRequestForm")',
-        maxFileCount: 3,
+        maxFileCount: 5,
         maxFileSize: 5120, //5mb
         maxFilePreviewSize: 10240,
         //initialPreview: true,
@@ -460,18 +584,17 @@
             var x = $('#endDate').daterangepicker("getDate");
             $(element).datetimepicker("option", "maxDate", x);
         }
-
         // Restore date
         $(element).val(val);
     }
 
      function setDateStart(setMinDate) {
-            if (setMinDate != 0) {
-                setMinDate = "-" + setMinDate;
-            } else {
-                setMinDate = 0;
-            }
-            $('input[name="daterange"]').daterangepicker({
+        if (setMinDate != 0) {
+            setMinDate = "-" + setMinDate;
+        } else {
+            setMinDate = 0;
+        }
+        $('input[name="daterange"]').daterangepicker({
             startDate: moment().subtract('days', 7),
             endDate: moment().subtract('days', setMinDate),
             minDate: moment().subtract('days', setMinDate),
@@ -517,7 +640,8 @@
             $('#numDay').val(end.diff(start, "days") + 1);
             console.log(start.format('DD/MM/YYYY') + ' - ' + end.format('DD/MM/YYYY'));
         });
-     }
+      }
+
     document.onreadystatechange = function () {
         if (document.readyState === 'interactive') {
             LoadingShow();
