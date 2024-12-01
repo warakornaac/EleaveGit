@@ -3,25 +3,20 @@ using Eleave.Models;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Data;
 using System.Data.SqlClient;
+using System.Data;
 using System.Drawing.Imaging;
 using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using System.Web.Services.Description;
 
 namespace Eleave.Controllers
 {
-    public class ApprovalController : Controller
+    public class AcknowledgeController : Controller
     {
-        // GET: Approval
-        public ActionResult Index()
-        {
-            return View();
-        }
-        public ActionResult ManagerApproval()
+        // GET: Acknowledge
+        public ActionResult AdminAcknowledge()
         {
             string EmpID = string.Empty;
             string EmpType = string.Empty;
@@ -34,46 +29,30 @@ namespace Eleave.Controllers
             {
                 return RedirectToAction("Login", "Home");
             }
-
-            if (Session["UserType"].ToString() == "1")
-            {
-                return RedirectToAction("EmployeeHistory", "Leave");
-            }
-            var RequestApprv = new List<ApprovalRequest>();
-            string Department = Session["DeptName"].ToString();
+            var Request = new List<ApprovalRequest>();
             try
             {
-                RequestApprv = new GetApprovalRequest().GetRequests(EmpID, Department);
+                Request = new GetRequestAcknowledge().GetRequestsAck(EmpID);
             }
             catch (Exception ex)
             {
-                ViewBag.ErrorMessage = "ไม่สามารถโหลดข้อมูลได้ กรุณาลองอีกครั้ง";
+                ViewBag.Error = ex.Message;
             }
             LoadDepartments();
             LoadRequestType();
             LoadLeavetype();
             LoadReqStatus();
-
-            return View(RequestApprv);
+            return View(Request);
         }
         [HttpPost]
-        public ActionResult ManagerApproval(string LeaveType, string reqType, string ReqStatus, string ReqStart, string ReqEnd, string Dept, string reqId, string empName, bool actionFlag)
+        public ActionResult AdminAcknowledge(string LeaveType, string reqType, string ReqStatus, string ReqStart, string ReqEnd, string Dept, string reqId, string empName, bool actionFlag)
         {
-            DateTime? startDate = null;
-            DateTime? endDate = null;
             string EmpID = string.Empty;
             string EmpType = string.Empty;
+            DateTime? startDate = null;
+            DateTime? endDate = null;
             string flag = actionFlag ? "1" : "0";
-            if (Session["EmpId"] != null)
-            {
-                EmpID = Session["EmpId"].ToString();
-                EmpType = Session["UserType"].ToString();
-            }
-            else
-            {
-                return RedirectToAction("Login", "Home");
-            }
-
+            var Request = new List<ApprovalRequest>();
             // แปลง ReqStart เป็น DateTime 
             if (!string.IsNullOrEmpty(ReqStart))
             {
@@ -91,24 +70,58 @@ namespace Eleave.Controllers
                     endDate = parsedEndDate;
                 }
             }
-            var requestOrder = new List<ApprovalRequest>();
+            if (Session["EmpId"] != null)
+            {
+                EmpID = Session["EmpId"].ToString();
+                EmpType = Session["UserType"].ToString();
+            }
+            else
+            {
+                return RedirectToAction("Login", "Home");
+            }
+
             try
             {
-                requestOrder = new SearchApprovalRequest().SearchApprv(EmpID, LeaveType, reqType, ReqStatus, startDate, endDate, Dept, reqId, empName, flag);
+                Request = new SearchAcknowledgeRequest().GetAck(EmpID, LeaveType, reqType, ReqStatus, startDate, endDate, Dept, reqId, empName, flag);
             }
             catch (Exception ex)
             {
-                ViewBag.ErrorMessage = "ไม่สามารถโหลดข้อมูลได้ กรุณาลองอีกครั้ง";
+
             }
-
-
             LoadDepartments();
             LoadRequestType();
             LoadLeavetype();
             LoadReqStatus();
-            return View(requestOrder);
+            return View(Request);
         }
-        public JsonResult UpdateApproval(string ReqNo, string ApprvStatus, string ApprvComment)
+        public ActionResult GetDetailAcknowledge(string ReqNo)
+        {
+            var Request = new List<RequestList>();
+            var Comment = new List<ApproveCommentRequest>();
+            var AckComment = new List<ApproveCommentRequest>();
+            try
+            {
+                Request = new GetRequestDetail().Get(ReqNo);
+                Comment = new GetCommentApprover().GetComment(ReqNo);
+                AckComment = new GetCommentAcknowledge().GetComment(ReqNo);
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Message = ex.Message;
+            }
+            ViewBag.ReqDetail = Request;
+            ViewBag.CommentAppv = Comment;
+            ViewBag.AckComment = AckComment;
+
+            return PartialView("_DetailAcknowledge", new
+            {
+                ViewBag.Message,
+                ViewBag.ReqDetail,
+                ViewBag.CommentAppv,
+                ViewBag.Flag,
+            });
+        }
+        public JsonResult CheckAcknowledge(string ReqNo)
         {
             string message = string.Empty;
             string EmpID = string.Empty;
@@ -123,12 +136,45 @@ namespace Eleave.Controllers
             conn.Open();
             try
             {
-                var cmd = new SqlCommand("P_Save_Approval_Request", conn);
+                var cmd = new SqlCommand("P_Check_Acknowledge_Request", conn);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@inUser", EmpID);
+                cmd.Parameters.AddWithValue("@inReqNo", ReqNo);
+                SqlParameter p = new SqlParameter("@OutGenstatus", SqlDbType.NVarChar, 100);
+                p.Direction = ParameterDirection.Output;
+                cmd.Parameters.Add(p);
+                cmd.ExecuteNonQuery();
+                message = cmd.Parameters["@OutGenstatus"].Value.ToString();
+                conn.Close();
+                cmd.Dispose();
+            }
+            catch (Exception ex)
+            {
+                conn.Close();
+                message = ex.Message;
+            }
+            return Json(new { message = message }, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult SaveAcknowledge(string ReqNo, string AckComment)
+        {
+            string message = string.Empty;
+            string EmpID = string.Empty;
+            string EmpType = string.Empty;
+            if (Session["EmpId"] != null)
+            {
+                EmpID = Session["EmpId"].ToString();
+                EmpType = Session["UserType"].ToString();
+            }
+            var connectionString = ConfigurationManager.ConnectionStrings["HRIS_DB"].ConnectionString;
+            SqlConnection conn = new SqlConnection(connectionString);
+            conn.Open();
+            try
+            {
+                var cmd = new SqlCommand("P_Save_Ackonwledge_Request", conn);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@inReqNo", ReqNo.Trim());
                 cmd.Parameters.AddWithValue("@inUser", EmpID);
-                cmd.Parameters.AddWithValue("@inReqSta", ApprvStatus);
-                cmd.Parameters.AddWithValue("@inComment", ApprvComment);
+                cmd.Parameters.AddWithValue("@inComment", AckComment);
                 SqlParameter p = new SqlParameter("@OutGenstatus", SqlDbType.NVarChar, 100);
                 p.Direction = ParameterDirection.Output;
                 cmd.Parameters.Add(p);
@@ -143,89 +189,6 @@ namespace Eleave.Controllers
                 conn.Close();
             }
             return Json(new { message = message }, JsonRequestBehavior.AllowGet);
-        }
-        public JsonResult GetRequestDetail(string ReqNO)
-        {
-            var ReqDetail = new List<RequestList>();
-
-            string message = string.Empty;
-            try
-            {
-                ReqDetail = new GetRequestDetail().Get(ReqNO);
-
-                var reqDetailFormatted = ReqDetail.Select(x => new
-                {
-                    x.ReqNo,
-                    x.ReqType,
-                    x.CountryCode,
-                    x.EmpId,
-                    x.LeaveType,
-                    x.ReqDate, //ReqDate = x.ReqDate.HasValue ? x.ReqDate.Value.ToString("dd/MM/yyyy") : "",  // ตรวจสอบ null ก่อนแปลง
-                    x.StartDate, //= x.StartDate.HasValue ? x.StartDate.Value.ToString("dd/MM/yyyy") : "",  // ตรวจสอบ null ก่อนแปลง
-                    x.EndDate, //= x.EndDate.HasValue ? x.EndDate.Value.ToString("dd/MM/yyyy") : "",  // ตรวจสอบ null ก่อนแปลง
-                    x.ReqStatus,
-                    x.ReqStaDesc,
-                    x.Remark
-                }).ToList();
-
-                message = "Y";
-                return Json(new { message = message, ReqDetail = reqDetailFormatted }, JsonRequestBehavior.AllowGet);
-            }
-            catch (Exception ex)
-            {
-                message = ex.Message;
-                return Json(new { message = message, ReqDetail = new List<object>() }, JsonRequestBehavior.AllowGet);
-            }
-
-        }
-        public JsonResult CheckApproval(string ReqNo)
-        {
-            string message = string.Empty;
-            string EmpID = string.Empty;
-            string EmpType = string.Empty;
-            if (Session["EmpId"] != null)
-            {
-                EmpID = Session["EmpId"].ToString();
-                EmpType = Session["UserType"].ToString();
-            }
-            var connectionString = ConfigurationManager.ConnectionStrings["HRIS_DB"].ConnectionString;
-            SqlConnection conn = new SqlConnection(connectionString);
-            conn.Open();
-            try
-            {
-                var cmd = new SqlCommand("P_Check_Approv_Request", conn);
-                cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@inReqNo", ReqNo);
-                cmd.Parameters.AddWithValue("@inUser", EmpID);
-                SqlParameter p = new SqlParameter("@OutGenstatus", SqlDbType.NVarChar, 100);
-                p.Direction = ParameterDirection.Output;
-                cmd.Parameters.Add(p);
-                cmd.ExecuteNonQuery();
-                message = cmd.Parameters["@OutGenstatus"].Value.ToString();
-                conn.Close();
-                cmd.Dispose();
-            }
-            catch (Exception ex)
-            {
-                conn.Close();
-                message = ex.Message;
-            }
-            return Json(new { message = message }, JsonRequestBehavior.AllowGet);
-        }
-        public JsonResult GetLeavetype()
-        {
-            var LeaveType = new List<LeaveTypeModel>();
-            string message = string.Empty;
-            try
-            {
-                LeaveType = new GetLeaveType().GetLeaveTypeList();
-                message = "Y";
-            }
-            catch (Exception ex)
-            {
-                message = ex.Message;
-            }
-            return Json(new { message = message, LeaveType }, JsonRequestBehavior.AllowGet);
         }
         private void LoadDepartments()
         {

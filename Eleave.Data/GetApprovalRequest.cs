@@ -12,9 +12,10 @@ namespace Eleave.Data
     public class GetApprovalRequest : MsSQL
     {
         public GetApprovalRequest() : base(Utils.GetConfig("HRIS_DB")) { }
-        public List<ApprovalRequest> GetRequests(string Department)
+        public List<ApprovalRequest> GetRequests(string EmpId, string Department)
         {
             var p = new SqlParameters();
+            p.AddParams("@inUser", EmpId);
             p.AddParams("@inDepartment", Department);
 
             var table = GetData(CmdStore("P_Get_Request_Approval", p));

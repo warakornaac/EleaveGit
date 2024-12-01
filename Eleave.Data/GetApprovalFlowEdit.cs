@@ -15,10 +15,12 @@ namespace Eleave.Data
         {
 
         }
-        public List<ApprovalFlow> GetApprovalFlows(string ApprvID)
+        public List<ApprovalFlow> GetApprovalFlows(string ApprvID, string ApprvName, string Step)
         {
             var p = new SqlParameters();
             p.AddParams("@inApprvID", ApprvID);
+            p.AddParams("@inApprvName", ApprvName);
+            p.AddParams("@inStep", Step);
             return ConvertExtension.ConvertDataTable<ApprovalFlow>(GetData(CmdStore("P_Get_ApprovalFlow_edit", p)));
         }
     }

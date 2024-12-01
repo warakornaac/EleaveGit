@@ -44,8 +44,10 @@
   <ItemGroup>
     <Compile Include="ApprovalFlow.cs" />
     <Compile Include="ApprovalRequest.cs" />
+    <Compile Include="ApproveCommentRequest.cs" />
     <Compile Include="DirectorProfile.cs" />
     <Compile Include="Eleaving.cs" />
+    <Compile Include="LeaveOverview.cs" />
     <Compile Include="LeaveTypeModel.cs" />
     <Compile Include="Request.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

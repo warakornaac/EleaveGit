@@ -20,7 +20,7 @@
     <div class="col-md-12 col-xl-4">
         <div class="card flat-card">
             <div class="card-header">
-                <h5>วันลาที่เหลือ</h5>
+                <h5>Leave Balance / วันลาที่เหลือ</h5>
             </div>
             <div class="row-table">
                 <div class="col-sm-6 card-body br ">
@@ -77,16 +77,16 @@
         </div>
         <!-- widget primary card start -->
         @*<div class="card flat-card widget-primary-card">
-            <div class="row-table">
-                <div class="col-sm-3 card-body">
-                    <i class="feather icon-star-on"></i>
+                <div class="row-table">
+                    <div class="col-sm-3 card-body">
+                        <i class="feather icon-star-on"></i>
+                    </div>
+                    <div class="col-sm-9">
+                        <h4>4000 +</h4>
+                        <h6>Ratings Received</h6>
+                    </div>
                 </div>
-                <div class="col-sm-9">
-                    <h4>4000 +</h4>
-                    <h6>Ratings Received</h6>
-                </div>
-            </div>
-        </div>*@
+            </div>*@
         <!-- widget primary card end -->
     </div>
     <!-- table card-1 end -->
@@ -94,74 +94,41 @@
     <div class="col-md-12 col-xl-4">
         <div class="card flat-card">
             <div class="card-header">
-                <h5>วันลาทั้งหมด</h5>
+                <h5>Leave Benefits | สิทธิ์วันลา</h5>
             </div>
-            <div class="row-table">
-                <div class="col-sm-6 card-body br">
-                    <div class="row">
-                        <div class="col-sm-4">
-                            @*<i class="icon feather icon-share-2 text-c-blue mb-1 d-block"></i>*@
-                            <i class="fa fa-medkit text-c-green mb-1 d-block"></i>
+            @{
+                var iconMapping = new Dictionary<int, string>
+                            {
+                    { 1, "fa fa-medkit" },
+                    { 2, "fa fa-map-marker" },
+                    { 3, "icon feather icon-rotate-ccw" },
+                    { 4, "icon feather icon-rotate-ccw" },
+                };
+
+                string defaultIcon = "icon feather icon-file-text"; // Default icon
+            }
+            @for (int k = 0; k < ViewBag.LeaveOverview.Count; k += 2)
+            {
+                <div class="row-table">
+                    @for (int j = k; j < k + 2 && j < ViewBag.LeaveOverview.Count; j++)
+                    {
+                        var over = ViewBag.LeaveOverview[j];
+                        var icon = iconMapping.ContainsKey(j) ? iconMapping[j] : defaultIcon;
+                        <div class="col-sm-6 card-body @(j % 2 == 0 ? "br" : "")">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <i class="@icon text-c-green mb-1 d-block"></i>
+                                </div>
+                                <div class="col-sm-8 text-md-center">
+                                    <h5>@over.TotalCount</h5>
+                                    <span>@over.LeaveType</span>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-sm-8 text-md-center">
-                            <h5>10</h5>
-                            <span>ลาป่วย</span>
-                        </div>
-                    </div>
+                    }
                 </div>
-                <div class="col-sm-6 card-body">
-                    <div class="row">
-                        <div class="col-sm-4">
-                            @*<i class="icon feather icon-wifi text-c-blue mb-1 d-block"></i>*@
-                            <i class="icon feather icon-file-text text-c-blue mb-1 d-block"></i>
-                        </div>
-                        <div class="col-sm-8 text-md-center">
-                            <h5>60</h5>
-                            <span>ลากิจ</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row-table">
-                <div class="col-sm-6 card-body br border-top">
-                    <div class="row">
-                        <div class="col-sm-4">
-                            @*<i class="icon feather icon-rotate-ccw text-c-blue mb-1 d-block"></i>*@
-                            <i class="fa fa-map-marker text-c-blue mb-1 d-block"></i>
-                        </div>
-                        <div class="col-sm-8 text-md-center">
-                            <h5>3</h5>
-                            <span>ลาพักร้อน</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-6 card-body border-top">
-                    <div class="row">
-                        <div class="col-sm-4">
-                            @*<i class="icon feather icon-shopping-cart text-c-blue mb-1 d-blockz"></i>*@
-                            <i class="icon feather icon-rotate-ccw text-c-blue mb-1 d-block"></i>
-                        </div>
-                        <div class="col-sm-8 text-md-center">
-                            <h5>10%</h5>
-                            <span>วันลาทั้งหมด</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            }
         </div>
-        <!-- widget-success-card start -->
-        @*<div class="card flat-card widget-purple-card">
-            <div class="row-table">
-                <div class="col-sm-3 card-body">
-                    <i class="fas fa-trophy"></i>
-                </div>
-                <div class="col-sm-9">
-                    <h4>17</h4>
-                    <h6>Achievements</h6>
-                </div>
-            </div>
-        </div>*@
-        <!-- widget-success-card end -->
     </div>
     <!-- table card-2 end -->
     <!-- Widget primary-success card start -->
@@ -178,15 +145,15 @@
                 <div class="row text-center">
                     <div class="col">
                         <h4 class="m-0 text-white">10</h4>
-                        <span>Over Time</span>
+                        <span>OT.</span>
                     </div>
                     <div class="col">
                         <h4 class="m-0 text-white">5</h4>
-                        <span>Work From Home</span>
+                        <span>WFH</span>
                     </div>
                     <div class="col">
                         <h4 class="m-0 text-white">3</h4>
-                        <span>Outside Job</span>
+                        <span>OUT</span>
                     </div>
                 </div>
             </div>
@@ -249,8 +216,8 @@
                                     <td class="text-center">@leave.ReqType</td>
                                     <td class="text-center">@leave.Empname</td>
                                     <td class="text-center">@leave.LeaveType</td>
-                                    <td>@(leave.StartDate)</td>
-                                    <td>@(leave.EndDate)</td>
+                                    <td class="text-center">@(leave.StartDate)</td>
+                                    <td class="text-center">@(leave.EndDate)</td>
                                     <td class="text-center">@leave.NumDay</td>
                                     @if (leave.ReqStatus == "0")
                                     {
@@ -286,12 +253,10 @@
                                     <td style="max-width: 200px;">
                                         <p class="p-0 m-0 text-truncate">@leave.Remark</p>
                                     </td>
-                                    <td class="text-center">@leave.AcceptBy</td>
-                                    <td>@(leave.AcceptDate?.ToString("dd/MM/yyyy")??"")</td>
-                                    @*<td class="text-center">@leave.UpdatedBy</td>
-                                        <td>@(leave.UpdateDate?.ToString("dd/MM/yyyy")??"")</td>*@
-                                    <td></td>
-                                    <td></td>
+                                    <td class="text-center">@leave.ApproveBy</td>
+                                    <td class="text-center">@(leave.ApproveDate)</td>
+                                    <td class="text-center">@leave.AcknowledgeBy</td>
+                                    <td class="text-center">@(leave.AcknowledgeDate)</td>
                                 </tr>
                             }
                         </tbody>

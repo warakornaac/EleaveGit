@@ -48,15 +48,15 @@
                         </div>
                         <div class="form-group col-lg-3">
                             <label class="font-weight-bold">สถานะคำขอ :</label>
-                            @Html.DropDownList("ReqStatus", new SelectList(ViewBag.ReqSta, "LookValue", "LookDesc", "0"), "สถานะคำขอทั้งหมด", new { @class = "custom-select", @id = "reqStatus" })
+                            @Html.DropDownList("ReqStatus", new SelectList(ViewBag.ReqSta, "LookValue", "LookDesc"), "สถานะคำขอทั้งหมด", new { @class = "custom-select", @id = "reqStatus" })
                         </div>
                         <div class="form-group col-lg-3">
                             <label class="font-weight-bold">เริ่มวันที่ :</label>
-                            @Html.TextBox("ReqStart", DateTime.Now.ToString("dd/MM/yyyy"), new { @class = "form-control", @id = "reqStart", @placeholder = "--/--/--" })
+                            @Html.TextBox("ReqStart",@*DateTime.Now.AddDays(-3).ToString("dd/MM/yyyy")*@null, new { @class = "form-control", @id = "reqStart", @placeholder = "--/--/--" })
                         </div>
                         <div class="form-group col-lg-3">
                             <label class="font-weight-bold">ถึงวันที่ :</label>
-                            @Html.TextBox("ReqEnd", DateTime.Now.AddDays(3).ToString("dd/MM/yyyy"), new { @class = "form-control", @id = "reqEnd", @placeholder = "--/--/--" })
+                            @Html.TextBox("ReqEnd",@*DateTime.Now.AddDays(3).ToString("dd/MM/yyyy")*@null, new { @class = "form-control", @id = "reqEnd", @placeholder = "--/--/--" })
                         </div>
                         <div class="form-group col-lg-3">
                             <label class="font-weight-bold">แผนก :</label>
@@ -74,7 +74,12 @@
                             <label class="font-weight-bold">ชื่อพนักงาน :</label>
                             @Html.TextBox("empName", null, new { @class = "form-control", @id = "empName", @placeholder = "ชื่อพนักงาน" })
                         </div>
-
+                        <div class="form-group col-lg-3">
+                            <div class="custom-control custom-checkbox">
+                                @Html.CheckBox("actionFlag", true, new { @class = "custom-control-input", @id = "actionFlag" })
+                                <label class="custom-control-label" for="actionFlag">รายการที่ต้องดำเนินการ</label>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="card-footer p-0">
@@ -126,12 +131,12 @@
                                         <div class="btn btn-warning btn-xs p-1" id="aprvbtn_@request.ReqNo" data-reqno="@request.ReqNo"><span class="fa fa-eye p-1"></span></div>
                                     </td>
                                     <td>@request.ReqNo</td>
-                                    <td>@(request.ReqDate?.ToString("dd/MM/yyyy")??"")</td>
+                                    <td>@(request.ReqDate )</td>
                                     <td class="text-center">@request.ReqType</td>
                                     <td class="text-center">@request.Empname</td>
                                     <td class="text-center">@request.LeaveType</td>
-                                    <td>@(request.StartDate?.ToString("dd/MM/yyyy")??"")</td>
-                                    <td>@(request.EndDate?.ToString("dd/MM/yyyy")??"")</td>
+                                    <td>@(request.StartDate )</td>
+                                    <td>@(request.EndDate )</td>
                                     <td class="text-center">@request.NumDay</td>
                                     @if (request.ReqStatus == "0")
                                     {
@@ -167,12 +172,11 @@
                                     <td style="max-width: 200px;">
                                         <p class="p-0 m-0 text-truncate">@request.Remark</p>
                                     </td>
-                                    <td class="text-center">@request.AcceptBy</td>
-                                    <td>@(request.AcceptDate?.ToString("dd/MM/yyyy")??"")</td>
-                                    @*<td class="text-center">@leave.UpdatedBy</td>
-                                        <td>@(request.UpdateDate?.ToString("dd/MM/yyyy")??"")</td>*@
-                                    <td></td>
-                                    <td></td>
+
+                                    <td class="text-center">@request.ApproveBy</td>
+                                    <td>@(request.ApproveDate )</td>
+                                    <td class="text-center">@request.AcknowledgeBy</td>
+                                    <td>@(request.AcknowledgeDate )</td>
 
                                 </tr>
                             }
@@ -199,6 +203,7 @@
                             <label>รหัสคำขอ: </label>
                             <p class="border-0 p-0 m-0" name="ReqId" id="Approv_reqid"></p>
                             <input type="hidden" name="ReqIdHide" value="" id="Approv_reqid_val" />
+
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -246,7 +251,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-12">
+                    <div class="col-12" id="area-comment-form" hidden>
                         <div class="form-group">
                             <label>ความเห็นผู้อนุมัติ</label>
                             <textarea class="form-control" id="apprv_comment"></textarea>
@@ -255,16 +260,28 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-success" data-dismiss="modal">อนุมัติ/Approve</button>
-                <button type="button" class="btn btn-danger" id="Approv_submit">ปฎิเสธ/Reject</button>
+                <div id="btn-apprv-form" hidden>
+                    <button type="button" class="btn btn-secondary" id="Approv_submit" value="1">อนุมัติ/Approve</button>
+                    <button type="button" class="btn btn-danger" id="Approv_reject" value="2">ปฎิเสท/Reject</button>
+                </div>
             </div>
         </div>
     </div>
 </div>
-<script defer>
 
-    $('#department-selector').select2({
-        width: '100%'
+<script>
+    const queryString = decodeURIComponent(window.location.search);
+    const params = new URLSearchParams(queryString);
+    const page = params.get('req');
+    $(document).ready(function () {
+        $('#department-selector').select2({
+            width: '100%'
+        });
+        console.log('Param :' + page);
+        if (page) {
+            $('#aprvbtn_' + page).click();
+            console.log('click:' + page);
+        }
     });
     $('#reqStart').inputmask('99/99/9999');
     $('#reqEnd').inputmask('99/99/9999');
@@ -281,16 +298,93 @@
     //$(document).on('change', '#LeaveType-selector', function () {
     //    DropdownReqTyp();
     //});
-    $(document).on('click', '[id^="aprvbtn_"]', function (e) {
+    $(document).on('click', '[id^="aprvbtn_"]', async function (e) {
         e.preventDefault();
         var reqNo = $(this).data('reqno');
-        //console.log(reqNo);
-        //$('#ApprovRequestModal').modal('show');
-        GetReqDetail(reqNo);
-    });
 
-     function GetReqDetail(REQ) {
+        $('#apprv_comment').val('');
+        $('#Approv_reqid_val').val(reqNo);
+
+        try {
+
+            await GetReqDetail(reqNo);
+
+            await CheckApprovalReq(reqNo);
+        } catch (error) {
+            console.error("Error during approval process:", error);
+        }
+    });
+    $(document).on('click', '[id^="Approv_"]', function (e) {
+        e.preventDefault();
+        var status = $(this).val();
+        console.log("Status Btn: " + status);
+        ApproveSubmit(status)
+    });
+    function ApproveSubmit(Sta) {
+        var comment = $('#apprv_comment').val();
+        var reqno = $('#cancel_reqid').text()
+        console.log('ReqNo Sub:' + reqno);
         $.ajax({
+            url: '@Url.Action("UpdateApproval", "Approval")',
+            data: {
+                ReqNo: reqno,
+                ApprvStatus: Sta,
+                ApprvComment: comment
+            },
+            type: 'POST',
+            dataType: 'JSON',
+            success: function (data) {
+                if (data.message == 'Y') {
+                    $('#ApprovRequestModal').modal('hide');
+                    Swal.fire({
+                        title: "Success!!!",
+                        text: "ทำการอนุมัติเสร็จสิ้น",
+                        icon: "success"
+                    }).then(() => {
+                        location.reload();
+                    });
+                }
+                else {
+                    $('#ApprovRequestModal').modal('hide');
+                    Swal.fire({
+                        title: "Error!!!",
+                        text: data.message,
+                        icon: "error"
+                    }).then(() => {
+                        $('#ApprovRequestModal').modal('show');
+                    });
+                }
+            }
+        })
+    }
+    function CheckApprovalReq(REQ) {
+        return $.ajax({
+            url: '@Url.Action("CheckApproval", "Approval")',
+            data: {
+                ReqNo: REQ
+            },
+            type: 'POST',
+            dataType: 'JSON',
+            beforeSend: function () {
+
+            },
+            success: function (res) {
+                if (res.message == 'Y') {
+                    $('#area-comment-form').removeAttr('hidden');
+                    $('#btn-apprv-form').removeAttr('hidden');
+                }
+                else if (res.message == 'N') {
+                    $('#area-comment-form').attr('hidden',true);
+                    $('#btn-apprv-form').attr('hidden', true);
+                }
+                else {
+                    console.log('Error :' + res.message);
+                }
+            }
+        });
+    }
+    function GetReqDetail(REQ) {
+        return $.ajax({
             url: '@Url.Action("GetRequestDetail", "Leave")',
             data: {
                 ReqNO: REQ,
@@ -358,7 +452,7 @@
         });
     }
 
-    $(document).on('click', '#Approv_submit', function () {
+    @*$(document).on('click', '#Approv_submit', function () {
         var reqno = $('#Approv_reqid_val').val()
         $.ajax({
             url: '@Url.Action("ApprovRequest", "Leave")',
@@ -388,7 +482,7 @@
                 }
             }
         });
-    });
+    });*@
 
     function DropdownReqTyp()
     {
@@ -443,7 +537,6 @@
         });
     });
 </script>
-
 <script type="text/javascript">
     //$(document).ready(function () {
     //    LoadingShow();
@@ -459,15 +552,15 @@
 </script>
 
 @*@if (Model != null)
-{
-    <script type="text/javascript">
-        $(document).ready(function () {
-            setTimeout(function () {
-                LoadingHide();
-            }, 1500);
-        });
-    </script>
-}*@
+    {
+        <script type="text/javascript">
+            $(document).ready(function () {
+                setTimeout(function () {
+                    LoadingHide();
+                }, 1500);
+            });
+        </script>
+    }*@
 @if (ViewBag.ErrorMessage != null)
 {
     <script>

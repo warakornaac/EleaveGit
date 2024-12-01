@@ -1,5 +1,6 @@
 ﻿@{
     Layout = null;
+    string UserType = Session["UserType"].ToString();
 }
 
 <header class="navbar pcoded-header navbar-expand-lg navbar-light header-dark" style="max-height: 65px;">
@@ -44,38 +45,46 @@
                             }
                         </span>
                     </a>
+                    @*<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ModalAlert">
+                            Launch static backdrop modal
+                        </button>*@
                     <a class="dropdown-toggle" href="#" data-toggle="dropdown">
-                        <i class="fa fa-bell"></i>
-                        <span class="badge badge-pill badge-danger">5</span>
+
+                        <i class="fa fa-bell" id="bell_alert"></i>
+
+                        <span class="badge badge-pill badge-danger" id="alert-number"></span>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right notification">
                         <div class="noti-head">
                             <h6 class="d-inline-block m-b-0">Notifications</h6>
-                            <div class="float-right">
-                                <a href="#!" class="m-r-10">mark as read</a>
-                                <a href="#!">clear all</a>
-                            </div>
+                            @*<div class="float-right">
+                                    <a href="#!" class="m-r-10">mark as read</a>
+                                    <a href="#!">clear all</a>
+                                </div>*@
                         </div>
-                        <ul class="noti-body">
+                        <ul class="noti-body" id="notiAlert">
                             <li class="n-title">
                                 <p class="m-b-0">NEW</p>
                             </li>
                             <li class="notification">
-                                <div class="media">
-                                    @*<img class="img-radius" src="assets/images/user/avatar-1.jpg" alt="Generic placeholder image">*@
-                                    <i class="fa fa-user"></i>
-                                    <div class="media-body">
-                                        <p><strong>John Doe</strong><span class="n-time text-muted"><i class="fa fa-user icon-clock m-r-10"></i>5 min</span></p>
-                                        <p>New ticket Added</p>
+                                <a href="@Url.Action("ManagerHistory","Leave",new { req = 1233 })">
+
+                                    <div class="media">
+
+                                        <i class="fa fa-user"></i>
+                                        <div class="media-body">
+                                            <p><strong>John Doe</strong><span class="n-time text-muted"><i class="fa fa-user icon-clock m-r-10"></i>5 min</span></p>
+                                            <p>New ticket Added</p>
+                                        </div>
                                     </div>
-                                </div>
+                                </a>
                             </li>
                             <li class="n-title">
                                 <p class="m-b-0">EARLIER</p>
                             </li>
                             <li class="notification">
                                 <div class="media">
-                                    <img class="img-radius" src="assets/images/user/avatar-2.jpg" alt="Generic placeholder image">
+                                    <i class="fa fa-user text-danger"></i>
                                     <div class="media-body">
                                         <p><strong>Joseph William</strong><span class="n-time text-muted"><i class="icon feather icon-clock m-r-10"></i>10 min</span></p>
                                         <p>Prchace New Theme and make payment</p>
@@ -102,7 +111,26 @@
                             </li>
                         </ul>
                         <div class="noti-footer">
-                            <a href="#!">show all</a>
+                            @if (Session["UserType"] != null)
+                            {
+                                switch (Session["UserType"].ToString())
+                                {
+                                    case "1": //Employee
+                                        <a href="@Url.Action("EmployeeHistory","Leave")">show all</a>;
+                                        break;
+                                    case "2": //Hr
+                                        <a href="@Url.Action("AdminAcknowledge","Acknowledge")">show all</a>;
+                                        break;
+                                    case "3": //Approve
+                                        <a href="@Url.Action("ManagerApproval","Approval")">show all</a>;
+                                        break;
+                                    default: //SuperAdmin (IT)
+                                        <a href="@Url.Action("ManagerHistory","Leave")">show all</a>;
+                                        break;
+                                }
+
+                            }
+
                         </div>
                     </div>
                 </div>
@@ -131,3 +159,607 @@
         </ul>
     </div>
 </header>
+<div class="modal fade" id="ModalAlert" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="ModalAlertLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ModalAlertLabel">Modal title</h5>
+                @*<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>*@
+                <div class="col-sm-2 col-md-2 text-right"><button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">ปิด</button></div>
+            </div>
+            <div class="modal-body">
+
+            </div>
+            <div class="modal-footer">
+                <div class="d-none" id="btnAlt-apprv-form">
+                    <button type="button" class="btn btn-secondary" id="Approv_alt_submit" value="1">อนุมัติ/Approve</button>
+                    <button type="button" class="btn btn-danger" id="Approv_alt_reject" value="2">ปฎิเสท/Reject</button>
+                </div>
+                <div class="d-none" id="btnAlt-ack-form">
+                    <button type="button" class="btn btn-success" id="acknowledge-alt-btn">รับทราบ/Acknowledge</button>
+                </div>
+
+                <button type="button" class="btn btn-warning" id="cancel_alt_submit"><i class="fa fa-times"></i> ยกเลิกรายการ </button>
+
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        UserSession();
+    });
+    $(document).on('click', '[id^="emp_btn_"]', async function () {
+        var con = $(this).data('reqno');
+        console.log('btn : ' + con);
+        GetReqDetail(con);
+    });
+    $(document).on('click', '[id^="manager_btn_"]', async function () {
+        var con = $(this).data('reqno');
+        console.log('btn : ' + con);
+        await GetReqDetailApproval(con);
+        await CheckApprovalReq(con);
+    });
+    $(document).on('click', '[id^="hr_btn_"]', async function () {
+        var con = $(this).data('reqno');
+        console.log('btn : ' + con);
+        await GetDetailAcknowledge(con);
+        await CheckAcknowledge(con);
+    });
+    setInterval(function () {
+        UserSession();
+    }, 6000);
+
+
+
+    /////Approve
+    $(document).on('click', '[id^="Approv_alt_"]', function (e) {
+        e.preventDefault();
+        var status = $(this).val();
+        console.log("Status Btn: " + status);
+        ApproveAltSubmit(status);
+    })
+    /////Acknowledge
+    $(document).on('click', '#acknowledge-alt-btn', function (e) {
+        e.preventDefault();
+        var ReqNo = $('#ack_reqid_val').val();
+        var Ack_comment = $('#ack-comment').val();
+        console.log('Req :' + ReqNo);
+        console.log('Comment :' + Ack_comment);
+        SaveAcknowledge(ReqNo, Ack_comment);
+    });
+
+    ///////cancel
+    $(document).on('click', '#cancel_alt_submit', function () {
+        var reqno = $('#cancel_reqid_val').val()
+        $.ajax({
+            url: '@Url.Action("CancelRequest", "Leave")',
+            data: {
+                ReqNo: reqno
+            },
+            type: 'POST',
+            dataType: 'JSON',
+            success: function (data) {
+                if (data.message == 'Y') {
+                    $('#ModalAlert').modal('hide');
+                    Swal.fire({
+                        title: "Success!!!",
+                        text: "ยกเลิกคำร้องสำเร็จ ",
+                        icon: "success"
+                    }).then(() => {
+                        location.reload();
+                    });
+                }
+                else {
+                    $('#ModalAlert').modal('hide');
+                    Swal.fire({
+                        title: "Error!!!",
+                        text: "Cancel Failed : " + data.message,
+                        icon: "error"
+                    });
+                }
+            }
+        });
+    });
+    //////
+
+    function UserSession() {
+        var Type = '@UserType'
+        //console.log('Type:' + Type);
+        switch (Type) {
+            case '1':
+                ReqAlert();
+                break;
+            case '2':
+                AdminAlert();
+                break;
+            case '3':
+                ManagerAlert();
+                break;
+            default:
+                ReqAlert()
+                break;
+        }
+    }
+    function ReqAlert() {
+        $.ajax({
+            url: '@Url.Action("GetAlertEmp", "Home")',
+            data: {
+
+            },
+            type: 'POST',
+            dataType: 'JSON',
+            beforeSend: function () {
+
+            },
+            success: function (data) {
+                if (data.message == 'Y') {
+                    var HtmlString = '';
+                    var StaIcon = '';
+                    var colorStatus = '';
+
+                    $('.noti-body').empty();
+                    $('.noti-body').html('<li class="n-title"><p class= "m-b-0">รายการรออนุมัติ</p></li>');
+                    if (data.REQ.length != 0) {
+                        $('#alert-number').text(data.REQ.length);
+                        $('#bell_alert').addClass('text-warning');
+                        for (var i = 0; i < data.REQ.length; i++) {
+                            if (data.REQ[i].ReqStatus == 0) {
+                                StaIcon = 'fa fa-repeat';
+                                colorStatus = "text-warning";
+                            }
+                            if (data.REQ[i].ReqStatus == 1) {
+                                StaIcon = 'fa fa-check';
+                                colorStatus = "text-success";
+                            }
+                            if (data.REQ[i].ReqStatus == 2) {
+                                StaIcon = 'fa fa-times';
+                                colorStatus = "text-danger";
+                            }
+                            if (data.REQ[i].ReqStatus == 3) {
+                                StaIcon = 'fa fa-check';
+                                colorStatus = "text-success";
+                            }
+                            if (data.REQ[i].ReqStatus == 4) {
+                                StaIcon = 'fa fa-ban';
+                                colorStatus = "text-danger";
+                            }
+                            HtmlString += '<li class="notification">';
+                            HtmlString += '<a href="#!" id="emp_btn_' + data.REQ[i].ReqNo + '" data-reqno="' + data.REQ[i].ReqNo + '">'
+                            HtmlString += ' <div class="media">';
+                            HtmlString += '     <div class="media-body">';
+                            HtmlString += '         <p><strong>' + data.REQ[i].Empname + '</strong><strong class="float-end "> ' + data.REQ[i].LeaveType + '</strong></p>';
+                            HtmlString += '         <p><span class="' + colorStatus + '"><i class="' + StaIcon + '"></i>' + data.REQ[i].ReqStaDesc + '</p>';
+                            HtmlString += '     </div>';
+                            HtmlString += ' </div>';
+                            HtmlString += '</a>';
+                            HtmlString += '</li > ';
+
+                        }
+                        $('.noti-body').append(HtmlString);
+
+                    }
+                    else {
+                        $('#alert-number').text('0');
+                        $('#bell_alert').removeClass('text-warning');
+                        $('.noti-body').html('<li class="n-title"><p class= "m-b-0">ไม่พบรายการที่ต้องดำเนินงาน</p></li>');
+                    }
+                }
+            },
+            error: function (xhr, status, error) {
+                console.log('AJAX error: ' + status + ' - ' + error);
+            }
+        });
+    }
+    function ManagerAlert() {
+        $.ajax({
+            url: '@Url.Action("GetAlertApproval", "Home")',
+            data: {
+
+            },
+            type: 'POST',
+            dataType: 'JSON',
+            beforeSend: function () {
+
+            },
+            success: function (data) {
+                if (data.message == 'Y') {
+                    var HtmlString = '';
+                    var StaIcon = '';
+                    var colorStatus = '';
+
+                    $('.noti-body').empty();
+                    $('.noti-body').html('<li class="n-title"><p class= "m-b-0">รายการที่ต้องอนุมัติ</p></li>');
+                    if (data.RequestApprv.length > 0) {
+                        var maxItems = Math.min(data.RequestApprv.length, 5);
+                        $('#alert-number').text(data.RequestApprv.length);
+                        $('#bell_alert').addClass(' faa-ring animated text-warning');
+                        for (var i = 0; i < maxItems; i++) {
+                            if (data.RequestApprv[i].ReqStatus == 0) {
+                                StaIcon = 'fa fa-repeat';
+                                colorStatus = "text-warning";
+                            }
+                            if (data.RequestApprv[i].ReqStatus == 1) {
+                                StaIcon = 'fa fa-check';
+                                colorStatus = "text-success";
+                            }
+                            if (data.RequestApprv[i].ReqStatus == 2) {
+                                StaIcon = 'fa fa-times';
+                                colorStatus = "text-danger";
+                            }
+                            if (data.RequestApprv[i].ReqStatus == 3) {
+                                StaIcon = 'fa fa-check';
+                                colorStatus = "text-success";
+                            }
+                            if (data.RequestApprv[i].ReqStatus == 4) {
+                                StaIcon = 'fa fa-ban';
+                                colorStatus = "text-danger";
+                            }
+                            HtmlString += '<li class="notification">';
+                            HtmlString += '<a href="#!" id="manager_btn_' + data.RequestApprv[i].ReqNo + '" data-reqno="' + data.RequestApprv[i].ReqNo +'">'
+                            HtmlString += ' <div class="media">';
+                            HtmlString += '     <div class="media-body">';
+                            HtmlString += '         <p><strong>' + data.RequestApprv[i].Empname + '</strong><strong class="float-end "> ' + data.RequestApprv[i].LeaveType + '</strong></p>';
+                            HtmlString += '         <p><span class="' + colorStatus + '"><i class="' + StaIcon + '"></i>' + data.RequestApprv[i].ReqStaDesc + '</p>';
+                            HtmlString += '     </div>';
+                            HtmlString += ' </div>';
+                            HtmlString += '</a>';
+                            HtmlString += '</li > ';
+
+                        }
+                        $('.noti-body').append(HtmlString);
+
+                    }
+                    else {
+                        $('#alert-number').text('0');
+                        $('#bell_alert').removeClass(' faa-ring animated text-warning');
+                        $('.noti-body').html('<li class="n-title"><p class= "m-b-0">ไม่พบรายการที่ต้องดำเนินงาน</p></li>');
+                    }
+                }
+            },
+            error: function (xhr, status, error) {
+                console.log('AJAX error: ' + status + ' - ' + error);
+            }
+        });
+    }
+
+    function AdminAlert() {
+        $.ajax({
+            url: '@Url.Action("GetAlertAcknowledge", "Home")',
+            data: {
+
+            },
+            type: 'POST',
+            dataType: 'JSON',
+            beforeSend: function () {
+
+            },
+            success: function (data) {
+                if (data.message == 'Y') {
+                    var HtmlString = '';
+                    var StaIcon = '';
+                    var colorStatus = '';
+                    var maxItems = Math.min(data.RequestAck.length, 5);
+                    $('.noti-body').empty();
+                    $('.noti-body').html('<li class="n-title"><p class= "m-b-0">รายการที่ต้องรับทราบ</p></li>');
+                    if (data.RequestAck.length != 0) {
+                        $('#alert-number').text(data.RequestAck.length);
+                        $('#bell_alert').addClass(' faa-ring animated text-warning');
+                        for (var i = 0; i < maxItems; i++) {
+                            if (data.RequestAck[i].ReqStatus == 0) {
+                                StaIcon = 'fa fa-repeat';
+                                colorStatus = "text-warning";
+                            }
+                            if (data.RequestAck[i].ReqStatus == 1) {
+                                StaIcon = 'fa fa-check';
+                                colorStatus = "text-success";
+                            }
+                            if (data.RequestAck[i].ReqStatus == 2) {
+                                StaIcon = 'fa fa-times';
+                                colorStatus = "text-danger";
+                            }
+                            if (data.RequestAck[i].ReqStatus == 3) {
+                                StaIcon = 'fa fa-check';
+                                colorStatus = "text-success";
+                            }
+                            if (data.RequestAck[i].ReqStatus == 4) {
+                                StaIcon = 'fa fa-ban';
+                                colorStatus = "text-danger";
+                            }
+                            HtmlString += '<li class="notification">';
+                            HtmlString += '<a href="#!" id="hr_btn_' + data.RequestAck[i].ReqNo + '" data-reqno="' + data.RequestAck[i].ReqNo + '">'
+                            HtmlString += ' <div class="media">';
+                            HtmlString += '     <div class="media-body">';
+                            HtmlString += '         <p><strong>' + data.RequestAck[i].Empname + '</strong><strong class="float-end "> ' + data.RequestAck[i].LeaveType + '</strong></p>';
+                            HtmlString += '         <p><span class="' + colorStatus + '"><i class="' + StaIcon + '"></i>' + data.RequestAck[i].ReqStaDesc + '</p>';
+                            HtmlString += '     </div>';
+                            HtmlString += ' </div>';
+                            HtmlString += '</a>';
+                            HtmlString += '</li > ';
+                        }
+                        $('.noti-body').append(HtmlString);
+                    }
+                    else {
+                        $('#alert-number').text('0');
+                        $('#bell_alert').removeClass(' faa-ring animated text-warning');
+                        $('.noti-body').html('<li class="n-title"><p class= "m-b-0">ไม่พบรายการที่ต้องดำเนินงาน</p></li>');
+                    }
+                }
+            },
+            error: function (xhr, status, error) {
+                console.log('AJAX error: ' + status + ' - ' + error);
+            }
+        });
+    }
+
+    ///////ForModalAlert
+    function GetReqDetail(REQ) {
+    return  $.ajax({
+            url: '@Url.Action("GetRequestDetail", "Leave")',
+            data: {
+                ReqNO: REQ,
+                Flag: "view"
+            },
+            type: 'POST',
+            dataType: 'HTML',
+            beforeSend: function () {
+                LoadingShow();
+                $('#ModalAlert').find('.modal-body').html("");
+                $('#ModalAlertLabel').text('การอนุมัติคำขอ');
+            },
+            success: function (data) {
+                $('#ModalAlert').find('.modal-body').html(data);
+                $('#ModalAlert').modal('show');
+            },complete: function (res) {
+                LoadingHide();
+            },
+            error: function (er) {
+                Swal.fire({
+                    icon: 'error',
+                    html: '<p>GetReqDetail :</p><p>' + er.error + '</p>',
+                    confirmButtonColor: '#d33',
+                    confirmButtonText: 'ปิด',
+                    allowOutsideClick: false,
+                    focusConfirm: false,
+                });
+            }
+        }).fail(function (error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'เกิดข้อผิดพลาด กรุณาแจ้งผู้ดูแลระบบ (' + error.status + ')',
+                html: '<p>GetReqDetail :</p><p>' + error.responseText + '</p>',
+                confirmButtonColor: '#d33',
+                confirmButtonText: 'ปิด',
+                allowOutsideClick: false,
+                focusConfirm: false,
+            });
+        });
+    }
+
+
+    function GetReqDetailApproval(REQ) {
+    return $.ajax({
+        url: '@Url.Action("GetRequestDetail", "Leave")',
+        data: {
+            ReqNO: REQ,
+            Flag: "approve"
+        },
+        type: 'POST',
+        dataType: 'HTML',
+        beforeSend: function () {
+            LoadingShow();
+            $('#ModalAlert').find('.modal-body').html("");
+            $('#ModalAlertLabel').text('การอนุมัติคำขอ');
+        },
+        success: function (data) {
+            $('#ModalAlert').find('.modal-body').html(data);
+            $('#ModalAlert').modal('show');
+        },complete: function (res) {
+            LoadingHide();
+        },
+        error: function (er) {
+            Swal.fire({
+                icon: 'error',
+                html: '<p>GetReqDetail :</p><p>' + er.error + '</p>',
+                confirmButtonColor: '#d33',
+                confirmButtonText: 'ปิด',
+                allowOutsideClick: false,
+                focusConfirm: false,
+            });
+        }
+    }).fail(function (error) {
+        Swal.fire({
+            icon: 'error',
+            title: 'เกิดข้อผิดพลาด กรุณาแจ้งผู้ดูแลระบบ (' + error.status + ')',
+            html: '<p>GetReqDetail :</p><p>' + error.responseText + '</p>',
+            confirmButtonColor: '#d33',
+            confirmButtonText: 'ปิด',
+            allowOutsideClick: false,
+            focusConfirm: false,
+        });
+    });
+    }
+    function CheckApprovalReq(REQ) {
+    return $.ajax({
+        url: '@Url.Action("CheckApproval", "Approval")',
+        data: {
+            ReqNo: REQ
+        },
+        type: 'POST',
+        dataType: 'JSON',
+        beforeSend: function () {
+
+        },
+        success: function (res) {
+            if (res.message == 'Y') {
+                $('#area-comment-form').removeAttr('hidden');
+                $('#btnAlt-apprv-form').removeClass('d-none');
+            }
+            else if (res.message == 'N') {
+                $('#area-comment-form').attr('hidden',true);
+                $('#btnAlt-apprv-form').addClass('d-none');
+            }
+            else {
+                console.log('Error :' + res.message);
+            }
+        }
+    });
+}
+
+
+
+    function GetDetailAcknowledge(REQ) {
+        return $.ajax({
+            url: '@Url.Action("GetDetailAcknowledge", "Acknowledge")',
+            data: {
+                ReqNo: REQ
+            },
+            type: 'POST',
+            dataType: 'HTML',
+            beforeSend: function () {
+                LoadingShow();
+                $('#ModalAlertLabel').text('การรับทราบคำขอ');
+                $('#ModalAlert').find('.modal-body').html("");
+            },
+            success: function (data) {
+                $('#ModalAlert').find('.modal-body').html(data);
+                $('#ModalAlert').modal('show');
+            }, complete: function (res) {
+                LoadingHide();
+            },
+            error: function (er) {
+                $('#ModalAlert').modal('hide');
+                Swal.fire({
+                    icon: 'error',
+                    html: '<p>GetReqDetail :</p><p>' + er.error + '</p>',
+                    confirmButtonColor: '#d33',
+                    confirmButtonText: 'ปิด',
+                    allowOutsideClick: false,
+                    focusConfirm: false,
+                });
+            }
+        });
+    }
+        function CheckAcknowledge(REQ) {
+        return $.ajax({
+            url: '@Url.Action("CheckAcknowledge", "Acknowledge")',
+            data: {
+                ReqNo:REQ
+            },
+            type: 'POST',
+            dataType: 'JSON',
+            cache: false,
+            beforeSend: function () {
+                LoadingShow();
+            },
+            success: function (res) {
+                if (res.message === "Y") {
+                    $('#ack-comment-div').removeClass('d-none');
+                    $('#btnAlt-ack-form').removeClass('d-none');
+                }
+                else if (res.message === "N") {
+                    $('#ack-comment-div').addClass('d-none');
+                    $('#btnAlt-ack-form').addClass('d-none');
+                }
+                else {
+                    $('#ModalAlert').modal('hide');
+                    Swal.fire({
+                        icon: 'error',
+                        html: '<p>Error :</p><p>' + res.message + '</p>',
+                        confirmButtonColor: '#d33',
+                        confirmButtonText: 'ปิด',
+                        allowOutsideClick: false,
+                        focusConfirm: false,
+                    });
+                }
+            }, complete: function (res) {
+                LoadingHide();
+            },
+            error: function (er) {
+                Swal.fire({
+                    icon: 'error',
+                    html: '<p>GetReqDetail :</p><p>' + er.error + '</p>',
+                    confirmButtonColor: '#d33',
+                    confirmButtonText: 'ปิด',
+                    allowOutsideClick: false,
+                    focusConfirm: false,
+                });
+            }
+        });
+    }
+    /////Approve
+        function ApproveAltSubmit(Sta) {
+        var comment = $('#apprv_comment').val();
+        var reqno = $('#cancel_reqid').text()
+        console.log('ReqNo Sub:' + reqno);
+        $.ajax({
+            url: '@Url.Action("UpdateApproval", "Approval")',
+            data: {
+                ReqNo: reqno,
+                ApprvStatus: Sta,
+                ApprvComment: comment
+            },
+            type: 'POST',
+            dataType: 'JSON',
+            success: function (data) {
+                if (data.message == 'Y') {
+                    $('#ModalAlert').modal('hide');
+                    Swal.fire({
+                        title: "Success!!!",
+                        text: "ทำการอนุมัติเสร็จสิ้น",
+                        icon: "success"
+                    }).then(() => {
+                        location.reload();
+                    });
+                }
+                else {
+                    $('#ModalAlert').modal('hide');
+                    Swal.fire({
+                        title: "Error!!!",
+                        text: data.message,
+                        icon: "error"
+                    }).then(() => {
+                        $('#ModalAlert').modal('show');
+                    });
+                }
+            }
+        })
+    }
+
+    ////Acknowledge
+    function SaveAcknowledge(REQ, ack_comm) {
+        $.ajax({
+            url: '@Url.Action("SaveAcknowledge", "Acknowledge")',
+            data: {
+                ReqNo: REQ,
+                AckComment: ack_comm
+            },
+            type: 'POST',
+            dataType: 'JSON',
+            success: function (res) {
+                if (res.message == 'Y') {
+                    $('#ModalAlert').modal('hide');
+                    Swal.fire({
+                        title: "Success!!!",
+                        text: "ทำการอนุมัติเสร็จสิ้น",
+                        icon: "success"
+                    }).then(() => {
+                        location.reload();
+                    });
+                }
+                else {
+                    $('#ModalAlert').modal('hide');
+                    Swal.fire({
+                        title: "Error!!!",
+                        text: res.message,
+                        icon: "error"
+                    }).then(() => {
+                        $('#ModalAlert').modal('show');
+                    });
+                }
+            }
+        });
+    }
+</script>

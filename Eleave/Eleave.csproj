@@ -135,6 +135,7 @@
   <ItemGroup>
     <Content Include="About.aspx" />
     <Content Include="Contact.aspx" />
+    <Content Include="Content\bell-alert.css" />
     <Content Include="Content\bootstrap-grid.css" />
     <Content Include="Content\bootstrap-grid.min.css" />
     <Content Include="Content\bootstrap-grid.rtl.css" />
@@ -318,6 +319,7 @@
     <Compile Include="Contact.aspx.designer.cs">
       <DependentUpon>Contact.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Controllers\AcknowledgeController.cs" />
     <Compile Include="Controllers\ApprovalController.cs" />
     <Compile Include="Controllers\EleaveController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
@@ -392,6 +394,8 @@
     <Content Include="Views\Employee\ImportExcel.cshtml" />
     <Content Include="Views\Employee\_ListImportExcel.cshtml" />
     <Content Include="Views\Employee\_ListImportExcelSample.cshtml" />
+    <Content Include="Views\Acknowledge\AdminAcknowledge.cshtml" />
+    <Content Include="Views\Acknowledge\_DetailAcknowledge.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
