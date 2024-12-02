@@ -483,37 +483,10 @@
             beforeSend: function () {
                 LoadingShow();
                 $('#ApprovRequestModal').find('.modal-body').html("");
-                //$('#cancel_reqid').text('');
-                //$('#cancel_reqid_val').val('');
-                //$('#cancel_reqdate').text('');
-                //$('#cancel_reqtyp').text('');
-                //$('#cancel_levtyp').text('');
-                //$('#cancel_startdate').text('');
-                //$('#cancel_enddate').text('');
-                //$('#cancel_remark').text('');
-                //$('#cancel_sta').html('');
             },
             success: function (data) {
                 $('#ApprovRequestModal').find('.modal-body').html(data);
                 $('#ApprovRequestModal').modal('show');
-                //if (data.message == "Y") {
-                //    if (data.ReqDetail.length != 0) {
-                //        $('#cancel_reqid').text(data.ReqDetail[0].ReqNo);
-                //        $('#cancel_reqid_val').val(data.ReqDetail[0].ReqNo);
-                //        $('#cancel_reqdate').text(data.ReqDetail[0].ReqDate);
-                //        $('#cancel_reqtyp').text(data.ReqDetail[0].ReqType);
-                //        $('#cancel_levtyp').text(data.ReqDetail[0].LeaveType);
-                //        $('#cancel_startdate').text(data.ReqDetail[0].StartDate);
-                //        $('#cancel_enddate').text(data.ReqDetail[0].EndDate);
-                //        $('#cancel_remark').text(data.ReqDetail[0].Remark);
-                //        if (data.ReqDetail[0].ReqStatus == "0") {
-                //            $('#cancel_sta').html('<div class="text-warning"><i class="fa fa-repeat" aria-hidden="true"></i><span>' + data.ReqDetail[0].ReqStaDesc +'</span></div>');
-                //        }
-                //    }
-                //}
-                //else {
-                //    console.log('Detail Err: ' + data.message);
-                //}
             },complete: function (res) {
                 LoadingHide();
             },

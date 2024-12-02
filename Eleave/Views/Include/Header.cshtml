@@ -206,8 +206,9 @@
     });
     $(document).on('click', '[id^="hr_btn_"]', async function () {
         var con = $(this).data('reqno');
+        var empId = $(this).data('empid');
         console.log('btn : ' + con);
-        await GetDetailAcknowledge(con);
+        await GetDetailAcknowledge(con, empId);
         await CheckAcknowledge(con);
     });
     setInterval(function () {
@@ -471,7 +472,7 @@
                                 colorStatus = "text-danger";
                             }
                             HtmlString += '<li class="notification">';
-                            HtmlString += '<a href="#!" id="hr_btn_' + data.RequestAck[i].ReqNo + '" data-reqno="' + data.RequestAck[i].ReqNo + '">'
+                            HtmlString += '<a href="#!" id="hr_btn_' + data.RequestAck[i].ReqNo + '" data-reqno="' + data.RequestAck[i].ReqNo + '"data-empid="' + data.RequestAck[i].EmpId + '">'
                             HtmlString += ' <div class="media">';
                             HtmlString += '     <div class="media-body">';
                             HtmlString += '         <p><strong>' + data.RequestAck[i].Empname + '</strong><strong class="float-end "> ' + data.RequestAck[i].LeaveType + '</strong></p>';
@@ -614,11 +615,13 @@
 
 
 
-    function GetDetailAcknowledge(REQ) {
+    function GetDetailAcknowledge(REQ, empId) {
         return $.ajax({
             url: '@Url.Action("GetDetailAcknowledge", "Acknowledge")',
             data: {
-                ReqNo: REQ
+                ReqNo: REQ,
+                EmpId: empId,
+                Flag: "ack"
             },
             type: 'POST',
             dataType: 'HTML',

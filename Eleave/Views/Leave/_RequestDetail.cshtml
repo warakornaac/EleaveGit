@@ -17,7 +17,7 @@
                     <label class="control-label font-weight-bold" for="">รหัสคำขอ : </label>
                     <div class="form-control-static">
                         <p class="border-0 p-0 m-0" name="ReqId" id="cancel_reqid"> @reqDetail.ReqNo </p>
-                        <input type="hidden" name="ReqIdHide" value="@reqDetail.ReqNo" id="cancel_reqid_val" />
+                        <input type="hidden" id="ReqIdHide" name="ReqIdHide" value="@reqDetail.ReqNo"/>
                         <input type="hidden" id="ReqStatus" name="ReqStatus" value="@reqDetail.ReqStatus" />
                         <input type="hidden" id="ReqEmpId" name="ReqEmpId" value="@reqDetail.EmpId" />
                     </div>
@@ -97,13 +97,11 @@
                 </div>
             </div>
         </div>
-        //if (ViewBag.Flag == "approve")
-        //{
-            //สิทธิการลา
-            <div class="row">
-                <hr />
-            </div>
-        //}
+
+        <div class="row">
+            <hr />
+        </div>
+
         <div class="row">
             <div class="col-sm-6 col-md-6 text-left">
                 <span class="badge badge-light-secondary" style="font-size: 16px;"> สิทธิการลา </span>
@@ -114,9 +112,7 @@
                 @Html.Partial("_LeaveBalance", (List<StoreGetLeaveBalance>)ViewBag.listLeaveBalance)
             </div>
         </div>
-        @*<div class="row">
-                <hr />
-            </div>*@
+
         if (ViewBag.ApprvComment.Count > 0)
         {
             <div class="row">
@@ -165,10 +161,8 @@
                         </div>
                     </div>
                 }
-
             }
         </div>
-        <br />
 
         <div id="area-ack-comment">
             @if (ViewBag.AckComment.Count > 0)
@@ -219,10 +213,8 @@
                 </div>
             }
         </div>
-        @*<div class="row">
-                <hr />
-            </div>*@
-        <div class="row mb-2">
+
+        <div class="row mt-1 mb-2">
             <div class="col-sm-6 col-md-6 text-left">
                 <span class="badge badge-light-secondary" style="font-size: 16px;"> Attach File </span>
             </div>
@@ -230,21 +222,8 @@
 
         @Html.Partial("_RequestFileDetail", (List<RequestFile>)ViewBag.ReqFile)
 
-        if (countLogApprove > 0) { 
-            <div class="row">
-                <div class="col-sm-6 col-md-6 text-left">
-                    <span class="badge badge-light-secondary" style="font-size: 16px;"> Log อนุมัติ </span>
-                </div>
-            </div>
-            <div class="mt-2">
-                @Html.Partial("_LogApprove", (List<StoreGetLogApprove>)ViewBag.listLogApprove) 
-            </div>
-        }
-
+        //ผู้อนุมัติ
         <div id="area-comment-form" hidden>
-            @*<div class="row">
-                    <hr />
-                </div>*@
             <div class="row">
                 <div class="col-sm-6 col-md-6 text-left">
                     <span class="badge badge-light-secondary" style="font-size: 16px;"> ความเห็นผู้อนุมัติ </span>
@@ -256,6 +235,31 @@
                 </div>
             </div>
         </div>
+        //Ack HR
+        <div id="ack-comment-div" class="d-none">
+            <div class="row">
+                <div class="col-sm-6 col-md-6 text-left">
+                    <span class="badge badge-light-secondary" style="font-size: 16px;"> ความเห็น HR </span>
+                </div>
+            </div>
+            <div class="row pt-1 pb-3">
+                <div class="col-12">
+                    <textarea class="form-control" id="ack-comment"></textarea>
+                </div>
+            </div>
+        </div>
+        //Log
+        if (countLogApprove > 0)
+        {
+            <div class="row pt-1">
+                <div class="col-sm-6 col-md-6 text-left">
+                    <span class="badge badge-light-secondary" style="font-size: 16px;"> Log อนุมัติ </span>
+                </div>
+            </div>
+            <div class="mt-2">
+                @Html.Partial("_LogApprove", (List<StoreGetLogApprove>)ViewBag.listLogApprove)
+            </div>
+        }
     }
 }
 else
@@ -293,35 +297,5 @@ else
             $("#cancel_alt_submit").css("display", "none");
         }
     });
-   @*$(document).on('click', '#cancel_submit', function () {
-        var reqno = $('#cancel_reqid_val').val()
-        $.ajax({
-            url: '@Url.Action("CancelRequest", "Leave")',
-            data: {
-                ReqNo: reqno
-            },
-            type: 'POST',
-            dataType: 'JSON',
-            success: function (data) {
-                if (data.message == 'Y') {
-                    $('#RequestDetailModal').modal('hide');
-                    Swal.fire({
-                        title: "Success",
-                        text: "ยกเลิกคำร้องสำเร็จ ",
-                        icon: "success"
-                    }).then(() => {
-                        location.reload();
-                    });
-                }
-                else {
-                    $('#RequestDetailModal').modal('hide');
-                    Swal.fire({
-                        title: "Error!!!",
-                        text: "Cancel Failed : " + data.message,
-                        icon: "error"
-                    });
-                }
-            }
-        });
-   });*@
+
 </script>

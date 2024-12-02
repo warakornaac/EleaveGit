@@ -38,7 +38,7 @@
                         </div>
                         <div class="form-group col-lg-3">
                             <label class="font-weight-bold">ประเภทการลา :</label>
-                            @Html.DropDownList("reqType", new SelectList(ViewBag.Leavetype, "RequestID", "Description"), "ประเภทการลา", new { @class = "custom-select", @id = "reqType-selector" })
+                            @Html.DropDownList("reqType", new SelectList(ViewBag.Leavetype, "Leavetype", "Description"), "ประเภทการลา", new { @class = "custom-select", @id = "reqType-selector" })
 
                         </div>
                         <div class="form-group col-lg-3">
@@ -124,7 +124,7 @@
                                 <tr>
                                     <td class="text-center">@i</td>
                                     <td class="text-center">
-                                        <div class="btn btn-warning btn-xs p-1" id="ackbtn_@item.ReqNo" data-reqno="@item.ReqNo"><span class="fa fa-eye p-1"></span></div>
+                                        <div class="btn btn-warning btn-xs p-1" id="ackbtn_@item.ReqNo" data-reqno="@item.ReqNo" data-empid="@item.EmpId"><span class="fa fa-eye p-1"></span></div>
                                     </td>
                                     <td class="text-center">@item.ReqNo</td>
                                     <td class="text-center">@(item.ReqDate )</td>
@@ -186,7 +186,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="ModalAck">การรับทราบคำขอ</h5>
+                <h5 class="modal-title" id="ModalAck">รับทราบคำขอ</h5>
                 <div class="col-sm-2 col-md-2 text-right"><button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">ปิด</button></div>
             </div>
             <div class="modal-body">
@@ -254,10 +254,10 @@
     $(document).on('click', '[id^="ackbtn_"]', async function (e) {
         e.preventDefault();
         var ReqNo = $(this).data('reqno');
+        var empId = $(this).data('empid');
         console.log("Detail ReqNo: " + ReqNo);
         try {
-            await GetDetailAcknowledge(ReqNo);
-
+            await GetDetailAcknowledge(ReqNo, empId);
             await CheckAcknowledge(ReqNo);
         }
         catch(error) {
@@ -266,42 +266,58 @@
     });
     $(document).on('click', '#acknowledge-btn', function (e) {
         e.preventDefault();
-        var ReqNo = $('#ack_reqid').text();
+        var ReqNo = $('#ReqIdHide').val();
         var Ack_comment = $('#ack-comment').val();
         console.log('Req :' + ReqNo);
         console.log('Comment :' + Ack_comment);
         SaveAcknowledge(ReqNo, Ack_comment);
     });
     function SaveAcknowledge(REQ, ack_comm) {
-        $.ajax({
-            url: '@Url.Action("SaveAcknowledge", "Acknowledge")',
-            data: {
-                ReqNo: REQ,
-                AckComment: ack_comm
-            },
-            type: 'POST',
-            dataType: 'JSON',
-            success: function (res) {
-                if (res.message == 'Y') {
-                    $('#AckRequestModal').modal('hide');
-                    Swal.fire({
-                        title: "Success!!!",
-                        text: "ทำการอนุมัติเสร็จสิ้น",
-                        icon: "success"
-                    }).then(() => {
-                        location.reload();
-                    });
-                }
-                else {
-                    $('#AckRequestModal').modal('hide');
-                    Swal.fire({
-                        title: "Error!!!",
-                        text: res.message,
-                        icon: "error"
-                    }).then(() => {
-                        $('#AckRequestModal').modal('show');
-                    });
-                }
+        Swal.fire({
+            icon: 'question',
+            title: 'ต้องยืนยันใช่หรือไม่',
+            html: '',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'ยืนยัน',
+            showCancelButton: true,
+            cancelButtonColor: '#d33',
+            cancelButtonText: 'ยกเลิก',
+            allowOutsideClick: false,
+            focusConfirm: false,
+        }).then(async (result) => {
+            if (result.value) {
+                $.ajax({
+                    url: '@Url.Action("SaveAcknowledge", "Acknowledge")',
+                    data: {
+                        ReqNo: REQ,
+                        AckComment: ack_comm
+                    },
+                    type: 'POST',
+                    dataType: 'JSON',
+                    success: function (res) {
+                        if (res.message == 'Y') {
+                            $('#AckRequestModal').modal('hide');
+                            Swal.fire({
+                                title: "อนุมัติเรียบร้อย",
+                                icon: 'success',
+                                confirmButtonColor: '#3085d6',
+                                confirmButtonText: 'ปิด',
+                            }).then(() => {
+                                location.reload();
+                            });
+                        }
+                        else {
+                            $('#AckRequestModal').modal('hide');
+                            Swal.fire({
+                                title: "เกิดข้อผิดพลาด!",
+                                text: res.message,
+                                icon: "error"
+                            }).then(() => {
+                                $('#AckRequestModal').modal('show');
+                            });
+                        }
+                    }
+                });
             }
         });
     }
@@ -352,11 +368,13 @@
         });
     }
 
-    function GetDetailAcknowledge(REQ) {
-        return $.ajax({
-            url: '@Url.Action("GetDetailAcknowledge", "Acknowledge")',
+    function GetDetailAcknowledge(REQ, empId) {
+          return $.ajax({
+            url: '@Url.Action("GetRequestDetail", "Leave")',
             data: {
-                ReqNo: REQ
+                ReqNO: REQ,
+                EmpId: empId,
+                Flag: "ack"
             },
             type: 'POST',
             dataType: 'HTML',
@@ -367,6 +385,7 @@
             success: function (data) {
                 $('#AckRequestModal').find('.modal-body').html(data);
                 $('#AckRequestModal').modal('show');
+                $("#ack-comment").focus();
             }, complete: function (res) {
                 LoadingHide();
             },
