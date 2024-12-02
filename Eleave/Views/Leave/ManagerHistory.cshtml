@@ -125,7 +125,7 @@
                                     <td class="vcenter">@i</td>
 
                                     <td class="text-center vcenter">
-                                        <div class="btn btn-info btn-xs p-1" id="btnview_@leave.ReqNo" data-reqno="@leave.ReqNo"><span class="fa fa-eye p-1"></span></div>
+                                        <div class="btn btn-info btn-xs p-1" id="btnview_@leave.ReqNo" data-reqno="@leave.ReqNo" data-empid="@leave.EmpId"><span class="fa fa-eye p-1"></span></div>
 
                                     </td>
 
@@ -231,16 +231,18 @@
     $(document).on('click', '[id^="btnview_"]', function (e) {
         e.preventDefault();
         var reqNo = $(this).data('reqno');
+        var empId = $(this).data('empid');
         //console.log(reqNo);
         //$('#RequestDetailModal').modal('show');
-        GetReqDetail(reqNo);
+        GetReqDetail(reqNo, empId);
     });
 
-    function GetReqDetail(REQ) {
+    function GetReqDetail(REQ, empId) {
         $.ajax({
             url: '@Url.Action("GetRequestDetail", "Leave")',
             data: {
                 ReqNO: REQ,
+                EmpId: empId,
                 Flag: "view"
             },
             type: 'POST',

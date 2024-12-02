@@ -175,7 +175,7 @@
             <div class="modal-footer">
                 <div class="d-none" id="btnAlt-apprv-form">
                     <button type="button" class="btn btn-secondary" id="Approv_alt_submit" value="1">อนุมัติ/Approve</button>
-                    <button type="button" class="btn btn-danger" id="Approv_alt_reject" value="2">ปฎิเสท/Reject</button>
+                    <button type="button" class="btn btn-danger" id="Approv_alt_reject" value="2">ปฎิเสธ/Reject</button>
                 </div>
                 <div class="d-none" id="btnAlt-ack-form">
                     <button type="button" class="btn btn-success" id="acknowledge-alt-btn">รับทราบ/Acknowledge</button>
@@ -193,13 +193,15 @@
     });
     $(document).on('click', '[id^="emp_btn_"]', async function () {
         var con = $(this).data('reqno');
+        var empId = $(this).data('empid');
         console.log('btn : ' + con);
-        GetReqDetail(con);
+        GetReqDetail(con, empId);
     });
     $(document).on('click', '[id^="manager_btn_"]', async function () {
         var con = $(this).data('reqno');
+        var empId = $(this).data('empid');
         console.log('btn : ' + con);
-        await GetReqDetailApproval(con);
+        await GetReqDetailApproval(con, empId);
         await CheckApprovalReq(con);
     });
     $(document).on('click', '[id^="hr_btn_"]', async function () {
@@ -327,7 +329,7 @@
                                 colorStatus = "text-danger";
                             }
                             HtmlString += '<li class="notification">';
-                            HtmlString += '<a href="#!" id="emp_btn_' + data.REQ[i].ReqNo + '" data-reqno="' + data.REQ[i].ReqNo + '">'
+                            HtmlString += '<a href="#!" id="emp_btn_' + data.REQ[i].ReqNo + '" data-reqno="' + data.REQ[i].ReqNo + '" data-empid="' + data.REQ[i].EmpId + '">'
                             HtmlString += ' <div class="media">';
                             HtmlString += '     <div class="media-body">';
                             HtmlString += '         <p><strong>' + data.REQ[i].Empname + '</strong><strong class="float-end "> ' + data.REQ[i].LeaveType + '</strong></p>';
@@ -398,7 +400,7 @@
                                 colorStatus = "text-danger";
                             }
                             HtmlString += '<li class="notification">';
-                            HtmlString += '<a href="#!" id="manager_btn_' + data.RequestApprv[i].ReqNo + '" data-reqno="' + data.RequestApprv[i].ReqNo +'">'
+                            HtmlString += '<a href="#!" id="manager_btn_' + data.RequestApprv[i].ReqNo + '" data-reqno="' + data.RequestApprv[i].ReqNo + '"  data-empid="' + data.RequestApprv[i].EmpId + '">'
                             HtmlString += ' <div class="media">';
                             HtmlString += '     <div class="media-body">';
                             HtmlString += '         <p><strong>' + data.RequestApprv[i].Empname + '</strong><strong class="float-end "> ' + data.RequestApprv[i].LeaveType + '</strong></p>';
@@ -495,11 +497,12 @@
     }
 
     ///////ForModalAlert
-    function GetReqDetail(REQ) {
+    function GetReqDetail(REQ, empId) {
     return  $.ajax({
             url: '@Url.Action("GetRequestDetail", "Leave")',
             data: {
                 ReqNO: REQ,
+                EmpId: empId,
                 Flag: "view"
             },
             type: 'POST',
@@ -539,11 +542,12 @@
     }
 
 
-    function GetReqDetailApproval(REQ) {
+    function GetReqDetailApproval(REQ, empId) {
     return $.ajax({
         url: '@Url.Action("GetRequestDetail", "Leave")',
         data: {
             ReqNO: REQ,
+            EmpId: empId,
             Flag: "approve"
         },
         type: 'POST',
