@@ -13,6 +13,7 @@ using Eleave.Library;
 using Eleave.Models;
 using System.Data.OleDb;
 using System.IO;
+using System.Drawing.Imaging;
 
 namespace Eleave.Controllers
 {
@@ -67,18 +68,40 @@ namespace Eleave.Controllers
         {
             string EmpId = string.Empty;
             //this.Session["EmpId"] = "6601002";
-            EmpId = Session["EmpId"].ToString();
+            if (Session["EmpId"] != null)
+            {
+                EmpId = Session["EmpId"].ToString();
+            }
+            else
+            {
+                return RedirectToAction("Login", "Home");
+            }
+            var Permission = new List<PermissionProfile>();
             var GetProfile = new List<StoreGetProfile>();
+            var OverviewLeave = new List<LeaveOverview>();
             //if (EmpId != null)
             //{
             GetProfile = new GetProfile().GetStoreGetProfile(EmpId);
+            OverviewLeave = new GetLeaveConsumptionOverview().Get(EmpId);
+            Permission = new GetPermissionProfile().Get(EmpId);
             //}
             ViewBag.ProfileList = GetProfile[0];
             ViewBag.UpdateStatus = "";
+            ViewBag.listLeaveBalance = GetLeaveBalance(EmpId);
+            ViewBag.LeaveOverview = OverviewLeave;
+            ViewBag.Permission = Permission;
             return View("ViewProfile", new
             {
                 @ViewBag.ProfileList
             });
+        }
+        [HttpPost]
+        public List<StoreGetLeaveBalance> GetLeaveBalance(string empId)
+        {
+            var listLeaveBalance = new List<StoreGetLeaveBalance>();
+            listLeaveBalance = new GetLeaveBalance().LeaveBalance(empId);
+
+            return listLeaveBalance;
         }
 
         public ActionResult UpdateEmployee(string EmpId)
@@ -183,7 +206,7 @@ namespace Eleave.Controllers
                     OleDbDataReader dReader;
 
                     dReader = cmd.ExecuteReader();
-              
+
                     while (dReader.Read())
                     {
                         //stkcod = dReader.GetValue(0);
@@ -212,7 +235,8 @@ namespace Eleave.Controllers
                                 //rowInsert++;
                                 empIdList.Add(dReader.GetValue(2).ToString());
                             }
-                            catch (Exception ex) {
+                            catch (Exception ex)
+                            {
                                 txtStatus = "error";
                                 txtMessage = ex.Message;
                             }

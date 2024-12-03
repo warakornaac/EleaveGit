@@ -10,6 +10,6 @@ namespace Eleave.Models
     {
         public int ID { get; set; }
         public string LeaveType { get; set; }
-        public int TotalCount { get; set; }
+        public string TotalCount { get; set; }
     }
 }

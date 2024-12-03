@@ -37,16 +37,19 @@ namespace Eleave.Controllers
             }
             var HisRequest = new List<RequestList>();
             var OverviewLeave = new List<LeaveOverview>();
+            var BalanceLeave = new List<LeaveOverview>();
             try
             {
                 HisRequest = new GetRequestList().GetRequests(EmpID, EmpType, "");
                 OverviewLeave = new GetLeaveConsumptionOverview().Get(EmpID);
+                BalanceLeave = new GetLeaveBalanceOverview().Get(EmpID);
             }
             catch
             {
 
             }
             ViewBag.LeaveOverview = OverviewLeave;
+            ViewBag.BalanceLeave = BalanceLeave;
 
             return View(HisRequest);
         }
