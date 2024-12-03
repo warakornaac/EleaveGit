@@ -40,12 +40,41 @@ namespace Eleave.Controllers
             return View();
         }
         [HttpPost]
+        public ActionResult GetFormLeaveBalance(string empId)
+        {
+            var listLeaveBalance = new List<StoreGetLeaveBalance>();
+            string message = string.Empty;
+            try
+            {
+                listLeaveBalance = new GetLeaveBalance().LeaveBalance(empId);
+            }
+            catch (Exception ex)
+            {
+                message = ex.Message;
+
+            }
+            ViewBag.Message = message;
+            ViewBag.listLeaveBalance = listLeaveBalance;
+            return PartialView("_LeaveBalance", new
+            {
+                @ViewBag.listLeaveBalance
+            });
+        }
+        [HttpPost]
         public List<StoreGetLeaveBalance> GetLeaveBalance(string empId)
         {
             var listLeaveBalance = new List<StoreGetLeaveBalance>();
             listLeaveBalance = new GetLeaveBalance().LeaveBalance(empId);
 
             return listLeaveBalance;
+        }
+        [HttpPost]
+        public List<StoreGetLogApprove> GetLogApprove(string reqId)
+        {
+            var listLogApprove = new List<StoreGetLogApprove>();
+            listLogApprove = new GetLogApprove().LogApprove(reqId);
+
+            return listLogApprove;
         }
         [HttpPost]
         public ActionResult SaveRequestForm(string ReqNo, string EmpId, string ReqType, string LeaveType, string StartDate, string EndDate, string PeriodTime, double NumDay, int NumHour, string Remark)
@@ -307,12 +336,14 @@ namespace Eleave.Controllers
             }
             return Json(new { message = message }, JsonRequestBehavior.AllowGet);
         }
-        public ActionResult GetRequestDetail(string ReqNO, string Flag)
+        public ActionResult GetRequestDetail(string ReqNO, string EmpId, string Flag)
         {
             var ReqDetail = new List<RequestList>();
             var ReqFile = new List<RequestFile>();
             var AppComment = new List<ApproveCommentRequest>();
             var AckComment = new List<ApproveCommentRequest>();
+            var listLeaveBalance = new List<StoreGetLeaveBalance>();
+            var listLogApprove = new List<StoreGetLogApprove>();
             string message = string.Empty;
             try
             {
@@ -321,32 +352,23 @@ namespace Eleave.Controllers
                 ReqFile = new GetRequestFile().GetFile(ReqNO);
                 AppComment = new GetCommentApprover().GetComment(ReqNO);
                 AckComment = new GetCommentAcknowledge().GetComment(ReqNO);
-                //var reqDetailFormatted = ReqDetail.Select(x => new
-                //{
-                //    x.ReqNo,
-                //    x.ReqType,
-                //    x.CountryCode,
-                //    x.EmpId,
-                //    x.LeaveType,
-                //    ReqDate = x.ReqDate.HasValue ? x.ReqDate.Value.ToString("dd/MM/yyyy") : "",  // ตรวจสอบ null ก่อนแปลง
-                //    StartDate = x.StartDate.HasValue ? x.StartDate.Value.ToString("dd/MM/yyyy") : "",  // ตรวจสอบ null ก่อนแปลง
-                //    EndDate = x.EndDate.HasValue ? x.EndDate.Value.ToString("dd/MM/yyyy") : "",  // ตรวจสอบ null ก่อนแปลง
-                //    x.ReqStatus,
-                //    x.ReqStaDesc,
-                //    x.Remark
-                //}).ToList();
+                listLeaveBalance = new GetLeaveBalance().LeaveBalance(EmpId);
+                listLogApprove = new GetLogApprove().LogApprove(ReqNO);
 
                 message = "Y";
                 ViewBag.ReqDetail = ReqDetail;
                 ViewBag.ReqFile = ReqFile;
                 ViewBag.ApprvComment = AppComment;
                 ViewBag.AckComment = AckComment;
+                ViewBag.listLeaveBalance = listLeaveBalance;
+                ViewBag.listLogApprove = listLogApprove;
             }
             catch (Exception ex)
             {
                 message = ex.Message;
                 ViewBag.ReqDetail = new List<object>();
                 ViewBag.ReqFile = new List<object>();
+                ViewBag.listLeaveBalance = new List<object>();
 
             }
             ViewBag.Message = message;
@@ -357,6 +379,8 @@ namespace Eleave.Controllers
                 @ViewBag.ReqDetail,
                 @ViewBag.ReqFile,
                 @ViewBag.Flag,
+                @ViewBag.listLeaveBalance,
+                @ViewBag.listLogApprove,
             });
         }
 

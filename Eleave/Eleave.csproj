@@ -176,6 +176,7 @@
     <Content Include="fonts\Flaticon.svg" />
     <Content Include="fonts\pct.svg" />
     <Content Include="Images\avatar.png" />
+    <Content Include="Images\Logo\log.png" />
     <Content Include="Images\Logo\logo_heager.jpg" />
     <Content Include="Images\Logo\logo_tru.png" />
     <Content Include="Scripts\analytics.min.js" />
@@ -396,6 +397,8 @@
     <Content Include="Views\Employee\_ListImportExcelSample.cshtml" />
     <Content Include="Views\Acknowledge\AdminAcknowledge.cshtml" />
     <Content Include="Views\Acknowledge\_DetailAcknowledge.cshtml" />
+    <Content Include="Views\Leave\_LeaveBalance.cshtml" />
+    <Content Include="Views\Leave\_LogApprove.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -127,7 +127,7 @@ namespace Eleave.Controllers
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@inReqNo", ReqNo.Trim());
                 cmd.Parameters.AddWithValue("@inUser", EmpID);
-                cmd.Parameters.AddWithValue("@inReqSta", ApprvStatus);
+                cmd.Parameters.AddWithValue("@inReqStatus", ApprvStatus);
                 cmd.Parameters.AddWithValue("@inComment", ApprvComment);
                 SqlParameter p = new SqlParameter("@OutGenstatus", SqlDbType.NVarChar, 100);
                 p.Direction = ParameterDirection.Output;

@@ -6,7 +6,16 @@
     string DepartAppver = Session["DeptName"].ToString();
     string EmployeeID = Session["EmpId"].ToString();
 }
+<style>
+    div.table-responsive > div.dt-container > div.row {
+        margin: 1%;
+    }
 
+    .mt-2, .my-2 {
+        margin-top: -0.5rem !important;
+        margin-bottom: 10px;
+    }
+</style>
 <div class="page-header">
     <div class="page-block">
         <div class="row align-items-center">
@@ -15,8 +24,8 @@
                     <h5 class="m-b-10">รายการอนุมัติ</h5>
                 </div>
                 <ul class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="@Url.Action("Index","Home")"><i class="feather icon-home"></i></a></li>
-                    <li class="breadcrumb-item"><a href="@Url.Action("ManagerApproval","Approval")">รายการอนุมัติ</a></li>
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home")"><i class="feather icon-home"></i></a></li>
+                    <li class="breadcrumb-item"><a href="@Url.Action("ManagerApproval", "Approval")">รายการอนุมัติ</a></li>
                 </ul>
             </div>
         </div>
@@ -62,9 +71,9 @@
                             <label class="font-weight-bold">แผนก :</label>
                             @Html.Hidden("Dept", DepartAppver)
                             @Html.DropDownList("Dept",
-                                               new SelectList(ViewBag.DepartmentList, "LookValue", "LookDesc", DepartAppver),
-                                               "เลือกหน่วยงาน",
-                                               new { @class = "custom-select", @id = "department-selector", @disabled = "disabled" })
+                            new SelectList(ViewBag.DepartmentList, "LookValue", "LookDesc", DepartAppver),
+                            "เลือกหน่วยงาน",
+                            new { @class = "custom-select", @id = "department-selector", @disabled = "disabled" })
                         </div>
                         <div class="form-group col-lg-3">
                             <label class="font-weight-bold">รหัสคำขอ :</label>
@@ -93,11 +102,11 @@
             }
         </div>
     </div>
-    <div class="col-xl-12">
-        <div class="card p-0">
+    <div class="col-md-12">
+        <div class="card">
             <div class="card-body p-0">
                 <div class="table-responsive">
-                    <table class="table table-bordered table-striped m-0" id="request-table">
+                    <table class="table table-bordered table-striped" id="request-table" style="margin-left: -25px;">
                         <thead>
                             <tr>
                                 <th>#</th>
@@ -128,7 +137,7 @@
                                 <tr>
                                     <td class="text-center">@i</td>
                                     <td class="text-center">
-                                        <div class="btn btn-warning btn-xs p-1" id="aprvbtn_@request.ReqNo" data-reqno="@request.ReqNo"><span class="fa fa-eye p-1"></span></div>
+                                        <div class="btn btn-warning btn-xs p-1" id="aprvbtn_@request.ReqNo" data-reqno="@request.ReqNo" data-empid="@request.EmpId"><span class="fa fa-eye p-1"></span></div>
                                     </td>
                                     <td>@request.ReqNo</td>
                                     <td>@(request.ReqDate )</td>
@@ -193,7 +202,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="ModalApprov">การอนุมัติคำขอ</h5>
+                <h5 class="modal-title" id="ModalApprov">อนุมัติคำขอ</h5>
                 <div class="col-sm-2 col-md-2 text-right"><button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">ปิด</button></div>
             </div>
             <div class="modal-body">
@@ -260,9 +269,11 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <div id="btn-apprv-form" hidden>
-                    <button type="button" class="btn btn-secondary" id="Approv_submit" value="1">อนุมัติ/Approve</button>
-                    <button type="button" class="btn btn-danger" id="Approv_reject" value="2">ปฎิเสท/Reject</button>
+                <div class="row">
+                    <div class="col-md-12">
+                        <button type="button" class="btn btn-success" id="Approv_submit" value="1"> อนุมัติ/Approve </button>
+                        <button type="button" class="btn btn-danger" id="Approv_reject" value="2"> ปฎิเสธ/Reject </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -301,14 +312,13 @@
     $(document).on('click', '[id^="aprvbtn_"]', async function (e) {
         e.preventDefault();
         var reqNo = $(this).data('reqno');
+        var empId = $(this).data('empid');
 
         $('#apprv_comment').val('');
         $('#Approv_reqid_val').val(reqNo);
 
         try {
-
-            await GetReqDetail(reqNo);
-
+            await GetReqDetail(reqNo, empId);
             await CheckApprovalReq(reqNo);
         } catch (error) {
             console.error("Error during approval process:", error);
@@ -316,46 +326,123 @@
     });
     $(document).on('click', '[id^="Approv_"]', function (e) {
         e.preventDefault();
+        var txtMessage = "อนุมัติ";
         var status = $(this).val();
         console.log("Status Btn: " + status);
-        ApproveSubmit(status)
+        if (status == 2) {
+            txtMessage = "ปฎิเสธ";
+        }
+        var comment = $('#apprv_comment').val();
+        var reqno = $('#cancel_reqid').text()
+        console.log('ReqNo Sub:' + reqno);
+        Swal.fire({
+            icon: 'question',
+            title: 'ต้องการ' + txtMessage + ' ช่หรือไม่',
+            html: '',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'ยืนยัน',
+            showCancelButton: true,
+            cancelButtonColor: '#d33',
+            cancelButtonText: 'ยกเลิก',
+            allowOutsideClick: false,
+            focusConfirm: false,
+        }).then(async (result) => {
+            if (result.value) {
+                $.ajax({
+                    url: '@Url.Action("UpdateApproval", "Approval")',
+                    data: {
+                        ReqNo: reqno,
+                        ApprvStatus: status,
+                        ApprvComment: comment
+                    },
+                    type: 'POST',
+                    dataType: 'JSON',
+                    success: function (data) {
+                        if (data.message == 'Y') {
+                            $('#ApprovRequestModal').modal('hide');
+                            Swal.fire({
+                                title: "อนุมัติเรียบร้อย",
+                                icon: 'success',
+                                confirmButtonColor: '#3085d6',
+                                confirmButtonText: 'ปิด',
+                                allowOutsideClick: false,
+                                focusConfirm: false,
+                                timer: 5000,
+                                timerProgressBar: true,
+                                onClose: () => {
+                                    LoadingHide();
+                                }
+                            }).then(() => {
+                                location.reload();
+                            });
+                        }
+                        else {
+                            $('#ApprovRequestModal').modal('hide');
+                            Swal.fire({
+                                title: "เกิดข้อผิดพลาด!",
+                                text: data.message,
+                                icon: "error"
+                            }).then(() => {
+                                $('#ApprovRequestModal').modal('show');
+                            });
+                        }
+                    }
+                });
+            }
+        });
     });
     function ApproveSubmit(Sta) {
         var comment = $('#apprv_comment').val();
         var reqno = $('#cancel_reqid').text()
         console.log('ReqNo Sub:' + reqno);
-        $.ajax({
-            url: '@Url.Action("UpdateApproval", "Approval")',
-            data: {
-                ReqNo: reqno,
-                ApprvStatus: Sta,
-                ApprvComment: comment
-            },
-            type: 'POST',
-            dataType: 'JSON',
-            success: function (data) {
-                if (data.message == 'Y') {
-                    $('#ApprovRequestModal').modal('hide');
-                    Swal.fire({
-                        title: "Success!!!",
-                        text: "ทำการอนุมัติเสร็จสิ้น",
-                        icon: "success"
-                    }).then(() => {
-                        location.reload();
-                    });
-                }
-                else {
-                    $('#ApprovRequestModal').modal('hide');
-                    Swal.fire({
-                        title: "Error!!!",
-                        text: data.message,
-                        icon: "error"
-                    }).then(() => {
-                        $('#ApprovRequestModal').modal('show');
-                    });
-                }
+        Swal.fire({
+            icon: 'question',
+            title: 'ต้องการอนุมัติใช่หรือไม่',
+            html: '',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'ยืนยัน',
+            showCancelButton: true,
+            cancelButtonColor: '#d33',
+            cancelButtonText: 'ยกเลิก',
+            allowOutsideClick: false,
+            focusConfirm: false,
+        }).then(async (result) => {
+            if (result.value) {
+                $.ajax({
+                    url: '@Url.Action("UpdateApproval", "Approval")',
+                    data: {
+                        ReqNo: reqno,
+                        ApprvStatus: Sta,
+                        ApprvComment: comment
+                    },
+                    type: 'POST',
+                    dataType: 'JSON',
+                    success: function (data) {
+                        if (data.message == 'Y') {
+                            $('#ApprovRequestModal').modal('hide');
+                            Swal.fire({
+                                title: "อนุมัติเรียบร้อย",
+                                icon: 'success',
+                                confirmButtonColor: '#3085d6',
+                                confirmButtonText: 'ปิด',
+                            }).then(() => {
+                                location.reload();
+                            });
+                        }
+                        else {
+                            $('#ApprovRequestModal').modal('hide');
+                            Swal.fire({
+                                title: "เกิดข้อผิดพลาด!",
+                                text: data.message,
+                                icon: "error"
+                            }).then(() => {
+                                $('#ApprovRequestModal').modal('show');
+                            });
+                        }
+                    }
+                });
             }
-        })
+        });
     }
     function CheckApprovalReq(REQ) {
         return $.ajax({
@@ -383,11 +470,12 @@
             }
         });
     }
-    function GetReqDetail(REQ) {
+    function GetReqDetail(REQ, empId) {
         return $.ajax({
             url: '@Url.Action("GetRequestDetail", "Leave")',
             data: {
                 ReqNO: REQ,
+                EmpId: empId,
                 Flag: "approve"
             },
             type: 'POST',
@@ -395,37 +483,10 @@
             beforeSend: function () {
                 LoadingShow();
                 $('#ApprovRequestModal').find('.modal-body').html("");
-                //$('#cancel_reqid').text('');
-                //$('#cancel_reqid_val').val('');
-                //$('#cancel_reqdate').text('');
-                //$('#cancel_reqtyp').text('');
-                //$('#cancel_levtyp').text('');
-                //$('#cancel_startdate').text('');
-                //$('#cancel_enddate').text('');
-                //$('#cancel_remark').text('');
-                //$('#cancel_sta').html('');
             },
             success: function (data) {
                 $('#ApprovRequestModal').find('.modal-body').html(data);
                 $('#ApprovRequestModal').modal('show');
-                //if (data.message == "Y") {
-                //    if (data.ReqDetail.length != 0) {
-                //        $('#cancel_reqid').text(data.ReqDetail[0].ReqNo);
-                //        $('#cancel_reqid_val').val(data.ReqDetail[0].ReqNo);
-                //        $('#cancel_reqdate').text(data.ReqDetail[0].ReqDate);
-                //        $('#cancel_reqtyp').text(data.ReqDetail[0].ReqType);
-                //        $('#cancel_levtyp').text(data.ReqDetail[0].LeaveType);
-                //        $('#cancel_startdate').text(data.ReqDetail[0].StartDate);
-                //        $('#cancel_enddate').text(data.ReqDetail[0].EndDate);
-                //        $('#cancel_remark').text(data.ReqDetail[0].Remark);
-                //        if (data.ReqDetail[0].ReqStatus == "0") {
-                //            $('#cancel_sta').html('<div class="text-warning"><i class="fa fa-repeat" aria-hidden="true"></i><span>' + data.ReqDetail[0].ReqStaDesc +'</span></div>');
-                //        }
-                //    }
-                //}
-                //else {
-                //    console.log('Detail Err: ' + data.message);
-                //}
             },complete: function (res) {
                 LoadingHide();
             },
@@ -538,9 +599,6 @@
     });
 </script>
 <script type="text/javascript">
-    //$(document).ready(function () {
-    //    LoadingShow();
-    //});
     document.onreadystatechange = function () {
         if (document.readyState === 'interactive') {
             LoadingShow();

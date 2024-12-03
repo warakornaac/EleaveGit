@@ -55,6 +55,7 @@
     <Compile Include="RequestFile.cs" />
     <Compile Include="RequestList.cs" />
     <Compile Include="StoreGetLeaveBalance.cs" />
+    <Compile Include="StoreGetLogApprove.cs" />
     <Compile Include="StoreGetLookupData.cs" />
     <Compile Include="StoreGetProfile.cs" />
     <Compile Include="StoreUpdateEmployeeProfile.cs" />
