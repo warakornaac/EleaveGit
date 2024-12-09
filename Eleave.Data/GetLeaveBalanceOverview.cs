@@ -15,13 +15,13 @@ namespace Eleave.Data
         {
 
         }
-        public List<LeaveOverview> Get(string EmpID)
+        public List<LeaveBalanceOverview> Get(string EmpID)
         {
             var p = new SqlParameters();
             p.AddParams("@inEmpId", EmpID);
 
             var table = GetData(CmdStore("P_Leave_Balance_Overview", p));
-            return ConvertExtension.ConvertDataTable<LeaveOverview>(GetData(CmdStore("P_Leave_Balance_Overview", p)));
+            return ConvertExtension.ConvertDataTable<LeaveBalanceOverview>(GetData(CmdStore("P_Leave_Balance_Overview", p)));
         }
     }
 }

@@ -47,6 +47,7 @@
     <Compile Include="ApproveCommentRequest.cs" />
     <Compile Include="DirectorProfile.cs" />
     <Compile Include="Eleaving.cs" />
+    <Compile Include="LeaveBalanceOverview.cs" />
     <Compile Include="PermissionProfile.cs" />
     <Compile Include="LeaveOverview.cs" />
     <Compile Include="LeaveTypeModel.cs" />
