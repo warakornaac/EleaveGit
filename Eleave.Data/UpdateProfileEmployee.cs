@@ -24,10 +24,13 @@ namespace Eleave.Data
             p.AddParams("@inPrefix", profile.TitleName);
             p.AddParams("@inFirstName", profile.FirstName);
             p.AddParams("@inLastName", profile.LastName);
+            p.AddParams("@inEmail", profile.Email);
             p.AddParams("@inDeptId", profile.DeptId);
             p.AddParams("@inPosition", profile.Position);
             p.AddParams("@inDirectorId", profile.DirectorId);
             p.AddParams("@inEmpLvl", profile.EmpLvl);
+            p.AddParams("@inApprvID", profile.ApprGrpID);
+            p.AddParams("@inUsrTyp", profile.UserType);
             p.AddParams("@inEmpTypeId", profile.EmpTypeId);
             p.AddParams("@inEmpStatus", profile.EmpStatus);
             p.AddParams("@inUser", usrID);

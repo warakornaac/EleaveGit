@@ -19,12 +19,14 @@ namespace Eleave.Models
         public string FirstName { get; set; }
         [Required(ErrorMessage = "กรุณากรอกนามสกุล")]
         public string LastName { get; set; }
+        public string Email { get; set; }
         public string DeptId { get; set; }
         public string Position { get; set; }
         public string EmpLvl { get; set; }
         public string EmpTypeId { get; set; }
         public string ApprGrpID { get; set; }
         public string StartDate { get; set; }
+        public string UserType { get; set; }
         public string EmpStatus { get; set; }
         public string DirectorId { get; set; }
 
