@@ -36,17 +36,18 @@ namespace Eleave.Controllers
                 return RedirectToAction("Login", "Home");
             }
             var HisRequest = new List<RequestList>();
-            var OverviewLeave = new List<LeaveOverview>();
+            var BalanceLeave = new List<LeaveBalanceOverview>();
             try
             {
                 HisRequest = new GetRequestList().GetRequests(EmpID, EmpType, "");
-                OverviewLeave = new GetLeaveConsumptionOverview().Get(EmpID);
+                BalanceLeave = new GetLeaveBalanceOverview().Get(EmpID);
             }
             catch
             {
 
             }
-            ViewBag.LeaveOverview = OverviewLeave;
+
+            ViewBag.BalanceLeave = BalanceLeave;
 
             return View(HisRequest);
         }

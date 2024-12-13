@@ -17,7 +17,8 @@
                     <label class="control-label font-weight-bold" for="">รหัสคำขอ : </label>
                     <div class="form-control-static">
                         <p class="border-0 p-0 m-0" name="ReqId" id="cancel_reqid"> @reqDetail.ReqNo </p>
-                        <input type="hidden" id="ReqIdHide" name="ReqIdHide" value="@reqDetail.ReqNo"/>
+                        <input type="hidden" id="cancel_reqid_val" name="cancel_reqid_val" value="@reqDetail.ReqNo" />
+                        <input type="hidden" id="ReqIdHide" name="ReqIdHide" value="@reqDetail.ReqNo" />
                         <input type="hidden" id="ReqStatus" name="ReqStatus" value="@reqDetail.ReqStatus" />
                         <input type="hidden" id="ReqEmpId" name="ReqEmpId" value="@reqDetail.EmpId" />
                     </div>

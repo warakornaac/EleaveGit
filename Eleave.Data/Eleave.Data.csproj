@@ -51,10 +51,12 @@
     <Compile Include="GetLeaveBalance.cs" />
     <Compile Include="GetCommentAcknowledge.cs" />
     <Compile Include="GetCommentApprover.cs" />
+    <Compile Include="GetLeaveBalanceOverview.cs" />
     <Compile Include="GetLeaveConsumptionOverview.cs" />
     <Compile Include="GetLeaveType.cs" />
     <Compile Include="GetLogApprove.cs" />
     <Compile Include="GetLookupData.cs" />
+    <Compile Include="GetPermissionProfile.cs" />
     <Compile Include="GetProfile.cs" />
     <Compile Include="GetProfileList.cs" />
     <Compile Include="GetRequestAcknowledge.cs" />

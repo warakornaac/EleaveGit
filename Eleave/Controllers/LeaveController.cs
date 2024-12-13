@@ -22,6 +22,7 @@ namespace Eleave.Controllers
         {
             string EmpID = string.Empty;
             string EmpType = string.Empty;
+
             if (Session["EmpId"] != null)
             {
                 EmpID = Session["EmpId"].ToString();
@@ -117,7 +118,7 @@ namespace Eleave.Controllers
             string messageResult = string.Empty;
             try
             {
-                if (IdFile != null) 
+                if (IdFile != null)
                 {
                     messageResult = Utils.deleteFile(IdFile);
                     if (messageResult == "Y")
