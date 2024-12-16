@@ -14,6 +14,7 @@ using Eleave.Models;
 using System.Data.OleDb;
 using System.IO;
 using System.Drawing.Imaging;
+using Microsoft.Ajax.Utilities;
 
 namespace Eleave.Controllers
 {
@@ -114,11 +115,23 @@ namespace Eleave.Controllers
             {
                 model = modelData.FirstOrDefault();
             }
+            var flow = LoadGroupApprovalDropdown();
+            var dropdownData = flow
+                        .GroupBy(f => f.ApprGrpId)
+                        .Select(group => new
+                        {
+                            ApprGrpId = group.Key,
+                            DisplayText = group.Key + " / " + group.First().ApprGrpName // สร้าง DisplayText
+                        })
+                        .ToList();
+
+            ViewBag.ApprovFlow = dropdownData;
             LoadStatusEmp();
             LoadDirector();
             LoadEmployeeLevel();
             LoadDepartments();
             LoadEmpType();
+            LoadUsrtype();
             return View(model);
         }
         public ActionResult Setting()
@@ -138,20 +151,49 @@ namespace Eleave.Controllers
                 string usr = Session["EmpId"].ToString();
                 updateEmployee = new UpdateProfileEmployee().Update(store, usr);
                 ViewBag.UpdateStatus = "Success";
+                var flow = LoadGroupApprovalDropdown();
+                //flow = flow
+                //        .GroupBy(emp => emp.ApprGrpId) // Group by value
+                //        .Select(group => group.First()) // เลือกรายการแรก
+                //        .ToList();
+
+                var dropdownData = flow
+                        .GroupBy(f => f.ApprGrpId)
+                        .Select(group => new
+                        {
+                            ApprGrpId = group.Key,
+                            DisplayText = group.Key + " / " + group.First().ApprGrpName // สร้าง DisplayText
+                        })
+                        .ToList();
+
+                ViewBag.ApprovFlow = dropdownData;
                 LoadStatusEmp();
                 LoadDirector();
                 LoadDepartments();
                 LoadEmpType();
                 LoadEmployeeLevel();
+                LoadUsrtype();
                 return View(store);
             }
             catch (Exception ex)
             {
                 ViewBag.Error = ex.ToString();
+                var flow = LoadGroupApprovalDropdown();
+                var dropdownData = flow
+                        .GroupBy(f => f.ApprGrpId)
+                        .Select(group => new
+                        {
+                            ApprGrpId = group.Key,
+                            DisplayText = group.Key + " / " + group.First().ApprGrpName // สร้าง DisplayText
+                        })
+                        .ToList();
+
+                ViewBag.ApprovFlow = dropdownData;
                 LoadDirector();
                 LoadDepartments();
                 LoadEmpType();
                 LoadEmployeeLevel();
+                LoadUsrtype();
                 return View(store);
             }
         }
@@ -581,7 +623,45 @@ namespace Eleave.Controllers
             }
             return Json(new { message = message }, JsonRequestBehavior.AllowGet);
         }
-
+        public JsonResult DeleteApprvFlow(string ApprvID, string ApprvStep, string ApprvAction)
+        {
+            string message = string.Empty;
+            string username = Session["EmpId"].ToString();
+            string EmpID = string.Empty;
+            if (Session["EmpId"] is null)
+            {
+                return Json(new { success = true, message = "Session expired. Please log in again." }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                EmpID = Session["EmpId"].ToString();
+            }
+            var connectionString = ConfigurationManager.ConnectionStrings["HRIS_DB"].ConnectionString;
+            SqlConnection conn = new SqlConnection(connectionString);
+            conn.Open();
+            try
+            {
+                var cmd = new SqlCommand("P_Delete_ApprovalFlowByStep", conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@inApprvID", ApprvID);
+                cmd.Parameters.AddWithValue("@inStep", ApprvStep);
+                cmd.Parameters.AddWithValue("@inAction", ApprvAction);
+                cmd.Parameters.AddWithValue("@inUser", EmpID);
+                SqlParameter p = new SqlParameter("@outGenstatus", SqlDbType.NVarChar, 100);
+                p.Direction = ParameterDirection.Output;
+                cmd.Parameters.Add(p);
+                cmd.ExecuteNonQuery();
+                message = cmd.Parameters["@OutGenstatus"].Value.ToString();
+                cmd.Dispose();
+                conn.Close();
+            }
+            catch (Exception ex)
+            {
+                conn.Close();
+                message = ex.Message;
+            }
+            return Json(new { message = message }, JsonRequestBehavior.AllowGet);
+        }
         public JsonResult GetDepartmentEditApprvFlow(string GrpId)
         {
             string message = string.Empty;
@@ -737,6 +817,36 @@ namespace Eleave.Controllers
                 message = ex.Message;
             }
             ViewBag.Directors = getDirector;
+        }
+        private void LoadUsrtype()
+        {
+            string message = string.Empty;
+            var connectionString = ConfigurationManager.ConnectionStrings["HRIS_DB"].ConnectionString;
+            SqlConnection conn = new SqlConnection(connectionString);
+            conn.Open();
+            List<Object> typ = new List<Object>();
+            try
+            {
+                SqlCommand cmd = new SqlCommand("select LookDesc,LookValue from [HRIS].[dbo].[LookupData] where LookCode = 'USR_TYPE'", conn);
+                SqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    typ.Add(new
+                    {
+                        UsrTypeName = reader["LookDesc"].ToString(),
+                        TypeVal = reader["LookValue"].ToString()
+                    });
+                }
+                reader.Close();
+                reader.Dispose();
+
+                conn.Close();
+            }
+            catch (Exception ex)
+            {
+                conn.Close();
+            }
+            ViewBag.usrtyp = typ;
         }
     }
 }

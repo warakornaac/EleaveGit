@@ -150,6 +150,12 @@
                     </div>
                     <div class="col-md-4 col-lg-4">
                         <div class="form-group">
+                            @Html.LabelFor(model => model.Email, "อีเมล")
+                            @Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-lg-4">
+                        <div class="form-group">
                             @Html.LabelFor(model => model.DeptId, "หน่วยงาน")
                             @Html.DropDownListFor(model => model.DeptId, new SelectList(ViewBag.DepartmentList, "LookValue", "LookDesc"), "เลือกหน่อยงาน", new { @class = "custom-select", @id = "department-selector" })
                         </div>
@@ -163,20 +169,33 @@
                     <div class="col-md-4 col-lg-4">
                         <div class="form-group">
                             @Html.LabelFor(model => model.DirectorId, "หัวหน้างาน")
-                            @Html.TextBoxFor(model => model.DirectorId, new { @class = "form-control", list = "directors-list" })
-                            <datalist id="directors-list">
-                                @foreach (var director in ViewBag.Directors)
-                                {
-                                    <option value="@director.EmpId">@director.Fullname</option>
-                                }
-                            </datalist>
+                            @*@Html.TextBoxFor(model => model.DirectorId, new { @class = "form-control", list = "directors-list" })*@
+                            @Html.DropDownListFor(model => model.DirectorId, new SelectList(ViewBag.Directors, "EmpId", "Fullname"), "เลือกหัวหน้างาน", new { @class = "custom-select", @id = "directors-selector" })
+
+                            @*<datalist id="directors-list">
+                                    @foreach (var director in ViewBag.Directors)
+                                    {
+                                        <option value="@director.EmpId">@director.Fullname</option>
+                                    }
+                                </datalist>*@
                         </div>
                     </div>
                     <div class="col-md-4 col-lg-4">
                         <div class="form-group">
                             @Html.LabelFor(model => model.EmpLvl, "ระดับพนักงาน")
                             @Html.DropDownListFor(model => model.EmpLvl, new SelectList(ViewBag.EmpLevel, "LookValue", "LookDesc"), "เลือกหน่อยงาน", new { @class = "custom-select", @id = "emplvl-selector" })
-
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-lg-4">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.ApprGrpID, "กลุ่มอนุมัติ")
+                            @Html.DropDownListFor(model => model.ApprGrpID, new SelectList(ViewBag.ApprovFlow, "ApprGrpId", "DisplayText"), "เลือกกลุ่มอนุมัติ", new { @class = "custom-select", @id = "approval-selector" })
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-lg-4">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.UserType, "ประเภทผู้ใช้")
+                            @Html.DropDownListFor(model => model.UserType, new SelectList(ViewBag.usrtyp, "TypeVal", "UsrTypeName"), "เลือกประเภทผู้ใช้", new { @class = "custom-select", @id = "usrtyp-selector" })
 
                         </div>
                     </div>
@@ -201,6 +220,17 @@
     </div>
 </div>
 <script>
+    $(document).ready(function () {
+        $('#department-selector').select2({
+            width: '100%'
+        });
+        $('#directors-selector').select2({
+            width: '100%'
+        });
+        $('#approval-selector').select2({
+            width: '100%'
+        });
+    });
     if ('@ViewBag.Error' != '') {
         Swal.fire({
             title: 'Error',
@@ -217,9 +247,7 @@
             window.location.href = "@Url.Action("ManagerEmployee", "Employee")";
         });
     }
-    $('#department-selector').select2({
-        width: '100%'
-    });
+
 
 
 </script>

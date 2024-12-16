@@ -12,6 +12,7 @@ namespace Eleave.Models
         public string ApprGrpId { get; set; }
         public string ApprGrpName { get; set; }
         public string DepId { get; set; }
+        public string DeptShort { get; set; }
         public string DepName { get; set; }
         public int ApprStep { get; set; }
         public string EmpId { get; set; }

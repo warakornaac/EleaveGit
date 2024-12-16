@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewBag.Title = "ตั้งค้า-กำหนดลำดับการอนุมัติ";
+    ViewBag.Title = "ตั้งค่า-กำหนดลำดับการอนุมัติ";
 }
 
 <style>
@@ -13,11 +13,11 @@
         <div class="row align-items-center">
             <div class="col-md-12">
                 <div class="page-header-title">
-                    <h5 class="m-b-10">กำหนดลำดับการอนุมัติ</h5>
+                    <h5 class="m-b-10">Approval flow setting | กำหนดลำดับการอนุมัติ</h5>
                 </div>
                 <ul class="breadcrumb">
                     <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home")"><i class="feather icon-home"></i></a></li>
-                    <li class="breadcrumb-item"><a href="@Url.Action("ApprovflowSetting", "Employee")">กำหนดลำดับการอนุมัติ</a></li>
+                    <li class="breadcrumb-item"><a href="@Url.Action("ApprovflowSetting", "Employee")">Approval flow setting | กำหนดลำดับการอนุมัติ</a></li>
                 </ul>
             </div>
         </div>
@@ -29,25 +29,25 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">เพิ่ม Approve Flow</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Add approve flow | เพิ่มการอนุมัติ</h5>
 
-                <button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close">ปิด</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close">Close | ปิด</button>
 
             </div>
             <div class="modal-body">
                 <div class="row">
                     <div class="col-12">
                         <div class="form-group">
-                            <label>การเพิ่มอนุมัต</label>
+                            <label>Add approval | การเพิ่มอนุมัติ</label>
                             <select class="custom-select" id="select-addApprv">
-                                <option value="1">เพิ่มกลุ่มอนุมัต</option>
-                                <option value="2">เพิ่มลำดับการอนุมัติ</option>
+                                <option value="1">Add approval group | เพิ่มกลุ่มอนุมัติ</option>
+                                <option value="2">Add approval level | เพิ่มลำดับการอนุมัติ</option>
                             </select>
                         </div>
                     </div>
                     <div class="col-12">
                         <div class="form-group">
-                            @Html.Label("รหัสกลุ่มอนุมัติ")
+                            @Html.Label("Approval group ID | รหัสกลุ่มอนุมัติ")
                             @Html.TextBox("GroupID", null, new { @class = "form-control", @id = "groupId-add", @readonly = "readonly", list = "list-ApprvFlowID" })
                             <datalist id="list-ApprvFlowID">
                                 <option value="dataTest">Group</option>
@@ -56,44 +56,45 @@
                     </div>
                     <div class="col-12">
                         <div class="form-group">
-                            @Html.Label("ชื่อกลุ่มอนุมัติ")
+                            @Html.Label("Approve group name | ชื่อกลุ่มอนุมัติ")
                             @Html.TextBox("GroupName", null, new { @class = "form-control", @id = "groupName-add" })
                         </div>
                     </div>
                     <div class="col-12">
                         <div class="form-group">
-                            @Html.Label("แผนก")
-                            @Html.DropDownList("Department", new SelectList(ViewBag.DepartmentList, "LookValue", "LookDesc"), "เลือกหน่วยงาน", new { @class = "custom-select", @id = "department-selector-add", onchange = "GenApprv(this.value)" })
+                            @Html.Label("Department | แผนก")
+                            @Html.DropDownList("Department", new SelectList(ViewBag.DepartmentList, "LookValue", "LookDesc"), "Select department | เลือกหน่วยงาน", new { @class = "custom-select", @id = "department-selector-add", onchange = "GenApprv(this.value),GetdirectorSelectAdd(this.value)" })
                         </div>
                     </div>
                     <div class="col-12">
                         <div class="form-group">
-                            @Html.Label("ลำดับการอนุมัติ")
+                            @Html.Label("Approval level | ลำดับการอนุมัติ")
                             @Html.TextBox("ApprvLvl", null, new { @class = "custom-select", @id = "apprvLvl-add", @readonly = "readonly" })
                         </div>
                     </div>
                     <div class="col-12">
                         <div class="form-group">
-                            @Html.Label("พนักงานผู้อนุมัติ")
+                            @Html.Label("Approve type | ประเภทอนุมัติ")
+                            @Html.DropDownList("ActionType", new List<SelectListItem>
+                                               {
+                                                   new SelectListItem(){Text="Approve", Value="Approve"},
+                                                   new SelectListItem(){Text="Acknowledge", Value="Acknowledge"}
+                                               }, "Select approve type | เลือกประเภทอนุมัติ", new { @class = "custom-select", @id = "actiontyp-add", onchange = "ActionSelectAdd(this.value)" })
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-group">
+                            @Html.Label("Approver | พนักงานผู้อนุมัติ")
                             @Html.DropDownList("EMPID", new List<SelectListItem>
                        {
 
                        }, "เลือกพนักงาน", new { @class = "custom-select", @id = "empId-add" })
                         </div>
                     </div>
+
                     <div class="col-12">
                         <div class="form-group">
-                            @Html.Label("ประเภทอนุมัติ")
-                            @Html.DropDownList("ActionType", new List<SelectListItem>
-                                               {
-                                                   new SelectListItem(){Text="Approve", Value="Approve"},
-                                                   new SelectListItem(){Text="Acknowledge", Value="Acknowledge"}
-                                               }, "เลือกประเภทอนุมัติ", new { @class = "custom-select", @id = "actiontyp-add" })
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="form-group">
-                            @Html.Label("รายระเอียดประเภทอนุมัติ")
+                            @Html.Label("Description | รายละเอียดประเภทอนุมัติ")
                             @Html.TextArea("ApprvDesc", null, new { @class = "form-control", @id = "apprvDesc-add" })
                         </div>
                     </div>
@@ -102,7 +103,7 @@
             </div>
             <div class="modal-footer">
                 @*<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>*@
-                <button type="button" class="btn btn-primary" id="addApprove-btn">ยืนยัน</button>
+                <button type="button" class="btn btn-primary" id="addApprove-btn">Confirm | ยืนยัน</button>
             </div>
         </div>
     </div>
@@ -114,34 +115,34 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="editformModel">แก้ไข Approve Flow</h5>
-                <button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close">ปิด</button>
+                <h5 class="modal-title" id="editformModel">Edit Approval | แก้ไขการอนุมัติ</h5>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close">Close | ปิด</button>
             </div>
             <div class="modal-body">
                 <div class="row">
                     <div class="col-12">
                         <div class="form-group">
-                            @Html.Label("รหัสกลุ่มอนุมัติ")
+                            @Html.Label("Approval group ID | รหัสกลุ่มอนุมัติ")
                             @Html.TextBox("GroupID", "", new { @class = "form-control", @id = "groupId-edit", @readonly = "readonly" })
                         </div>
                     </div>
                     <div class="col-12">
                         <div class="form-group">
-                            @Html.Label("ชื่อกลุ่มอนุมัติ")
+                            @Html.Label("Approval group name | ชื่อกลุ่มอนุมัติ")
                             @Html.TextBox("GroupName", "", new { @class = "form-control", @id = "groupName-edit" })
                             @Html.Hidden("GroupNameVal", null, new { @id = "groupName-edit-old" })
                         </div>
                     </div>
                     <div class="col-12">
                         <div class="form-group">
-                            @Html.Label("แผนก")
-                            @Html.DropDownList("Department", new SelectList(ViewBag.DepartmentList, "LookParam", "LookDesc"), "เลือกหน่วยงาน", new { @class = "custom-select", @id = "department-selector-edit", @disabled = "disabled" })
+                            @Html.Label("Department | แผนก")
+                            @Html.DropDownList("Department", new SelectList(ViewBag.DepartmentList, "LookParam", "LookDesc"), "Select department | เลือกหน่วยงาน", new { @class = "custom-select", @id = "department-selector-edit", @disabled = "disabled" })
                         </div>
                     </div>
                     <div class="col-12">
                         <div class="form-group">
                             @Html.Hidden("ApprvLvl_Hidden", null, new { @id = "ApprvLvl-edit-old" })
-                            @Html.Label("ลำดับการอนุมัติ")
+                            @Html.Label("Approval level | ลำดับการอนุมัติ")
                             @Html.DropDownList("ApprvLvl", new List<SelectListItem>
                                                            {
                                                             new SelectListItem() {Text="1",Value="1"},
@@ -154,16 +155,7 @@
                     </div>
                     <div class="col-12">
                         <div class="form-group">
-                            @Html.Label("พนักงานผู้อนุมัติ")
-                            @Html.DropDownList("EMPID", new List<SelectListItem>
-                                               {
-
-                                               }, "เลือกพนักงาน", new { @class = "custom-select", @id = "empid-edit" })
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="form-group">
-                            @Html.Label("ประเภทอนุมัติ")
+                            @Html.Label("Approve type | ประเภทอนุมัติ")
                             @Html.DropDownList("ActionType", new List<SelectListItem>
                                                {
                                                    new SelectListItem(){Text="Approve", Value="Approve"},
@@ -173,7 +165,17 @@
                     </div>
                     <div class="col-12">
                         <div class="form-group">
-                            @Html.Label("รายระเอียดประเภทอนุมัติ")
+                            @Html.Label("Approver | พนักงานผู้อนุมัติ")
+                            @Html.DropDownList("EMPID", new List<SelectListItem>
+                                               {
+
+                                               }, "Select employee | เลือกพนักงาน", new { @class = "custom-select", @id = "empid-edit" })
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <div class="form-group">
+                            @Html.Label("Description | รายละเอียดประเภทอนุมัติ")
                             @Html.TextArea("ApprvDesc", null, new { @class = "form-control", @id = "apprvDesc-edit" })
                         </div>
                     </div>
@@ -182,11 +184,91 @@
             </div>
             <div class="modal-footer">
                 @*<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>*@
-                <button type="button" class="btn btn-primary" onclick="UpdateApprvFlow();">ยืนยัน</button>
+                <button type="button" class="btn btn-primary" onclick="UpdateApprvFlow();">Confirm | ยืนยัน</button>
             </div>
         </div>
     </div>
 </div>
+<!-- Modal Delete-->
+<div class="modal fade" id="DeleteFlowModal" tabindex="-1" aria-labelledby="DeleteModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <h5 class="modal-title" id="DeleteModel"> Delete Approval | ลบลำดับการอนุมัติ</h5>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close">Close | ปิด</button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="form-group">
+                            @Html.Label("Approval group ID | รหัสกลุ่มอนุมัติ")
+                            @Html.TextBox("GroupID", "", new { @class = "form-control", @id = "groupId-del", @readonly = "readonly" })
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-group">
+                            @Html.Label("Approval group name | ชื่อกลุ่มอนุมัติ")
+                            @Html.TextBox("GroupName", "", new { @class = "form-control", @id = "groupName-del", @readonly = "readonly" })
+
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-group">
+                            @Html.Label("Department | แผนก")
+                            @Html.DropDownList("Department", new SelectList(ViewBag.DepartmentList, "LookParam", "LookDesc"), "Select department | เลือกหน่วยงาน", new { @class = "custom-select", @id = "department-selector-del", @disabled = "disabled" })
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-group">
+                            @Html.Hidden("ApprvLvl_Hidden", null, new { @id = "ApprvLvl-edit-old" })
+                            @Html.Label("Approval level | ลำดับการอนุมัติ")
+                            @Html.DropDownList("ApprvLvl", new List<SelectListItem>
+                                                           {
+                                                            new SelectListItem() {Text="1",Value="1"},
+                                                            new SelectListItem() {Text="2",Value="2"},
+                                                            new SelectListItem() {Text="3",Value="3"},
+                                                            new SelectListItem() {Text="4",Value="4"},
+                                                            new SelectListItem() {Text="5",Value="5"},
+                                                           }, "Approve Level", new { @class = "custom-select", @id = "apprvLvl-del", @disabled = "disabled" })
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-group">
+                            @Html.Label("Approve type | ประเภทอนุมัติ")
+                            @Html.DropDownList("ActionType", new List<SelectListItem>
+                                               {
+                                                   new SelectListItem(){Text="Approve", Value="Approve"},
+                                                   new SelectListItem(){Text="Acknowledge", Value="Acknowledge"}
+                                               }, new { @class = "custom-select", @id = "actiontyp-del", @disabled = "disabled" })
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-group">
+                            @Html.Label("Approver | พนักงานผู้อนุมัติ")
+                            @Html.DropDownList("EMPID", new List<SelectListItem>
+                       {
+
+                       }, "Select employee | เลือกพนักงาน", new { @class = "custom-select", @id = "empid-del", @disabled = "disabled" })
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <div class="form-group">
+                            @Html.Label("Description | รายละเอียดประเภทอนุมัติ")
+                            @Html.TextArea("ApprvDesc", null, new { @class = "form-control", @id = "apprvDesc-del", @readonly = "readonly" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" id="del-appr-btn">ลบ | Delete</button>
+                <button class="btn btn-secondary" id="del-appr-btn-cn">ยกเลิก | Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="row">
     <div class="col-xl-12" `>
         <div class="card">
@@ -197,13 +279,13 @@
                     <div class="row">
                         <div class="col-md-4">
                             <div class="form-group">
-                                @Html.Label("แผนก")
-                                @Html.DropDownList("DeptID", new SelectList(ViewBag.DepartmentList, "LookParam", "LookDesc"), "เลือกหน่วยงาน", new { @class = "custom-select", @id = "department-search" })
+                                @Html.Label("Department | แผนก")
+                                @Html.DropDownList("DeptID", new SelectList(ViewBag.DepartmentList, "LookParam", "LookDesc"), "Select department | เลือกหน่วยงาน", new { @class = "custom-select", @id = "department-search" })
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                @Html.Label("รหัสกลุ่มอนุมัติ")
+                                @Html.Label("Approval Group ID | รหัสกลุ่มอนุมัติ")
                                 @Html.DropDownList("ApprvGrp", new SelectList(ViewBag.apprvFlowSelect, "ApprGrpId", "ApprGrpName"), "ALL", new { @class = "custom-select", @id = "apprv-search" })
                             </div>
                         </div>
@@ -212,11 +294,11 @@
                 </div>
                 <div class="card-footer p-1">
                     <div class="form-group float-start m-2">
-                        <button class="btn btn-success float-start m-1" type="button" id="addFlowbtn">เพิ่ม</button>
+                        <button class="btn btn-success float-start m-1" type="button" id="addFlowbtn">Add | เพิ่ม</button>
                     </div>
                     <div class="form-group float-end m-2">
-                        <input type="button" value="ล้าง" class="btn btn-secondary" id="reset-btn" />
-                        <input type="submit" value="ค้นหา" class="btn btn-primary" />
+                        <input type="button" value="Clear | ล้าง" class="btn btn-secondary" id="reset-btn" />
+                        <input type="submit" value="Search | ค้นหา" class="btn btn-primary" />
                     </div>
                 </div>
             }
@@ -229,13 +311,13 @@
                     <table class="table table-bordered table-striped" id="apprv-flow-table">
                         <thead>
                             <tr>
-                                <th class="text-center">รหัสกลุ่มอนุมัติ</th>
-                                <th class="text-center">ชื่อกลุ่มอนุมัติ</th>
-                                <th class="text-center">รหัสแผนก</th>
-                                <th class="text-center">ลำดับการอนุมัติ</th>
-                                <th class="text-center">พนักงานผู้อนุมัติ</th>
-                                <th class="text-center">ประเภทอนุมัติ</th>
-                                <th class="text-center">แก้ไข</th>
+                                <th class="text-center">Approval group ID | รหัสกลุ่มอนุมัติ</th>
+                                <th class="text-center">Approval group name | ชื่อกลุ่มอนุมัติ</th>
+                                <th class="text-center">Department ID | รหัสแผนก</th>
+                                <th class="text-center">Approval level|ลำดับการอนุมัติ</th>
+                                <th class="text-center">Approver | พนักงานผู้อนุมัติ</th>
+                                <th class="text-center">Approver Type | ประเภทอนุมัติ</th>
+                                <th class="text-center">Edit | แก้ไข <br />Delete | ลบ</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -249,7 +331,10 @@
                                         <td class="text-center">@aprflow.ApprStep</td>
                                         <td class="text-center">@aprflow.EmpName</td>
                                         <td class="text-center">@aprflow.ActionType</td>
-                                        <td class="text-center"><a href="#" data-apprv="@aprflow.ApprGrpId" data-apprvname="@aprflow.ApprGrpName" data-apprvstep="@aprflow.ApprStep" id="editApprv-@aprflow.ApprGrpId">แก้ไข</a></td>
+                                        <td class="text-center p-2">
+                                            <a href="#" class="btn btn-warning btn-xs" data-apprv="@aprflow.ApprGrpId" data-apprvname="@aprflow.ApprGrpName" data-department="@aprflow.DepId" data-dept="@aprflow.DeptShort" data-apprvstep="@aprflow.ApprStep" data-apprvaction="@aprflow.ActionType" id="editApprv-@aprflow.ApprGrpId"><span class="fa fa-edit"></span></a>
+                                            <a href="#" class="btn btn-danger btn-xs" id="deleteApprv-@aprflow.ApprGrpId" data-apprv="@aprflow.ApprGrpId" data-apprvname="@aprflow.ApprGrpName" data-department="@aprflow.DepId" data-dept="@aprflow.DeptShort" data-apprvstep="@aprflow.ApprStep" data-apprvaction="@aprflow.ActionType"><span class="fa fa-times"></span></a>
+                                        </td>
                                     </tr>
                                 }
                             }
@@ -286,11 +371,7 @@
     $(document).on('click', '#addFlowbtn', function () {
         $('#addFormModal').modal('show');
     });
-
-
-
     $(document).ready(function () {
-
         $('#apprv-flow-table').dataTable({
             paging: true,
             pageLength: 50,
@@ -299,8 +380,8 @@
             ordering: false,
             select: false,
             language: {
-                info: "แสดง _START_ ถึง _END_ จากทั้งหมด _TOTAL_ กลุ่ม",
-                infoEmpty: "ไม่มีข้อมูลให้แสดง"
+                info: " _START_ to _END_ from _TOTAL_ Group",
+                infoEmpty: "No data display.| ไม่มีข้อมูลให้แสดง"
             }
         });
     });
@@ -327,7 +408,7 @@
             $('#addFormModal').modal('hide');
             Swal.fire({
                 title: "Error!!!",
-                text: "ไม่พบรหัสรหัสกลุ่มอนุมัติ กรุณาตรวจสอบข้อมูล",
+                text: "Approval group ID is not found,please verify your data !!! | ไม่พบรหัสรหัสกลุ่มอนุมัติ กรุณาตรวจสอบข้อมูล",
                 icon: "error"
             }).then(() => {
                 $('#addFormModal').modal('show');
@@ -338,7 +419,7 @@
             $('#addFormModal').modal('hide');
             Swal.fire({
                 title: "Error!!!",
-                text: "กรุณากรอกชื่อกลุ่มอนุมัติ",
+                text: "Please enter approval group name. | กรุณากรอกชื่อกลุ่มอนุมัติ",
                 icon: "error"
             }).then(() => {
                 $('#addFormModal').modal('show');
@@ -349,7 +430,7 @@
             $('#addFormModal').modal('hide');
             Swal.fire({
                 title: "Error!!!",
-                text: "กรุณาเลือกแผนก",
+                text: "Please select department.| กรุณาเลือกแผนก",
                 icon: "error"
             }).then(() => {
                 $('#addFormModal').modal('show');
@@ -361,7 +442,7 @@
             $('#addFormModal').modal('hide');
             Swal.fire({
                 title: "Error!!!",
-                text: "กรุณาเลือกลำดับการอนุมัติ",
+                text: "Please select approval level.| กรุณาเลือกลำดับการอนุมัติ",
                 icon: "error"
             }).then(() => {
                 $('#addFormModal').modal('show');
@@ -372,7 +453,7 @@
             $('#addFormModal').modal('hide');
             Swal.fire({
                 title: "Error!!!",
-                text: "กรุณาเลือกพนักงานผู้อนุมัติ",
+                text: "Please select approver. | กรุณาเลือกพนักงานผู้อนุมัติ",
                 icon: "error"
             }).then(() => {
                 $('#addFormModal').modal('show');
@@ -383,7 +464,7 @@
             $('#addFormModal').modal('hide');
             Swal.fire({
                 title: "Error!!!",
-                text: "กรุณาเลือกประเภทอนุมัติ",
+                text: "Please select approval type. | กรุณาเลือกประเภทอนุมัติ",
                 icon: "error"
             }).then(() => {
                 $('#addFormModal').modal('show');
@@ -394,7 +475,7 @@
             $('#addFormModal').modal('hide');
             Swal.fire({
                 title: "Error!!!",
-                text: "กรุณากรอกรายระเอียดขั้นตอนอนุมัติ",
+                text: "Please enter aprroval description. | กรุณากรอกรายละเอียดขั้นตอนอนุมัติ",
                 icon: "error"
             }).then(() => {
                 $('#addFormModal').modal('show');
@@ -443,18 +524,6 @@
             }
         })
     }
-    //$(document).on('change', '#department-selector-add', function () {
-    //    var depart = $(this).val();
-    //    var selectApprv = $('#select-addApprv').val();
-    //    console.log('SELECT HOW');
-    //    if (selectApprv == 1) {
-    //        GenerateApprvGrbID(depart);
-    //    }
-    //    else {
-    //        GetApprovalID(depart);
-    //    }
-
-    //});
     function GenApprv(depart) {
         var selectApprv = $('#select-addApprv').val();
         console.log('SELECT HOW');
@@ -469,7 +538,6 @@
     $(document).on('click', '#reset-btn', function () {
         $('#department-search').val('').trigger('change');
         $('#apprv-search').val('').trigger('change');
-
     }),
     $(document).on('change', '#select-addApprv', function () {
         var selectVal = $(this).val();
@@ -483,17 +551,83 @@
             $('#groupId-add').attr('readonly', true);
             $('#department-selector-add').prop('disabled', false);
         }
-
     });
-
-    $('[id^="editApprv-"]').on('click', function () {
+    $('[id^="editApprv-"]').on('click', async function () {
         var ApprvID = $(this).data('apprv');
         var ApprvName = $(this).data('apprvname');
         var ApprvStep = $(this).data('apprvstep');
+        var ApprvDept = $(this).data('dept');
+        var ApprvAction = $(this).data('apprvaction');
+        var Dept = $(this).data('department');
         $('#groupId-edit').val(ApprvID);
         $('#editFormModal').modal('show');
-        DropdownEmpSelectEdit();
+        if (ApprvAction == 'Acknowledge') {
+             DropdownEmpSelectEditAsync('Ack');
+        }
+        else {
+             DropdownEmpSelectEditAsync(ApprvDept);
+        }
+        await GetApprovflowSettingEdit(ApprvID, ApprvName, ApprvStep, ApprvDept, ApprvAction);
+
+    });
+    $('[id^="deleteApprv-"]').on('click', async function () {
+        var ApprvID = $(this).data('apprv');
+        var ApprvName = $(this).data('apprvname');
+        var ApprvStep = $(this).data('apprvstep');
+        var ApprvDept = $(this).data('dept');
+        var ApprvAction = $(this).data('apprvaction');
+        var Dept = $(this).data('department');
+        $('#DeleteFlowModal').modal('show');
+        if (ApprvAction == 'Acknowledge') {
+            await DropdownEmpSelectDelAsync('Ack');
+        }
+        else {
+            await DropdownEmpSelectDelAsync(ApprvDept);
+        }
+        await GetApprovflowSettingDel(ApprvID, ApprvName, ApprvStep, ApprvDept, ApprvAction);
+    });
+    $(document).on('click', '#del-appr-btn-cn', function () {
+        $('#DeleteFlowModal').modal('hide');
+    });
+    $(document).on('click', '#del-appr-btn', function () {
+        var ID = $('#groupId-del').val();
+        var Dept = $('#department-selector-del').val()
+        var Step = $('#apprvLvl-del').val()
+        var Action = $('#actiontyp-del').val();
         $.ajax({
+            url: '@Url.Action("DeleteApprvFlow", "Employee")',
+            data: {
+                ApprvID: ID,
+                ApprvStep: Step,
+                ApprvAction: Action
+            },
+            type: 'POST',
+            dataType: 'JSON',
+            beforeSend: function () {
+                $('#DeleteFlowModal').modal('hide');
+                LoadingShow();
+            },
+            success: function (res) {
+                LoadingHide();
+                if (res.message == 'Y') {
+                    Swal.fire({
+                        title: "ลบ Approval Flow สำเร็จ",
+                        icon: "success"
+                    });
+                }
+                else {
+                    Swal.fire({
+                        title: "ไม่สามารถลบได้",
+                        text: res.message,
+                        icon: "warning"
+                    });
+                }
+            }
+        });
+
+    });
+    async function GetApprovflowSettingEdit(ApprvID, ApprvName, ApprvStep, ApprvDept, ApprvAction) {
+        return $.ajax({
             url: '@Url.Action("GetApprovflowSettingEdit", "Employee")',
             data: {
                 ApprvGrp: ApprvID,
@@ -530,6 +664,8 @@
                                 return false;
                             }
                         });
+                        //$('#department-selector-edit').val(ApprvDept).trigger('change');
+
                         $('#ApprvLvl-edit-old').val(res.getApproval[0].ApprStep);
                         $('#ApprvLvl-edit').val(res.getApproval[0].ApprStep).trigger('change');
                         var emp = res.getApproval[0].EmpId;
@@ -544,12 +680,68 @@
             }
 
         });
-    });
-    function DropdownEmpSelectAdd() {
+    }
+
+    async function GetApprovflowSettingDel(ApprvID, ApprvName, ApprvStep, ApprvDept, ApprvAction) {
+        return $.ajax({
+            url: '@Url.Action("GetApprovflowSettingEdit", "Employee")',
+            data: {
+                ApprvGrp: ApprvID,
+                ApprvName: ApprvName,
+                ApprvStep: ApprvStep,
+            },
+            type: 'POST',
+            dataType: 'JSON',
+            beforeSend: function () {
+                $('#groupName-del').val('');
+                $('#department-selector-del').val('').trigger('change');
+                $('#apprvLvl-del').val('').trigger('change');
+                $('#empid-del').val('').trigger('change');
+                $('#actiontyp-del').val('').trigger('change');
+                $('#apprvDesc-del').val('');
+            },
+            success: function (res) {
+                if (res.message === "Y") {
+                    if (res.getApproval && res.getApproval.length > 0) {
+                        // $('#groupName-edit-old').val(res.getApproval[0].ApprGrpName);
+                        $('#groupId-del').val(res.getApproval[0].ApprGrpId);
+                        $('#groupName-del').val(res.getApproval[0].ApprGrpName);
+                        var dept = res.getApproval[0].DepId.trim();
+
+                        var shortDept = dept.substring(0, 3);
+                        console.log(dept);
+
+                        $('#department-selector-del option').each(function () {
+                            var optionValue = $(this).val();
+                            if (optionValue.includes(shortDept) ) {
+                                console.log('depert option: ' + optionValue);
+                                $('#department-selector-del').val(optionValue).trigger('change');
+                                return false;
+                            }
+                        });
+                        //$('#department-selector-edit').val(ApprvDept).trigger('change');
+
+                        //$('#ApprvLvl-edit-old').val(res.getApproval[0].ApprStep);
+                        $('#apprvLvl-del').val(res.getApproval[0].ApprStep).trigger('change');
+                        var emp = res.getApproval[0].EmpId;
+                        console.log('Head: ' + emp);
+                        $('#empid-del').val(res.getApproval[0].EmpId).trigger('change');
+                        if (res.getApproval[0].ActionType) {
+                            $('#actiontyp-del').val(res.getApproval[0].ActionType.trim()).trigger('change');
+                        }
+                        $('#apprvDesc-del').val(res.getApproval[0].ApprDesc)
+                    }
+                }
+            }
+
+        });
+    }
+    function DropdownEmpSelectAdd(dept) {
+        //var dept = $('#department-selector-add').val();
          $.ajax({
                  url: '@Url.Action("GetDirectorDepartment", "Employee")',
                  data: {
-                     deptID: 'values'
+                     deptID: dept
                  },
                  type: 'POST',
                  dataType: 'JSON',
@@ -557,7 +749,7 @@
                      if (data.message == "Y") {
                          var select = $('#empId-add');
                          select.children().remove();
-                         select.append($('<option>').val(0).text('เลือกผู้อนุมัติ'))
+                         select.append($('<option>').val(0).text('Select approver. | เลือกผู้อนุมัติ'))
                          $(data.getDirector).each(function (index, item) {
                              select.append($('<option>').val(item.EmpId).text(item.DeptId + '/' + item.Fullname))
                          });
@@ -568,11 +760,51 @@
                  }
              });
     }
-    function DropdownEmpSelectEdit() {
+    function GetdirectorSelectAdd(valdep) {
+        console.log('');
+        var action = $('#actiontyp-add').val();
+        if (action == 'Acknowledge') {
+            DropdownEmpSelectAdd('HR');
+        }
+        else {
+            DropdownEmpSelectAdd(valdep);
+        }
+
+    }
+    function GetdirectorSelectEdit(valdep) {
+        var action = $('#actiontyp-edit').val();
+        if (action == 'Acknowledge') {
+            DropdownEmpSelectEdit('Ack');
+        }
+        else {
+            DropdownEmpSelectEdit(valdep);
+        }
+    }
+    function ActionSelectAdd(val) {
+        var dept = $('#department-selector-add').val();
+        if (val == 'Acknowledge') {
+            DropdownEmpSelectAdd('HR');
+        }
+        else {
+            DropdownEmpSelectAdd(dept);
+        }
+    }
+    function ActionSelectEdit(val) {
+        var dept = $('#department-selector-add').val();
+        if (val == 'Acknowledge') {
+            DropdownEmpSelectEdit('Ack');
+        }
+        else {
+            DropdownEmpSelectEdit(dept);
+
+        }
+    }
+
+    function DropdownEmpSelectEdit(dept) {
          $.ajax({
              url: '@Url.Action("GetDirectorDepartment", "Employee")',
              data: {
-                 deptID: '123'
+                 deptID: dept
              },
              type: 'POST',
              dataType: 'JSON',
@@ -580,7 +812,7 @@
                  if (data.message == "Y") {
                      var select = $('#empid-edit');
                      select.children().remove();
-                     select.append($('<option>').val(0).text('เลือก'))
+                     select.append($('<option>').val(0).text('Select | เลือก'))
                      $(data.getDirector).each(function (index, item) {
                          select.append($('<option>').val(item.EmpId).text(item.DeptId + '/' + item.Fullname))
                      });
@@ -591,6 +823,53 @@
              }
          });
     }
+    async function DropdownEmpSelectEditAsync(dept) {
+        return $.ajax({
+             url: '@Url.Action("GetDirectorDepartment", "Employee")',
+             data: {
+                 deptID: dept
+             },
+             type: 'POST',
+             dataType: 'JSON',
+             success: function (data) {
+                 if (data.message == "Y") {
+                     var select = $('#empid-edit');
+                     select.children().remove();
+                     select.append($('<option>').val(0).text('Select | เลือก'))
+                     $(data.getDirector).each(function (index, item) {
+                         select.append($('<option>').val(item.EmpId).text(item.DeptId + '/' + item.Fullname))
+                     });
+                 }
+                 else {
+                     alert(data.message);
+                 }
+             }
+         });
+    }
+    async function DropdownEmpSelectDelAsync(dept) {
+    return $.ajax({
+         url: '@Url.Action("GetDirectorDepartment", "Employee")',
+         data: {
+             deptID: dept
+         },
+         type: 'POST',
+         dataType: 'JSON',
+         success: function (data) {
+             if (data.message == "Y") {
+                 var select = $('#empid-del');
+                 select.children().remove();
+                 select.append($('<option>').val(0).text('Select | เลือก'))
+                 $(data.getDirector).each(function (index, item) {
+                     select.append($('<option>').val(item.EmpId).text(item.DeptId + '/' + item.Fullname))
+                 });
+             }
+             else {
+                 alert(data.message);
+             }
+         }
+     });
+}
+
     function GenerateApprvGrbID(department) {
         $.ajax({
             url: '@Url.Action("GenerateApprvFlowID", "Employee")',
@@ -684,7 +963,7 @@
                 if (data.message == "Y") {
                     Swal.fire({
                         title: "Success",
-                        text: "เพิ่มการอนุมัติสำเร็จ",
+                        text: "Add approval successful. | เพิ่มการอนุมัติสำเร็จ",
                         icon: "success"
                     }).then((result) => {
                         if (result.isConfirmed) {
@@ -718,7 +997,7 @@
             $('#editFormModal').modal('hide');
             Swal.fire({
                 title: "Error!!!",
-                text: "กรุณากรอกชื่อกลุ่มอนุมัติ",
+                text: "Please select approval group. | กรุณากรอกชื่อกลุ่มอนุมัติ",
                 icon: "error"
             }).then(() => {
                 $('#editFormModal').modal('show');
@@ -729,7 +1008,7 @@
             $('#editFormModal').modal('hide');
             Swal.fire({
                 title: "Error!!!",
-                text: "กรุณาเลือกแผนก",
+                text: "Please select department. | กรุณาเลือกแผนก",
                 icon: "error"
             }).then(() => {
                 $('#editFormModal').modal('show');
@@ -740,7 +1019,7 @@
             $('#editFormModal').modal('hide');
             Swal.fire({
                 title: "Error!!!",
-                text: "กรุณาเลือกลำดับการอนุมัติ",
+                text: "Please select approval level. | กรุณาเลือกลำดับการอนุมัติ",
                 icon: "error"
             }).then(() => {
                 $('#editFormModal').modal('show');
@@ -751,7 +1030,7 @@
             $('#editFormModal').modal('hide');
             Swal.fire({
                 title: "Error!!!",
-                text: "กรุณาเลือกผู้ทำการอนุมัติ",
+                text: "Please select approver. | กรุณาเลือกผู้ทำการอนุมัติ",
                 icon: "error"
             }).then(() => {
                 $('#editFormModal').modal('show');
