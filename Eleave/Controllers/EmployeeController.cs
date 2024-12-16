@@ -163,13 +163,15 @@ namespace Eleave.Controllers
         public ActionResult SaveImportExcel(HttpPostedFileBase fileInput, string empId)
         {
             List<string> empIdList = new List<string>();
-            List<StoreUpdateEmployeeProfile> listEmployee = new List<StoreUpdateEmployeeProfile>();
+            //List<StoreUpdateEmployeeProfile> listEmployee = new List<StoreUpdateEmployeeProfile>();
             string filePath = string.Empty;
             string exerror = string.Empty;
             string txtMessage = string.Empty;
             string txtStatus = string.Empty;
-            var rowInsert = 0;
-            var GetProfile = new List<StoreGetProfile>();
+            var countRowImport = 0;
+            var countStatusSuccess = 0;
+            var countStatusFail = 0;
+            List<StoreImportEmployee> listEmployee = new List<StoreImportEmployee>();
             try
             {
                 if (fileInput != null)
@@ -179,12 +181,10 @@ namespace Eleave.Controllers
                     {
                         Directory.CreateDirectory(path);
                     }
-
                     filePath = path + Path.GetFileName(fileInput.FileName);
                     string extension = Path.GetExtension(fileInput.FileName);
                     fileInput.SaveAs(filePath);
                     string conString = string.Empty;
-
                     var connectionString = Utils.GetConfig("HRIS_DB");
                     SqlConnection Connection = new SqlConnection(connectionString);
                     Connection.Open();
@@ -197,70 +197,109 @@ namespace Eleave.Controllers
                             conString = Utils.GetConfig("HRIS_EXCEL07");
                             break;
                     }
-
+                    conString = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + filePath + ";Extended Properties=Excel 12.0;Persist Security Info=False";
                     DataTable dt = new DataTable();
-                    conString = string.Format(conString, filePath);
+                    //conString = string.Format(conString, filePath);
                     OleDbConnection excelConnection = new OleDbConnection(conString);
                     OleDbCommand cmd = new OleDbCommand("Select * from [Employee Template$]", excelConnection);
                     excelConnection.Open();
                     OleDbDataReader dReader;
-
                     dReader = cmd.ExecuteReader();
-
                     while (dReader.Read())
                     {
-                        //stkcod = dReader.GetValue(0);
-                        if (dReader.GetValue(0).ToString() != "" && dReader.GetValue(1).ToString() != "")
+                        if (dReader.GetValue(2).ToString() != "")
                         {
-                            var ImportEmployee = new List<StoreUpdateEmployeeProfile>();
-                            try
+                            SqlCommand cmdUpload = new SqlCommand("P_Import_Employee", Connection);
+                            cmdUpload.Connection = Connection;
+                            cmdUpload.CommandType = CommandType.StoredProcedure;
+                            cmdUpload.Parameters.AddWithValue("@inCompany", dReader.GetValue(0).ToString());
+                            cmdUpload.Parameters.AddWithValue("@inCountryCode", dReader.GetValue(1).ToString());
+                            cmdUpload.Parameters.AddWithValue("@inEmpId", dReader.GetValue(2).ToString());
+                            cmdUpload.Parameters.AddWithValue("@inTitleName", dReader.GetValue(3).ToString());
+                            cmdUpload.Parameters.AddWithValue("@inFirstName", dReader.GetValue(4).ToString());
+                            cmdUpload.Parameters.AddWithValue("@inLastName", dReader.GetValue(5).ToString());
+                            cmdUpload.Parameters.AddWithValue("@inGender", dReader.GetValue(6).ToString());
+                            cmdUpload.Parameters.AddWithValue("@inDeptId", dReader.GetValue(7).ToString());
+                            cmdUpload.Parameters.AddWithValue("@inPosition", dReader.GetValue(8).ToString());
+                            cmdUpload.Parameters.AddWithValue("@inEmpLvl", dReader.GetValue(9).ToString());
+                            cmdUpload.Parameters.AddWithValue("@inEmpTypeId", dReader.GetValue(10).ToString());
+                            cmdUpload.Parameters.AddWithValue("@inApprGrpId", dReader.GetValue(11).ToString());
+                            cmdUpload.Parameters.AddWithValue("@inStartDate", dReader.GetValue(12).ToString());
+                            cmdUpload.Parameters.AddWithValue("@inEmail", dReader.GetValue(13).ToString());
+                            cmdUpload.Parameters.AddWithValue("@inEmpStatus", dReader.GetValue(14).ToString());
+                            cmdUpload.Parameters.AddWithValue("@inUserType", dReader.GetValue(15).ToString());
+                            cmdUpload.Parameters.AddWithValue("@inDirectorId", dReader.GetValue(16).ToString());
+                            cmdUpload.Parameters.AddWithValue("@inInsertedBy", empId.ToString());
+                            SqlParameter returnValue = new SqlParameter("@outGenstatus", SqlDbType.NVarChar, 100);
+                            returnValue.Direction = System.Data.ParameterDirection.Output;
+                            cmdUpload.Parameters.Add(returnValue);
+                            SqlDataReader dr = cmdUpload.ExecuteReader();
+                            while (dr.Read())
                             {
-                                ImportEmployee = new ImportExcelEmployee().Save(dReader.GetValue(0).ToString(), dReader.GetValue(1).ToString(), dReader.GetValue(2).ToString(), dReader.GetValue(3).ToString(), dReader.GetValue(4).ToString(), dReader.GetValue(5).ToString(), dReader.GetValue(6).ToString(), dReader.GetValue(7).ToString(), dReader.GetValue(8).ToString(), dReader.GetValue(9).ToString(), dReader.GetValue(10).ToString(), dReader.GetValue(11).ToString(), dReader.GetValue(12).ToString(), dReader.GetValue(13).ToString(), dReader.GetValue(14).ToString(), dReader.GetValue(15).ToString(), empId.ToString());
-                                txtStatus = "success";
-                                //listEmployee.Add(new StoreUpdateEmployeeProfile()
-                                //{
-                                //    Company = ImportEmployee[0].Company,
-                                //    EmpId = ImportEmployee[0].EmpId, 
-                                //    TitleName = ImportEmployee[0].TitleName,   
-                                //    FirstName = ImportEmployee[0].FirstName,
-                                //    LastName = ImportEmployee[0].LastName,
-                                //    DeptId = ImportEmployee[0].DeptId,
-                                //    Position = ImportEmployee[0].Position,
-                                //    EmpLvl = ImportEmployee[0].EmpLvl,
-                                //    EmpTypeId = ImportEmployee[0].EmpTypeId,
-                                //    StartDate = ImportEmployee[0].StartDate,
-                                //    EmpStatus = ImportEmployee[0].EmpStatus,
-                                //    DirectorId = ImportEmployee[0].TitleName
-                                //});
-                                //rowInsert++;
-                                empIdList.Add(dReader.GetValue(2).ToString());
+                                countRowImport++;
+                                if (dr["StatusImport"].ToString() == "Y")
+                                {
+                                    countStatusSuccess++;
+                                }
+                                if (dr["StatusImport"].ToString() == "N")
+                                {
+                                    countStatusFail++;
+                                }
+                                listEmployee.Add(new StoreImportEmployee()
+                                {
+                                    Company = dr["Company"].ToString(),
+                                    CountryCode = dr["CountryCode"].ToString(),
+                                    EmpId = dr["EmpId"].ToString(),
+                                    TitleName = dr["TitleName"].ToString(),
+                                    FirstName = dr["FirstName"].ToString(),
+                                    LastName = dr["LastName"].ToString(),
+                                    Gender = dr["Gender"].ToString(),
+                                    DeptId = dr["DeptId"].ToString(),
+                                    Position = dr["Position"].ToString(),
+                                    EmpLvl = dr["EmpLvl"].ToString(),
+                                    EmpTypeId = dr["EmpTypeId"].ToString(),
+                                    ApprGrpID = dr["ApprGrpID"].ToString(),
+                                    StartDate = dr["StartDate"].ToString(),
+                                    Email = dr["Email"].ToString(),
+                                    EmpStatus = dr["EmpStatus"].ToString(),
+                                    UserType = dr["UserType"].ToString(),
+                                    DirectorId = dr["DirectorId"].ToString(),
+                                    InsertedBy = dr["InsertedBy"].ToString(),
+                                    StatusImport = dr["StatusImport"].ToString(),
+                                    ErrorImport = dr["ErrorImport"].ToString()
+                                });
                             }
-                            catch (Exception ex)
-                            {
-                                txtStatus = "error";
-                                txtMessage = ex.Message;
-                            }
+                            cmdUpload.Dispose();
                         }
                     }
-                    if (empIdList != null)
-                    {
-                        string empIdArray = string.Join(",", empIdList.ToArray());
-                        GetProfile = new GetProfile().GetStoreGetProfile(empIdArray);
-                    }
+                    excelConnection.Close();
+                    Connection.Close();
                 }
             }
             catch (Exception ex)
             {
                 txtMessage = ex.Message + '/' + ex.Source + '/' + ex.HelpLink + '/' + ex.HResult;
             }
+            //string fullPathDelete = Server.MapPath("~/FileExcel/" + fileInput.FileName);
+            //if (System.IO.File.Exists(fullPathDelete))
+            //{
+            //    System.IO.File.Delete(fullPathDelete);
+            //}
+            // return Json(new { status = txtMessage, message = txtMessage, listEmployee = listEmployee }, JsonRequestBehavior.AllowGet);
             ViewBag.status = txtStatus;
             ViewBag.message = txtMessage;
-            ViewBag.listEmployee = GetProfile;
+            ViewBag.listEmployee = listEmployee;
+            ViewBag.countStatusSuccess = countStatusSuccess;
+            ViewBag.countStatusFail = countStatusFail;
+            ViewBag.countRowImport = countRowImport;
             return PartialView("_ListImportExcel", new
             {
                 @ViewBag.status,
                 @ViewBag.message,
                 @ViewBag.listEmployee,
+                @ViewBag.countStatusSuccess,
+                @ViewBag.countStatusFail,
+                @ViewBag.countRowImport,
             });
         }
         public ActionResult ApprovflowSetting()

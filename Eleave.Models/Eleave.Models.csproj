@@ -58,6 +58,7 @@
     <Compile Include="StoreGetLeaveBalance.cs" />
     <Compile Include="StoreGetLogApprove.cs" />
     <Compile Include="StoreGetLookupData.cs" />
+    <Compile Include="StoreImportEmployee.cs" />
     <Compile Include="StoreGetProfile.cs" />
     <Compile Include="StoreUpdateEmployeeProfile.cs" />
     <Compile Include="StoreUpdateRequest.cs" />

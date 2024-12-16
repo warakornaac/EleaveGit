@@ -1,11 +1,31 @@
 ﻿@using Eleave.Models;
-<div class="card card-success">
-    <div class="card-header with-border" style="font-weight: bold;"><i class="fa fa-file-excel-o" aria-hidden="true"></i> </div>
+<div class="row p-0" style="margin-top: -10px;">
+    <div class="col-sm-12">
+        <div class="mt-4">
+            <div class="table-responsive">
+                <table class="table table-bordered text-start bg-white">
+                    <tbody>
+                        <tr>
+                            <td rowspan="2" style="text-align: -webkit-center;vertical-align: middle;"><strong>Total No. of Records: <span class="text-primary">@ViewBag.countRowImport</span></strong> </td>
+                            <td><strong>Success: <span class="text-success">@ViewBag.countStatusSuccess</span></strong></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Failure: <span class="text-danger">@ViewBag.countStatusFail</span></strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card card-success pt-1">
+    <div class="card-header with-border" style="font-weight: bold;"><i class="fa fa-file-excel-o" aria-hidden="true"></i> ข้อมูลพนักงาน </div>
     <div class="card-body p-0" style="margin-bottom: -17px;">
         <div class="table-responsive">
             <table class="table table-bordered table-hover" style="text-align: center;">
                 <thead>
                     <tr>
+                        <th style="width: 100px;">#</th>
                         <th style="width: 100px;">Company</th>
                         <th style="width: 100px;">CountryCode</th>
                         <th style="width: 100px;">Employee Id</th>
@@ -17,36 +37,52 @@
                         <th style="width: 100px;">Position</th>
                         <th style="width: 100px;">Level</th>
                         <th style="width: 100px;">Employee Type</th>
+                        <th style="width: 100px;">Approve Flow</th>
                         <th style="width: 100px;">StartDate</th>
                         <th style="width: 100px;">Email</th>
                         <th style="width: 100px;">Employee Status</th>
                         <th style="width: 100px;">UserType</th>
                         <th style="width: 100px;">DirectorId</th>
+                        <th style="width: 100px;">StatusImport</th>
+                        <th style="width: 100px;">MessageImport</th>
                     </tr>
                 </thead>
-                <tbody> 
-                    @if (ViewBag.listEmployee != null)
-                    {
-                        foreach (var rowEmployee in (List<StoreGetProfile>)ViewBag.listEmployee)
+                <tbody>
+                    @{
+                        var rowImport = 0;
+                        if (ViewBag.listEmployee != null)
                         {
-                            <tr style="background: #ffff99;">
-                                <td>@rowEmployee.Company</td>
-                                <td>TH</td>
-                                <td>@rowEmployee.EmpId</td>
-                                <td>@rowEmployee.TitleName</td>
-                                <td>@rowEmployee.LastName</td>
-                                <td>@rowEmployee.LastName</td>
-                                <td>-</td>
-                                <td>-</td>
-                                <td>@rowEmployee.Position</td>
-                                <td>-</td>
-                                <td>-</td>
-                                <td>@rowEmployee.StartDate</td>
-                                <td>-</td>
-                                <td>@rowEmployee.EmpStatus</td>
-                                <td>-</td>
-                                <td>@rowEmployee.DirectorId</td>
-                            </tr>
+                            foreach (var rowEmployee in (List<StoreImportEmployee>)ViewBag.listEmployee)
+                            {
+                                rowImport++;
+                                var colorTr = "table-success";
+                                if (rowEmployee.StatusImport == "N")
+                                {
+                                    colorTr = "table-danger";
+                                }
+                                <tr class="@colorTr">
+                                    <td>@rowImport</td>
+                                    <td>@rowEmployee.Company</td>
+                                    <td>@rowEmployee.CountryCode</td>
+                                    <td>@rowEmployee.EmpId</td>
+                                    <td>@rowEmployee.TitleName</td>
+                                    <td>@rowEmployee.FirstName</td>
+                                    <td>@rowEmployee.LastName</td>
+                                    <td>@rowEmployee.Gender</td>
+                                    <td>@rowEmployee.DeptId</td>
+                                    <td>@rowEmployee.Position</td>
+                                    <td>@rowEmployee.EmpLvl</td>
+                                    <td>@rowEmployee.EmpTypeId</td>
+                                    <td>@rowEmployee.ApprGrpID</td>
+                                    <td>@rowEmployee.StartDate</td>
+                                    <td>@rowEmployee.Email</td>
+                                    <td>@rowEmployee.EmpStatus</td>
+                                    <td>@rowEmployee.UserType</td>
+                                    <td>@rowEmployee.DirectorId</td>
+                                    <td>@rowEmployee.StatusImport</td>
+                                    <td>@rowEmployee.ErrorImport</td>
+                                </tr>
+                            }
                         }
                     }
                 </tbody>
