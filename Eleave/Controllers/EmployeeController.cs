@@ -344,6 +344,7 @@ namespace Eleave.Controllers
                 @ViewBag.countRowImport,
             });
         }
+        [HttpGet]
         public ActionResult ApprovflowSetting()
         {
             string EmpId = string.Empty;
