@@ -52,18 +52,21 @@
                             <datalist id="list-ApprvFlowID">
                                 <option value="dataTest">Group</option>
                             </datalist>
+
                         </div>
                     </div>
                     <div class="col-12">
                         <div class="form-group">
                             @Html.Label("Approve group name | ชื่อกลุ่มอนุมัติ")
                             @Html.TextBox("GroupName", null, new { @class = "form-control", @id = "groupName-add" })
+                            <span class="text-danger" id="alert-apprv-add-name" hidden> *Please enter approval group name. | กรุณากรอกชื่อกลุ่มอนุมัติ</span>
                         </div>
                     </div>
                     <div class="col-12">
                         <div class="form-group">
                             @Html.Label("Department | แผนก")
                             @Html.DropDownList("Department", new SelectList(ViewBag.DepartmentList, "LookValue", "LookDesc"), "Select department | เลือกหน่วยงาน", new { @class = "custom-select", @id = "department-selector-add", onchange = "GenApprv(this.value),GetdirectorSelectAdd(this.value)" })
+                            <span class="text-danger" id="alert-apprv-add-dept" hidden> *Please select approval Department. | กรุณาเลือกแผนกกลุ่มอนุมัติ</span>
                         </div>
                     </div>
                     <div class="col-12">
@@ -80,6 +83,7 @@
                                                    new SelectListItem(){Text="Approve", Value="Approve"},
                                                    new SelectListItem(){Text="Acknowledge", Value="Acknowledge"}
                                                }, "Select approve type | เลือกประเภทอนุมัติ", new { @class = "custom-select", @id = "actiontyp-add", onchange = "ActionSelectAdd(this.value)" })
+                            <span class="text-danger" id="alert-apprv-add-type" hidden> *Please select approval type . | กรุณาเลือกประเภทอนุมัติ</span>
                         </div>
                     </div>
                     <div class="col-12">
@@ -89,6 +93,7 @@
                        {
 
                        }, "เลือกพนักงาน", new { @class = "custom-select", @id = "empId-add" })
+                            <span class="text-danger" id="alert-apprv-add-emp" hidden> *Please select approver group. | กรุณาเลือกพนักงานผู้อนุมัติ</span>
                         </div>
                     </div>
 
@@ -96,6 +101,7 @@
                         <div class="form-group">
                             @Html.Label("Description | รายละเอียดประเภทอนุมัติ")
                             @Html.TextArea("ApprvDesc", null, new { @class = "form-control", @id = "apprvDesc-add" })
+                            <span class="text-danger" id="alert-apprv-add-desc" hidden> *Please enter approval Description. | กรุณากรอกชื่อรายละเอียดประเภทอนุมัติ</span>
                         </div>
                     </div>
                 </div>
@@ -130,6 +136,7 @@
                         <div class="form-group">
                             @Html.Label("Approval group name | ชื่อกลุ่มอนุมัติ")
                             @Html.TextBox("GroupName", "", new { @class = "form-control", @id = "groupName-edit" })
+                            <span class="text-danger" id="alert-apprv-edit-name" hidden> *Please enter approval group name. | กรุณากรอกชื่อกลุ่มอนุมัติ</span>
                             @Html.Hidden("GroupNameVal", null, new { @id = "groupName-edit-old" })
                         </div>
                     </div>
@@ -137,6 +144,7 @@
                         <div class="form-group">
                             @Html.Label("Department | แผนก")
                             @Html.DropDownList("Department", new SelectList(ViewBag.DepartmentList, "LookParam", "LookDesc"), "Select department | เลือกหน่วยงาน", new { @class = "custom-select", @id = "department-selector-edit", @disabled = "disabled" })
+                            <span class="text-danger" id="alert-apprv-edit-dept" hidden> *Please select approval Department. | กรุณาเลือกแผนกกลุ่มอนุมัติ</span>
                         </div>
                     </div>
                     <div class="col-12">
@@ -151,6 +159,7 @@
                                                             new SelectListItem() {Text="4",Value="4"},
                                                             new SelectListItem() {Text="5",Value="5"},
                                                            }, "Approve Level", new { @class = "custom-select", @id = "ApprvLvl-edit" })
+                            <span class="text-danger" id="alert-apprv-edit-lvl" hidden> *Please select approval level. | กรุณาเลือกลำดับการอนุมัติ</span>
                         </div>
                     </div>
                     <div class="col-12">
@@ -161,6 +170,7 @@
                                                    new SelectListItem(){Text="Approve", Value="Approve"},
                                                    new SelectListItem(){Text="Acknowledge", Value="Acknowledge"}
                                                }, new { @class = "custom-select", @id = "actiontyp-edit" })
+                            <span class="text-danger" id="alert-apprv-edit-type" hidden> *Please select approval type . | กรุณาเลือกประเภทอนุมัติ</span>
                         </div>
                     </div>
                     <div class="col-12">
@@ -170,6 +180,7 @@
                                                {
 
                                                }, "Select employee | เลือกพนักงาน", new { @class = "custom-select", @id = "empid-edit" })
+                            <span class="text-danger" id="alert-apprv-edit-emp" hidden> *Please select approver group. | กรุณาเลือกพนักงานผู้อนุมัติ</span>
                         </div>
                     </div>
 
@@ -177,6 +188,7 @@
                         <div class="form-group">
                             @Html.Label("Description | รายละเอียดประเภทอนุมัติ")
                             @Html.TextArea("ApprvDesc", null, new { @class = "form-control", @id = "apprvDesc-edit" })
+                            <span class="text-danger" id="alert-apprv-edit-desc" hidden> *Please enter approval Description. | กรุณากรอกชื่อรายละเอียดประเภทอนุมัติ</span>
                         </div>
                     </div>
                 </div>
@@ -370,6 +382,11 @@
 
     $(document).on('click', '#addFlowbtn', function () {
         $('#addFormModal').modal('show');
+        $('#alert-apprv-add-name').attr('hidden', true);
+        $('#alert-apprv-add-dept').attr('hidden', true);
+        $('#alert-apprv-add-type').attr('hidden', true);
+        $('#alert-apprv-add-emp').attr('hidden', true);
+        $('#alert-apprv-add-desc').attr('hidden', true);
     });
     $(document).ready(function () {
         $('#apprv-flow-table').dataTable({
@@ -397,6 +414,7 @@
         DropdownEmpSelectAdd();
     });
     $(document).on('click', '#addApprove-btn', function () {
+        var check = 0;
         var apprvID = $('#groupId-add').val();
         var apprvNm = $('#groupName-add').val();
         var deptVal = $('#department-selector-add').val();
@@ -408,35 +426,45 @@
             $('#addFormModal').modal('hide');
             Swal.fire({
                 title: "Error!!!",
-                text: "Approval group ID is not found,please verify your data !!! | ไม่พบรหัสรหัสกลุ่มอนุมัติ กรุณาตรวจสอบข้อมูล",
+                text: "Approval group ID is not found,please verify your data or select department !!! | ไม่พบรหัสรหัสกลุ่มอนุมัติ กรุณาตรวจสอบข้อมูล หรือ เลือกแผนกก่อน",
                 icon: "error"
             }).then(() => {
                 $('#addFormModal').modal('show');
             });
-            return false;
+            check++;
+            //return false;
         }
         if (apprvNm == "") {
-            $('#addFormModal').modal('hide');
-            Swal.fire({
-                title: "Error!!!",
-                text: "Please enter approval group name. | กรุณากรอกชื่อกลุ่มอนุมัติ",
-                icon: "error"
-            }).then(() => {
-                $('#addFormModal').modal('show');
-            });
-            return false;
+            //$('#addFormModal').modal('hide');
+            //Swal.fire({
+            //    title: "Error!!!",
+            //    text: "Please enter approval group name. | กรุณากรอกชื่อกลุ่มอนุมัติ",
+            //    icon: "error"
+            //}).then(() => {
+            //    $('#addFormModal').modal('show');
+            //});
+            $('#alert-apprv-add-name').removeAttr('hidden');
+            check++;
+            //return false;
+        }
+        else {
+            $('#alert-apprv-add-name').attr('hidden',true);
         }
         if (deptVal === "" || deptVal === null) {
-            $('#addFormModal').modal('hide');
-            Swal.fire({
-                title: "Error!!!",
-                text: "Please select department.| กรุณาเลือกแผนก",
-                icon: "error"
-            }).then(() => {
-                $('#addFormModal').modal('show');
-            });
-
-            return false;
+            //$('#addFormModal').modal('hide');
+            //Swal.fire({
+            //    title: "Error!!!",
+            //    text: "Please select department.| กรุณาเลือกแผนก",
+            //    icon: "error"
+            //}).then(() => {
+            //    $('#addFormModal').modal('show');
+            //});
+            $('#alert-apprv-add-dept').removeAttr('hidden');
+            check++;
+            //return false;
+        }
+        else {
+            $('#alert-apprv-add-dept').attr('hidden', true);
         }
         if (stepNum === "" || stepNum === null) {
             $('#addFormModal').modal('hide');
@@ -447,39 +475,61 @@
             }).then(() => {
                 $('#addFormModal').modal('show');
             });
-            return false;
+            check++;
+            //return false;
         }
-        if (empId === "" || empId === null) {
-            $('#addFormModal').modal('hide');
-            Swal.fire({
-                title: "Error!!!",
-                text: "Please select approver. | กรุณาเลือกพนักงานผู้อนุมัติ",
-                icon: "error"
-            }).then(() => {
-                $('#addFormModal').modal('show');
-            });
-            return false;
-        }
+
         if (actionTex === "" || actionTex === null) {
-            $('#addFormModal').modal('hide');
-            Swal.fire({
-                title: "Error!!!",
-                text: "Please select approval type. | กรุณาเลือกประเภทอนุมัติ",
-                icon: "error"
-            }).then(() => {
-                $('#addFormModal').modal('show');
-            });
-            return false;
+            //$('#addFormModal').modal('hide');
+            //Swal.fire({
+            //    title: "Error!!!",
+            //    text: "Please select approval type. | กรุณาเลือกประเภทอนุมัติ",
+            //    icon: "error"
+            //}).then(() => {
+            //    $('#addFormModal').modal('show');
+            //});
+            $('#alert-apprv-add-type').removeAttr('hidden');
+            check++;
+            //return false;
+        }
+        else {
+            $('#alert-apprv-add-type').attr('hidden', true);
+        }
+
+        if (empId === '0') {
+            //$('#addFormModal').modal('hide');
+            //Swal.fire({
+            //    title: "Error!!!",
+            //    text: "Please select approver. | กรุณาเลือกพนักงานผู้อนุมัติ",
+            //    icon: "error"
+            //}).then(() => {
+            //    $('#addFormModal').modal('show');
+            //});
+            $('#alert-apprv-add-emp').removeAttr('hidden');
+            check++;
+            //return false;
+        }
+        else {
+            $('#alert-apprv-add-emp').attr('hidden', true);
         }
         if (apprvDesc == "") {
-            $('#addFormModal').modal('hide');
-            Swal.fire({
-                title: "Error!!!",
-                text: "Please enter aprroval description. | กรุณากรอกรายละเอียดขั้นตอนอนุมัติ",
-                icon: "error"
-            }).then(() => {
-                $('#addFormModal').modal('show');
-            });
+            //$('#addFormModal').modal('hide');
+            //Swal.fire({
+            //    title: "Error!!!",
+            //    text: "Please enter aprroval description. | กรุณากรอกรายละเอียดขั้นตอนอนุมัติ",
+            //    icon: "error"
+            //}).then(() => {
+            //    $('#addFormModal').modal('show');
+            //});
+            $('#alert-apprv-add-desc').removeAttr('hidden');
+            check++;
+            //return false;
+        }
+        else {
+            $('#alert-apprv-add-desc').attr('hidden', true);
+        }
+        if (check > 0) {
+            console.log('Alert ADD');
             return false;
         }
         AddApprvFlow();
@@ -562,10 +612,10 @@
         $('#groupId-edit').val(ApprvID);
         $('#editFormModal').modal('show');
         if (ApprvAction == 'Acknowledge') {
-             DropdownEmpSelectEditAsync('Ack');
+            await DropdownEmpSelectEditAsync('Ack');
         }
         else {
-             DropdownEmpSelectEditAsync(ApprvDept);
+            await DropdownEmpSelectEditAsync(ApprvDept);
         }
         await GetApprovflowSettingEdit(ApprvID, ApprvName, ApprvStep, ApprvDept, ApprvAction);
 
@@ -637,6 +687,7 @@
             type: 'POST',
             dataType: 'JSON',
             beforeSend: function () {
+                hiddenAlertEdit();
                 $('#groupName-edit-old').val('');
                 $('#groupName-edit').val('');
                 $('#department-selector-edit').val('').trigger('change');
@@ -953,6 +1004,11 @@
             dataType: 'JSON',
             beforeSend: function () {
                 $('#addFormModal').modal('hide');
+                $('#alert-apprv-add-name').attr('hidden', true);
+                $('#alert-apprv-add-dept').attr('hidden', true);
+                $('#alert-apprv-add-type').attr('hidden', true);
+                $('#alert-apprv-add-emp').attr('hidden', true);
+                $('#alert-apprv-add-desc').attr('hidden', true);
                 LoadingShow();
             },
             success: function (data) {
@@ -980,7 +1036,17 @@
             }
         })
     }
+    function hiddenAlertEdit() {
+        $('#alert-apprv-edit-name').attr('hidden', true);
+        $('#alert-apprv-edit-dept').attr('hidden', true);
+        $('#alert-apprv-edit-type').attr('hidden', true);
+        $('#alert-apprv-edit-lvl').attr('hidden', true);
+        $('#alert-apprv-edit-emp').attr('hidden', true);
+        $('#alert-apprv-edit-desc').attr('hidden', true);
+        console.log('hidden Edit');
+    }
     function UpdateApprvFlow() {
+        var check = 0;
         var apprvID = $('#groupId-edit').val();
         var apprvNmold = $('#groupName-edit-old').val();
         var apprvNm = $('#groupName-edit').val();
@@ -990,62 +1056,93 @@
         var empId = $('#empid-edit').val();
         var actionTex = $('#actiontyp-edit').val();
         var apprvDesc = $('#apprvDesc-edit').val();
+
+
+
         if (apprvNm === null || apprvNm.trim() === "") {
-            $('#editFormModal').modal('hide');
-            Swal.fire({
-                title: "Error!!!",
-                text: "Please select approval group. | กรุณากรอกชื่อกลุ่มอนุมัติ",
-                icon: "error"
-            }).then(() => {
-                $('#editFormModal').modal('show');
-            });
-            return false;
+            //$('#editFormModal').modal('hide');
+            //Swal.fire({
+            //    title: "Error!!!",
+            //    text: "Please select approval group. | กรุณากรอกชื่อกลุ่มอนุมัติ",
+            //    icon: "error"
+            //}).then(() => {
+            //    $('#editFormModal').modal('show');
+            //});
+            check++;
+            $('#alert-apprv-edit-name').removeAttr('hidden');
+            //return false;
+        }
+        else {
+            $('#alert-apprv-edit-name').attr('hidden', true);
         }
         if (deptVal === null || deptVal.trim() === "") {
-            $('#editFormModal').modal('hide');
-            Swal.fire({
-                title: "Error!!!",
-                text: "Please select department. | กรุณาเลือกแผนก",
-                icon: "error"
-            }).then(() => {
-                $('#editFormModal').modal('show');
-            });
-            return false;
+            //$('#editFormModal').modal('hide');
+            //Swal.fire({
+            //    title: "Error!!!",
+            //    text: "Please select department. | กรุณาเลือกแผนก",
+            //    icon: "error"
+            //}).then(() => {
+            //    $('#editFormModal').modal('show');
+            //});
+            check++;
+            $('#alert-apprv-edit-dept').removeAttr('hidden');
+            //return false;
+        }
+        else {
+            $('#alert-apprv-edit-dept').attr('hidden', true);
         }
         if (stepNum === null || stepNum.trim() === "") {
-            $('#editFormModal').modal('hide');
-            Swal.fire({
-                title: "Error!!!",
-                text: "Please select approval level. | กรุณาเลือกลำดับการอนุมัติ",
-                icon: "error"
-            }).then(() => {
-                $('#editFormModal').modal('show');
-            });
-            return false;
+            //$('#editFormModal').modal('hide');
+            //Swal.fire({
+            //    title: "Error!!!",
+            //    text: "Please select approval level. | กรุณาเลือกลำดับการอนุมัติ",
+            //    icon: "error"
+            //}).then(() => {
+            //    $('#editFormModal').modal('show');
+            //});
+            $('#alert-apprv-edit-lvl').removeAttr('hidden');
+            check++;
+            //return false;
         }
-        if (empId === null || empId.trim() === "") {
-            $('#editFormModal').modal('hide');
-            Swal.fire({
-                title: "Error!!!",
-                text: "Please select approver. | กรุณาเลือกผู้ทำการอนุมัติ",
-                icon: "error"
-            }).then(() => {
-                $('#editFormModal').modal('show');
-            });
-            return false;
+        else {
+            $('#alert-apprv-edit-lvl').attr('hidden', true);
+        }
+        if (empId === "0") {
+            //$('#editFormModal').modal('hide');
+            //Swal.fire({
+            //    title: "Error!!!",
+            //    text: "Please select approver. | กรุณาเลือกผู้ทำการอนุมัติ",
+            //    icon: "error"
+            //}).then(() => {
+            //    $('#editFormModal').modal('show');
+            //});
+            $('#alert-apprv-edit-emp').removeAttr('hidden');
+            check++;
+            //return false;
+        }
+        else {
+            $('#alert-apprv-edit-emp').attr('hidden', true);
         }
         if (apprvDesc === "") {
-            $('#editFormModal').modal('hide');
-            Swal.fire({
-                title: "Error!!!",
-                text: "กรุณากรอกรายละเอียด",
-                icon: "error"
-            }).then(() => {
-                $('#editFormModal').modal('show');
-            });
+            //$('#editFormModal').modal('hide');
+            //Swal.fire({
+            //    title: "Error!!!",
+            //    text: "กรุณากรอกรายละเอียด",
+            //    icon: "error"
+            //}).then(() => {
+            //    $('#editFormModal').modal('show');
+            //});
+            $('#alert-apprv-edit-desc').removeAttr('hidden');
+            check++;
+            //return false;
+        }
+        else {
+            $('#alert-apprv-edit-desc').attr('hidden', true);
+        }
+        if (check > 0) {
+            console.log('Alert Edit');
             return false;
         }
-
 
         $.ajax({
             url: '@Url.Action("UpdateApprvFlow", "Employee")',
