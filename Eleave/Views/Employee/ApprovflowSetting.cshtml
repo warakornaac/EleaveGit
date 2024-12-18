@@ -1012,10 +1012,8 @@
                         title: "Success",
                         text: "Add approval successful. | เพิ่มการอนุมัติสำเร็จ",
                         icon: "success"
-                    }).then((result) => {
-                        if (result.isConfirmed) {
+                    }).then(() => {
                             location.reload();
-                        }
                     });
                 }
                 else {
