@@ -13,8 +13,6 @@ using Eleave.Library;
 using Eleave.Models;
 using System.Data.OleDb;
 using System.IO;
-using System.Drawing.Imaging;
-using Microsoft.Ajax.Utilities;
 
 namespace Eleave.Controllers
 {
@@ -202,6 +200,7 @@ namespace Eleave.Controllers
         {
             return View();
         }
+     
         public ActionResult SaveImportExcel(HttpPostedFileBase fileInput, string empId)
         {
             List<string> empIdList = new List<string>();
@@ -322,12 +321,6 @@ namespace Eleave.Controllers
             {
                 txtMessage = ex.Message + '/' + ex.Source + '/' + ex.HelpLink + '/' + ex.HResult;
             }
-            //string fullPathDelete = Server.MapPath("~/FileExcel/" + fileInput.FileName);
-            //if (System.IO.File.Exists(fullPathDelete))
-            //{
-            //    System.IO.File.Delete(fullPathDelete);
-            //}
-            // return Json(new { status = txtMessage, message = txtMessage, listEmployee = listEmployee }, JsonRequestBehavior.AllowGet);
             ViewBag.status = txtStatus;
             ViewBag.message = txtMessage;
             ViewBag.listEmployee = listEmployee;
