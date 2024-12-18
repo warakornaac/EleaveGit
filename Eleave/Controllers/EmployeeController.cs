@@ -337,8 +337,18 @@ namespace Eleave.Controllers
                 @ViewBag.countRowImport,
             });
         }
+        [HttpGet]
         public ActionResult ApprovflowSetting()
         {
+            string EmpId = string.Empty;
+            if (Session["EmpId"] != null)
+            {
+                EmpId = Session["EmpId"].ToString();
+            }
+            else
+            {
+                return RedirectToAction("Login", "Home");
+            }
             var list = LoadGroupApprovalDropdown();
             var flow = LoadGroupApprovalDropdown();
             flow = flow
@@ -353,6 +363,16 @@ namespace Eleave.Controllers
         [HttpPost]
         public ActionResult ApprovflowSetting(string DeptID, string ApprvGrp)
         {
+            string EmpId = string.Empty;
+            //this.Session["EmpId"] = "6601002";
+            if (Session["EmpId"] != null)
+            {
+                EmpId = Session["EmpId"].ToString();
+            }
+            else
+            {
+                return RedirectToAction("Login", "Home");
+            }
             var list = LoadGroupApprovalDropdown();
             var flow = LoadGroupApprovalDropdown();
             LoadDepartments();
@@ -835,7 +855,7 @@ namespace Eleave.Controllers
 
                 conn.Close();
             }
-            catch (Exception ex)
+            catch
             {
                 conn.Close();
             }
