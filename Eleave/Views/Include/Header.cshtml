@@ -12,8 +12,8 @@
             @*<span class="pl-1 font-weight-bold" style="color: #ffdede; font-style: italic;"> E-Leave </span>*@
         </a>
         @*<a href="#!" class="mob-toggler">
-            <i class="feather icon-more-vertical"></i>
-        </a>*@
+                <i class="feather icon-more-vertical"></i>
+            </a>*@
     </div>
     <div class="collapse navbar-collapse">
         <ul class="navbar-nav ml-auto">
@@ -625,7 +625,7 @@
 
     function GetDetailAcknowledge(REQ, empId) {
         return $.ajax({
-            url: '@Url.Action("GetDetailAcknowledge", "Acknowledge")',
+            url: '@Url.Action("GetRequestDetail", "Acknowledge")',
             data: {
                 ReqNo: REQ,
                 EmpId: empId,
