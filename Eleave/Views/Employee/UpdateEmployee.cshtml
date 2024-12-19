@@ -1,6 +1,11 @@
 ﻿@model Eleave.Models.StoreUpdateEmployeeProfile
 @{
     ViewBag.Title = "แก้ไขข้อมูลพนักงาน";
+
+    var com = ViewBag.SearchCompany ?? string.Empty;
+    var dept = ViewBag.SearchDept ?? string.Empty;
+    var nam = ViewBag.SearchName ?? string.Empty;
+    var emp = ViewBag.SearchEmpId ?? string.Empty;
 }
 <style>
     /* ปรับ dropdown ที่มีการใช้ select2 */
@@ -89,7 +94,7 @@
                 </div>
                 <ul class="breadcrumb">
                     <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home")"><i class="feather icon-home"></i></a></li>
-                    <li class="breadcrumb-item"><a href="@Url.Action("UpdateEmployee", "Employee")">แก้ไขข้อมูลผู้ใช้งาน</a></li>
+                    <li class="breadcrumb-item"><a href="@Url.Action("ManagerEmployee", "Employee")">จัดการผู้ใช้งาน</a></li>
                 </ul>
             </div>
         </div>
@@ -99,7 +104,10 @@
     <div class="card table-card">
         <div class="card-header">
             <h5>แก้ไขข้อมูลพนักงาน</h5>
-
+            <input type="hidden" value="" id="" />
+            <input type="hidden" value="" id="" />
+            <input type="hidden" value="" id="" />
+            <input type="hidden" value="" id="" />
         </div>
         <div class="card-body p-3 d-flex justify-content-center">
             @using (Html.BeginForm("UpdateEmployee", "Employee", FormMethod.Post))
@@ -214,7 +222,13 @@
                     </div>
 
                 </div>
-                <input type="submit" value="บันทึก" class="btn btn-success float-end" />
+                <div class="float-end">
+                    <input type="submit" value="บันทึก" class="btn btn-success " />
+                    <input type="button" value="ย้อนกลับ" class="btn btn-danger" onclick="history.back();" id="back-btn" />
+                </div>
+
+
+
             }
         </div>
     </div>
@@ -238,7 +252,7 @@
             icon: 'error'
         });
     }
-    if ("@ViewBag.UpdateStatus" == "Success") {
+    @*if ("@ViewBag.UpdateStatus" == "Success") {
         Swal.fire({
             title: "@ViewBag.UpdateStatus",
             text: "Update ข้อมูลพนักงานสำเร็จ",
@@ -246,7 +260,64 @@
         }).then(() => {
             window.location.href = "@Url.Action("ManagerEmployee", "Employee")";
         });
+    }*@
+    $(document).on('click', '#back-btn', function () {
+        let form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '@Url.Action("ManagerEmployee", "Employee")';
+
+            let inputs = [
+                { name: "Company", value: "@com" },
+                { name: "Department", value: "@dept" },
+                { name: "Name", value: "@nam" },
+                { name: "EmpID", value: "@emp" }
+            ];
+
+            inputs.forEach(data => {
+                let input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = data.name;
+                input.value = data.value;
+                form.appendChild(input);
+            });
+
+            document.body.appendChild(form);
+            form.submit();
+    });
+    if ("@ViewBag.UpdateStatus" === "Success") {
+        Swal.fire({
+            title: "Success",
+            text: "Update ข้อมูลพนักงานสำเร็จ",
+            icon: "success"
+        }).then(() => {
+            // สร้างฟอร์มเพื่อส่งค่ากลับไปที่ Controller
+            let form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '@Url.Action("ManagerEmployee", "Employee")';
+
+            // เพิ่ม input ซ่อนที่เก็บค่าจาก ViewBag
+            let inputs = [
+                { name: "Company", value: "@com" },
+                { name: "Department", value: "@dept" },
+                { name: "Name", value: "@nam" },
+                { name: "EmpID", value: "@emp" }
+            ];
+
+            // สร้าง input แต่ละตัวและเพิ่มเข้าไปในฟอร์ม
+            inputs.forEach(data => {
+                let input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = data.name;
+                input.value = data.value;
+                form.appendChild(input);
+            });
+
+            // เพิ่มฟอร์มใน body และทำการ submit
+            document.body.appendChild(form);
+            form.submit();
+        });
     }
+
 
 
 

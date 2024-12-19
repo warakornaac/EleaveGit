@@ -2,6 +2,12 @@
 @{
     ViewBag.Title = "ตั้งค่า-กำหนดลำดับการอนุมัติ";
 }
+<style>
+    .swal2-confirm {
+        background-color: red !important;
+        color: white !important;
+    }
+</style>
 <div class="page-header">
     <div class="page-block">
         <div class="row align-items-center">
@@ -59,7 +65,7 @@
                     <div class="col-12">
                         <div class="form-group">
                             @Html.Label("Department | แผนก")
-                            @Html.DropDownList("Department", new SelectList(ViewBag.DepartmentList, "LookValue", "LookDesc"), "Select department | เลือกหน่วยงาน", new { @class = "custom-select", @id = "department-selector-add", onchange = "GenApprv(this.value),GetdirectorSelectAdd(this.value)" })
+                            @Html.DropDownList("Department", new SelectList(ViewBag.DepartmentList, "LookValue", "LookDesc"), "Select department | เลือกหน่วยงาน", new { @class = "custom-select", @id = "department-selector-add", onchange = "GenApprv(this.value);GetdirectorSelectAdd(this.value);" })
                             <span class="text-danger" id="alert-apprv-add-dept" hidden> *Please select approval Department. | กรุณาเลือกแผนกกลุ่มอนุมัติ</span>
                         </div>
                     </div>
@@ -657,6 +663,8 @@
                     Swal.fire({
                         title: "ลบ Approval Flow สำเร็จ",
                         icon: "success"
+                    }).then(() => {
+                        location.reload();
                     });
                 }
                 else {
@@ -825,10 +833,11 @@
             DropdownEmpSelectEdit(valdep);
         }
     }
+
     function ActionSelectAdd(val) {
         var dept = $('#department-selector-add').val();
         if (val == 'Acknowledge') {
-            DropdownEmpSelectAdd('HR');
+            DropdownEmpSelectAdd('Ack');
         }
         else {
             DropdownEmpSelectAdd(dept);
@@ -1010,11 +1019,38 @@
                 if (data.message == "Y") {
                     Swal.fire({
                         title: "Success",
-                        text: "Add approval successful. | เพิ่มการอนุมัติสำเร็จ",
-                        icon: "success"
-                    }).then(() => {
+                        html: `
+                                <span>Add approval successful. | เพิ่มการอนุมัติสำเร็จ</span><br>
+                                <span>สร้างลำดับถัดไป</span><br>
+                                <button id="btn-addsuccess-acknowledge" class="btn btn-primary mt-2" value="Acknowledge">Acknowledge</button>
+                                <button id="btn-addsuccess-approve" class="btn btn-success mt-2" value="Approve">Approve</button>
+                             `,
+                        icon: "success",
+                        showConfirmButton: true,
+                        confirmButtonText: "NO | ไม่",
+                        didOpen: () => {
+
+                            //document.getElementById('acknowledge-btn').addEventListener('click', function () {
+                            //    Swal.close();
+                            //
+                            //});
+                            $(document).on('click', '[id^="btn-addsuccess-"]', function () {
+                                var actionBtn=$(this).val();
+                                Swal.close();
+                                $('#addFormModal').modal('show');
+                                addFlowContinue(apprvId, deptVal, stepNum, actionBtn);
+                            });
+
+                            //document.getElementById('approve-btn').addEventListener('click', function () {
+                            //    Swal.close();
+                            //
+                            //});
+                        },
+                        preConfirm: () => {
                             location.reload();
+                        }
                     });
+
                 }
                 else {
                     Swal.fire({
@@ -1027,6 +1063,13 @@
                 }
             }
         })
+    }
+    function addFlowContinue(apprvId, deptVal, stepNum, action) {
+        $('#select-addApprv').val(2).trigger('change');
+        GenerateApprvStep(apprvId);
+        $('#groupName-add').val('');
+        $('#apprvDesc-add').val('');
+        $('#actiontyp-add').val(action).trigger('change');
     }
     function hiddenAlertEdit() {
         $('#alert-apprv-edit-name').attr('hidden', true);

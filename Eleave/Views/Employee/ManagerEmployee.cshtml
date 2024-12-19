@@ -1,6 +1,10 @@
 ﻿@using Eleave.Models;
 @{
     ViewBag.Title = "จัดการผู้ใช้งาน";
+    string company = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(ViewBag.seachCompany ?? ""));
+    string department = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(ViewBag.seachDept ?? ""));
+    string name = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(ViewBag.seachName ?? ""));
+    string empId = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(ViewBag.seachEmpId ?? ""));
 }
 <style>
     .switch {
@@ -234,7 +238,16 @@
                                         }
                                         <td class="text-center p-1">
                                             <div class="btn btn-info btn-xs" id="viewEmployeeDetail-@dataItem.EmpId" title="แสดง" data-emp="@dataItem.EmpId"><span class="fa fa-eye"></span></div>
-                                            <a class="btn btn-warning btn-xs" href="@Url.Action("UpdateEmployee", "Employee", new { EmpId = dataItem.EmpId })" ,"Employee")" title="แก้ไข"><span class="fa fa-edit"></span></a>
+                                            <a class="btn btn-warning btn-xs"
+                                               href="@Url.Action("UpdateEmployee", "Employee", new {
+                                                    EmpId = dataItem.EmpId,
+                                                    Companys = company,
+                                                    Departments = department,
+                                                    Names= name,
+                                                    EmpIDs = empId
+                                                 })" title="แก้ไข">
+                                                <span class="fa fa-edit"></span>
+                                            </a>
                                         </td>
                                     </tr>
                                 }
@@ -312,12 +325,12 @@
 </script>
 
 @*@if (ViewBag.EmployeeList != null)
-{
-    <script type="text/javascript">
-        $(document).ready(function () {
-            setTimeout(function () {
-                LoadingHide();
-            }, 1500); // หน่วงเวลา (2 วินาที)
-        });
-    </script>
-}*@
+    {
+        <script type="text/javascript">
+            $(document).ready(function () {
+                setTimeout(function () {
+                    LoadingHide();
+                }, 1500); // หน่วงเวลา (2 วินาที)
+            });
+        </script>
+    }*@
