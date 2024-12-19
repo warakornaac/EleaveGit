@@ -1027,30 +1027,20 @@
                              `,
                         icon: "success",
                         showConfirmButton: true,
+                        allowOutsideClick: false,
                         confirmButtonText: "NO | ไม่",
                         didOpen: () => {
-
-                            //document.getElementById('acknowledge-btn').addEventListener('click', function () {
-                            //    Swal.close();
-                            //
-                            //});
                             $(document).on('click', '[id^="btn-addsuccess-"]', function () {
                                 var actionBtn=$(this).val();
                                 Swal.close();
                                 $('#addFormModal').modal('show');
                                 addFlowContinue(apprvId, deptVal, stepNum, actionBtn);
                             });
-
-                            //document.getElementById('approve-btn').addEventListener('click', function () {
-                            //    Swal.close();
-                            //
-                            //});
                         },
                         preConfirm: () => {
                             location.reload();
                         }
                     });
-
                 }
                 else {
                     Swal.fire({
