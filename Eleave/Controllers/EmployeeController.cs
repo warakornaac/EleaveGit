@@ -13,13 +13,10 @@ using Eleave.Library;
 using Eleave.Models;
 using System.Data.OleDb;
 using System.IO;
-<<<<<<< HEAD
 using System.Drawing.Imaging;
 using Microsoft.Ajax.Utilities;
 using System.Xml.Linq;
 using System.Text;
-=======
->>>>>>> 7d0d7ebb0667871658df72006ebcbba135064eb1
 
 namespace Eleave.Controllers
 {
@@ -296,7 +293,7 @@ namespace Eleave.Controllers
         {
             return View();
         }
-     
+
         public ActionResult SaveImportExcel(HttpPostedFileBase fileInput, string empId)
         {
             List<string> empIdList = new List<string>();
