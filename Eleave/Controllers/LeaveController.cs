@@ -12,6 +12,7 @@ using Eleave.Library;
 using System.IO;
 using Microsoft.Ajax.Utilities;
 using System.Web.Services.Description;
+using System.Data;
 
 namespace Eleave.Controllers
 {
@@ -36,6 +37,8 @@ namespace Eleave.Controllers
             LoadRequestType();
             ViewBag.DocumentRequest = "0";
             ViewBag.listLeaveBalance = GetLeaveBalance(EmpID);
+            ViewBag.EmpLvl = Session["EmpLvl"].ToString();
+
 
             return View();
         }
@@ -454,6 +457,65 @@ namespace Eleave.Controllers
             REQ_Typ = new GetLookupData().GetLookupDataStore("REQ_TYPE");
 
             ViewBag.REQ_T = REQ_Typ;
+        }
+        [HttpPost]
+        public ActionResult GetLeaveTypeCondition(string LeaveType)
+        {
+            var listData = new List<object>();
+            string txtStatus = string.Empty;
+            string txtMessage = string.Empty;
+            string ApplyBeforeDay = string.Empty;
+            string MinHour = string.Empty;
+            string MaxHour = string.Empty;
+            string CarryForward = string.Empty;
+            string IsRequiredAttach = string.Empty;
+            string MaxDay = string.Empty;
+            string AllowAdd = string.Empty;
+            try
+            {
+                var connectionString = Utils.GetConfig("HRIS_DB");
+                SqlConnection Connection = new SqlConnection(connectionString);
+                Connection.Open();
+                if (LeaveType != null)
+                {
+                    SqlCommand cmd = new SqlCommand("P_Get_LeaveType_Condition", Connection);
+                    cmd.Connection = Connection;
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@inLeaveType", LeaveType.ToString());
+                    SqlDataReader dr = cmd.ExecuteReader();
+                    while (dr.Read())
+                    {
+                        ApplyBeforeDay = dr["ApplyBeforeDay"].ToString();
+                        MinHour = dr["MinHour"].ToString();
+                        MaxHour = dr["MaxHour"].ToString();
+                        CarryForward = dr["CarryForward"].ToString();
+                        IsRequiredAttach = dr["IsRequiredAttach"].ToString();
+                        MaxDay = dr["MaxDay"].ToString();
+                        AllowAdd = dr["AllowAdd"].ToString();
+                    }
+                    txtStatus = "success";
+                    cmd.Dispose();
+                }
+                Connection.Dispose();
+                Connection.Close();
+            }
+            catch (Exception ex)
+            {
+                txtStatus = "fail";
+                txtMessage = ex.Message;
+            }
+            return Json(new
+            {
+                Status = txtStatus,
+                Message = txtMessage,
+                ApplyBeforeDay = ApplyBeforeDay,
+                MinHour = MinHour,
+                MaxHour = MaxHour,
+                CarryForward = CarryForward,
+                IsRequiredAttach = IsRequiredAttach,
+                MaxDay = MaxDay,
+                AllowAdd = AllowAdd,
+            }, JsonRequestBehavior.AllowGet);
         }
 
     }

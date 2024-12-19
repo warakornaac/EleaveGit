@@ -2,8 +2,10 @@
 @{
     ViewBag.Title = "บันทึกการลา";
     var countListBalance = ((List<StoreGetLeaveBalance>)ViewBag.listLeaveBalance).Count();
+    int EmpLvl = Int32.Parse(Session["EmpLvl"].ToString());
 }
 <style>
+    /**leaveBalance*/
     .filepond--credits {
         display: none;
     }
@@ -50,6 +52,117 @@
         color: #0c8916;
         font-weight: 700;
     }
+    /**note*/
+    .tile {
+        width: 100%;
+        background: #fff;
+        border-radius: 5px;
+        box-shadow: 0px 2px 3px -1px rgba(151, 171, 187, 0.7);
+        float: left;
+        transform-style: preserve-3d;
+        margin: 10px 0px;
+    }
+
+    .headerNote {
+        border-bottom: 1px solid #ebeff2;
+        padding: 19px 0;
+        text-align: center;
+        color: #59687f;
+        font-size: 600;
+        font-size: 19px;
+        position: relative;
+    }
+
+    .dates {
+        /*border: 1px solid #ebeff2;*/
+        border-radius: 5px;
+        /*padding: 20px 0px;*/
+        margin: 10px 20px;
+        font-size: 14px;
+        color: #cb661f;
+        /*font-weight: 600;*/
+        overflow: auto;
+    }
+
+        .dates div {
+            float: left;
+            width: 100%;
+            text-align: left;
+            position: relative;
+            font-size: 14px;
+            padding: 2px;
+        }
+
+        .dates strong,
+        .stats strong {
+            display: block;
+            color: #020202;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .dates span {
+            width: 1px;
+            height: 40px;
+            position: absolute;
+            right: 0;
+            top: 0;
+            background: #ebeff2;
+        }
+
+    .stats {
+        border-top: 1px solid #ebeff2;
+        background: #f7f8fa;
+        overflow: auto;
+        padding: 5px 0;
+        font-size: 16px;
+        color: #59687f;
+        font-weight: 600;
+        border-radius: 0 0 5px 5px;
+    }
+
+    .stats div {
+        border-right: 1px solid #ebeff2;
+        width: 20%;
+        float: left;
+        text-align: center
+    }
+
+    .stats div:nth-of-type(3) {
+        border: none;
+    }
+    #datepicker {
+        width: 200px;
+        font-size: 16px;
+    }
+
+    /* Customize the calendar dropdown */
+    .datepicker {
+        background-color: #f8f9fa;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        /*width: 300px;*/
+    }
+
+    /* Change today button color */
+    .datepicker .today,
+    .datepicker .today:hover {
+        background-color: #007bff;
+        color: white;
+    }
+
+    /* Change the selected date background */
+    /*.datepicker table tr td.active,
+    .datepicker table tr td.active:hover {
+        background-color: #007bff;
+        color: white;
+    }*/
+
+    /* Customizing the week days and month selection */
+    /*.datepicker table th {
+        background-color: #007bff;
+        color: white;
+    }*/
 </style>
 
 <div class="page-header">
@@ -78,8 +191,9 @@
             <div class="card-body">
                 <div class="row">
                     <input type="hidden" id="reqNo" value="@ViewBag.DocumentRequest">
-                    <div class="col-md-4 mb-4">
-                        <label for="validationTooltip02" class="font-weight-bold">ประเภทการร้องขอ</label>
+                    <input type="hidden" id="empLvl" value="@ViewBag.EmpLvl">
+                    <div class="col-md-5">
+                        <label for="validationTooltip02" class="font-weight-bold">ประเภทการร้องขอ <span class="filedRequired">*</span></label>
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text" id="inputGroupPrepend"><i class="fa fa-list"></i></span>
@@ -88,67 +202,115 @@
                                 <option value="0" selected>เลือกประเภทร้องขอ</option>
                                 @foreach (var type in ViewBag.REQ_T)
                                 {
-                                    <option value="@type.LookValue">@type.LookDesc</option>
+                                    if (EmpLvl > 3)
+                                    {
+                                        if (@type.LookValue != "2")
+                                        {
+                                            <option value="@type.LookValue">@type.LookDesc</option>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <option value="@type.LookValue">@type.LookDesc</option>
+                                    }
                                 }
                             </select>
                         </div>
                     </div>
-                    <div id="divDateleaveType" class="col-md-8 mb-8">
-
-                        <label for="validationTooltip02" class="font-weight-bold">ประเภทการลา</label>
+                    <div id="divDateleaveType" class="col-md-7" style="display: none;">
+                        <label for="validationTooltip02" class="font-weight-bold">ประเภทการลา <span class="filedRequired">*</span></label>
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text" id="inputGroupPrepend"><i class="fa fa-file-text-o"></i></span>
                             </div>
-                            <select id="leaveType" name="leaveType" class="form-control" onchange="getConditionLeaveType(this.value);">
+                            <select id="leaveType" name="leaveType" class="form-control" onchange="getLeaveTypeCondition(this.value);">
                                 <option value="0" selected>เลือกประเภทการลา</option>
                             </select>
                         </div>
                     </div>
                 </div>
-                <div class="row" style="margin-top: -5px;">
-                    <div class="col-md-12">
-                        <div class="alert alert-warning p-1" role="alert">
-                            <b>เงื่อไนขการลา : </b> พนักงานที่ประสงค์จะลาหยุดงาน จะต้องกรอกข้อมูลการลาในระบบและยื่นต่อผู้บังคับบัญชาตามลำดับชั้น และจะลาได้ก็ต่อเมื่อผู้บังคับบัญชาได้อนุมัติการลาเท่านั้น
+                <div class="row" id="divCondition" style="display: none;">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="tile">
+                            <div class="wrapper" style="border-top: 1px solid #ebeff2; background-color: #fdf2e4">
+                                <div class="dates">
+                                    <div class="start">
+                                        <label id="txtCondition"></label>
+                                    </div>
+                                </div>
+                                <div class="stats">
+                                    <div>
+                                        <strong>ApplyBeforeDay</strong>
+                                        @*<input type="hidden" id="ApplyBeforeDay" value="">*@
+                                        <span id="ApplyBeforeDayVal"></span>
+                                    </div>
+
+                                    <div>
+                                        <strong>MinHour</strong>
+                                        @*<input type="hidden" id="MinHour" value="">*@
+                                        <span id="MinHourVal"></span>
+
+                                    </div>
+
+                                    <div>
+                                        <strong>MaxHour</strong>
+                                        @*<input type="hidden" id="MaxHour" value="">*@
+                                        <span id="MaxHourVal"></span>
+
+                                    </div>
+                                    <div>
+                                        <strong>MaxDay</strong>
+                                        <input type="hidden" id="MaxDay" value="">
+                                        <span id="MaxDayVal"></span>
+                                    </div>
+                                    <div>
+                                        <strong>CarryForward</strong>
+                                        <input type="hidden" id="CarryForward" value="">
+                                        <span id="CarryForwardVal"></span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div id="divDatePicker" style="display:none;">
+                @*<div class="row pt-0" style="margin-top: -50px;">
+                        <div class="col-md-12">
+                            <div class="alert alert-warning p-1" role="alert">
+                                <b>เงื่อไนขการลา : </b> พนักงานที่ประสงค์จะลาหยุดงาน จะต้องกรอกข้อมูลการลาในระบบและยื่นต่อผู้บังคับบัญชาตามลำดับชั้น และจะลาได้ก็ต่อเมื่อผู้บังคับบัญชาได้อนุมัติการลาเท่านั้น
+                            </div>
+                        </div>
+                    </div>*@
+                <div id="divDatePicker" style="display: none;">
                     <div class="row">
                         <div class="col-md-6 mb-6">
-                            <label for="validationTooltip04" class="font-weight-bold">วันที่ลา(จาก-ถึง)</label>
+                            <label for="validationTooltip04" class="font-weight-bold">วันที่ลาเริ่มต้น <span class="filedRequired">*</span></label>
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="inputGroupPrepend"><i class="fa fa-calendar"></i></span>
                                 </div>
-                                <input type="text" class="form-control" name="daterange" id="dates-available-from" placeholder="จาก" aria-describedby="inputGroupPrepend" required>
-                                <input type="hidden" id="startDateDiv">
-                                <input type="hidden" id="endDateDiv">
-                                @*<div class="input-group-prepend">
-                                        <span class="input-group-text" id="inputGroupPrepend"><i class="fa fa-calendar"></i></span>
-                                    </div>
-                                    <input type="text" class="form-control" id="endDate" placeholder="ถึง" aria-describedby="inputGroupPrepend" required>*@
+                                <input type="text" id="startDate" class="form-control datepicker" placeholder="เลือกวันที่เริ่มต้น">
                             </div>
                         </div>
-
-                        <div class="col-md-2 mb-2">
-                            <label for="validationTooltip03" class="font-weight-bold">ช่วงเวลา</label>
-                            <select id="periodTime" name="periodTime" class="form-control">
+                        <div class="col-md-6 mb-6">
+                            <label for="validationTooltip04" class="font-weight-bold">วันที่ลาสิ้นสุด <span class="filedRequired">*</span></label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="inputGroupPrepend"><i class="fa fa-calendar"></i></span>
+                                </div>
+                                <input type="text" id="endDate" class="form-control datepicker" placeholder="เลือกวันที่สิ้นสุด">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row pt-2">
+                        <div class="col-md-4 mb-4">
+                            <label for="validationTooltip03" class="font-weight-bold"> ช่วงเวลา <span class="filedRequired">*</span></label>
+                            <select id="periodTime" name="periodTime" class="form-control" onchange="calNumHour(this.value, 0, 'Y');">
                                 <option value="1" selected>ทั้งวัน</option>
                                 <option value="2">ช่วงเช้า</option>
                                 <option value="3">ช่วงบ่าย</option>
                             </select>
                         </div>
-                        <div class="col-md-2 mb-2">
-                            <label for="validationTooltip03" class="font-weight-bold">จำนวนวัน</label>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text" id="inputGroupPrepend"><i class="fa fa-calendar-plus-o"></i></span>
-                                </div>
-                                <input type="text" class="form-control" name="numDay" id="numDay" placeholder="วัน">
-                            </div>
-                        </div>
-                        <div class="col-md-2 mb-2">
+                        <div class="col-md-4 mb-4">
                             <label for="validationTooltip03" class="font-weight-bold">จำนวนชั่วโมง</label>
                             <div class="input-group">
                                 <div class="input-group-prepend">
@@ -156,12 +318,21 @@
                                 </div>
                                 <input type="text" class="form-control" name="numHour" id="numHour" placeholder="ชั่วโมง">
                             </div>
-
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <label for="validationTooltip03" class="font-weight-bold">จำนวนวัน <span class="filedRequired">*</span></label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="inputGroupPrepend"><i class="fa fa-calendar-plus-o"></i></span>
+                                </div>
+                                <input type="text" class="form-control" name="numDay" id="numDay" placeholder="วัน" readonly>
+                                <input type="hidden" class="form-control" name="numDayOrg" id="numDayOrg">
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="form-row">
+                <div class="form-row pt-2">
                     <div class="col-md-12 mb-12">
                         <label for="exampleFormControlTextarea1" class="font-weight-bold">รายละเอียด/เหตุผลการลา</label>
                         <div class="form-group">
@@ -187,7 +358,7 @@
             <div class="card-footer">
                 <div class="row">
                     <div class="col-sm-12 text-right">
-                        <button class="btn btn-secondary btn-md">ล้าง</button>
+                        <button class="btn btn-secondary btn-md" type="button" onclick="resetRequest();">ล้าง</button>
                         <button class="btn btn-primary btn-md" type="button" onclick="btnSubmitRequest();">บันทึก</button>
                     </div>
                 </div>
@@ -196,10 +367,10 @@
     </div>
     <div class="col-lg-4 col-md-12">
         <div class="card border-0 p-2">
-            <div class="card-header p-2" style="border-bottom: 1px solid #e5c1be;">
-                <h5 class="text-success"> สิทธิคงเหลือ </h5>
-            </div>
-            <div id="item-list">
+            @*<div class="card-header p-2" style="border-bottom: 1px solid #e5c1be;">
+                    <h5 class="text-success"> สิทธิคงเหลือ </h5>
+                </div>*@
+            <div id="item-list" style="margin-top: -15px;">
                 @{
                     if (countListBalance == 0)
                     {
@@ -234,69 +405,25 @@
                     }
                 }
                 <div class="mt-3 text-right text-primary" style="cursor: pointer;">
-                   <a id="view-more" value="View More" style=""> เพิ่มเติม <i class="fa fa-angle-double-down"> </i> </a>
+                    <a id="view-more" value="View More" style=""> เพิ่มเติม <i class="fa fa-angle-double-down"> </i> </a>
                 </div>
             </div>
         </div>
     </div>
-    @*<div class="col-lg-4 col-md-12">
-            <div class="card chat-card">
-                <div class="card-header">
-                    <h5>สิทธิคงเหลือ</h5>
-                    <div class="card-header-right">
-                        <div class="btn-group card-option">
-                            <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="feather icon-more-horizontal"></i>
-                            </button>
-                            <ul class="list-unstyled card-option dropdown-menu dropdown-menu-right">
-                                <li class="dropdown-item full-card"><a href="#!"><span><i class="feather icon-maximize"></i> maximize</span><span style="display:none"><i class="feather icon-minimize"></i> Restore</span></a></li>
-                                <li class="dropdown-item minimize-card"><a href="#!"><span><i class="feather icon-minus"></i> collapse</span><span style="display:none"><i class="feather icon-plus"></i> expand</span></a></li>
-                                <li class="dropdown-item reload-card"><a href="#!"><i class="feather icon-refresh-cw"></i> reload</a></li>
-                                <li class="dropdown-item close-card"><a href="#!"><i class="feather icon-trash"></i> remove</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body p-0">
-                    <div class="table-responsive">
-                        <table class="table table-hover mb-0">
-                            <thead>
-                                <tr>
-                                    <th scope="col" align="center"></th>
-                                    <th scope="col" align="center"></th>
-                                    <th scope="col" align="center">ใช้สิทธิแล้ว</th>
-                                    <th scope="col" align="center">คงเหลือ</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @{
-
-                                    if (countListBalance == 0)
-                                    {
-                                        <tr>
-                                            <td colspan="4" align="center"> <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> ไม่พบข้อมูล </td>
-                                        </tr>
-                                    }
-                                    else
-                                    {
-                                        foreach (var rowItem in (List<StoreGetLeaveBalance>)ViewBag.listLeaveBalance)
-                                        {
-                                            <tr>
-                                                <th scope="row">@rowItem.Description</th>
-                                                <td align="right">@rowItem.AccuredLeave</td>
-                                                <td align="right">@rowItem.LeaveTaken</td>
-                                                <td align="right">@rowItem.ClosingBal</td>
-                                            </tr>
-                                        }
-                                    }
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>*@
-
+</div>
+<div class="row" style="margin-top: -30px;">
+    <div class="col-md-12">
+        <div class="callout callout-warning alert-dismissible fade show">
+            <h4>หมายเหตุ</h4>
+            1. การลาป่วยสามารถลาได้ตามระยะเวลาที่ป่วยจริง แต่ได้รับเงินค่าจ้างปกติไม่เกิน 30 วันในรอบปีปฎิทิน และการลาป่วยตั้งแต่ 3 วันติดต่อกันขึ้นไป <u>ต้องมีใบรับรองแพทย์ที่ระบุจำนวนวันลาป่วยเท่ากับวันที่ลาจริงทุกครั้ง</u> <br>
+            2. กรณีขอลงเวลาทำงานนอกสถานที่ (Add Leave)<br>
+            2.1. พนักงานที่มีสิทธิ์ใช้วันหยุดชดเฉยต้องเป็นพนักงานระดับ Supervisor ขึ้นไปเท่านั้น<br>
+            2.2. ล่วงเวลาพิเศษ คือ การปฏิบัติงานนอกสถานที่เกิน 6 ชั่วโมง/การปฎิบัติงานที่ตรงกับวันเสาร์-อาทิตย์ และวันหยุดนักขัตฤกษ์<br>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    </div>
 </div>
 @* } *@
 @* krajee *@
@@ -308,6 +435,220 @@
 <script src="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@5.5.0/js/fileinput.min.js"></script>
 
 <script defer>
+    //set จำนวนชั่วโมง
+    function calNumHour(PeriodTime, NumDay, FlagCal) {
+        let numHour = 8;
+        let setPeriodTime = PeriodTime;
+        let setNumDay = NumDay;
+        let numDayMin = 0;
+        let numDayOrg = $("#numDayOrg").val();
+        let numDayCal = 0;
+        if (setPeriodTime == 0) {
+            setPeriodTime = $("#periodTime option:selected").val();
+        }
+        if (setNumDay == 0) {
+            setNumDay = $("#numDay").val();
+        }
+        //console.log("setPeriodTime = " + setPeriodTime + " setNumDay = " + setNumDay, " FlagCal = " + FlagCal);
+        if (setPeriodTime > 0) {
+            if (setPeriodTime != 1) { //ครึ่งเช้า / ครึ่งบ่าย
+                numHour = 4;
+                numDayMin = 0.5;
+                if (setNumDay > 0) {
+                    if (FlagCal == 'Y') {
+                        numDayCal = Number(numDayOrg) - 0.5;
+                    } else {
+                        numDayCal = Number(numDayOrg);
+                    }
+                }
+            } else {
+                if (FlagCal == 'Y') {
+                    numDayCal = Number(setNumDay) + 0.5;
+                } else {
+                    numDayCal = Number(numDayOrg);
+                }
+            }
+        }
+        if (numHour > 0) {
+            $("#numHour").val(numHour)
+        }
+        $("#numDay").val(numDayCal)
+    }
+    //ดึงเงื่อนไขแต่ละการลา
+    function getLeaveTypeCondition(LeaveType) {
+        //$("#divDatePicker").fadeIn(100);
+        let txtCondition = "";
+        if (LeaveType == "SL01") {
+            $(".dates").fadeIn(100);
+            txtCondition = "การลาป่วยสามารถลาได้ตามระยะเวลาที่ป่วยจริง แต่ได้รับเงินค่าจ้างปกติไม่เกิน 30 วันในรอบปีปฎิทิน และการลาป่วยตั้งแต่ 3 วันติดต่อกันขึ้นไป <u>ต้องมีใบรับรองแพทย์ที่ระบุจำนวนวันลาป่วยเท่ากับวันที่ลาจริงทุกครั้ง</u>";
+        } else {
+            $(".dates").fadeOut(100);
+        }
+        if (LeaveType != 0) {
+            $("#divDatePicker").fadeIn(100); //show เลือกวันละ
+            $.ajax({
+                type: 'POST',
+                cache: false,
+                url: '@Url.Action("GetLeaveTypeCondition", "Leave")',
+                data: {
+                    LeaveType: LeaveType
+                },
+                dataType: 'json',
+                beforeSend: function () {
+                    LoadingShow();
+                    //$("#divCondition").html('<i class="fa fa-spinner fa-spin f-center"></i>');
+                },
+                success: function (res) {
+                    $("#divCondition").css("display", "block");
+                    if (res.Status = "success") {   //พบข้อมูล LeaveType
+                        $("#ApplyBeforeDayVal").text(res.ApplyBeforeDay);
+                        $("#MinHourVal").text(res.MinHour);
+                        $("#MaxHourVal").text(res.MaxHour);
+                        $("#MaxDayVal").text(res.MaxDay);
+                        $("#CarryForwardVal").text(res.CarryForward);
+                        $("#txtCondition").html(txtCondition);
+                        //จำนวนชั่วโมงจาก master
+                        $("#numHour").val(res.MaxHour);
+                        //ส่งไป set start date
+                        setDateStart(res.ApplyBeforeDay);
+
+                    } else {    //ไม่พบข้อมูล LeaveType
+                        $("#ApplyBeforeDayVal").text(0);
+                        $("#MinHourVal").text(0);
+                        $("#MaxHourVal").text(0);
+                        $("#MaxDayVal").text(0);
+                        $("#CarryForwardVal").text("-");
+                    }
+                },
+                complete: function (res) {
+                    LoadingHide();
+                }
+            }).fail(function (error) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error not search',
+                    html: 'กรุณาแจ้งผู้ดูแลระบบ<br>โดยการแคปหน้าจอและก๊อปปี้ Error ด่านล่างนี้<br>getLeaveTypeCondition<br>' + error.responseText + '<br><br>',
+                    confirmButtonColor: '#d33',
+                    confirmButtonText: 'ปิด',
+                    allowOutsideClick: false,
+                    focusConfirm: false,
+                });
+            });
+        }
+    }
+    //set start, end date
+    function setDateStart(setMinDate) {
+        //set val mindate
+        //$('#endDate').datepicker('destroy');
+        let formattedDate = new Date();
+        let yesterday = new Date();
+        let minDateVal = 0;
+        if (setMinDate > 0) {//ลาล่วงหน้า
+            minDateVal = setMinDate;
+            console.log("minDateVal 1 = " + minDateVal);
+            yesterday.setDate(yesterday.getDate() + Number(minDateVal));
+            console.log("Yesterday setMinDate > 0 = " + yesterday);
+            // Get the day of
+            //let dayOfWeek = yesterday.getDay();
+            //if (dayOfWeek === 0) {//ย้อนถึงวันหยุด Sunday
+            //    console.log("The date is a Sunday.");
+            //    yesterday.setDate(yesterday.getDate() - (minDateVal + 2));
+            //} else if (dayOfWeek === 6) { //ย้อนถึงวันหยุด Saturday
+            //    console.log("The date is a Saturday.");
+            //    yesterday.setDate(yesterday.getDate() - (minDateVal + 3));
+            //} else {
+            //    yesterday.setDate(yesterday.getDate() - minDateVal);
+            //}
+            formattedDate = yesterday.getDate().toString().padStart(2, '0') + '-' + (yesterday.getMonth() + 1).toString().padStart(2, '0') + '-' + yesterday.getFullYear();
+        } else { //ลาป่วย ภายในเดือน
+            setMinDateVal = 0;
+            yesterday.setDate(1); // Subtract 1 day
+            formattedDate = yesterday.getDate().toString().padStart(2, '0') + '-' + (yesterday.getMonth() + 1).toString().padStart(2, '0') + '-' + yesterday.getFullYear();
+        }
+        //let formattedDate = yesterday.getDate().toString().padStart(2, '0') + '-' + (yesterday.getMonth() + 1).toString().padStart(2, '0') + '-' + yesterday.getFullYear();
+        console.log("minDateVal 2 = " + minDateVal);
+        console.log("formattedDate = " + formattedDate);
+        //reset start end date
+        $('#startDate').datepicker('destroy');
+        // startDate
+        $('#startDate').datepicker({
+            todayBtn: "linked",
+            format: 'dd-mm-yyyy',
+            autoclose: true,
+            todayHighlight: true,
+            language: 'th',
+            startDate: formattedDate,
+            daysOfWeekDisabled: [0, 6],
+            days: ["อาทิตย์", "จันทร์", "อังคาร", "พุธ", "พฤหัส", "ศุกร์", "เสาร์", "อาทิตย์"],
+            daysShort: ["อา", "จ", "อ", "พ", "พฤ", "ศ", "ส", "อา"],
+            daysMin: ["อา", "จ", "อ", "พ", "พฤ", "ศ", "ส", "อา"],
+            months: ["มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"],
+            monthsShort: ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."],
+            today: "วันนี้"
+        });
+        // endDate
+        $('#endDate').datepicker({
+            todayBtn: "linked",
+            format: 'dd-mm-yyyy',
+            autoclose: true,
+            todayHighlight: true,
+            daysOfWeekDisabled: [0, 6],
+            language: 'th',
+            //startDate: formatDate(twoDaysAgo), // Ensure End Date respects the same limit
+            days: ["อาทิตย์", "จันทร์", "อังคาร", "พุธ", "พฤหัส", "ศุกร์", "เสาร์", "อาทิตย์"],
+            daysShort: ["อา", "จ", "อ", "พ", "พฤ", "ศ", "ส", "อา"],
+            daysMin: ["อา", "จ", "อ", "พ", "พฤ", "ศ", "ส", "อา"],
+            months: ["มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"],
+            monthsShort: ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."],
+            today: "วันนี้"
+        });
+
+        $('#startDate').on('changeDate', function (selected) {
+            let startDate = new Date(selected.date.valueOf());
+            $('#endDate').datepicker('setStartDate', startDate);
+        });
+
+        $('#endDate').on('changeDate', function (selected) {
+            let endDate = new Date(selected.date.valueOf());
+            $('#startDate').datepicker('setEndDate', endDate);
+            //cal day
+            let start = $("#startDate").val();
+            let startD = start ? new Date(start.split('-').reverse().join('-')) : null;
+            let end = $("#endDate").val();
+            let endD = end ? new Date(end.split('-').reverse().join('-')) : null;
+            if (startD && endD) {
+                let weekdays = calculateWeekdays(startD, endD);
+                console.log('Start Date: ' + startD.toISOString().split('T')[0]);
+                console.log('End Date: ' + endD.toISOString().split('T')[0]);
+                console.log('Weekdays Count: ' + weekdays);
+                $("#numDay").val(weekdays);
+                $("#numDayOrg").val(weekdays);
+                $("#periodTime").val(1).trigger('change');
+                calNumHour(1, weekdays, 'N')
+            }
+        });
+    }
+    //เลือกประเภทกวารลา
+    function setShowCalendar(leaveId) {
+        if (leaveId == 0) { //hide
+            $("#divDatePicker").fadeOut(100);
+        } else { //show
+            $("#divDatePicker").fadeIn(100);
+        }
+    }
+    //cal no Weekday
+    function calculateWeekdays(start, end) {
+        let count = 0;
+        let current = new Date(start);
+        //saturday, sunday
+        while (current <= end) {
+            if (current.getDay() !== 0 && current.getDay() !== 6) {
+                count++;
+            }
+            current.setDate(current.getDate() + 1);
+        }
+        return count;
+    }
     //set leave balance
     $('#item-list #sub-item-list').slice(5).hide();
     $('#view-more').click(function () {
@@ -323,27 +664,46 @@
 
     //js get date curent
     function getTodayDate() {
-        var tdate = new Date();
-        var dd = tdate.getDate(); //yields day
-        var MM = tdate.getMonth(); //yields month
-        var yyyy = tdate.getFullYear(); //yields year
-        var currentDate = yyyy + "-" + MM + "-" + dd;
+        let tdate = new Date();
+        let dd = tdate.getDate(); //yields day
+        let MM = tdate.getMonth(); //yields month
+        let yyyy = tdate.getFullYear(); //yields year
+        let currentDate = yyyy + "-" + MM + "-" + dd;
         return currentDate;
     }
     //เลือกประเภทการร้องขอ
-    function dropDownRequest(reqType) {
-        console.log("reqType = " + reqType);
-        if (reqType == 2) {
-            $("#divDateleaveType").fadeOut(100);
-        } else {
-            $("#divDateleaveType").fadeIn(100);
+    function dropDownRequest(ReqType) {
+        console.log("reqType = " + ReqType);
+        let txtCondition = "";
+        if (ReqType == 0) {
+            $("#divDateleaveType").fadeOut(100); //hide ประเภทการลา
+            $("#divDatePicker").fadeOut(100); //show เลือกวันละ
+            $("#divCondition").fadeOut(100); //hide เงื่อนไข
+        } else if (ReqType == 2) { //AddLeave
+            $("#divCondition").fadeIn(100); //show เงื่อนไข
+            $(".dates").fadeIn(100); //show เงื่อนไข
+            txtCondition = "- พนักงานที่มีสิทธิ์ใช้วันหยุดชดเฉยต้องเป็นพนักงานระดับ Supervisor ขึ้นไปเท่านั้น <br> - ล่วงเวลาพิเศษ คือ การปฏิบัติงานนอกสถานที่เกิน 6 ชั่วโมง / การปฎิบัติงานที่ตรงกับวันเสาร์ - อาทิตย์ และวันหยุดนักขัตฤกษ์";
+            $("#txtCondition").html(txtCondition);
+
+            $("#divDateleaveType").fadeOut(100); //hide ประเภทการลา
+            $("#divDatePicker").fadeIn(100); //show เลือกวันละ
+        } else if (ReqType == 3) { //WFH
+            $("#divDateleaveType").fadeOut(100); //hide ประเภทการลา
+            $("#divDatePicker").fadeIn(100); //show เลือกวันละ
+            $("#divCondition").fadeOut(100); //hide เงื่อนไข
+        } else { //LeaveRequest
+            $("#divDateleaveType").fadeIn(100); //show ประเภทการลา
+            $("#divDatePicker").fadeOut(100); //hide เลือกวันละ
+            $("#txtCondition").html("");
+            $("#divCondition").fadeOut(100); //hide เงื่อนไข
+            $(".dates").fadeOut(100); //hide เงื่อนไข
             $.ajax({
                 url: '@Url.Action("GetLeavetype", "Leave")',
                 type: 'POST',
                 dataType: 'JSON',
                 success: function (data) {
                     if (data.message == 'Y') {
-                        var select = $('#leaveType');
+                        let select = $('#leaveType');
                         select.children().remove();
                         select.append($('<option>').val(0).text('เลือกประเภทการลา'))
                         $(data.LeaveType).each(function (index, item) {
@@ -357,66 +717,70 @@
             });
         }
     }
-    //เลือกประเภทกวารลา
-    function getConditionLeaveType(leaveId) {
-        var todayDate = getTodayDate();
-        var setMinDate = 0;
-        console.log("leaveId = " + leaveId);
-        if (leaveId != "SL01") { //ไม่ใช่ลาป่วยต้องลาล่วงหน้า 1 วัน
-            setMinDate = 1;
-        }
-        setDateStart(setMinDate);
-        //set datediff defalut
-        console.log('todayDate = ' + todayDate);
-        $("#startDateDiv").val(todayDate);
-        $("#endDateDiv").val(todayDate);
-        $('#numDay').val(1);
-        if (leaveId == 0) { //hide
-            $("#divDatePicker").fadeOut(100);
-        } else { //show
-            $("#divDatePicker").fadeIn(100);
-        }
-    }
-
     //ปุ่มบันทึก
     function btnSubmitRequest() {
-        let error = 0;
-        let textMsg = "";
-        var ReqNo = $("#reqNo").val();
-        var EmpId = @this.Session["EmpId"].ToString();
-        var ReqType = $("#reqType option:selected").val();
-        var LeaveType = $("#leaveType option:selected").val();
-        var StartDate = $("#startDateDiv").val();
-        var EndDate = $("#endDateDiv").val();
-        var PeriodTime = $("#periodTime option:selected").val();
-        var NumDay = $("#numDay").val() || 0;
-        var NumHour = $("#numHour").val() || 0;
-        var Remark = $("#remark").val() || "";
-        //alert(ReqType + " LeaveType = " + LeaveType);
+        let Error = 0;
+        let TextMsg = "";
+        let ReqNo = $("#reqNo").val();
+        let EmpId = @this.Session["EmpId"].ToString();
+        let ReqType = $("#reqType option:selected").val();
+        let LeaveType = $("#leaveType option:selected").val();
+        let StartDate = $("#startDate").val();
+        let EndDate = $("#endDate").val();
+        let PeriodTime = $("#periodTime option:selected").val();
+        let NumDay = $("#numDay").val() || 0;
+        let NumHour = $("#numHour").val() || 0;
+        let Remark = $("#remark").val() || "";
+        console.log("StartDateBefore = " + StartDate);
+        console.log("EndDateBefore = " + EndDate);
+        if (StartDate != "") {
+            let StartDateParts = StartDate.split('-');
+            let StartDay = StartDateParts[0];
+            let StartMonth = StartDateParts[1] - 1;
+            let StartYear = StartDateParts[2];
+            StartDate = StartYear + '-' + StartMonth + '-' + StartDay;
+        }
+        if (EndDate != "") {
+            let EndDateParts = EndDate.split('-');
+            let EndDay = EndDateParts[0];
+            let EndMonth = EndDateParts[1] - 1;
+            let EndYear = EndDateParts[2];
+            EndDate = EndYear + '-' + EndMonth + '-' + EndDay
+        }
+        console.log("StartDatePart = " + StartDate);
+        console.log("EndDatePart = " + EndDate);
         //return false;
+        if (StartDate == "") {
+            Error++;
+            TextMsg += error + '. กรุณาเลือกวันที่ลาเริ่มต้น <br/>';
+        }
+        if (EndDate == "") {
+            Error++;
+            TextMsg += error + '. กรุณาเลือกวันที่ลาสิ้นสุด <br/>';
+        }
         if (ReqType == 0) {
-            error++;
-            textMsg += error + '. กรุณาเลือกประเภทการร้องขอ <br/>';
+            Error++;
+            TextMsg += error + '. กรุณาเลือกประเภทการร้องขอ <br/>';
         }
         if (ReqType == 1 && LeaveType == 0) {
-            error++;
-            textMsg += error + '. กรุณาเลือกประเภทการลา <br/>';
+            Error++;
+            TextMsg += error + '. กรุณาเลือกประเภทการลา <br/>';
         }
-        if (error > 0) {
+        if (Error > 0) {
             Swal.fire({
                 icon: 'warning',
                 title: 'กรุณาตรวจสอบข้อมูลดังต่อไปนี้ และลองใหม่อีกครั้ง',
-                html: '<div class="text-left">' + textMsg + '</div>',
+                html: '<div class="text-left">' + TextMsg + '</div>',
             });
             return false;
         }
 
         console.log("startDate = " + StartDate + " endDate = " + EndDate);
 
-        var formData = new FormData();
-        var totalFiles = document.getElementById("file_upload_multi").files.length;
-        for (var i = 0; i < totalFiles; i++) {
-            var file = document.getElementById("file_upload_multi").files[i];
+        let formData = new FormData();
+        let totalFiles = document.getElementById("file_upload_multi").files.length;
+        for (let i = 0; i < totalFiles; i++) {
+            let file = document.getElementById("file_upload_multi").files[i];
             formData.append("file_upload_multi", file);
         }
         formData.append('ReqNo', ReqNo);
@@ -431,7 +795,7 @@
         formData.append('Remark', Remark);
 
         if (formData.entries() != null) {
-            for (var pair of formData.entries()) {
+            for (let pair of formData.entries()) {
                 console.log(pair[0] + ', ' + pair[1]);
             }
         }
@@ -590,75 +954,80 @@
     });
 
 
-    function setMinMaxDate(element) {
-        // Store current date - setting max/min date seems to destroy time component
-        var val = element;
+    //function setMinMaxDate(element) {
+    //    // Store current date - setting max/min date seems to destroy time component
+    //    let val = element;
 
-        if (element.id == 'endDate') {
-            var x = $('#startDate').daterangepicker("getDate");
-            $(element).datetimepicker("option", "minDate", x);
-        }
-        else if (element.id == 'startDate') {
-            var x = $('#endDate').daterangepicker("getDate");
-            $(element).datetimepicker("option", "maxDate", x);
-        }
-        // Restore date
-        $(element).val(val);
+    //    if (element.id == 'endDate') {
+    //        let x = $('#startDate').daterangepicker("getDate");
+    //        $(element).datetimepicker("option", "minDate", x);
+    //    }
+    //    else if (element.id == 'startDate') {
+    //        let x = $('#endDate').daterangepicker("getDate");
+    //        $(element).datetimepicker("option", "maxDate", x);
+    //    }
+    //    // Restore date
+    //    $(element).val(val);
+    //}
+
+    // function setDateStart(setMinDate) {
+    //    if (setMinDate != 0) {
+    //        setMinDate = "-" + setMinDate;
+    //    } else {
+    //        setMinDate = 0;
+    //    }
+    //    $('input[name="daterange"]').daterangepicker({
+    //        startDate: moment().subtract('days', 7),
+    //        endDate: moment().subtract('days', setMinDate),
+    //        minDate: moment().subtract('days', setMinDate),
+    //        maxDate: '12/31/2024',
+    //        dateLimit: { days: 10 },
+    //        //showDropdowns: true,
+    //        //showWeekNumbers: true,
+    //        //timePicker: true,
+    //        //timePickerIncrement: 60,
+    //        //timePicker24Hour: true,
+    //        //ranges: {
+    //        //    'Today': [moment(), moment()],
+    //        //    'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
+    //        //    'Last 7 Days': [moment().subtract('days', 6), moment()],
+    //        //    'Last 30 Days': [moment().subtract('days', 29), moment()],
+    //        //    'This Month': [moment().startOf('month'), moment().endOf('month')],
+    //        //    'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
+    //        //},
+    //        autoclose: true,
+    //        language: 'th',
+    //        opens: 'left',
+    //        buttonClasses: ['btn btn-default'],
+    //        applyClass: 'btn-small btn-primary',
+    //        cancelClass: 'btn-small',
+    //        format: 'DD/MM/YYYY',
+    //        separator: ' to ',
+    //        locale: {
+    //            format: 'DD/MM/YYYY',
+    //            separator: "  ถึง  ",
+    //            applyLabel: 'ตกลง',
+    //            cancelLabel: "ยกเลิก",
+    //            fromLabel: 'From',
+    //            toLabel: 'To',
+    //            customRangeLabel: 'Custom Range',
+    //            daysOfWeek: ["อา.", "จ.", "อ.", "พ.", "พฤ.", "ศ.", "ส."],
+    //            monthNames: ["มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"],
+    //            firstDay: 1
+    //        }
+    //    }, function (start, end) {
+    //        console.log("Callback has been called!");
+    //        $("#startDateDiv").val(start.format('YYYY-MM-DD'));
+    //        $("#endDateDiv").val(end.format('YYYY-MM-DD'));
+    //        $('#numDay').val(end.diff(start, "days") + 1);
+    //        console.log(start.format('DD/MM/YYYY') + ' - ' + end.format('DD/MM/YYYY'));
+    //    });
+    //  }
+    function resetRequest() {
+        LoadingShow();
+        location.reload();
+        LoadingHide();
     }
-
-     function setDateStart(setMinDate) {
-        if (setMinDate != 0) {
-            setMinDate = "-" + setMinDate;
-        } else {
-            setMinDate = 0;
-        }
-        $('input[name="daterange"]').daterangepicker({
-            startDate: moment().subtract('days', 7),
-            endDate: moment().subtract('days', setMinDate),
-            minDate: moment().subtract('days', setMinDate),
-            maxDate: '12/31/2024',
-            dateLimit: { days: 10 },
-            //showDropdowns: true,
-            //showWeekNumbers: true,
-            //timePicker: true,
-            //timePickerIncrement: 60,
-            //timePicker24Hour: true,
-            //ranges: {
-            //    'Today': [moment(), moment()],
-            //    'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
-            //    'Last 7 Days': [moment().subtract('days', 6), moment()],
-            //    'Last 30 Days': [moment().subtract('days', 29), moment()],
-            //    'This Month': [moment().startOf('month'), moment().endOf('month')],
-            //    'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
-            //},
-            autoclose: true,
-            language: 'th',
-            opens: 'left',
-            buttonClasses: ['btn btn-default'],
-            applyClass: 'btn-small btn-primary',
-            cancelClass: 'btn-small',
-            format: 'DD/MM/YYYY',
-            separator: ' to ',
-            locale: {
-                format: 'DD/MM/YYYY',
-                separator: "  ถึง  ",
-                applyLabel: 'ตกลง',
-                cancelLabel: "ยกเลิก",
-                fromLabel: 'From',
-                toLabel: 'To',
-                customRangeLabel: 'Custom Range',
-                daysOfWeek: ["อา.", "จ.", "อ.", "พ.", "พฤ.", "ศ.", "ส."],
-                monthNames: ["มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"],
-                firstDay: 1
-            }
-        }, function (start, end) {
-            console.log("Callback has been called!");
-            $("#startDateDiv").val(start.format('YYYY-MM-DD'));
-            $("#endDateDiv").val(end.format('YYYY-MM-DD'));
-            $('#numDay').val(end.diff(start, "days") + 1);
-            console.log(start.format('DD/MM/YYYY') + ' - ' + end.format('DD/MM/YYYY'));
-        });
-      }
 
     document.onreadystatechange = function () {
         if (document.readyState === 'interactive') {
