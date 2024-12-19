@@ -291,5 +291,25 @@ namespace Eleave.Library
             }
             return getResult;
         }
+        public static string checkApprovalFlow(string EmpId)
+        {
+            string getResult = "";
+            using (SqlConnection Connection = new SqlConnection(GetConfig("HRIS_DB")))
+            {
+                Connection.Open();
+                var cmdSearch = new SqlCommand("P_Check_ApprovalFlow_By_Employee", Connection);
+
+                cmdSearch.CommandType = CommandType.StoredProcedure;
+                cmdSearch.Parameters.AddWithValue("@inEmpId", EmpId);
+                SqlParameter returnResult = new SqlParameter("@outResult", SqlDbType.NVarChar, 1000);
+                returnResult.Direction = ParameterDirection.Output;
+                cmdSearch.Parameters.Add(returnResult);
+                int INSID = cmdSearch.ExecuteNonQuery();
+                getResult = cmdSearch.Parameters["@outResult"].Value.ToString();
+                cmdSearch.Dispose();
+                Connection.Close();
+            }
+            return getResult;
+        }
     }
 }
