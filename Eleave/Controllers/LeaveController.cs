@@ -140,6 +140,24 @@ namespace Eleave.Controllers
                 return Json(new { status = "error", message = ex.Message });
             }
         }
+        [HttpPost]
+        public ActionResult CheckApprovalFlow(string EmpId)
+        {
+            string message = string.Empty;
+            string messageResult = string.Empty;
+            try
+            {
+                if (EmpId != null)
+                {
+                    messageResult = Utils.checkApprovalFlow(EmpId);
+                }
+            }
+            catch (Exception ex)
+            {
+                messageResult = ex.Message;
+            }
+            return Json(new { message = messageResult });
+        }
         public ActionResult ManagerHistory()
         {
             string EmpID = string.Empty;

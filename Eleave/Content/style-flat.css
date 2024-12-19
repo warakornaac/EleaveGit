@@ -21625,36 +21625,37 @@ pre[class*=language-]:before {
         background: #fff;
         box-shadow: 0 2px 1px rgba(0, 0, 0, 0.05);
         position: relative;
+        display: block;
     }
 
-        .pcoded-header > .collapse:not(.show) .mob-toggler:after,
-        .pcoded-header .container > .collapse:not(.show) .mob-toggler:after {
-            content: "\e89a";
-            font-family: "feather";
-            font-size: 20px;
-            color: #2c3e50;
-            position: absolute;
-            right: 10px;
-            top: 0;
-            width: 40px;
-            height: 56px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+    .pcoded-header > .collapse:not(.show) .mob-toggler:after,
+    .pcoded-header .container > .collapse:not(.show) .mob-toggler:after {
+        content: "\e89a";
+        font-family: "feather";
+        font-size: 20px;
+        color: #2c3e50;
+        position: absolute;
+        right: 10px;
+        top: 0;
+        width: 40px;
+        height: 56px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 
-        .pcoded-header > .collapse:not(.show) .mr-auto,
-        .pcoded-header .container > .collapse:not(.show) .mr-auto {
-            height: 56px;
-            display: flex;
-            justify-content: center;
-        }
+    .pcoded-header > .collapse:not(.show) .mr-auto,
+    .pcoded-header .container > .collapse:not(.show) .mr-auto {
+        height: 56px;
+        display: flex;
+        justify-content: center;
+    }
 
-        .pcoded-header > .collapse:not(.show) .ml-auto,
-        .pcoded-header .container > .collapse:not(.show) .ml-auto {
-            margin-left: auto;
-            margin-right: 0 !important;
-        }
+    .pcoded-header > .collapse:not(.show) .ml-auto,
+    .pcoded-header .container > .collapse:not(.show) .ml-auto {
+        margin-left: auto;
+        margin-right: 0 !important;
+    }
 
     .pcoded-header .dropdown-menu,
     .pcoded-header .dropdown-menu a,
