@@ -15,6 +15,8 @@ using System.Data.OleDb;
 using System.IO;
 using System.Drawing.Imaging;
 using Microsoft.Ajax.Utilities;
+using System.Xml.Linq;
+using System.Text;
 
 namespace Eleave.Controllers
 {
@@ -26,9 +28,12 @@ namespace Eleave.Controllers
             GetEmployee = new GetProfileList().GetProfileListS();
 
             ViewBag.EmployeeList = GetEmployee;
-
             LoadDepartments();
             LoadEmployeeLevel();
+            ViewBag.seachCompany = "";
+            ViewBag.seachDept = "";
+            ViewBag.seachName = "";
+            ViewBag.seachEmpId = "";
             return View();
 
             //return RedirectToAction("ManagerEmployee", new
@@ -60,11 +65,14 @@ namespace Eleave.Controllers
                 GetEmployee = GetEmployee.Where(emp => emp.EmpId.ToString().Contains(EmpID.Trim())).ToList();
             }
             ViewBag.EmployeeList = GetEmployee;
+            ViewBag.seachCompany = (Company == null ? "" : Company);
+            ViewBag.seachDept = (Department == null ? "" : Department);
+            ViewBag.seachName = (Name == null ? "" : Name);
+            ViewBag.seachEmpId = (EmpID == null ? "" : EmpID);
             LoadDepartments();
 
             return View();
         }
-
         public ActionResult ViewProfile()
         {
             string EmpId = string.Empty;
@@ -105,8 +113,12 @@ namespace Eleave.Controllers
             return listLeaveBalance;
         }
 
-        public ActionResult UpdateEmployee(string EmpId)
+        public ActionResult UpdateEmployee(string EmpId, string Companys, string Departments, string Names, string EmpIDs)
         {
+            string decodedCompany = string.IsNullOrEmpty(Companys) ? "" : Encoding.UTF8.GetString(Convert.FromBase64String(Companys));
+            string decodedDepartment = string.IsNullOrEmpty(Departments) ? "" : Encoding.UTF8.GetString(Convert.FromBase64String(Departments));
+            string decodedName = string.IsNullOrEmpty(Names) ? "" : Encoding.UTF8.GetString(Convert.FromBase64String(Names));
+            string decodedEmpID = string.IsNullOrEmpty(EmpIDs) ? "" : Encoding.UTF8.GetString(Convert.FromBase64String(EmpIDs));
             var model = new StoreUpdateEmployeeProfile();
             var modelData = new List<StoreUpdateEmployeeProfile>();
             modelData = new GetUpdateProfile().GetStoreGetUpdateProfile(EmpId);
@@ -126,6 +138,15 @@ namespace Eleave.Controllers
                         .ToList();
 
             ViewBag.ApprovFlow = dropdownData;
+            ViewBag.SearchCompany = decodedCompany;
+            ViewBag.SearchDept = decodedDepartment;
+            ViewBag.SearchName = decodedName;
+            ViewBag.SearchEmpId = decodedEmpID;
+
+            TempData["com"] = decodedCompany;
+            TempData["dept"] = decodedDepartment;
+            TempData["name"] = decodedName;
+            TempData["emp"] = decodedEmpID;
             LoadStatusEmp();
             LoadDirector();
             LoadEmployeeLevel();
@@ -146,57 +167,127 @@ namespace Eleave.Controllers
         public ActionResult UpdateEmployee(StoreUpdateEmployeeProfile store)
         {
             var updateEmployee = new List<StoreUpdateEmployeeProfile>();
+
             try
             {
-                string usr = Session["EmpId"].ToString();
+                string usr = Session["EmpId"]?.ToString(); // ตรวจสอบค่า Session ให้ปลอดภัย
+                if (string.IsNullOrEmpty(usr))
+                {
+                    throw new Exception("Session 'EmpId' is null or empty."); // จัดการกรณีที่ Session ไม่มีค่า
+                }
+
                 updateEmployee = new UpdateProfileEmployee().Update(store, usr);
                 ViewBag.UpdateStatus = "Success";
-                var flow = LoadGroupApprovalDropdown();
-                //flow = flow
-                //        .GroupBy(emp => emp.ApprGrpId) // Group by value
-                //        .Select(group => group.First()) // เลือกรายการแรก
-                //        .ToList();
-
-                var dropdownData = flow
-                        .GroupBy(f => f.ApprGrpId)
-                        .Select(group => new
-                        {
-                            ApprGrpId = group.Key,
-                            DisplayText = group.Key + " / " + group.First().ApprGrpName // สร้าง DisplayText
-                        })
-                        .ToList();
-
-                ViewBag.ApprovFlow = dropdownData;
-                LoadStatusEmp();
-                LoadDirector();
-                LoadDepartments();
-                LoadEmpType();
-                LoadEmployeeLevel();
-                LoadUsrtype();
-                return View(store);
             }
             catch (Exception ex)
             {
-                ViewBag.Error = ex.ToString();
-                var flow = LoadGroupApprovalDropdown();
-                var dropdownData = flow
-                        .GroupBy(f => f.ApprGrpId)
-                        .Select(group => new
-                        {
-                            ApprGrpId = group.Key,
-                            DisplayText = group.Key + " / " + group.First().ApprGrpName // สร้าง DisplayText
-                        })
-                        .ToList();
-
-                ViewBag.ApprovFlow = dropdownData;
-                LoadDirector();
-                LoadDepartments();
-                LoadEmpType();
-                LoadEmployeeLevel();
-                LoadUsrtype();
-                return View(store);
+                ViewBag.Error = ex.Message; // เก็บเฉพาะข้อความแสดงข้อผิดพลาด
             }
+
+
+            SetViewBagData();
+
+            return View(store);
         }
+
+        /// <summary>
+        /// เมธอดสำหรับตั้งค่า ViewBag และโหลดข้อมูลที่จำเป็น
+        /// </summary>
+        private void SetViewBagData()
+        {
+
+            var flow = LoadGroupApprovalDropdown();
+            var dropdownData = flow
+                .GroupBy(f => f.ApprGrpId)
+                .Select(group => new
+                {
+                    ApprGrpId = group.Key,
+                    DisplayText = group.Key + " / " + group.First().ApprGrpName
+                })
+                .ToList();
+
+            ViewBag.ApprovFlow = dropdownData;
+
+            // ตั้งค่า ViewBag สำหรับข้อมูลการค้นหา
+            ViewBag.SearchCompany = TempData["com"]?.ToString() ?? "";
+            ViewBag.SearchDept = TempData["dept"]?.ToString() ?? "";
+            ViewBag.SearchName = TempData["name"]?.ToString() ?? "";
+            ViewBag.SearchEmpId = TempData["emp"]?.ToString() ?? "";
+
+            // โหลดข้อมูลเพิ่มเติม
+            LoadStatusEmp();
+            LoadDirector();
+            LoadDepartments();
+            LoadEmpType();
+            LoadEmployeeLevel();
+            LoadUsrtype();
+        }
+
+
+        //[HttpPost]
+        //public ActionResult UpdateEmployee(StoreUpdateEmployeeProfile store)
+        //{
+        //    var updateEmployee = new List<StoreUpdateEmployeeProfile>();
+
+        //    try
+        //    {
+        //        string usr = Session["EmpId"].ToString();
+        //        updateEmployee = new UpdateProfileEmployee().Update(store, usr);
+        //        ViewBag.UpdateStatus = "Success";
+        //        var flow = LoadGroupApprovalDropdown();
+        //        //flow = flow
+        //        //        .GroupBy(emp => emp.ApprGrpId) // Group by value
+        //        //        .Select(group => group.First()) // เลือกรายการแรก
+        //        //        .ToList();
+
+        //        var dropdownData = flow
+        //                .GroupBy(f => f.ApprGrpId)
+        //                .Select(group => new
+        //                {
+        //                    ApprGrpId = group.Key,
+        //                    DisplayText = group.Key + " / " + group.First().ApprGrpName // สร้าง DisplayText
+        //                })
+        //                .ToList();
+
+        //        ViewBag.ApprovFlow = dropdownData;
+        //        ViewBag.SearchCompany = (TempData["com"] == null ? "" : TempData["com"].ToString());
+        //        ViewBag.SearchDept = (TempData["dept"] == null ? "" : TempData["dept"].ToString());
+        //        ViewBag.SearchName = (TempData["name"] == null ? "" : TempData["name"].ToString());
+        //        ViewBag.SearchEmpId = (TempData["emp"] == null ? "" : TempData["emp"].ToString());
+        //        LoadStatusEmp();
+        //        LoadDirector();
+        //        LoadDepartments();
+        //        LoadEmpType();
+        //        LoadEmployeeLevel();
+        //        LoadUsrtype();
+        //        return View(store);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        ViewBag.Error = ex.ToString();
+        //        var flow = LoadGroupApprovalDropdown();
+        //        var dropdownData = flow
+        //                .GroupBy(f => f.ApprGrpId)
+        //                .Select(group => new
+        //                {
+        //                    ApprGrpId = group.Key,
+        //                    DisplayText = group.Key + " / " + group.First().ApprGrpName // สร้าง DisplayText
+        //                })
+        //                .ToList();
+
+        //        ViewBag.ApprovFlow = dropdownData;
+        //        ViewBag.SearchCompany = (TempData["com"] == null ? "" : TempData["com"].ToString());
+        //        ViewBag.SearchDept = (TempData["dept"] == null ? "" : TempData["dept"].ToString());
+        //        ViewBag.SearchName = (TempData["name"] == null ? "" : TempData["name"].ToString());
+        //        ViewBag.SearchEmpId = (TempData["emp"] == null ? "" : TempData["emp"].ToString());
+        //        LoadDirector();
+        //        LoadDepartments();
+        //        LoadEmpType();
+        //        LoadEmployeeLevel();
+        //        LoadUsrtype();
+        //        return View(store);
+        //    }
+        //}
         //import excel
         public ActionResult ImportExcel()
         {
