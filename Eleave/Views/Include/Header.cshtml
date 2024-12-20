@@ -625,7 +625,7 @@
 
     function GetDetailAcknowledge(REQ, empId) {
         return $.ajax({
-            url: '@Url.Action("GetRequestDetail", "Acknowledge")',
+            url: '@Url.Action("GetRequestDetail", "Leave")',
             data: {
                 ReqNo: REQ,
                 EmpId: empId,
