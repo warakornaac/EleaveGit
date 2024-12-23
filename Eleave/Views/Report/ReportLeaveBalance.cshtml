@@ -2,6 +2,15 @@
 @{
     ViewBag.Title = "รายงานการลา";
 }
+<style>
+    /*    .btn-success {
+        background-color: #28a745;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        cursor: pointer;
+    }*/
+</style>
 <div class="page-header">
     <div class="page-block">
         <div class="row align-items-center">
@@ -151,6 +160,7 @@
             width: '100%'
         });
         $('#report-leave-balance-tbl').dataTable({
+            dom: '<t><"d-flex align-items-center"ip>',
             paging: true,
             pageLength: 100,
             lengthChange: false,
@@ -162,6 +172,31 @@
                 infoEmpty: "ไม่มีข้อมูลให้แสดง"
             }
         });
+        //$('#report-leave-balance-tbl').DataTable({
+        //    paging: true,
+        //    pageLength: 100,
+        //    lengthChange: false,
+        //    searching: false,
+        //    ordering: false,
+        //    select: false,
+        //    language: {
+        //        info: "แสดง _START_ ถึง _END_ จากทั้งหมด _TOTAL_ คน",
+        //        infoEmpty: "ไม่มีข้อมูลให้แสดง"
+        //    },
+        //    dom: 'Bfrtip', // เพิ่ม 'B' เพื่อแสดงปุ่ม
+        //    buttons: [
+        //        {
+        //            extend: 'excelHtml5',
+        //            text: 'Export to Excel', // ข้อความปุ่ม
+        //            className: 'btn btn-success', // เพิ่มคลาสเพื่อปรับแต่งปุ่ม
+        //            title: 'รายงานข้อมูล', // ชื่อไฟล์ Excel
+        //            exportOptions: {
+        //                columns: ':visible' // Export เฉพาะคอลัมน์ที่มองเห็น
+        //            }
+        //        }
+        //    ]
+        //});
+
     });
     $(document).on('click', '#reset-btn', function () {
         $('#Company-selector').val('').trigger('change');
