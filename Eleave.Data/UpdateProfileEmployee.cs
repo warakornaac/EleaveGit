@@ -29,6 +29,7 @@ namespace Eleave.Data
             p.AddParams("@inPosition", profile.Position);
             p.AddParams("@inDirectorId", profile.DirectorId);
             p.AddParams("@inEmpLvl", profile.EmpLvl);
+            p.AddParams("@inStartDate", profile.StartDate);
             p.AddParams("@inApprvID", profile.ApprGrpID);
             p.AddParams("@inUsrTyp", profile.UserType);
             p.AddParams("@inEmpTypeId", profile.EmpTypeId);
