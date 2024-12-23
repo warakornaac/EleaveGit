@@ -327,6 +327,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LeaveController.cs" />
     <Compile Include="Controllers\EmployeeController.cs" />
+    <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -399,6 +400,7 @@
     <Content Include="Views\Acknowledge\_DetailAcknowledge.cshtml" />
     <Content Include="Views\Leave\_LeaveBalance.cshtml" />
     <Content Include="Views\Leave\_LogApprove.cshtml" />
+    <Content Include="Views\Report\ReportLeaveBalance.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
