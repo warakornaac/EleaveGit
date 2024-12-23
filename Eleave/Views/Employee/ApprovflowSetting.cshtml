@@ -505,9 +505,8 @@
             //}).then(() => {
             //    $('#addFormModal').modal('show');
             //});
-            $('#alert-apprv-add-emp').removeAttr('hidden');
-            check++;
-            //return false;
+            //('#alert-apprv-add-emp').removeAttr('hidden');
+            //check++;
         }
         else {
             $('#alert-apprv-add-emp').attr('hidden', true);
@@ -802,7 +801,7 @@
                      if (data.message == "Y") {
                          var select = $('#empId-add');
                          select.children().remove();
-                         select.append($('<option>').val(0).text('Select approver. | เลือกผู้อนุมัติ'))
+                         select.append($('<option>').val(null).text('Select approver. | เลือกผู้อนุมัติ'))
                          $(data.getDirector).each(function (index, item) {
                              select.append($('<option>').val(item.EmpId).text(item.DeptId + '/' + item.Fullname))
                          });
@@ -866,7 +865,7 @@
                  if (data.message == "Y") {
                      var select = $('#empid-edit');
                      select.children().remove();
-                     select.append($('<option>').val(0).text('Select | เลือก'))
+                     select.append($('<option>').val(null).text('Select | เลือก'))
                      $(data.getDirector).each(function (index, item) {
                          select.append($('<option>').val(item.EmpId).text(item.DeptId + '/' + item.Fullname))
                      });
@@ -889,7 +888,7 @@
                  if (data.message == "Y") {
                      var select = $('#empid-edit');
                      select.children().remove();
-                     select.append($('<option>').val(0).text('Select | เลือก'))
+                     select.append($('<option>').val(null).text('Select | เลือก'))
                      $(data.getDirector).each(function (index, item) {
                          select.append($('<option>').val(item.EmpId).text(item.DeptId + '/' + item.Fullname))
                      });
@@ -1141,8 +1140,8 @@
             //}).then(() => {
             //    $('#editFormModal').modal('show');
             //});
-            $('#alert-apprv-edit-emp').removeAttr('hidden');
-            check++;
+            //$('#alert-apprv-edit-emp').removeAttr('hidden');
+            //check++;
             //return false;
         }
         else {
