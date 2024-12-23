@@ -193,6 +193,8 @@
                 <div class="row">
                     <input type="hidden" id="reqNo" value="@ViewBag.DocumentRequest">
                     <input type="hidden" id="empLvl" value="@ViewBag.EmpLvl">
+                    <input type="hidden" id="userType" value="@ViewBag.UserType">
+                    <input type="hidden" id="empTypeId" value="@ViewBag.EmpTypeId">
                     <div class="col-md-5">
                         <label for="validationTooltip02" class="font-weight-bold">ประเภทการร้องขอ <span class="filedRequired">*</span></label>
                         <div class="input-group">
@@ -305,7 +307,7 @@
                     <div class="row pt-2">
                         <div class="col-md-4 mb-4">
                             <label for="validationTooltip03" class="font-weight-bold"> ช่วงเวลา <span class="filedRequired">*</span></label>
-                            <select id="periodTime" name="periodTime" class="form-control" onchange="calNumHour(this.value, 0, 'Y');">
+                            <select id="periodTime" name="periodTime" class="form-control" onchange="calNumHour(this.value, 0, 0, 'Y');">
                                 <option value="1" selected>ทั้งวัน</option>
                                 <option value="2">ช่วงเช้า</option>
                                 <option value="3">ช่วงบ่าย</option>
@@ -317,7 +319,17 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="inputGroupPrepend"><i class="fa fa-clock-o"></i></span>
                                 </div>
-                                <input type="text" class="form-control" name="numHour" id="numHour" placeholder="ชั่วโมง">
+                                <select id="numHour" name="numHour" class="form-control" onchange="calNumHour(0, 0, this.value, 'Y');">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                </select>
+                                @*<input type="text" class="form-control" name="numHour" id="numHour" onkeyup="calNumHour(0, 0, this.value, 'Y');" placeholder="ชั่วโมง">*@
                             </div>
                         </div>
                         <div class="col-md-4 mb-4">
@@ -332,7 +344,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="form-row pt-2">
                     <div class="col-md-12 mb-12">
                         <label for="exampleFormControlTextarea1" class="font-weight-bold">รายละเอียด/เหตุผลการลา</label>
@@ -436,14 +447,18 @@
 <script src="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@5.5.0/js/fileinput.min.js"></script>
 
 <script defer>
+    var EmpTypeId = $("#empTypeId").val() || 0;
     //set จำนวนชั่วโมง
-    function calNumHour(PeriodTime, NumDay, FlagCal) {
-        let numHour = 8;
+    function calNumHour(PeriodTime, NumDay, NumHour, FlagCal) {
+        let SetNumHour = NumHour;
         let setPeriodTime = PeriodTime;
         let setNumDay = NumDay;
         let numDayMin = 0;
         let numDayOrg = $("#numDayOrg").val();
         let numDayCal = 0;
+        if (SetNumHour == 0) {
+            SetNumHour = $("#numHour option:selected").val();
+        }
         if (setPeriodTime == 0) {
             setPeriodTime = $("#periodTime option:selected").val();
         }
@@ -453,7 +468,7 @@
         //console.log("setPeriodTime = " + setPeriodTime + " setNumDay = " + setNumDay, " FlagCal = " + FlagCal);
         if (setPeriodTime > 0) {
             if (setPeriodTime != 1) { //ครึ่งเช้า / ครึ่งบ่าย
-                numHour = 4;
+                SetNumHour = 4;
                 numDayMin = 0.5;
                 if (setNumDay > 0) {
                     if (FlagCal == 'Y') {
@@ -463,6 +478,7 @@
                     }
                 }
             } else {
+                SetNumHour = 8;
                 if (FlagCal == 'Y') {
                     numDayCal = Number(setNumDay) + 0.5;
                 } else {
@@ -470,9 +486,22 @@
                 }
             }
         }
-        if (numHour > 0) {
-            $("#numHour").val(numHour)
+        if (NumHour != 0) {
+            SetNumHour = NumHour;
         }
+        //กรณี 1 วัน ลาเป็นรายชํ่วโมง
+        //console.log("numDayOrg = " + numDayOrg);
+        //console.log("SetNumHour = " + SetNumHour);
+        if (numDayOrg == 1) {
+            console.log("AfterSetNumHour = " + SetNumHour);
+            numDayCal = SetNumHour / 8;
+            if (numDayCal >= 1) {
+                numDayCal = 1;
+            } else {
+                numDayCal = numDayCal.toFixed(2)
+            }
+        }
+        $("#numHour").val(SetNumHour);
         $("#numDay").val(numDayCal)
     }
     //ดึงเงื่อนไขแต่ละการลา
@@ -623,9 +652,17 @@
                 console.log('End Date: ' + endD.toISOString().split('T')[0]);
                 console.log('Weekdays Count: ' + weekdays);
                 $("#numDay").val(weekdays);
+
+                $("#numHour").val(8);
+                if (weekdays > 1) {
+                    $("#numHour").attr("disabled", true);
+                } else {
+                    $("#numHour").attr("disabled", false);
+                }
+
                 $("#numDayOrg").val(weekdays);
                 $("#periodTime").val(1).trigger('change');
-                calNumHour(1, weekdays, 'N')
+                calNumHour(1, weekdays, 0, 'N')
             }
         });
     }
@@ -681,6 +718,7 @@
             $("#divDatePicker").fadeOut(100); //show เลือกวันละ
             $("#divCondition").fadeOut(100); //hide เงื่อนไข
         } else if (ReqType == 2) { //AddLeave
+            setDateStart(0);
             $("#divCondition").fadeIn(100); //show เงื่อนไข
             $(".dates").fadeIn(100); //show เงื่อนไข
             txtCondition = "- พนักงานที่มีสิทธิ์ใช้วันหยุดชดเฉยต้องเป็นพนักงานระดับ Supervisor ขึ้นไปเท่านั้น <br> - ล่วงเวลาพิเศษ คือ การปฏิบัติงานนอกสถานที่เกิน 6 ชั่วโมง / การปฎิบัติงานที่ตรงกับวันเสาร์ - อาทิตย์ และวันหยุดนักขัตฤกษ์";
@@ -689,6 +727,7 @@
             $("#divDateleaveType").fadeOut(100); //hide ประเภทการลา
             $("#divDatePicker").fadeIn(100); //show เลือกวันละ
         } else if (ReqType == 3) { //WFH
+            setDateStart(0);
             $("#divDateleaveType").fadeOut(100); //hide ประเภทการลา
             $("#divDatePicker").fadeIn(100); //show เลือกวันละ
             $("#divCondition").fadeOut(100); //hide เงื่อนไข
@@ -706,9 +745,15 @@
                     if (data.message == 'Y') {
                         let select = $('#leaveType');
                         select.children().remove();
-                        select.append($('<option>').val(0).text('เลือกประเภทการลา'))
+                        select.append($('<option>').val(0).text('เลือกประเภทการลา'));
                         $(data.LeaveType).each(function (index, item) {
-                            select.append($('<option>').val(item.LeaveType).text(item.Description));
+                            if (EmpTypeId == 4) {//ถ้า EmpTypeID = 4
+                                if (item.LeaveType == 'SL01' || item.LeaveType == 'GL09' || item.LeaveType == 'BL10' || item.LeaveType == 'OT13') {
+                                    select.append($('<option>').val(item.LeaveType).text(item.Description));
+                                }
+                            } else {
+                                select.append($('<option>').val(item.LeaveType).text(item.Description));
+                            }
                         });
                         select.val(0).trigger('change');
                     } else {

@@ -38,7 +38,8 @@ namespace Eleave.Controllers
             ViewBag.DocumentRequest = "0";
             ViewBag.listLeaveBalance = GetLeaveBalance(EmpID);
             ViewBag.EmpLvl = Session["EmpLvl"].ToString();
-
+            ViewBag.UserType = Session["UserType"].ToString();
+            ViewBag.EmpTypeId = Session["EmpTypeId"].ToString();
 
             return View();
         }

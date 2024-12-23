@@ -107,7 +107,7 @@ namespace Eleave.Controllers
             }
             return View(loginUser);
         }
-        public (string, string, string, string, string, string) CheckLoginEmployee(string Username, string Password)
+        public (string, string, string, string, string, string, string) CheckLoginEmployee(string Username, string Password)
         {
             this.Session["EmpId"] = null;
             this.Session["UserType"] = null;
@@ -115,7 +115,8 @@ namespace Eleave.Controllers
             this.Session["DeptName"] = null;
             this.Session["Username"] = null;
             this.Session["EmpLvl"] = null;
-            this.Session["Firstname"] = null;
+            this.Session["Firstname"] = null; 
+            this.Session["EmpTypeId"] = null;
 
             string EmpId = "";
             string UserType = "";
@@ -123,6 +124,7 @@ namespace Eleave.Controllers
             string DeptName = "";
             string EmpLvl = "";
             string Firstname = "";
+            string EmpTypeId = "";
             using (SqlConnection Connection = new SqlConnection(Utils.GetConfig("HRIS_DB")))
             {
                 Connection.Open();
@@ -135,19 +137,22 @@ namespace Eleave.Controllers
                 SqlParameter returnFullName = new SqlParameter("@getFullName", SqlDbType.NVarChar, 1000);
                 SqlParameter returnDeptName = new SqlParameter("@getDeptName", SqlDbType.NVarChar, 1000);
                 SqlParameter returnEmpLvl = new SqlParameter("@getEmpLvl", SqlDbType.NVarChar, 1000);
-                SqlParameter returnFirstname = new SqlParameter("@getFirstname", SqlDbType.NVarChar, 1000);
+                SqlParameter returnFirstname = new SqlParameter("@getFirstname", SqlDbType.NVarChar, 1000); 
+                SqlParameter returnEmpTypeId = new SqlParameter("@getEmpTypeId", SqlDbType.NVarChar, 1000);
                 returnEmpId.Direction = ParameterDirection.Output;
                 returnUserType.Direction = ParameterDirection.Output;
                 returnFullName.Direction = ParameterDirection.Output;
                 returnDeptName.Direction = ParameterDirection.Output;
                 returnEmpLvl.Direction = ParameterDirection.Output;
                 returnFirstname.Direction = ParameterDirection.Output;
+                returnEmpTypeId.Direction = ParameterDirection.Output;
                 command.Parameters.Add(returnEmpId);
                 command.Parameters.Add(returnUserType);
                 command.Parameters.Add(returnFullName);
                 command.Parameters.Add(returnDeptName);
                 command.Parameters.Add(returnEmpLvl);
                 command.Parameters.Add(returnFirstname);
+                command.Parameters.Add(returnEmpTypeId);
                 int outputResult = command.ExecuteNonQuery();
                 EmpId = command.Parameters["@getEmpId"].Value.ToString();
                 UserType = command.Parameters["@getUserType"].Value.ToString();
@@ -155,6 +160,7 @@ namespace Eleave.Controllers
                 DeptName = command.Parameters["@getDeptName"].Value.ToString();
                 EmpLvl = command.Parameters["@getEmpLvl"].Value.ToString();
                 Firstname = command.Parameters["@getFirstname"].Value.ToString();
+                EmpTypeId = command.Parameters["@getEmpTypeId"].Value.ToString();
                 //keep session
                 this.Session["EmpId"] = command.Parameters["@getEmpId"].Value.ToString();
                 this.Session["UserType"] = command.Parameters["@getUserType"].Value.ToString();
@@ -163,10 +169,11 @@ namespace Eleave.Controllers
                 this.Session["Username"] = Username;
                 this.Session["EmpLvl"] = command.Parameters["@getEmpLvl"].Value.ToString();
                 this.Session["Firstname"] = command.Parameters["@getFirstname"].Value.ToString();
+                this.Session["EmpTypeId"] = command.Parameters["@getEmpTypeId"].Value.ToString();
                 command.Dispose();
                 Connection.Close();
             }
-            return (EmpId, UserType, FullName, DeptName, EmpLvl, Firstname);
+            return (EmpId, UserType, FullName, DeptName, EmpLvl, Firstname, EmpTypeId);
         }
         public ActionResult Logout()
         {
