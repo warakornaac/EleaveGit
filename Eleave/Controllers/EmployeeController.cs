@@ -164,6 +164,7 @@ namespace Eleave.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult UpdateEmployee(StoreUpdateEmployeeProfile store)
         {
             var updateEmployee = new List<StoreUpdateEmployeeProfile>();
@@ -656,7 +657,7 @@ namespace Eleave.Controllers
             return Json(new { message = message, getApproval }, JsonRequestBehavior.AllowGet);
         }
         //AddFlow
-        public JsonResult AddApprvFlow(string apprvID, string apprvName, string dept, string step, string empId, string action, string desc)
+        public JsonResult AddApprvFlow(string apprvID, string apprvName, string dept, string step, string empId, string action, string stepname)
         {
             string message = string.Empty;
             string username = Session["EmpId"].ToString();
@@ -673,7 +674,7 @@ namespace Eleave.Controllers
                 cmd.Parameters.AddWithValue("@inStep", step);
                 cmd.Parameters.AddWithValue("@inEmpID", empId);
                 cmd.Parameters.AddWithValue("@inAction", action);
-                cmd.Parameters.AddWithValue("@inApprvDes", desc);
+                cmd.Parameters.AddWithValue("@inApprvStepName", stepname);
                 cmd.Parameters.AddWithValue("@inUser", username.Trim());
                 SqlParameter p = new SqlParameter("@outGenstatus", SqlDbType.NVarChar, 100);
                 p.Direction = ParameterDirection.Output;
@@ -692,7 +693,7 @@ namespace Eleave.Controllers
             return Json(new { message = message }, JsonRequestBehavior.AllowGet);
         }
         //UpdateFlow
-        public JsonResult UpdateApprvFlow(string apprvID, string oldApprvName, string apprvName, string dept, string step, string oldStep, string empId, string action, string desc)
+        public JsonResult UpdateApprvFlow(string apprvID, string oldApprvName, string apprvName, string dept, string step, string oldStep, string empId, string action, string apprvstepname)
         {
             string message = string.Empty;
             string username = Session["EmpId"].ToString();
@@ -711,7 +712,7 @@ namespace Eleave.Controllers
                 cmd.Parameters.AddWithValue("@inStep", step);
                 cmd.Parameters.AddWithValue("@inEmpID", empId);
                 cmd.Parameters.AddWithValue("@inAction", action);
-                cmd.Parameters.AddWithValue("@inDesc", desc);
+                cmd.Parameters.AddWithValue("@inStepName", apprvstepname);
                 cmd.Parameters.AddWithValue("@inUser", username.Trim());
                 SqlParameter p = new SqlParameter("@outGenstatus", SqlDbType.NVarChar, 100);
                 p.Direction = ParameterDirection.Output;

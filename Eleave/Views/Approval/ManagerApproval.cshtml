@@ -577,13 +577,10 @@
         $('#reqStart').val('');                   // เริ่มวันที่
         $('#reqEnd').val('');                     // ถึงวันที่
         $('#reqStatus').val('0').trigger('change'); // สถานะคำขอ
-        //$('#department-selector').val('').trigger('change');
         console.log("dept" + $('#department-selector').val());
     });
     $(document).ready(function () {
         console.log("DepartName :"+"@DepartAppver");
-        //$('#reqStatus').val('0').trigger('change');
-        //$('#department-selector').val('@DepartAppver').trigger('change');
         $('#request-table').dataTable({
             dom: '<t><"d-flex align-items-center"ip>',
             paging: true,

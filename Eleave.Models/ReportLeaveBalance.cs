@@ -16,6 +16,9 @@ namespace Eleave.Models
         public string Position { get; set; }
         public string StartDate { get; set; }
         public string Fullname { get; set; }
+        public string Years { get; set; }
+        public string Months { get; set; }
+        public string Days { get; set; }
         public decimal AL02_Accured { get; set; }
         public decimal AL02_Leave { get; set; }
         public decimal AL02_Balance { get; set; }
@@ -25,6 +28,9 @@ namespace Eleave.Models
         public decimal CP03_Accured { get; set; }
         public decimal CP03_Leave { get; set; }
         public decimal CP03_Balance { get; set; }
+        public decimal BU04_Accured { get; set; }
+        public decimal BU04_Leave { get; set; }
+        public decimal BU04_Balance { get; set; }
         public decimal OL07_Accured { get; set; }
         public decimal ML06_Accured { get; set; }
         public decimal Other_Accured { get; set; }

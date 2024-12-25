@@ -71,6 +71,13 @@
                     </div>
                     <div class="col-12">
                         <div class="form-group">
+                            @Html.Label("Approve step name | ชื่อลำดับอนุมัติ")
+                            @Html.TextBox("ApprvStepName", null, new { @class = "form-control", @id = "apprvStepName-add" })
+                            <span class="text-danger" id="alert-apprv-add-stname" hidden> *Please enter approval step name. | กรุณากรอกชื่อลำดับอนุมัติ</span>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-group">
                             @Html.Label("Approval level | ลำดับการอนุมัติ")
                             @Html.TextBox("ApprvLvl", null, new { @class = "custom-select", @id = "apprvLvl-add", @readonly = "readonly" })
                         </div>
@@ -97,13 +104,7 @@
                         </div>
                     </div>
 
-                    <div class="col-12">
-                        <div class="form-group">
-                            @Html.Label("Description | รายละเอียดประเภทอนุมัติ")
-                            @Html.TextArea("ApprvDesc", null, new { @class = "form-control", @id = "apprvDesc-add" })
-                            <span class="text-danger" id="alert-apprv-add-desc" hidden> *Please enter approval Description. | กรุณากรอกชื่อรายละเอียดประเภทอนุมัติ</span>
-                        </div>
-                    </div>
+
                 </div>
 
             </div>
@@ -135,7 +136,7 @@
                     <div class="col-12">
                         <div class="form-group">
                             @Html.Label("Approval group name | ชื่อกลุ่มอนุมัติ")
-                            @Html.TextBox("GroupName", "", new { @class = "form-control", @id = "groupName-edit" })
+                            @Html.TextBox("GroupName", "", new { @class = "form-control", @id = "groupName-edit", @readonly = "@readonly" })
                             <span class="text-danger" id="alert-apprv-edit-name" hidden> *Please enter approval group name. | กรุณากรอกชื่อกลุ่มอนุมัติ</span>
                             @Html.Hidden("GroupNameVal", null, new { @id = "groupName-edit-old" })
                         </div>
@@ -145,6 +146,13 @@
                             @Html.Label("Department | แผนก")
                             @Html.DropDownList("Department", new SelectList(ViewBag.DepartmentList, "LookParam", "LookDesc"), "Select department | เลือกหน่วยงาน", new { @class = "custom-select", @id = "department-selector-edit", @disabled = "disabled" })
                             <span class="text-danger" id="alert-apprv-edit-dept" hidden> *Please select approval Department. | กรุณาเลือกแผนกกลุ่มอนุมัติ</span>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-group">
+                            @Html.Label("Approve step name | ชื่อลำดับอนุมัติ")
+                            @Html.TextBox("ApprvStepName", null, new { @class = "form-control", @id = "apprvStepName-edit" })
+                            <span class="text-danger" id="alert-apprv-edit-stname" hidden> *Please enter approval step name. | กรุณากรอกชื่อลำดับอนุมัติ</span>
                         </div>
                     </div>
                     <div class="col-12">
@@ -184,13 +192,7 @@
                         </div>
                     </div>
 
-                    <div class="col-12">
-                        <div class="form-group">
-                            @Html.Label("Description | รายละเอียดประเภทอนุมัติ")
-                            @Html.TextArea("ApprvDesc", null, new { @class = "form-control", @id = "apprvDesc-edit" })
-                            <span class="text-danger" id="alert-apprv-edit-desc" hidden> *Please enter approval Description. | กรุณากรอกชื่อรายละเอียดประเภทอนุมัติ</span>
-                        </div>
-                    </div>
+
                 </div>
 
             </div>
@@ -233,6 +235,12 @@
                     </div>
                     <div class="col-12">
                         <div class="form-group">
+                            @Html.Label("Approve step name | ชื่อลำดับอนุมัติ")
+                            @Html.TextBox("ApprvStepName", null, new { @class = "form-control", @id = "apprvStepName-del", @readonly = "readonly" })
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-group">
                             @Html.Hidden("ApprvLvl_Hidden", null, new { @id = "ApprvLvl-edit-old" })
                             @Html.Label("Approval level | ลำดับการอนุมัติ")
                             @Html.DropDownList("ApprvLvl", new List<SelectListItem>
@@ -265,12 +273,7 @@
                         </div>
                     </div>
 
-                    <div class="col-12">
-                        <div class="form-group">
-                            @Html.Label("Description | รายละเอียดประเภทอนุมัติ")
-                            @Html.TextArea("ApprvDesc", null, new { @class = "form-control", @id = "apprvDesc-del", @readonly = "readonly" })
-                        </div>
-                    </div>
+
                 </div>
             </div>
             <div class="modal-footer">
@@ -306,7 +309,8 @@
                 </div>
                 <div class="card-footer p-1">
                     <div class="form-group float-start m-2">
-                        <button class="btn btn-success float-start m-1" type="button" id="addFlowbtn">Add | เพิ่ม</button>
+                        <button class="btn btn-success float-start" type="button" id="addFlowbtn">Add | เพิ่ม</button>
+                        @*<input type="button" class="" value="Add | เพิ่ม"/>*@
                     </div>
                     <div class="form-group float-end m-2">
                         <input type="button" value="Clear | ล้าง" class="btn btn-secondary" id="reset-btn" />
@@ -326,6 +330,7 @@
                                 <th class="text-center">Approval group ID | รหัสกลุ่มอนุมัติ</th>
                                 <th class="text-center">Approval group name | ชื่อกลุ่มอนุมัติ</th>
                                 <th class="text-center">Department ID | รหัสแผนก</th>
+                                <th class="text-center">Approval step name</th>
                                 <th class="text-center">Approval level|ลำดับการอนุมัติ</th>
                                 <th class="text-center">Approver | พนักงานผู้อนุมัติ</th>
                                 <th class="text-center">Approver Type | ประเภทอนุมัติ</th>
@@ -340,6 +345,7 @@
                                         <td class="text-center">@aprflow.ApprGrpId</td>
                                         <td class="text-center">@aprflow.ApprGrpName</td>
                                         <td class="text-center">@aprflow.DepName</td>
+                                        <td class="text-center">@aprflow.ApprStepName</td>
                                         <td class="text-center">@aprflow.ApprStep</td>
                                         <td class="text-center">@aprflow.EmpName</td>
                                         <td class="text-center">@aprflow.ActionType</td>
@@ -386,7 +392,8 @@
         $('#alert-apprv-add-dept').attr('hidden', true);
         $('#alert-apprv-add-type').attr('hidden', true);
         $('#alert-apprv-add-emp').attr('hidden', true);
-        $('#alert-apprv-add-desc').attr('hidden', true);
+        $('#alert-apprv-add-stname').attr('hidden', true);
+
     });
     $(document).ready(function () {
         $('#apprv-flow-table').dataTable({
@@ -406,11 +413,12 @@
     $(document).on('click', '#addFlowbtn', function () {
         $('#groupId-add').val('');
         $('#groupName-add').val('');
-        $('#apprvDesc-add').val('');
+        $('#apprvStepName-add').val('');
         $('#department-selector-add').val('').trigger('change');
         $('#apprvLvl-add').val('');
         $('#empId-add').val('').trigger('change');
         $('#actiontyp-add').val('').trigger('change');
+        $('#groupName-add').removeAttr('readonly');
 
         DropdownEmpSelectAdd();
     });
@@ -422,7 +430,7 @@
         var stepNum = $('#apprvLvl-add').val();
         var empId = $('#empId-add').val();
         var actionTex = $('#actiontyp-add').val();
-        var apprvDesc = $('#apprvDesc-add').val();
+        var stepName = $('#apprvStepName-add').val();
         if (apprvID == "") {
             $('#addFormModal').modal('hide');
             Swal.fire({
@@ -512,7 +520,7 @@
         else {
             $('#alert-apprv-add-emp').attr('hidden', true);
         }
-        if (apprvDesc == "") {
+        if (stepName == "") {
             //$('#addFormModal').modal('hide');
             //Swal.fire({
             //    title: "Error!!!",
@@ -521,12 +529,12 @@
             //}).then(() => {
             //    $('#addFormModal').modal('show');
             //});
-            $('#alert-apprv-add-desc').removeAttr('hidden');
+            $('#alert-apprv-add-stname').removeAttr('hidden');
             check++;
             //return false;
         }
         else {
-            $('#alert-apprv-add-desc').attr('hidden', true);
+            $('#alert-apprv-add-stname').attr('hidden', true);
         }
         if (check > 0) {
             console.log('Alert ADD');
@@ -697,7 +705,7 @@
                 $('#ApprvLvl-edit').val('').trigger('change');
                 $('#empid-edit').val('').trigger('change');
                 $('#actiontyp-edit').val('').trigger('change');
-                $('#apprvDesc-edit').val('');
+                $('#apprvStepName-edit').val('');
             },
             success: function (res) {
                 if (res.message === "Y") {
@@ -727,7 +735,7 @@
                         if (res.getApproval[0].ActionType) {
                             $('#actiontyp-edit').val(res.getApproval[0].ActionType.trim()).trigger('change');
                         }
-                        $('#apprvDesc-edit').val(res.getApproval[0].ApprDesc)
+                        $('#apprvStepName-edit').val(res.getApproval[0].ApprDesc)
                     }
                 }
             }
@@ -751,7 +759,7 @@
                 $('#apprvLvl-del').val('').trigger('change');
                 $('#empid-del').val('').trigger('change');
                 $('#actiontyp-del').val('').trigger('change');
-                $('#apprvDesc-del').val('');
+                $('#apprvStepName-del').val('');
             },
             success: function (res) {
                 if (res.message === "Y") {
@@ -782,7 +790,7 @@
                         if (res.getApproval[0].ActionType) {
                             $('#actiontyp-del').val(res.getApproval[0].ActionType.trim()).trigger('change');
                         }
-                        $('#apprvDesc-del').val(res.getApproval[0].ApprDesc)
+                        $('#apprvStepName-del').val(res.getApproval[0].ApprDesc)
                     }
                 }
             }
@@ -817,7 +825,7 @@
         console.log('');
         var action = $('#actiontyp-add').val();
         if (action == 'Acknowledge') {
-            DropdownEmpSelectAdd('HR');
+            DropdownEmpSelectAdd('Ack');
         }
         else {
             DropdownEmpSelectAdd(valdep);
@@ -990,7 +998,7 @@
         var stepNum = $('#apprvLvl-add').val();
         var emp = $('#empId-add').val();
         var actionTex = $('#actiontyp-add').val();
-        var apprvDesc = $('#apprvDesc-add').val();
+        var stepName = $('#apprvStepName-add').val();
 
         $.ajax({
             url: '@Url.Action("AddApprvFlow", "Employee")',
@@ -1001,7 +1009,7 @@
                 step: stepNum,
                 empId: emp,
                 action: actionTex,
-                desc: apprvDesc
+                stepname: stepName
             },
             type: 'POST',
             dataType: 'JSON',
@@ -1011,7 +1019,7 @@
                 $('#alert-apprv-add-dept').attr('hidden', true);
                 $('#alert-apprv-add-type').attr('hidden', true);
                 $('#alert-apprv-add-emp').attr('hidden', true);
-                $('#alert-apprv-add-desc').attr('hidden', true);
+                $('#alert-apprv-add-stname').attr('hidden', true);
                 LoadingShow();
             },
             success: function (data) {
@@ -1034,7 +1042,7 @@
                                 var actionBtn=$(this).val();
                                 Swal.close();
                                 $('#addFormModal').modal('show');
-                                addFlowContinue(apprvId, deptVal, stepNum, actionBtn);
+                                addFlowContinue(apprvId, apprvNm ,deptVal, stepNum, actionBtn);
                             });
                         },
                         preConfirm: () => {
@@ -1054,12 +1062,20 @@
             }
         })
     }
-    function addFlowContinue(apprvId, deptVal, stepNum, action) {
+    function addFlowContinue(apprvId, apprvNm, deptVal, stepNum, action) {
+        if (action == 'acknowledge') {
+            DropdownEmpSelectAdd('Ack');
+        }
+        else {
+            DropdownEmpSelectAdd('dept');
+        }
         $('#select-addApprv').val(2).trigger('change');
         GenerateApprvStep(apprvId);
-        $('#groupName-add').val('');
-        $('#apprvDesc-add').val('');
+        $('#groupName-add').val(apprvNm);
+        $('#groupName-add').attr('readonly', true);
+        $('#apprvStepName-add').val('');
         $('#actiontyp-add').val(action).trigger('change');
+
     }
     function hiddenAlertEdit() {
         $('#alert-apprv-edit-name').attr('hidden', true);
@@ -1067,7 +1083,7 @@
         $('#alert-apprv-edit-type').attr('hidden', true);
         $('#alert-apprv-edit-lvl').attr('hidden', true);
         $('#alert-apprv-edit-emp').attr('hidden', true);
-        $('#alert-apprv-edit-desc').attr('hidden', true);
+        $('#alert-apprv-edit-stname').attr('hidden', true);
         console.log('hidden Edit');
     }
     function UpdateApprvFlow() {
@@ -1080,7 +1096,7 @@
         var stepNum = $('#ApprvLvl-edit').val();
         var empId = $('#empid-edit').val();
         var actionTex = $('#actiontyp-edit').val();
-        var apprvDesc = $('#apprvDesc-edit').val();
+        var stepName = $('#apprvStepName-edit').val();
 
 
 
@@ -1148,7 +1164,7 @@
         else {
             $('#alert-apprv-edit-emp').attr('hidden', true);
         }
-        if (apprvDesc === "") {
+        if (stepName === "") {
             //$('#editFormModal').modal('hide');
             //Swal.fire({
             //    title: "Error!!!",
@@ -1157,12 +1173,12 @@
             //}).then(() => {
             //    $('#editFormModal').modal('show');
             //});
-            $('#alert-apprv-edit-desc').removeAttr('hidden');
+            $('#alert-apprv-edit-stname').removeAttr('hidden');
             check++;
             //return false;
         }
         else {
-            $('#alert-apprv-edit-desc').attr('hidden', true);
+            $('#alert-apprv-edit-stname').attr('hidden', true);
         }
         if (check > 0) {
             console.log('Alert Edit');
@@ -1180,7 +1196,7 @@
                 step: stepNum,
                 empId: empId,
                 action: actionTex,
-                desc: apprvDesc
+                apprvstepname: stepName
             },
             type: 'POST',
             dataType: 'JSON',

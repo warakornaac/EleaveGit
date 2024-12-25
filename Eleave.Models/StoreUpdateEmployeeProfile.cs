@@ -15,9 +15,9 @@ namespace Eleave.Models
         public string Company { get; set; }
         public string EmpId { get; set; }
         public string TitleName { get; set; }
-        [Required(ErrorMessage = "กรุณากรอกชื่อ")]
+        //[Required(ErrorMessage = "กรุณากรอกชื่อ")]
         public string FirstName { get; set; }
-        [Required(ErrorMessage = "กรุณากรอกนามสกุล")]
+        //[Required(ErrorMessage = "กรุณากรอกนามสกุล")]
         public string LastName { get; set; }
         public string Email { get; set; }
         public string DeptId { get; set; }

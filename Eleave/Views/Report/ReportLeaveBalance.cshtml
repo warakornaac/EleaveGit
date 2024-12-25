@@ -34,7 +34,7 @@
                 <div class="card-body p-3 m-0">
                     @Html.AntiForgeryToken()
                     <div class="row">
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-6">
                             @Html.Label("บริษัท | Company", new { @class = "font-weight-bold" })
                             @Html.DropDownList("Company", new List<SelectListItem>
                                     {
@@ -43,7 +43,7 @@
                                         new SelectListItem(){Text="OMP",Value="OMP"}
                                     }, "Select Company | เลือกบริษัท", new { @class = "custom-select", @id = "Company-selector" })
                         </div>
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-6">
                             @{
                                 var currentYear = DateTime.Now.Year;
                                 var years = Enumerable.Range(currentYear - 3, 4).Reverse()
@@ -56,11 +56,11 @@
                             @Html.Label("ปี | Year", new { @class = "font-weight-bold" })
                             @Html.DropDownList("Year", years, "Select Year | เลือกปี", new { @class = "form-control", @id = "year-dd" })
                         </div>
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-6">
                             @Html.Label("แผนก | Department", new { @class = "font-weight-bold" })
                             @Html.DropDownList("Department", new SelectList(ViewBag.DepartmentList, "LookValue", "LookDesc"), "Select department | เลือกหน่วยงาน", new { @class = "custom-select", @id = "department-search" })
                         </div>
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-6">
                             @Html.Label("รหัสผนักงาน | EmployeeID", new { @class = "font-weight-bold" })
                             @Html.TextBox("EmpID", null, new { @class = "form-control", @id = "emp-tb", @placeholder = "Enter EmpID | กรอกรหัสผนักงาน" })
                         </div>
@@ -127,21 +127,22 @@
                                     <td class="text-center">@report.Fullname</td>
                                     <td class="text-center">@report.Position</td>
                                     <td class="text-center">@report.StartDate</td>
-                                    <td class="text-center"></td>
-                                    <td class="text-center"></td>
-                                    <td class="text-center"></td>
+                                    <td class="text-center">@report.Years</td>
+                                    <td class="text-center">@report.Months</td>
+                                    <td class="text-center">@report.Days</td>
                                     <td class="text-center">@report.AL02_Accured</td>
                                     <td class="text-center">@report.AL02_Balance</td>
                                     <td class="text-center">@report.AL02_Leave</td>
                                     <td class="text-center">@report.SL01_Accured</td>
                                     <td class="text-center">@report.SL01_Balance</td>
                                     <td class="text-center">@report.SL01_Leave</td>
+                                    <td class="text-center">@report.BU04_Accured</td>
+                                    <td class="text-center">@report.BU04_Balance</td>
+                                    <td class="text-center">@report.BU04_Leave</td>
                                     <td class="text-center">@report.CP03_Accured</td>
                                     <td class="text-center">@report.CP03_Balance</td>
                                     <td class="text-center">@report.CP03_Leave</td>
-                                    <td class="text-center"></td>
-                                    <td class="text-center"></td>
-                                    <td class="text-center"></td>
+
                                     <td class="text-center">@report.OL07_Accured</td>
                                     <td class="text-center">@report.ML06_Accured</td>
                                     <td class="text-center">@report.Other_Accured</td>
@@ -159,20 +160,8 @@
         $('#department-search').select2({
             width: '100%'
         });
-        $('#report-leave-balance-tbl').dataTable({
-            dom: '<t><"d-flex align-items-center"ip>',
-            paging: true,
-            pageLength: 100,
-            lengthChange: false,
-            searching: false,
-            ordering: false,
-            select: false,
-            language: {
-                info: "แสดง _START_ ถึง _END_ จากทั้งหมด _TOTAL_ คน",
-                infoEmpty: "ไม่มีข้อมูลให้แสดง"
-            }
-        });
-        //$('#report-leave-balance-tbl').DataTable({
+        //$('#report-leave-balance-tbl').dataTable({
+        //    dom: '<t><"d-flex align-items-center"ip>',
         //    paging: true,
         //    pageLength: 100,
         //    lengthChange: false,
@@ -182,20 +171,32 @@
         //    language: {
         //        info: "แสดง _START_ ถึง _END_ จากทั้งหมด _TOTAL_ คน",
         //        infoEmpty: "ไม่มีข้อมูลให้แสดง"
-        //    },
-        //    dom: 'Bfrtip', // เพิ่ม 'B' เพื่อแสดงปุ่ม
-        //    buttons: [
-        //        {
-        //            extend: 'excelHtml5',
-        //            text: 'Export to Excel', // ข้อความปุ่ม
-        //            className: 'btn btn-success', // เพิ่มคลาสเพื่อปรับแต่งปุ่ม
-        //            title: 'รายงานข้อมูล', // ชื่อไฟล์ Excel
-        //            exportOptions: {
-        //                columns: ':visible' // Export เฉพาะคอลัมน์ที่มองเห็น
-        //            }
-        //        }
-        //    ]
+        //    }
         //});
+        $('#report-leave-balance-tbl').DataTable({
+            paging: true,
+            pageLength: 100,
+            lengthChange: false,
+            searching: false,
+            ordering: false,
+            select: false,
+            language: {
+                info: "แสดง _START_ ถึง _END_ จากทั้งหมด _TOTAL_ คน",
+                infoEmpty: "ไม่มีข้อมูลให้แสดง"
+            },
+            dom: '<"d-flex justify-content-between mb-3"B>t<"d-flex align-items-center"i<"ml-3"p>>', // ปรับตำแหน่ง DOM
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+                    text: 'Export to Excel', // ข้อความปุ่ม
+                    className: 'btn btn-success', // เพิ่มคลาสเพื่อปรับแต่งปุ่ม
+                    title: 'รายงานข้อมูล'//, // ชื่อไฟล์ Excel
+                    //exportOptions: {
+                    //    columns: ':visible' // Export เฉพาะคอลัมน์ที่มองเห็น
+                    //}
+                }
+            ]
+        });
 
     });
     $(document).on('click', '#reset-btn', function () {
