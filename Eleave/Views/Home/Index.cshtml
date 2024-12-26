@@ -35,6 +35,11 @@
         color: #0c8916;
         font-weight: 700;
     }
+
+    .vcenter {
+        vertical-align: middle;
+        text-align: -webkit-center;
+    }
 </style>
 <div class="page-header">
     <div class="page-block">
@@ -130,6 +135,7 @@
                         <thead>
                             <tr>
                                 <th>#</th>
+                                <th class="text-center">Act | จัดการ</th>
                                 <th class="text-center">Req No | รหัสคำขอ</th>
                                 <th class="text-center">Req Date | วันที่ขอ</th>
                                 <th class="text-center">Req Type | ประเภทการขอ</th>
@@ -155,6 +161,9 @@
                                 i++;
                                 <tr>
                                     <td>@i</td>
+                                    <td class="text-center vcenter">
+                                        <div class="btn btn-info btn-xs p-1" id="btnview_@leave.ReqNo" data-reqno="@leave.ReqNo" data-empid="@leave.EmpId"><span class="fa fa-eye p-1"></span></div>
+                                    </td>
                                     <td class="text-center">@leave.ReqNo</td>
                                     <td class="text-center">@(leave.ReqDate)</td>
                                     <td class="text-center">@leave.ReqType</td>
@@ -211,6 +220,28 @@
     </div>
 
 </div>
+
+<!-- Modal -->
+<div class="modal fade" id="RequestDetailModal" tabindex="-1" aria-labelledby="ModalCancel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header pb-2">
+                <div class="col-sm-10 col-md-10">
+                    <h4 class="modal-title" id="myModalLabel">รายละเอียด</h4>
+                </div>
+                <div class="col-sm-2 col-md-2 text-right"><button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">ปิด</button></div>
+            </div>
+            <div class="modal-body">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning" id="cancel_submit"><i class="fa fa-trash"></i> ยกเลิกรายการ </button>
+                @*<button type="button" class="btn btn-danger" data-dismiss="modal"> <i class="fa fa-times"></i> ปิด</button>*@
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     $(document).ready(function () {
         $('[data-toggle="tooltip"]').tooltip();
@@ -228,6 +259,89 @@
                 infoEmpty: "ไม่มีข้อมูลให้แสดง"
             }
         });
-    })
+    });
 
+    $(document).on('click', '[id^="btnview_"]', function (e) {
+        e.preventDefault();
+        var reqNo = $(this).data('reqno');
+        var empId = $(this).data('empid');
+        //console.log(reqNo);
+        //$('#RequestDetailModal').modal('show');
+        GetReqDetail(reqNo, empId);
+    });
+
+    function GetReqDetail(REQ, empId) {
+        $.ajax({
+            url: '@Url.Action("GetRequestDetail", "Leave")',
+            data: {
+                ReqNO: REQ,
+                EmpId: empId,
+                Flag: "view"
+            },
+            type: 'POST',
+            dataType: 'HTML',
+            beforeSend: function () {
+                LoadingShow();
+                $('#RequestDetailModal').find('.modal-body').html("");
+            },
+            success: function (data) {
+                $('#RequestDetailModal').find('.modal-body').html(data);
+                $('#RequestDetailModal').modal('show');
+            },complete: function (res) {
+                LoadingHide();
+            },
+            error: function (er) {
+                Swal.fire({
+                    icon: 'error',
+                    html: '<p>GetReqDetail :</p><p>' + er.error + '</p>',
+                    confirmButtonColor: '#d33',
+                    confirmButtonText: 'ปิด',
+                    allowOutsideClick: false,
+                    focusConfirm: false,
+                });
+            }
+        }).fail(function (error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'เกิดข้อผิดพลาด กรุณาแจ้งผู้ดูแลระบบ (' + error.status + ')',
+                html: '<p>GetReqDetail :</p><p>' + error.responseText + '</p>',
+                confirmButtonColor: '#d33',
+                confirmButtonText: 'ปิด',
+                allowOutsideClick: false,
+                focusConfirm: false,
+            });
+        });
+    }
+
+    $(document).on('click', '#cancel_submit', function () {
+        var reqno = $('#cancel_reqid_val').val()
+        $.ajax({
+            url: '@Url.Action("CancelRequest", "Leave")',
+            data: {
+                ReqNo: reqno
+            },
+            type: 'POST',
+            dataType: 'JSON',
+            success: function (data) {
+                if (data.message == 'Y') {
+                    $('#RequestDetailModal').modal('hide');
+                    Swal.fire({
+                        title: "Success!!!",
+                        text: "ยกเลิกคำร้องสำเร็จ ",
+                        icon: "success"
+                    }).then(() => {
+                        location.reload();
+                    });
+                }
+                else {
+                    $('#RequestDetailModal').modal('hide');
+                    Swal.fire({
+                        title: "Error!!!",
+                        text: "Cancel Failed : " + data.message,
+                        icon: "error"
+                    });
+                }
+            }
+        });
+    });
 </script>
