@@ -19,6 +19,7 @@ namespace Eleave.Data
         {
             var p = new SqlParameters();
             p.AddParams("@inUser", user);
+            p.AddParams("@inReqTyp", LeaveType);
             p.AddParams("@inReqSub", reqType);
             p.AddParams("@inReqSta", ReqStatus);
             p.AddParams("@inStartDate", ReqStart);

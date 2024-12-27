@@ -29,16 +29,18 @@
                     <div class="row">
                         <div class="form-group col-lg-3">
                             <label class="font-weight-bold">ประเภทร้องขอ :</label>
-                            @Html.DropDownList("LeaveType", new List<SelectListItem>
-                                                {
-                                                    new SelectListItem() {Text="ลาป่วย", Value="ลาป่วย"},
-                                                    new SelectListItem() {Text="ลากิจ", Value="ลากิจ"},
-                                                    new SelectListItem(){Text="ลาพักร้อน",Value="ลาพักร้อน"}
-                                                }, "ลา", new { @class = "custom-select", @id = "LeaveType-selector", @disabled = "disabled" })
+                            @*@Html.DropDownList("LeaveType", new List<SelectListItem>
+                                {
+                                    new SelectListItem() {Text="ลาป่วย", Value="ลาป่วย"},
+                                    new SelectListItem() {Text="ลากิจ", Value="ลากิจ"},
+                                    new SelectListItem(){Text="ลาพักร้อน",Value="ลาพักร้อน"}
+                                }, "ลา", new { @class = "custom-select", @id = "LeaveType-selector", @disabled = "disabled" })*@
+                            @Html.DropDownList("LeaveType", new SelectList(ViewBag.REQ_T, "LookValue", "LookDesc"), "Select request type | เลือกประเภทร้องขอ", new { @class = "custom-select", @id = "LeaveType-selector" })
+
                         </div>
                         <div class="form-group col-lg-3">
                             <label class="font-weight-bold">ประเภทการลา :</label>
-                            @Html.DropDownList("reqType", new SelectList(ViewBag.Leavetype, "Leavetype", "Description"), "ประเภทการลา", new { @class = "custom-select", @id = "reqType-selector" })
+                            @Html.DropDownList("reqType", new SelectList(ViewBag.Leavetype, "Leavetype", "Description"), "ประเภทการลา", new { @class = "custom-select", @id = "reqType-selector", @disabled = "disabled" })
 
                         </div>
                         <div class="form-group col-lg-3">
@@ -187,7 +189,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="ModalAck">รับทราบคำขอ</h5>
-                <div class="col-sm-2 col-md-2 text-right"><button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">ปิด</button></div>
+                <div class="col-sm-2 col-md-2 text-right"><button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Close | ปิด</button></div>
             </div>
             <div class="modal-body">
             </div>
@@ -251,6 +253,16 @@
         $('#reqId').val('');
         $('#empName').val('');
 
+    });
+    $(document).on('change', '#LeaveType-selector', function () {
+        var typ = $(this).val();
+        console.log('typ :' + typ);
+        if (typ == 1) {
+            $('#reqType-selector').removeAttr('disabled');
+        }
+        else {
+            $('#reqType-selector').attr('disabled', true);
+        }
     });
     $(document).on('click', '[id^="ackbtn_"]', async function (e) {
         e.preventDefault();

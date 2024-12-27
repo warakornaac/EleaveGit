@@ -82,35 +82,36 @@
                     <table class="table table-bordered table-striped" id="report-leave-balance-tbl">
                         <thead>
                             <tr>
-                                <th class="text-center">ลำดับ</th>
-                                <th class="text-center">แผนก</th>
-                                <th class="text-center">รหัสผนักงาน</th>
-                                <th class="text-center">ชื่อพนักงาน</th>
-                                <th class="text-center">ตำแหน่ง</th>
-                                <th class="text-center">วันเริ่มงาน</th>
-                                <th class="text-center">อายุงาน(ปี)</th>
-                                <th class="text-center">อายุงาน(เดือน)</th>
-                                <th class="text-center">อายุงาน(วัน)</th>
+                                <th class="text-center">No. | ลำดับ</th>
+                                <th class="text-center">Department | แผนก</th>
+                                <th class="text-center">Employee ID | รหัสพนักงาน</th>
+                                <th class="text-center">Employee Name | ชื่อพนักงาน</th>
+                                <th class="text-center">Position | ตำแหน่ง</th>
+                                <th class="text-center">Start Date | วันเริ่มงาน</th>
+                                <th class="text-center">Years of Service | อายุงาน (ปี)</th>
+                                <th class="text-center">Months of Service | อายุงาน (เดือน)</th>
+                                <th class="text-center">Days of Service | อายุงาน (วัน)</th>
 
-                                <th class="text-center">สิทธิ์ลาพักร้อน</th>
-                                <th class="text-center">ใช้ลาพักร้อน</th>
-                                <th class="text-center">ลาพักร้อนคงเหลือ</th>
+                                <th class="text-center">Vacation Entitlement | สิทธิ์ลาพักร้อน</th>
+                                <th class="text-center">Vacation Taken | ใช้ลาพักร้อน</th>
+                                <th class="text-center">Vacation Remaining | ลาพักร้อนคงเหลือ</th>
 
-                                <th class="text-center">สิทธิ์ลาป่วย</th>
-                                <th class="text-center">ใช้ลาป่วย</th>
-                                <th class="text-center">ลาป่วยคงเหลือ</th>
+                                <th class="text-center">Sick Leave Entitlement | สิทธิ์ลาป่วย</th>
+                                <th class="text-center">Sick Leave Taken | ใช้ลาป่วย</th>
+                                <th class="text-center">Sick Leave Remaining | ลาป่วยคงเหลือ</th>
 
-                                <th class="text-center">สิทธิ์ลากิจ(ได้รับเงิน)</th>
-                                <th class="text-center">ใช้ลากิจ</th>
-                                <th class="text-center">ลากิจคงเหลือ</th>
+                                <th class="text-center">Personal Leave Entitlement (Paid) | สิทธิ์ลากิจ (ได้รับเงิน)</th>
+                                <th class="text-center">Personal Leave Taken | ใช้ลากิจ</th>
+                                <th class="text-center">Personal Leave Remaining | ลากิจคงเหลือ</th>
 
-                                <th class="text-center">สิทธิ์หยุดชดเชย</th>
-                                <th class="text-center">ใช้หยุดชดเชย</th>
-                                <th class="text-center">หยุดชดเชยคงเหลือ</th>
+                                <th class="text-center">Compensation Leave Entitlement | สิทธิ์หยุดชดเชย</th>
+                                <th class="text-center">Compensation Leave Taken | ใช้หยุดชดเชย</th>
+                                <th class="text-center">Compensation Leave Remaining | หยุดชดเชยคงเหลือ</th>
 
-                                <th class="text-center">ลาบวช</th>
-                                <th class="text-center">ลาคลอด</th>
-                                <th class="text-center">อื่นๆ</th>
+                                <th class="text-center">Ordination Leave | ลาบวช</th>
+                                <th class="text-center">Maternity Leave | ลาคลอด</th>
+                                <th class="text-center">Other | อื่นๆ</th>
+
                             </tr>
                         </thead>
                         <tbody>
@@ -142,7 +143,6 @@
                                     <td class="text-center">@report.CP03_Accured</td>
                                     <td class="text-center">@report.CP03_Balance</td>
                                     <td class="text-center">@report.CP03_Leave</td>
-
                                     <td class="text-center">@report.OL07_Accured</td>
                                     <td class="text-center">@report.ML06_Accured</td>
                                     <td class="text-center">@report.Other_Accured</td>

@@ -14,7 +14,7 @@
         <div class="row">
             <div class="col-sm-3 col-md-3">
                 <div class="form-group highlight-addon hide-errors">
-                    <label class="control-label font-weight-bold" for="">รหัสคำขอ : </label>
+                    <label class="control-label font-weight-bold" for="">Request No | รหัสคำขอ : </label>
                     <div class="form-control-static">
                         <p class="border-0 p-0 m-0" name="ReqId" id="cancel_reqid"> @reqDetail.ReqNo </p>
                         <input type="hidden" id="cancel_reqid_val" name="cancel_reqid_val" value="@reqDetail.ReqNo" />
@@ -26,7 +26,7 @@
             </div>
             <div class="col-sm-3 col-md-3">
                 <div class="form-group highlight-addon hide-errors">
-                    <label class="control-label font-weight-bold" for="">ชื่อพนักงาน : </label>
+                    <label class="control-label font-weight-bold" for="">Emp Name | ชื่อพนักงาน : </label>
                     <div class="form-control-static">
                         <span style="white-space: nowrap;"><p class="border-0 p-0 m-0" name="Empname" id="Empname"> @reqDetail.Empname </p></span>
                     </div>
@@ -34,7 +34,7 @@
             </div>
             <div class="col-sm-3 col-md-3">
                 <div class="form-group highlight-addon hide-errors">
-                    <label class="control-label font-weight-bold" for="">วันที่ขอ : </label>
+                    <label class="control-label font-weight-bold" for="">Req Date | วันที่ขอ : </label>
                     <div class="form-control-static">
                         <p class="border-0 p-0 m-0" name="ReqId" id="cancel_reqid"> @reqDetail.ReqDate </p>
                         <input type="hidden" name="ReqIdHide" value="" id="cancel_reqdate" />
@@ -43,7 +43,7 @@
             </div>
             <div class="col-sm-3 col-md-3">
                 <div class="form-group highlight-addon hide-errors">
-                    <label class="control-label font-weight-bold" for="">ประเภทการขอ	 : </label>
+                    <label class="control-label font-weight-bold" for="">Req Type | ประเภทการขอ	 : </label>
                     <divs class="form-control-static">
                         <p class="border-0 p-0 m-0" name="ReqId" id="cancel_reqtyp"> @reqDetail.ReqType </p>
                     </divs>
@@ -51,7 +51,7 @@
             </div>
             <div class="col-sm-3 col-md-3">
                 <div class="form-group highlight-addon hide-errors">
-                    <label class="control-label font-weight-bold" for="">ประเภทการลา	 : </label>
+                    <label class="control-label font-weight-bold" for="">Req Cate | ประเภทการลา	 : </label>
                     <div class="form-control-static">
                         <p class="border-0 p-0 m-0" name="LevTyp" id="cancel_levtyp"> @reqDetail.LeaveType </p>
                     </div>
@@ -59,7 +59,7 @@
             </div>
             <div class="col-sm-3 col-md-3">
                 <div class="form-group highlight-addon hide-errors">
-                    <label class="control-label font-weight-bold" for="">วันที่ลา(เริ่ม)	 : </label>
+                    <label class="control-label font-weight-bold" for="">Start Date | วันที่ลา(เริ่ม)	 : </label>
                     <div class="form-control-static">
                         <p class="border-0 p-0 m-0" name="StartDate" id="cancel_startdate"> @reqDetail.StartDate </p>
                     </div>
@@ -67,7 +67,7 @@
             </div>
             <div class="col-sm-3 col-md-3">
                 <div class="form-group highlight-addon hide-errors">
-                    <label class="control-label font-weight-bold" for="">วันที่ลา(สิ้นสุด)	 : </label>
+                    <label class="control-label font-weight-bold" for="">End Date | วันที่ลา(สิ้นสุด)	 : </label>
                     <div class="form-control-static">
                         <p class="border-0 p-0 m-0" name="EndDate" id="cancel_enddate"> @reqDetail.EndDate </p>
                     </div>
@@ -75,7 +75,7 @@
             </div>
             <div class="col-sm-3 col-md-3">
                 <div class="form-group highlight-addon hide-errors">
-                    <label class="control-label font-weight-bold" for="">จำนวนวัน	 : </label>
+                    <label class="control-label font-weight-bold" for="">Total Date | จำนวนวัน	 : </label>
                     <div class="form-control-static">
                         <p class="border-0 p-0 m-0" name="NumDay" id="NumDay"> @reqDetail.NumDay </p>
                     </div>
@@ -83,7 +83,7 @@
             </div>
             <div class="col-sm-3 col-md-3">
                 <div class="form-group highlight-addon hide-errors">
-                    <label class="control-label font-weight-bold" for="">สถานะคำขอ : </label>
+                    <label class="control-label font-weight-bold" for="">Req Status | สถานะคำขอ : </label>
                     <div class="form-control-static">
                         <p class="border-0 p-0 m-0" name="CancelStatus" id="cancel_status"> @reqDetail.ReqStaDesc </p>
                     </div>
@@ -91,7 +91,7 @@
             </div>
             <div class="col-sm-12 col-md-12">
                 <div class="form-group highlight-addon hide-errors">
-                    <label class="control-label font-weight-bold" for="">หมายเหตุการลา	 : </label>
+                    <label class="control-label font-weight-bold" for="">Remark | หมายเหตุการลา	 : </label>
                     <div class="form-control-static">
                         <p class="border-0 p-0 m-0" name="Remark" id="cancel_remark"> @reqDetail.Remark </p>
                     </div>
@@ -105,7 +105,7 @@
 
         <div class="row">
             <div class="col-sm-6 col-md-6 text-left">
-                <span class="badge badge-light-secondary" style="font-size: 16px;"> สิทธิการลา </span>
+                <span class="badge badge-light-secondary" style="font-size: 16px;">Leave Benefits | สิทธิการลา </span>
             </div>
         </div>
         <div class="row pt-2">
@@ -118,7 +118,7 @@
         {
             <div class="row">
                 <div class="col-sm-6 col-md-6 text-left">
-                    <span class="badge badge-light-secondary" style="font-size: 16px;"> คาวมเห็นผู้อนุมัติ </span>
+                    <span class="badge badge-light-secondary" style="font-size: 16px;"> Approval Remarks | ความเห็นผู้อนุมัติ </span>
                 </div>
             </div>
         }
@@ -227,7 +227,7 @@
         <div id="area-comment-form" hidden>
             <div class="row">
                 <div class="col-sm-6 col-md-6 text-left">
-                    <span class="badge badge-light-secondary" style="font-size: 16px;"> ความเห็นผู้อนุมัติ </span>
+                    <span class="badge badge-light-secondary" style="font-size: 16px;"> Approval Remarks | ความเห็นผู้อนุมัติ </span>
                 </div>
             </div>
             <div class="row pt-2">
@@ -240,7 +240,7 @@
         <div id="ack-comment-div" class="d-none">
             <div class="row">
                 <div class="col-sm-6 col-md-6 text-left">
-                    <span class="badge badge-light-secondary" style="font-size: 16px;"> ความเห็น HR </span>
+                    <span class="badge badge-light-secondary" style="font-size: 16px;"> HR Remarks | ความเห็น HR </span>
                 </div>
             </div>
             <div class="row pt-1 pb-3">

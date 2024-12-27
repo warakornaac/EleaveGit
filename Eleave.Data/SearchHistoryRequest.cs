@@ -18,6 +18,7 @@ namespace Eleave.Data
         public List<RequestList> GetHis(string LeaveType, string reqType, string ReqStatus, DateTime? ReqStart, DateTime? ReqEnd, string Department, string reqId, string empName)
         {
             var p = new SqlParameters();
+            p.AddParams("@inReqTyp", LeaveType);
             p.AddParams("@inReqSub", reqType);
             p.AddParams("@inReqSta", ReqStatus);
             p.AddParams("@inStartDate", ReqStart);
