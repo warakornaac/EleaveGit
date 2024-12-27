@@ -117,37 +117,40 @@
                 <div class="row">
                     <div class="col-md-4 col-lg-4">
                         <div class="form-group">
-                            @Html.LabelFor(model => model.EmpId, "รหัสพนักงาน")
+                            @Html.LabelFor(model => model.EmpId, "Employee ID | รหัสพนักงาน")
                             @Html.TextBoxFor(model => model.EmpId, new { @class = "form-control", @readonly = "readonly" })
                         </div>
                     </div>
                     <div class="col-md-4 col-lg-4">
                         <div class="form-group">
-                            @Html.LabelFor(model => model.Company, "บริษัท")<span class="text-danger">*</span>
+                            @Html.LabelFor(model => model.Company, "Company | บริษัท")<span class="text-danger">*</span>
                             @Html.DropDownListFor(model => model.Company, new List<SelectListItem>
                                                {
                                                     new SelectListItem() {Text="AAC", Value="AAC"},
                                                     new SelectListItem() {Text="TRU", Value="TRU"},
                                                     new SelectListItem(){Text="OMP",Value="OMP"}
                                                }, "เลือกบริษัท", new { @class = "custom-select", @id = "comp-selector" })
-                            <span class="text-danger" id="alert-comp" hidden>Please selece a company | กรุณาเลือกบริษัท</span>
+                            <span class="text-danger" id="alert-comp" hidden>Please select a company | กรุณาเลือกบริษัท</span>
                         </div>
                     </div>
                     <div class="col-md-4 col-lg-4">
                         <div class="form-group">
-                            @Html.LabelFor(model => model.TitleName, "คำนำหน้า")<span class="text-danger">*</span>
+                            @Html.LabelFor(model => model.TitleName, "Title | คำนำหน้า")<span class="text-danger">*</span>
                             @Html.DropDownListFor(model => model.TitleName, new List<SelectListItem>
                                                 {
                                                     new SelectListItem() {Text="นาย", Value="นาย"},
                                                     new SelectListItem() {Text="นาง", Value="นาง"},
-                                                    new SelectListItem(){Text="นางสาว",Value="นางสาว"}
-                                                }, "เลือกคำนำหน้า", new { @class = "custom-select", @id = "title-selector" })
-                            <span class="text-danger" id="alert-title" hidden>Please selece a company | กรุณาเลือกบริษัท</span>
+                                                    new SelectListItem(){Text="นางสาว",Value="นางสาว"},
+                                                    new SelectListItem() {Text="Mr", Value="Mr"},
+                                                    new SelectListItem() {Text="Ms", Value="Ms"},
+                                                    new SelectListItem() {Text="Mrs", Value="Mrs"}
+                                                }, "Select title | เลือกคำนำหน้า", new { @class = "custom-select", @id = "title-selector" })
+                            <span class="text-danger" id="alert-title" hidden>Please select a company | กรุณาเลือกบริษัท</span>
                         </div>
                     </div>
                     <div class="col-md-4 col-lg-4">
                         <div class="form-group">
-                            @Html.LabelFor(model => model.FirstName, "ชื่อ")<span class="text-danger">*</span>
+                            @Html.LabelFor(model => model.FirstName, "First Name | ชื่อ")<span class="text-danger">*</span>
                             @Html.TextBoxFor(model => model.FirstName, new { @class = "form-control", @id = "fname-tbx" })
                             @* @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })*@
                             <span class="text-danger" id="alert-fname" hidden>Please enter first name | กรุณากรอกชื่อ</span>
@@ -155,7 +158,7 @@
                     </div>
                     <div class="col-md-4 col-lg-4">
                         <div class="form-group">
-                            @Html.LabelFor(model => model.LastName, "นามสกุล")<span class="text-danger">*</span>
+                            @Html.LabelFor(model => model.LastName, "Last Name | นามสกุล")<span class="text-danger">*</span>
                             @Html.TextBoxFor(model => model.LastName, new { @class = "form-control", @id = "lname-tbx" })
                             @*  @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })*@
                             <span class="text-danger" id="alert-lname" hidden>Please enter last name | กรุณากรอกนามสกุล</span>
@@ -163,31 +166,31 @@
                     </div>
                     <div class="col-md-4 col-lg-4">
                         <div class="form-group">
-                            @Html.LabelFor(model => model.Email, "อีเมล")
+                            @Html.LabelFor(model => model.Email, "E-mail | อีเมล")
                             @Html.TextBoxFor(model => model.Email, new { @class = "form-control", @id = "email-tbx" })
                             <span class="text-danger" id="alert-email" hidden>Please enter email | กรุณากรอกอีเมล</span>
                         </div>
                     </div>
                     <div class="col-md-4 col-lg-4">
                         <div class="form-group">
-                            @Html.LabelFor(model => model.DeptId, "หน่วยงาน")<span class="text-danger">*</span>
+                            @Html.LabelFor(model => model.DeptId, "Department | หน่วยงาน")<span class="text-danger">*</span>
                             @Html.DropDownListFor(model => model.DeptId, new SelectList(ViewBag.DepartmentList, "LookValue", "LookDesc"), "เลือกหน่อยงาน", new { @class = "custom-select", @id = "department-selector" })
-                            <span class="text-danger" id="alert-dept" hidden>Please selece a department | กรุณาเลือกแผนก</span>
+                            <span class="text-danger" id="alert-dept" hidden>Please select a department | กรุณาเลือกแผนก</span>
                         </div>
                     </div>
                     <div class="col-md-4 col-lg-4">
                         <div class="form-group">
-                            @Html.LabelFor(model => model.Position, "ตำแหน่ง")<span class="text-danger">*</span>
+                            @Html.LabelFor(model => model.Position, "Position | ตำแหน่ง")<span class="text-danger">*</span>
                             @Html.TextBoxFor(model => model.Position, new { @class = "form-control", @id = "pos-selector" })
-                            <span class="text-danger" id="alert-position" hidden>Please selece a position | กรุณาเลือกตำแหน่ง</span>
+                            <span class="text-danger" id="alert-position" hidden>Please select a position | กรุณาเลือกตำแหน่ง</span>
                         </div>
                     </div>
                     <div class="col-md-4 col-lg-4">
                         <div class="form-group">
-                            @Html.LabelFor(model => model.DirectorId, "หัวหน้างาน")<span class="text-danger">*</span>
+                            @Html.LabelFor(model => model.DirectorId, "Director | หัวหน้างาน")@*<span class="text-danger">*</span>*@
                             @*@Html.TextBoxFor(model => model.DirectorId, new { @class = "form-control", list = "directors-list" })*@
                             @Html.DropDownListFor(model => model.DirectorId, new SelectList(ViewBag.Directors, "EmpId", "Fullname"), "เลือกหัวหน้างาน", new { @class = "custom-select", @id = "directors-selector" })
-                            <span class="text-danger" id="alert-director" hidden>Please selece a director | กรุณาเลือกหัวหน้างาน</span>
+                            <span class="text-danger" id="alert-director" hidden>Please select a director | กรุณาเลือกหัวหน้างาน</span>
                             @*<datalist id="directors-list">
                                     @foreach (var director in ViewBag.Directors)
                                     {
@@ -198,41 +201,41 @@
                     </div>
                     <div class="col-md-4 col-lg-4">
                         <div class="form-group">
-                            @Html.LabelFor(model => model.EmpLvl, "ระดับพนักงาน")<span class="text-danger">*</span>
-                            @Html.DropDownListFor(model => model.EmpLvl, new SelectList(ViewBag.EmpLevel, "LookValue", "LookDesc"), "เลือกหน่อยงาน", new { @class = "custom-select", @id = "emplvl-selector" })
-                            <span class="text-danger" id="alert-emplvl" hidden>Please selece a employee level | กรุณาเลือกหน่อยงาน</span>
+                            @Html.LabelFor(model => model.EmpLvl, "Employee Level | ระดับพนักงาน")<span class="text-danger">*</span>
+                            @Html.DropDownListFor(model => model.EmpLvl, new SelectList(ViewBag.EmpLevel, "LookValue", "LookDesc"), "เลือกระดับพนักงาน", new { @class = "custom-select", @id = "emplvl-selector" })
+                            <span class="text-danger" id="alert-emplvl" hidden>Please select a employee level | กรุณาเลือกระดับพนักงาน</span>
                         </div>
                     </div>
                     <div class="col-md-4 col-lg-4">
                         <div class="form-group">
-                            @Html.LabelFor(model => model.ApprGrpID, "กลุ่มอนุมัติ")<span class="text-danger">*</span>
+                            @Html.LabelFor(model => model.ApprGrpID, "Approval Group | กลุ่มอนุมัติ")<span class="text-danger">*</span>
                             @Html.DropDownListFor(model => model.ApprGrpID, new SelectList(ViewBag.ApprovFlow, "ApprGrpId", "DisplayText"), "เลือกกลุ่มอนุมัติ", new { @class = "custom-select", @id = "approval-selector" })
-                            <span class="text-danger" id="alert-apprvgrp" hidden>Please selece a approval group | กรุณาเลือกกลุ่มอนุมัติ</span>
+                            <span class="text-danger" id="alert-apprvgrp" hidden>Please select a approval group | กรุณาเลือกกลุ่มอนุมัติ</span>
                         </div>
                     </div>
                     <div class="col-md-4 col-lg-4">
                         <div class="form-group">
-                            @Html.LabelFor(model => model.UserType, "ประเภทผู้ใช้")<span class="text-danger">*</span>
+                            @Html.LabelFor(model => model.UserType, "User Type | ประเภทผู้ใช้")<span class="text-danger">*</span>
                             @Html.DropDownListFor(model => model.UserType, new SelectList(ViewBag.usrtyp, "TypeVal", "UsrTypeName"), "เลือกประเภทผู้ใช้", new { @class = "custom-select", @id = "usrtyp-selector" })
-                            <span class="text-danger" id="alert-usrtyp" hidden>Please selece a user type | กรุณาเลือกประเภทผู้ใช้</span>
+                            <span class="text-danger" id="alert-usrtyp" hidden>Please select a user type | กรุณาเลือกประเภทผู้ใช้</span>
                         </div>
                     </div>
                     <div class="col-md-4 col-lg-4">
                         <div class="form-group">
-                            @Html.LabelFor(model => model.EmpTypeId, "ประเภทพนักงาน")
+                            @Html.LabelFor(model => model.EmpTypeId, "Employee Type | ประเภทพนักงาน")
                             @Html.DropDownListFor(model => model.EmpTypeId, new SelectList(ViewBag.EmpTyp, "LookValue", "LookDesc"), "เลือกหน่อยงาน", new { @class = "custom-select", @id = "emptyp-selector" })
 
                         </div>
                     </div>
                     <div class="col-md-4 col-lg-4">
                         <div class="form-group">
-                            @Html.LabelFor(model => model.StartDate, "วันเรื่มงาน")
+                            @Html.LabelFor(model => model.StartDate, "Start Date | วันเรื่มงาน")
                             @Html.TextBoxFor(model => model.StartDate, new { @class = "form-control", id = "start-date" })
                         </div>
                     </div>
                     <div class="col-md-4 col-lg-4">
                         <div class="form-group">
-                            @Html.LabelFor(model => model.EmpStatus, "สถานะพนักนักงาน")
+                            @Html.LabelFor(model => model.EmpStatus, "Employee Status | สถานะพนักนักงาน")
                             @Html.DropDownListFor(model => model.EmpStatus, new SelectList(ViewBag.EmpSta, "LookValue", "LookDesc"), new { @class = "custom-select", @id = "empStatusDropdown" })
                         </div>
                     </div>
@@ -241,11 +244,11 @@
                 <div class="card-footer">
                     <div class="float-end">
                         @*<input type="submit" value="บันทึก" class="btn btn-success" />*@
-                        <Button type="submit" class="btn btn-success">บันทึก</Button>
+                        <Button type="submit" class="btn btn-success">SAVE | บันทึก</Button>
 
                     </div>
                     <div class="float-left">
-                        <input type="button" value="ย้อนกลับ" class="btn btn-secondary" onclick="history.back();" id="back-btn" />
+                        <input type="button" value="BACK | ย้อนกลับ" class="btn btn-secondary" onclick="history.back();" id="back-btn" />
                     </div>
 
                 </div>
@@ -287,63 +290,68 @@
             var emplvl = $('#emplvl-selector').val();
             var apprv = $('#approval-selector').val();
             var usrtyp = $('#usrtyp-selector').val();
-            if (comp == '' || comp == null) {
+            if (comp === '' || comp === null) {
                 alrt++;
                 $('#alert-comp').removeAttr('hidden');
             }
             else {
                 $('#alert-comp').attr('hidden',true);
             }
-            if (title == '' || title == null) {
+            if (title === '' || title === null) {
                 alrt++;
                 $('#alert-title').removeAttr('hidden');
             }
             else {
                 $('#alert-title').attr('hidden', true);
             }
-            if (fname == '' || fname == null) {
+            if (fname === '' || fname === null) {
                 alrt++;
                 $('#alert-fname').removeAttr('hidden');
             }
             else {
                 $('#alert-fname').attr('hidden', true);
             }
-            if (lname == '' || lname == null) {
+            if (lname === '' || lname === null) {
                 alrt++;
                 $('#alert-lname').removeAttr('hidden');
             }
             else {
                 $('#alert-lname').attr('hidden', true);
             }
-            if (dept == '' || dept == null) {
+            if (dept === '' || dept === null) {
                 alrt++;
                 $('#alert-dept').removeAttr('hidden');
             }
             else {
                 $('#alert-dept').attr('hidden', true);
             }
-            if (position == '' || position == null) {
+            if (position === '' || position === null) {
                 alrt++;
                 $('#alert-position').removeAttr('hidden');
             }
             else {
                 $('#alert-position').attr('hidden', true);
             }
-            if (director == '' || director == null) {
-                alrt++;
-                $('#alert-director').removeAttr('hidden');
-
-            }
-            else {
+            if (emplvl === '0') {
                 $('#alert-director').attr('hidden', true);
             }
-            if (emplvl == '' || emplvl == null) {
+            else {
+                if (director === '' || director === null ) {
+                    alrt++;
+                    $('#alert-director').removeAttr('hidden');
+                }
+                else {
+                    $('#alert-director').attr('hidden', true);
+                }
+            }
+
+            if (emplvl === '' || emplvl === null) {
                 alrt++;
                 $('#alert-emplvl').removeAttr('hidden');
             }
-            else if (emplvl == 1 || emplvl == 2 || emplvl == 3) {
-                $('#alert-director').attr('hidden', true);
-                if (email == '' || email == null) {
+            else if (emplvl === 1 || emplvl === 2 || emplvl === 3) {
+                $('#alert-emplvl').attr('hidden', true);
+                if (email === '' || email === null) {
                     alrt++;
                     $('#alert-email').removeAttr('hidden');
                 }
@@ -352,17 +360,17 @@
                 }
             }
             else {
-                $('#alert-director').attr('hidden', true);
+                $('#alert-emplvl').attr('hidden', true);
                 $('#alert-email').attr('hidden', true);
             }
-            if (apprv == '' || apprv == null) {
+            if (apprv === '' || apprv === null) {
                 alrt++;
                 $('#alert-apprvgrp').removeAttr('hidden');
             }
             else {
                 $('#alert-apprvgrp').attr('hidden', true);
             }
-            if (usrtyp == '' || usrtyp == null) {
+            if (usrtyp === '' || usrtyp === null) {
                 alrt++;
                 $('#alert-usrtyp').removeAttr('hidden');
             }
@@ -383,7 +391,7 @@
             icon: 'error'
         });
     }
-    @*if ("@ViewBag.UpdateStatus" == "Success") {
+    @*if ("@ViewBag.UpdateStatus" === "Success") {
         Swal.fire({
             title: "@ViewBag.UpdateStatus",
             text: "Update ข้อมูลพนักงานสำเร็จ",
