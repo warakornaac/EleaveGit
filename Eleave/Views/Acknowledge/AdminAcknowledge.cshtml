@@ -28,7 +28,7 @@
                     @Html.AntiForgeryToken()
                     <div class="row">
                         <div class="form-group col-lg-3">
-                            <label class="font-weight-bold">ประเภทร้องขอ :</label>
+                            <label class="font-weight-bold">Request Type | ประเภทร้องขอ :</label>
                             @*@Html.DropDownList("LeaveType", new List<SelectListItem>
                                 {
                                     new SelectListItem() {Text="ลาป่วย", Value="ลาป่วย"},
@@ -39,41 +39,41 @@
 
                         </div>
                         <div class="form-group col-lg-3">
-                            <label class="font-weight-bold">ประเภทการลา :</label>
-                            @Html.DropDownList("reqType", new SelectList(ViewBag.Leavetype, "Leavetype", "Description"), "ประเภทการลา", new { @class = "custom-select", @id = "reqType-selector", @disabled = "disabled" })
+                            <label class="font-weight-bold">Leave Type | ประเภทการลา :</label>
+                            @Html.DropDownList("reqType", new SelectList(ViewBag.Leavetype, "Leavetype", "Description"), "Select request type | เลือกประเภทร้องขอ", new { @class = "custom-select", @id = "reqType-selector", @disabled = "disabled" })
 
                         </div>
                         <div class="form-group col-lg-3">
-                            <label class="font-weight-bold">สถานะคำขอ :</label>
-                            @Html.DropDownList("ReqStatus", new SelectList(ViewBag.ReqSta, "LookValue", "LookDesc"), "สถานะคำขอทั้งหมด", new { @class = "custom-select", @id = "reqStatus" })
+                            <label class="font-weight-bold">Request Status | สถานะคำขอ :</label>
+                            @Html.DropDownList("ReqStatus", new SelectList(ViewBag.ReqSta, "LookValue", "LookDesc"), "All Request Statuses | สถานะคำขอทั้งหมด", new { @class = "custom-select", @id = "reqStatus" })
                         </div>
                         <div class="form-group col-lg-3">
-                            <label class="font-weight-bold">เริ่มวันที่ :</label>
+                            <label class="font-weight-bold">From Date | เริ่มวันที่ :</label>
                             @Html.TextBox("ReqStart", null, new { @class = "form-control", @id = "reqStart", @placeholder = "--/--/--" })
                         </div>
                         <div class="form-group col-lg-3">
-                            <label class="font-weight-bold">ถึงวันที่ :</label>
+                            <label class="font-weight-bold">End Date | ถึงวันที่ :</label>
                             @Html.TextBox("ReqEnd", null, new { @class = "form-control", @id = "reqEnd", @placeholder = "--/--/--" })
                         </div>
                         <div class="form-group col-lg-3">
-                            <label class="font-weight-bold">แผนก :</label>
+                            <label class="font-weight-bold">Department | แผนก :</label>
                             @Html.DropDownList("Dept",
                                                new SelectList(ViewBag.DepartmentList, "LookValue", "LookDesc"),
-                                               "เลือกหน่วยงาน",
+                                               "Select department | เลือกหน่วยงาน",
                                                new { @class = "custom-select", @id = "department-selector" })
                         </div>
                         <div class="form-group col-lg-3">
-                            <label class="font-weight-bold">รหัสคำขอ :</label>
-                            @Html.TextBox("reqId", null, new { @class = "form-control", @id = "reqId", @placeholder = "รหัสคำขอ" })
+                            <label class="font-weight-bold">Request No | รหัสคำขอ :</label>
+                            @Html.TextBox("reqId", null, new { @class = "form-control", @id = "reqId", @placeholder = "Request No | รหัสคำขอ" })
                         </div>
                         <div class="form-group col-lg-3">
-                            <label class="font-weight-bold">ชื่อพนักงาน :</label>
-                            @Html.TextBox("empName", null, new { @class = "form-control", @id = "empName", @placeholder = "ชื่อพนักงาน" })
+                            <label class="font-weight-bold">Employee Name | ชื่อพนักงาน :</label>
+                            @Html.TextBox("empName", null, new { @class = "form-control", @id = "empName", @placeholder = "Employee Name | ชื่อพนักงาน" })
                         </div>
                         <div class="form-group col-lg-3">
                             <div class="custom-control custom-checkbox">
                                 @Html.CheckBox("actionFlag", true, new { @class = "custom-control-input", @id = "actionFlag" })
-                                <label class="custom-control-label" for="actionFlag">รายการที่ต้องดำเนินการ</label>
+                                <label class="custom-control-label" for="actionFlag">Pending Tasks | รายการที่ต้องดำเนินการ</label>
                             </div>
                         </div>
                     </div>
@@ -97,21 +97,21 @@
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th class="text-center">ดำเนินการ</th>
-                                <th class="text-center">รหัสคำขอ</th>
-                                <th class="text-center">วันที่ขอ</th>
-                                <th class="text-center">ประเภทการขอ</th>
-                                <th class="text-center">ผู้ร้องขอ</th>
-                                <th class="text-center">ประเภทการลา</th>
-                                <th class="text-center">วันที่ลา(เริ่ม)</th>
-                                <th class="text-center">วันที่ลา(สิ้นสุด)</th>
-                                <th class="text-center">รวมขอลา</th>
-                                <th class="text-center">สถานะคำขอ</th>
-                                <th class="text-center">หมายเหตุการลา</th>
-                                <th class="text-center">ผู้อนุมัติ</th>
-                                <th class="text-center">วันที่อนุมัติ</th>
-                                <th class="text-center">HR ผู้รับอนุมัติ</th>
-                                <th class="text-center">วันที่ HR รับอนุมัติ</th>
+                                <th class="text-center">ACT | จัดการ</th>
+                                <th class="text-center">REQ NO | รหัสคำขอ</th>
+                                <th class="text-center">REQ DATE | วันที่ขอ</th>
+                                <th class="text-center">REQ TYPE | ประเภทการขอ</th>
+                                <th class="text-center">REQ BY | ผู้ร้องขอ</th>
+                                <th class="text-center">REQ CATE | ประเภทการลา</th>
+                                <th class="text-center">FROM DATE | วันที่ลา (เริ่ม)</th>
+                                <th class="text-center">END DATE | วันที่ลา (สิ้นสุด)</th>
+                                <th class="text-center">TOT DATE | รวมขอลา</th>
+                                <th class="text-center">REQ STATUS | สถานะคำขอ</th>
+                                <th class="text-center">REMARK | หมายเหตุการลา</th>
+                                <th class="text-center">APPR BY | ผู้อนุมัติ</th>
+                                <th class="text-center">APPR DATE | วันที่อนุมัติ</th>
+                                <th class="text-center">ACK BY | HR ผู้รับอนุมัติ</th>
+                                <th class="text-center">ACK DATE | วันที่ HR รับอนุมัติ</th>
                             </tr>
                         </thead>
                         <tbody>
