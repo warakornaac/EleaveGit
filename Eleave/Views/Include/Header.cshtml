@@ -147,8 +147,8 @@
                             <h3 class="text-warning">@Session["EmpId"] </h3>
                             <p style="">@Session["FullName"]</p>
                             @*<a href="@Url.Action("Login","Home")" class="dud-logout" title="Logout">
-                                <i class="feather icon-log-out"></i>
-                            </a>*@
+                                    <i class="feather icon-log-out"></i>
+                                </a>*@
                         </div>
                         <ul class="pro-body">
                             <li><a href="@Url.Action("ViewProfile","Employee")" class="dropdown-item"><i class="feather icon-user"></i> โปรไฟล์</a></li>
@@ -169,7 +169,7 @@
                 @*<button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>*@
-                <div class="col-sm-2 col-md-2 text-right"><button type="button" class="btn btn-danger btn-sm" id="alrt-modal-btn-close" data-dismiss="modal">ปิด</button></div>
+                <div class="col-sm-2 col-md-2 text-right"><button type="button" class="btn btn-danger btn-sm" id="alrt-modal-btn-close" data-dismiss="modal">Close | ปิด</button></div>
             </div>
             <div class="modal-body">
 
@@ -235,7 +235,7 @@
     /////Acknowledge
     $(document).on('click', '#acknowledge-alt-btn', function (e) {
         e.preventDefault();
-        var ReqNo = $('#ack_reqid_val').val();
+        var ReqNo = $('#ReqIdHide').val();
         var Ack_comment = $('#ack-comment').val();
         console.log('Req :' + ReqNo);
         console.log('Comment :' + Ack_comment);
@@ -704,6 +704,8 @@
             }
         });
     }
+
+
     /////Approve
         function ApproveAltSubmit(Sta) {
         var comment = $('#apprv_comment').val();
