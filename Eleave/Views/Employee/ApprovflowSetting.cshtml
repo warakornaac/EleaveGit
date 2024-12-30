@@ -735,7 +735,7 @@
                         if (res.getApproval[0].ActionType) {
                             $('#actiontyp-edit').val(res.getApproval[0].ActionType.trim()).trigger('change');
                         }
-                        $('#apprvStepName-edit').val(res.getApproval[0].ApprDesc)
+                        $('#apprvStepName-edit').val(res.getApproval[0].ApprStepName)
                     }
                 }
             }
@@ -790,7 +790,7 @@
                         if (res.getApproval[0].ActionType) {
                             $('#actiontyp-del').val(res.getApproval[0].ActionType.trim()).trigger('change');
                         }
-                        $('#apprvStepName-del').val(res.getApproval[0].ApprDesc)
+                        $('#apprvStepName-del').val(res.getApproval[0].ApprStepName)
                     }
                 }
             }
@@ -1115,6 +1115,22 @@
         }
         else {
             $('#alert-apprv-edit-name').attr('hidden', true);
+        }
+        if (stepName === null || stepName.trim() === "") {
+            //$('#editFormModal').modal('hide');
+            //Swal.fire({
+            //    title: "Error!!!",
+            //    text: "Please select approval group. | กรุณากรอกชื่อกลุ่มอนุมัติ",
+            //    icon: "error"
+            //}).then(() => {
+            //    $('#editFormModal').modal('show');
+            //});
+            check++;
+            $('#alert-apprv-edit-stname').removeAttr('hidden');
+            //return false;
+        }
+        else {
+            $('#alert-apprv-edit-stname').attr('hidden', true);
         }
         if (deptVal === null || deptVal.trim() === "") {
             //$('#editFormModal').modal('hide');
