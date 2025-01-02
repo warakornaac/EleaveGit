@@ -34,7 +34,7 @@ namespace Eleave.Controllers
             var Report_leav_bal = new List<ReportLeaveBalance>();
             try
             {
-                Report_leav_bal = new GetReportLeaveBalance().GetReportLeaveBalances("", "", "", "", EmpID);
+                Report_leav_bal = new GetReportLeaveBalance().GetReportLeaveBalances("", DateTime.Now.Year.ToString(), "", "", EmpID);
             }
             catch (Exception ex)
             {
@@ -77,7 +77,21 @@ namespace Eleave.Controllers
             LoadDepartments();
             return View("ReportLeaveBalance", Report_leav_bal);
         }
-
+        public JsonResult DetailReport(string EMP, string LEVTYP, string YEAR)
+        {
+            var Detail = new List<DetailReport>();
+            string message = string.Empty;
+            try
+            {
+                Detail = new GetDetailReport().Get(EMP, LEVTYP, YEAR);
+                message = "Y";
+            }
+            catch (Exception ex)
+            {
+                message = ex.Message;
+            }
+            return Json(new { message = message, Detail }, JsonRequestBehavior.AllowGet);
+        }
 
         //LoadData
         private void LoadDepartments()

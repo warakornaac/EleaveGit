@@ -48,6 +48,7 @@
     <Compile Include="GetApprovalFlowEdit.cs" />
     <Compile Include="GetApprovalFlowList.cs" />
     <Compile Include="GetApprovalRequest.cs" />
+    <Compile Include="GetDetailReport.cs" />
     <Compile Include="GetLeaveBalance.cs" />
     <Compile Include="GetCommentAcknowledge.cs" />
     <Compile Include="GetCommentApprover.cs" />

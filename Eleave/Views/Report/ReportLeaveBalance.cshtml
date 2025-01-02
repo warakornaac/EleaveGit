@@ -54,7 +54,7 @@
                                                       }).ToList();
                             }
                             @Html.Label("ปี | Year", new { @class = "font-weight-bold" })
-                            @Html.DropDownList("Year", years, "Select Year | เลือกปี", new { @class = "form-control", @id = "year-dd" })
+                            @Html.DropDownList("Year", years, new { @class = "form-control", @id = "year-dd" })
                         </div>
                         <div class="form-group col-md-6">
                             @Html.Label("แผนก | Department", new { @class = "font-weight-bold" })
@@ -96,20 +96,20 @@
                                 <th class="text-center">Vacation Taken | ใช้ลาพักร้อน</th>
                                 <th class="text-center">Vacation Remaining | ลาพักร้อนคงเหลือ</th>
 
-                                <th class="text-center">Sick Leave Entitlement | สิทธิ์ลาป่วย</th>
-                                <th class="text-center">Sick Leave Taken | ใช้ลาป่วย</th>
-                                <th class="text-center">Sick Leave Remaining | ลาป่วยคงเหลือ</th>
+                                <th class="text-center">SickLeave Entitlement | สิทธิ์ลาป่วย</th>
+                                <th class="text-center">SickLeave Taken | ใช้ลาป่วย</th>
+                                <th class="text-center">SickLeave Remaining | ลาป่วยคงเหลือ</th>
 
-                                <th class="text-center">Personal Leave Entitlement (Paid) | สิทธิ์ลากิจ (ได้รับเงิน)</th>
-                                <th class="text-center">Personal Leave Taken | ใช้ลากิจ</th>
-                                <th class="text-center">Personal Leave Remaining | ลากิจคงเหลือ</th>
+                                <th class="text-center">PersonalLeave Entitlement (Paid) | สิทธิ์ลากิจ (ได้รับเงิน)</th>
+                                <th class="text-center">PersonalLeave Taken | ใช้ลากิจ</th>
+                                <th class="text-center">PersonalLeave Remaining | ลากิจคงเหลือ</th>
 
-                                <th class="text-center">Compensation Leave Entitlement | สิทธิ์หยุดชดเชย</th>
-                                <th class="text-center">Compensation Leave Taken | ใช้หยุดชดเชย</th>
-                                <th class="text-center">Compensation Leave Remaining | หยุดชดเชยคงเหลือ</th>
+                                <th class="text-center">CompensationLeave Entitlement | สิทธิ์หยุดชดเชย</th>
+                                <th class="text-center">CompensationLeave Taken | ใช้หยุดชดเชย</th>
+                                <th class="text-center">CompensationLeave Remaining | หยุดชดเชยคงเหลือ</th>
 
-                                <th class="text-center">Ordination Leave | ลาบวช</th>
-                                <th class="text-center">Maternity Leave | ลาคลอด</th>
+                                <th class="text-center">OrdinationLeave | ลาบวช</th>
+                                <th class="text-center">MaternityLeave | ลาคลอด</th>
                                 <th class="text-center">Other | อื่นๆ</th>
 
                             </tr>
@@ -132,17 +132,17 @@
                                     <td class="text-center">@report.Months</td>
                                     <td class="text-center">@report.Days</td>
                                     <td class="text-center">@report.AL02_Accured</td>
+                                    <td class="text-center" id="al02-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="al02">@report.AL02_Leave</td>
                                     <td class="text-center">@report.AL02_Balance</td>
-                                    <td class="text-center">@report.AL02_Leave</td>
                                     <td class="text-center">@report.SL01_Accured</td>
+                                    <td class="text-center" id="sl01-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="sl01">@report.SL01_Leave</td>
                                     <td class="text-center">@report.SL01_Balance</td>
-                                    <td class="text-center">@report.SL01_Leave</td>
                                     <td class="text-center">@report.BU04_Accured</td>
+                                    <td class="text-center" id="bu04-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="bu04">@report.BU04_Leave</td>
                                     <td class="text-center">@report.BU04_Balance</td>
-                                    <td class="text-center">@report.BU04_Leave</td>
                                     <td class="text-center">@report.CP03_Accured</td>
+                                    <td class="text-center" id="cp03-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="cp03">@report.CP03_Leave</td>
                                     <td class="text-center">@report.CP03_Balance</td>
-                                    <td class="text-center">@report.CP03_Leave</td>
                                     <td class="text-center">@report.OL07_Accured</td>
                                     <td class="text-center">@report.ML06_Accured</td>
                                     <td class="text-center">@report.Other_Accured</td>
@@ -152,6 +152,43 @@
                     </table>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="detailLeaveModal" tabindex="-1" role="dialog" aria-labelledby="detailLeaveModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">รายละเอียด | Detail</h5>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close">Close | ปิด</button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <h5>ชื่อ-นามสกุล | Name : <span id="detail-fullname"></span></h5>
+                    </div>
+                    <div class="col-12">
+                        <div class="table-responsive">
+                            <table class="table table-hover" id="detail-table">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">ประเภทการลา | Leave Type</th>
+                                        <th class="text-center">ลาวันที่ | Leave Date</th>
+                                        <th class="text-center">จำนวนวัน | Total Days </th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @*<div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>*@
         </div>
     </div>
 </div>
@@ -205,4 +242,74 @@
         $('#department-search').val('').trigger('change');
         $('#emp-tb').val('');
     });
+    $(document).on('click', '[id*="-bal-detail-"]', function () {
+        var emp = $(this).data('emp');
+        var type = $(this).data('levtyp');
+        var yearly = $('#year-dd').val();
+        getDetailReport(emp, type, yearly);
+    });
+    function getDetailReport(empID,type,year) {
+        $.ajax({
+            url: '@Url.Action("DetailReport", "Report")',
+            data: {
+                EMP: empID,
+                LEVTYP: type,
+                YEAR: year
+            },
+            type: 'POST',
+            dataType: 'JSON',
+            beforeSend: function () {
+                LoadingShow();
+                $('#detail-table tbody').html("");
+                $('#detail-fullname').text('');
+            },
+            success: function (data) {
+                $('#detail-table tbody').html("");
+                if (data.message == 'Y') {
+                    $('#detailLeaveModal').modal('show');
+                    var SubmithtmlPage = '';
+                    if (data.Detail.length > 0) {
+                        for (var i = 0; i < data.Detail.length; i++) {
+                            SubmithtmlPage += '<tr>';
+                            SubmithtmlPage += '<td>' + data.Detail[i].Description + '</td>';
+                            SubmithtmlPage += '<td>' + data.Detail[i].TimeLev + '</td>';
+                            SubmithtmlPage += '<td>' + data.Detail[i].NumDay + '</td>';
+                            SubmithtmlPage += '</tr>';
+                        }
+                        $('#detail-fullname').text(data.Detail[0].Fullname);
+                    }
+                    else {
+                        SubmithtmlPage += '<tr>';
+                        SubmithtmlPage += '<td class="text-center" colspan="3">ไม่พบข้อมูล | No Data</td>';
+                        SubmithtmlPage += '</tr>';
+                    }
+
+                    $('#detail-table tbody').append(SubmithtmlPage);
+                }
+                else {
+                    Swal.fire({
+                        icon: 'error',
+                        html: '<p>GetDetailReport :</p><p>' + er.error + '</p>',
+                        confirmButtonColor: '#d33',
+                        confirmButtonText: 'ปิด | Close',
+                        allowOutsideClick: false,
+                        focusConfirm: false,
+                    });
+                }
+            }, complete: function (res) {
+                LoadingHide();
+            },
+            error: function (er) {
+                Swal.fire({
+                    icon: 'error',
+                    html: '<p>GetDetailReport :</p><p>' + er.error + '</p>',
+                    confirmButtonColor: '#d33',
+                    confirmButtonText: 'ปิด | Close',
+                    allowOutsideClick: false,
+                    focusConfirm: false,
+                });
+            }
+
+        });
+    }
 </script>

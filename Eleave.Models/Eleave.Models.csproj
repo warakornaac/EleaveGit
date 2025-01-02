@@ -45,6 +45,7 @@
     <Compile Include="ApprovalFlow.cs" />
     <Compile Include="ApprovalRequest.cs" />
     <Compile Include="ApproveCommentRequest.cs" />
+    <Compile Include="DetailReport.cs" />
     <Compile Include="DirectorProfile.cs" />
     <Compile Include="Eleaving.cs" />
     <Compile Include="LeaveBalanceOverview.cs" />
