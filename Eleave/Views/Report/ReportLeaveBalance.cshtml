@@ -10,6 +10,23 @@
         padding: 5px 10px;
         cursor: pointer;
     }*/
+    .note {
+        position: relative;
+    }
+
+        .note:after { /* Magic Happens Here!!! */
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 0;
+            height: 0;
+            display: block;
+            border-left: 20px solid transparent;
+            border-bottom: 20px solid transparent;
+            border-top: 20px solid #f00;
+        }
+    /* </magic> */
 </style>
 <div class="page-header">
     <div class="page-block">
@@ -132,16 +149,16 @@
                                     <td class="text-center">@report.Months</td>
                                     <td class="text-center">@report.Days</td>
                                     <td class="text-center">@report.AL02_Accured</td>
-                                    <td class="text-center" id="al02-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="al02">@report.AL02_Leave</td>
+                                    <td class="text-center @report.AL02_Leave > 0 ?? " ":" note""><a href="#" id="al02-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="al02"> @report.AL02_Leave</a></td>
                                     <td class="text-center">@report.AL02_Balance</td>
                                     <td class="text-center">@report.SL01_Accured</td>
-                                    <td class="text-center" id="sl01-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="sl01">@report.SL01_Leave</td>
+                                    <td class="text-center note"><a href="#" id="sl01-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="sl01"> @report.SL01_Leave</a></td>
                                     <td class="text-center">@report.SL01_Balance</td>
                                     <td class="text-center">@report.BU04_Accured</td>
-                                    <td class="text-center" id="bu04-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="bu04">@report.BU04_Leave</td>
+                                    <td class="text-center note"><a href="#" id="bu04-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="bu04"> @report.BU04_Leave</a> </td>
                                     <td class="text-center">@report.BU04_Balance</td>
                                     <td class="text-center">@report.CP03_Accured</td>
-                                    <td class="text-center" id="cp03-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="cp03">@report.CP03_Leave</td>
+                                    <td class="text-center note"><a href="#" id="cp03-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="cp03"> @report.CP03_Leave</a></td>
                                     <td class="text-center">@report.CP03_Balance</td>
                                     <td class="text-center">@report.OL07_Accured</td>
                                     <td class="text-center">@report.ML06_Accured</td>
@@ -260,11 +277,11 @@
             dataType: 'JSON',
             beforeSend: function () {
                 LoadingShow();
-                $('#detail-table tbody').html("");
+                $('#detail-table tbody').html('');
                 $('#detail-fullname').text('');
             },
             success: function (data) {
-                $('#detail-table tbody').html("");
+                $('#detail-table tbody').html('');
                 if (data.message == 'Y') {
                     $('#detailLeaveModal').modal('show');
                     var SubmithtmlPage = '';
@@ -299,10 +316,10 @@
             }, complete: function (res) {
                 LoadingHide();
             },
-            error: function (er) {
+            error: function (xhr, status, error) {
                 Swal.fire({
                     icon: 'error',
-                    html: '<p>GetDetailReport :</p><p>' + er.error + '</p>',
+                    html: '<p>GetDetailReport :</p><p>' + error + '</p>',
                     confirmButtonColor: '#d33',
                     confirmButtonText: 'ปิด | Close',
                     allowOutsideClick: false,
