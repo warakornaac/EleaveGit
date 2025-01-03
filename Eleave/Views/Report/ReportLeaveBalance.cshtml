@@ -149,7 +149,7 @@
                                     <td class="text-center">@report.Months</td>
                                     <td class="text-center">@report.Days</td>
                                     <td class="text-center">@report.AL02_Accured</td>
-                                    <td class="text-center @report.AL02_Leave > 0 ?? " ":" note""><a href="#" id="al02-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="al02"> @report.AL02_Leave</a></td>
+                                    <td class="text-center note"><a href="#" id="al02-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="al02"> @report.AL02_Leave</a></td>
                                     <td class="text-center">@report.AL02_Balance</td>
                                     <td class="text-center">@report.SL01_Accured</td>
                                     <td class="text-center note"><a href="#" id="sl01-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="sl01"> @report.SL01_Leave</a></td>
@@ -267,7 +267,7 @@
     });
     function getDetailReport(empID,type,year) {
         $.ajax({
-            url: '@Url.Action("DetailReport", "Report")',
+            url: '@Url.Action("ReportDetail", "Report")',
             data: {
                 EMP: empID,
                 LEVTYP: type,
