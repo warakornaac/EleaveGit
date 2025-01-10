@@ -10,9 +10,9 @@ namespace Eleave.Models
     {
         public string ID { get; set; }
         public string LeaveType { get; set; }
-        public int LeaveTaken { get; set; }
-        public int ClosingBal { get; set; }
-        public int AccuredLeave { get; set; }
-        public int WaitApprove { get; set; }
+        public decimal LeaveTaken { get; set; }
+        public decimal ClosingBal { get; set; }
+        public decimal AccuredLeave { get; set; }
+        public decimal WaitApprove { get; set; }
     }
 }

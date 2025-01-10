@@ -5,43 +5,43 @@
 
 <ul class="nav pcoded-inner-navbar">
     <li class="nav-item pt-2">
-        <a href="@Url.Action("Index","Home")" class="nav-link "><span class="pcoded-micon"><i class="feather icon-home"></i></span><span class="pcoded-mtext">หน้าแรก</span></a>
+        <a href="@Url.Action("Index","Home")" class="nav-link "><span class="pcoded-micon"><i class="feather icon-home"></i></span><span class="pcoded-mtext">หน้าแรก | Home</span></a>
     </li>
     <li class="nav-item pcoded-menu-caption pt-1">
-        <label>หัวข้อหลัก</label>
+        <label>หัวข้อหลัก | Menu</label>
     </li>
     <li class="nav-item">
-        <a href="@Url.Action("RequestForm","Leave")" class="nav-link "><span class="pcoded-micon"><i class="feather icon-file-plus"></i></span><span class="pcoded-mtext">บันทึกการลา</span></a>
+        <a href="@Url.Action("RequestForm","Leave")" class="nav-link "><span class="pcoded-micon"><i class="feather icon-file-plus"></i></span><span class="pcoded-mtext">บันทึกการลา | Leave Request</span></a>
     </li>
     <li class="nav-item">
-        <a href="@Url.Action("ManagerHistory","Leave")" class="nav-link "><span class="pcoded-micon"><i class="feather icon-grid"></i></span><span class="pcoded-mtext">ประวัติการลา</span></a>
+        <a href="@Url.Action("ManagerHistory","Leave")" class="nav-link "><span class="pcoded-micon"><i class="feather icon-grid"></i></span><span class="pcoded-mtext">ประวัติการลา | History</span></a>
     </li>
     <li class="nav-item pcoded-menu-caption pt-1">
-        <label>รับทราบคำร้อง</label>
+        <label>รับทราบคำร้อง | Acknowledge </label>
     </li>
     <li class="nav-item">
-        <a href="@Url.Action("AdminAcknowledge","Acknowledge")" class="nav-link "><span class="pcoded-micon"><i class="feather icon-user-check"></i></span><span class="pcoded-mtext">รับทราบคำร้อง</span></a>
+        <a href="@Url.Action("AdminAcknowledge","Acknowledge")" class="nav-link "><span class="pcoded-micon"><i class="feather icon-user-check"></i></span><span class="pcoded-mtext">รับทราบคำร้อง | Acknowledge</span></a>
     </li>
     <li class="nav-item pcoded-menu-caption pt-1">
-        <label>ผู้ดูแลระบบ</label>
+        <label>ผู้ดูแลระบบ | Administrator</label>
     </li>
     <li class="nav-item">
-        <a href="@Url.Action("ManagerEmployee","Employee")" class="nav-link "><span class="pcoded-micon"><i class="feather icon-user"></i></span><span class="pcoded-mtext">จัดการผู้ใช้งาน</span></a>
+        <a href="@Url.Action("ManagerEmployee","Employee")" class="nav-link "><span class="pcoded-micon"><i class="feather icon-user"></i></span><span class="pcoded-mtext">จัดการผู้ใช้งาน | Manage Employee</span></a>
     </li>
     <li class="nav-item pcoded-hasmenu">
-        <a href="#" class="nav-link "><span class="pcoded-micon"><i class="fa fa-cog"></i></span><span class="pcoded-mtext">ตั่งค่า</span></a>
+        <a href="#" class="nav-link "><span class="pcoded-micon"><i class="fa fa-cog"></i></span><span class="pcoded-mtext">ตั้งค่า | Setting</span></a>
         <ul class="pcoded-submenu">
-            <li><a href="@Url.Action("ImportExcel","Employee")" target="">Import ข้อมูลพนักงาน</a></li>
-            <li><a href="@Url.Action("Setting","Employee")" target="">สิทธิ์เข้าใช้งาน</a></li>
-            <li><a href="@Url.Action("ApprovflowSetting","Employee")" target="">ลำดับการอนุมัติ</a></li>
+            <li><a href="@Url.Action("ImportExcel","Employee")" target="">Import ข้อมูลพนักงาน | Import Empolyee</a></li>
+            <li><a href="@Url.Action("Setting","Employee")" target="">สิทธิ์เข้าใช้งาน | Permission</a></li>
+            <li><a href="@Url.Action("ApprovflowSetting","Employee")" target="">ลำดับการอนุมัติ | Approval Flow</a></li>
         </ul>
     </li>
     <li class="nav-item pcoded-menu-caption">
-        <label>รายงาน</label>
+        <label>รายงาน | Reports</label>
     <li class="nav-item pcoded-hasmenu">
-        <a href="#!" class="nav-link "><span class="pcoded-micon"><i class="feather icon-lock"></i></span><span class="pcoded-mtext">รายงาน</span></a>
+        <a href="#!" class="nav-link "><span class="pcoded-micon"><i class="feather icon-lock"></i></span><span class="pcoded-mtext">รายงาน | Reports</span></a>
         <ul class="pcoded-submenu">
-            <li><a href="@Url.Action("ReportLeaveBalance","Report")" target="">รายงานการลา</a></li>
+            <li><a href="@Url.Action("ReportLeaveBalance","Report")" target="">รายงานการลา | LeaveType balance Reports</a></li>
             @*<li><a href="auth-signin.html" target="_blank">รายงาน 2</a></li>*@
         </ul>
     </li>

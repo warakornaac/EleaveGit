@@ -1,0 +1,327 @@
+﻿@model IEnumerable<Eleave.Models.ReportLeaveBalanceMonth>
+@{
+    ViewBag.Title = "รายงานการลารายเดือน";
+}
+<style>
+    th, td {
+        white-space: nowrap;
+    }
+
+    div.dataTables_wrapper {
+        width: 800px;
+        margin: 0 auto;
+    }
+
+    .note {
+        position: relative;
+    }
+
+        .note:after { /* Magic Happens Here!!! */
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 0;
+            height: 0;
+            display: block;
+            border-left: 20px solid transparent;
+            border-bottom: 20px solid transparent;
+            border-top: 20px solid #f00;
+        }
+    /* </magic> */
+</style>
+<div class="page-header">
+    <div class="page-block">
+        <div class="row align-items-center">
+            <div class="col-lg-12">
+                <div class="page-header-title">
+                    <h5 class="m-b-10">รายงานการลา</h5>
+                </div>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index","Home")"><i class="feather icon-home"></i></a></li>
+                    <li class="breadcrumb-item"><a href="@Url.Action("ReportLeaveBalanceMonth","Report")">รายงานการลารายเดือน</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            @using (Html.BeginForm("ReportLeaveBalanceMonthSearch", "Report", FormMethod.Post, new { @id = "formsearch" }))
+            {
+                <div class="card-body p-3 m-0">
+                    @Html.AntiForgeryToken()
+                    <div class="row">
+                        <div class="form-group col-md-3">
+                            @Html.Label("บริษัท | Company", new { @class = "font-weight-bold" })
+                            @Html.DropDownList("Company", new List<SelectListItem>
+                                    {
+                                        new SelectListItem() {Text="AAC", Value="AAC"},
+                                        new SelectListItem() {Text="TRU", Value="TRU"},
+                                        new SelectListItem(){Text="OMP",Value="OMP"}
+                                    }, "Select Company | เลือกบริษัท", new { @class = "custom-select", @id = "Company-selector" })
+                        </div>
+                        <div class="form-group col-md-3">
+                            @Html.Label("แผนก | Department", new { @class = "font-weight-bold" })
+                            @Html.DropDownList("Department", new SelectList(ViewBag.DepartmentList, "LookValue", "LookDesc"), "Select department | เลือกหน่วยงาน", new { @class = "custom-select", @id = "department-search" })
+                        </div>
+                        <div class="form-group col-md-3">
+                            @Html.Label("เริ่มต้น | Begin", new { @class = "font-weight-bold" })
+                            @Html.TextBox("StartDate", null, new { @class = "form-control", @id = "start-date", @placeholder = "--/--/--" })
+                            @Html.Hidden("StartDateHidden", "", new { @id = "start-date-hidden" })
+                        </div>
+                        <div class="form-group col-md-3">
+                            @Html.Label("จนถึง | End", new { @class = "font-weight-bold" })
+                            @Html.TextBox("EndDate", null, new { @class = "form-control", @id = "end-date", @placeholder = "--/--/--" })
+                            @Html.Hidden("EndDateHidden", "", new { @id = "end-date-hidden" })
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer p-1">
+                    <div class="form-group float-end m-2">
+                        <input type="button" value="ล้าง | Clear" class="btn btn-secondary" id="reset-btn" />
+                        <input type="submit" value="ค้นหา | Search" class="btn btn-primary" />
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped" id="report-leave-balance-month-tbl">
+                        <thead>
+                            <tr>
+                                <th class="text-center">No. | ลำดับ</th>
+                                <th class="text-center">Company | บริษัท</th>
+                                <th class="text-center">Employee ID | รหัสพนักงาน</th>
+                                <th class="text-center">Employee Name | ชื่อพนักงาน</th>
+                                <th class="text-center">Department | แผนก</th>
+                                <th class="text-center">Position | ตำแหน่ง</th>
+                                <th class="text-center">Start Date | วันที่เริ่มทำงาน</th>
+                                <th class="text-center">Annual leave | ลาพักร้อน</th>
+                                <th class="text-center">Sick Leave | ลาป่วย</th>
+                                <th class="text-center">Business Leave | สิทธิ์ลากิจ</th>
+                                @*<th class="text-center">Compensation Leave | สิทธิ์หยุดชดเชย</th>*@
+                                <th class="text-center">Ordination Leave | ลาบวช</th>
+                                <th class="text-center">Maternity  Leave | ลาคลอด</th>
+                                <th class="text-center">Other | อื่นๆ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                int i = 0;
+                            }
+                            @foreach (var report in Model)
+                            {
+                                i++;
+                                <tr>
+                                    <td class="text-center">@i</td>
+                                    <td class="text-center">@report.Company</td>
+                                    <td class="text-center">@report.EmpId</td>
+                                    <td class="text-center">@report.EmpName</td>
+                                    <td class="text-center">@report.DeptName</td>
+                                    <td class="text-center">@report.Position</td>
+                                    <td class="text-center">@report.StartDate</td>
+                                    <td class="text-center @(report.Vacation > 0 ? "note" : "")" id="vac-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="al02">@report.Vacation.ToString("0.#")</td>
+                                    <td class="text-center @(report.SickLeave > 0 ? "note" : "")" id="sick-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="sl01">@report.SickLeave.ToString("0.#")</td>
+                                    <td class="text-center @(report.PersonalLeave > 0 ? "note" : "")" id="person-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="bu04">@report.PersonalLeave.ToString("0.#")</td>
+                                    <td class="text-center @(report.OrdinationLeave > 0 ? "note" : "")" id="ordinate-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="ol07">@report.OrdinationLeave.ToString("0.#")</td>
+                                    <td class="text-center @(report.MaternityLeave > 0 ? "note" : "")" id="meternity-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="ml06">@report.MaternityLeave.ToString("0.#")</td>
+                                    <td class="text-center @(report.Other > 0 ? "note" : "")" id="other-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="other">@report.Other.ToString("0.#")</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="detailLeaveModal" tabindex="-1" role="dialog" aria-labelledby="detailLeaveModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">รายละเอียด | Detail</h5>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close">Close | ปิด</button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <h5>ชื่อ-นามสกุล | Name : <span id="detail-fullname"></span></h5>
+                    </div>
+                    <div class="col-12">
+                        <div class="table-responsive-sm table-responsive">
+                            <table class="table table-hover" id="detail-table">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">ประเภทการลา | Leave Type</th>
+                                        <th class="text-center">ลาวันที่ | Leave Date</th>
+                                        <th class="text-center">จำนวนวัน | Total Days </th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#department-search').select2({
+            width: '100%'
+        });
+        var isMdOrLarger = window.matchMedia("(min-width: 768px)").matches;
+        $('#report-leave-balance-month-tbl').DataTable({
+            paging: true,
+            fixedColumns: isMdOrLarger
+                ? { start: 5, end: 0 } // ใช้งาน fixedColumns ถ้าหน้าจอเป็น md ขึ้นไป
+                : false,
+            columnDefs: [
+                {
+                    targets: '_all',
+                    className: "dt-head-center"
+                }
+            ],
+            pageLength: 100,
+            lengthChange: false,
+            searching: false,
+            ordering: false,
+            select: false,
+            language: {
+                info: "แสดง _START_ ถึง _END_ จากทั้งหมด _TOTAL_ คน",
+                infoEmpty: "ไม่มีข้อมูลให้แสดง"
+            },
+            screenX: true,
+            scrollY: 500,
+            dom: '<"d-flex justify-content-between mb-3"B>t<"d-flex align-items-center"i<"ml-3"p>>', // ปรับตำแหน่ง DOM
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+                    text: 'Export to Excel', // ข้อความปุ่ม
+                    className: 'btn btn-success', // เพิ่มคลาสเพื่อปรับแต่งปุ่ม
+                    title: 'รายงานข้อมูลรวมเดือน'//, // ชื่อไฟล์ Excel
+                    //exportOptions: {
+                    //    columns: ':visible' // Export เฉพาะคอลัมน์ที่มองเห็น
+                    //}
+                }
+            ]
+        });
+    });
+
+    $('#start-date').datepicker({
+        orientation: "bottom auto",
+        format: "dd/mm/yyyy",
+        autoclose: true
+    });
+    $('#end-date').datepicker({
+        orientation: "bottom auto",
+        format: "dd/mm/yyyy",
+        autoclose: true
+    });
+    $('#start-date').inputmask('99/99/9999');
+    $('#end-date').inputmask('99/99/9999');
+    $(document).ready(function () {
+
+        var startDate = $('#start-date').val();
+        var endDate = $('#end-date').val();
+        $('#start-date-hidden').val(startDate);
+        $('#end-date-hidden').val(endDate);
+
+    });
+    $(document).on('click', '#reset-btn', function () {
+        $('#Company-selector').val('').trigger('change');
+        $('#department-search').val('').trigger('change');
+        $('#start-date').val('');
+        $('#end-date').val('');
+    });
+    $(document).on('click', '[id*="-detail-"]', function () {
+        var emp = $(this).data('emp');
+        var type = $(this).data('levtyp');
+        var startdate = $('#start-date-hidden').val();
+        var enddate = $('#end-date-hidden').val();
+
+        //console.log('EmpID : ' + emp);
+        //console.log('Type :' + type);
+        //console.log('Start Date: ' + startdate);
+        //console.log('End Date: ' + enddate);
+        getDetailReport(emp, type, startdate, enddate);
+
+    });
+
+
+
+    function getDetailReport(empID,type,start,end) {
+        $.ajax({
+            url: '@Url.Action("ReportDetailMonth", "Report")',
+            data: {
+                EmpID: empID,
+                LeavTyp: type,
+                StartDate: start,
+                EndDate: end
+            },
+            type: 'POST',
+            dataType: 'JSON',
+            beforeSend: function () {
+                LoadingShow();
+                $('#detail-table tbody').html('');
+                $('#detail-fullname').text('');
+            },
+            success: function (data) {
+                $('#detail-table tbody').html('');
+                if (data.message == 'Y') {
+                    $('#detailLeaveModal').modal('show');
+                    var SubmithtmlPage = '';
+                    if (data.Detail.length > 0) {
+                        for (var i = 0; i < data.Detail.length; i++) {
+                            SubmithtmlPage += '<tr>';
+                            SubmithtmlPage += '<td>' + data.Detail[i].Description + '</td>';
+                            SubmithtmlPage += '<td>' + data.Detail[i].TimeLev + '</td>';
+                            SubmithtmlPage += '<td>' + data.Detail[i].NumDay + '</td>';
+                            SubmithtmlPage += '</tr>';
+                        }
+                        $('#detail-fullname').text(data.Detail[0].Fullname);
+                    }
+                    else {
+                        SubmithtmlPage += '<tr>';
+                        SubmithtmlPage += '<td class="text-center" colspan="3">ไม่พบข้อมูล | No Data</td>';
+                        SubmithtmlPage += '</tr>';
+                    }
+
+                    $('#detail-table tbody').append(SubmithtmlPage);
+                }
+                else {
+                    Swal.fire({
+                        icon: 'error',
+                        html: '<p>GetDetailReport :</p><p>' + data.message + '</p>',
+                        confirmButtonColor: '#d33',
+                        confirmButtonText: 'ปิด | Close',
+                        allowOutsideClick: false,
+                        focusConfirm: false,
+                    });
+                }
+            }, complete: function (res) {
+                LoadingHide();
+            },
+            error: function (xhr, status, error) {
+                Swal.fire({
+                    icon: 'error',
+                    html: '<p>GetDetailReport :</p><p>' + error + '</p>',
+                    confirmButtonColor: '#d33',
+                    confirmButtonText: 'ปิด | Close',
+                    allowOutsideClick: false,
+                    focusConfirm: false,
+                });
+            }
+
+        });
+    }
+</script>

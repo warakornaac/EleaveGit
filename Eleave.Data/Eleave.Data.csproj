@@ -49,6 +49,7 @@
     <Compile Include="GetApprovalFlowList.cs" />
     <Compile Include="GetApprovalRequest.cs" />
     <Compile Include="GetDetailReport.cs" />
+    <Compile Include="GetDetailReportMonth.cs" />
     <Compile Include="GetLeaveBalance.cs" />
     <Compile Include="GetCommentAcknowledge.cs" />
     <Compile Include="GetCommentApprover.cs" />
@@ -61,6 +62,7 @@
     <Compile Include="GetProfile.cs" />
     <Compile Include="GetProfileList.cs" />
     <Compile Include="GetReportLeaveBalance.cs" />
+    <Compile Include="GetReportLeaveBalanceMonth.cs" />
     <Compile Include="GetRequestAcknowledge.cs" />
     <Compile Include="GetRequestDetail.cs" />
     <Compile Include="GetRequestFile.cs" />

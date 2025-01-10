@@ -274,12 +274,17 @@
         });
         $('#employee-table').dataTable({
             dom: '<t><"d-flex align-items-center"ip>',
+            fixedColumns: {
+                start: 7,
+                end: 0
+            },
             paging: true,
             pageLength: 50,
             lengthChange: false,
             searching: false,
             ordering: false,
             select: false,
+            scrollY: 500,
             language: {
                 info: "แสดง _START_ ถึง _END_ จากทั้งหมด _TOTAL_ คน",
                 infoEmpty: "ไม่มีข้อมูลให้แสดง"

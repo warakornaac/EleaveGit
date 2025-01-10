@@ -5,6 +5,13 @@ using System.Web;
 
 namespace Eleave.Models
 {
+    public class SearchReportMonth
+    {
+        public string Company { get; set; }
+        public string DepartMent { get; set; }
+        public string StartDate { get; set; }
+        public string EndDate { get; set; }
+    }
     public class Department
     {
         public string DeptId { get; set; }

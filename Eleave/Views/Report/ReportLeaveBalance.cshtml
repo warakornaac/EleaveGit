@@ -26,6 +26,11 @@
             border-bottom: 20px solid transparent;
             border-top: 20px solid #f00;
         }
+
+    .dt-head-center {
+        text-align: center;
+    }
+
     /* </magic> */
 </style>
 <div class="page-header">
@@ -51,7 +56,7 @@
                 <div class="card-body p-3 m-0">
                     @Html.AntiForgeryToken()
                     <div class="row">
-                        <div class="form-group col-md-6">
+                        <div class="form-group col-md-3">
                             @Html.Label("บริษัท | Company", new { @class = "font-weight-bold" })
                             @Html.DropDownList("Company", new List<SelectListItem>
                                     {
@@ -60,7 +65,7 @@
                                         new SelectListItem(){Text="OMP",Value="OMP"}
                                     }, "Select Company | เลือกบริษัท", new { @class = "custom-select", @id = "Company-selector" })
                         </div>
-                        <div class="form-group col-md-6">
+                        <div class="form-group col-md-3">
                             @{
                                 var currentYear = DateTime.Now.Year;
                                 var years = Enumerable.Range(currentYear - 3, 4).Reverse()
@@ -73,11 +78,11 @@
                             @Html.Label("ปี | Year", new { @class = "font-weight-bold" })
                             @Html.DropDownList("Year", years, new { @class = "form-control", @id = "year-dd" })
                         </div>
-                        <div class="form-group col-md-6">
+                        <div class="form-group col-md-3">
                             @Html.Label("แผนก | Department", new { @class = "font-weight-bold" })
                             @Html.DropDownList("Department", new SelectList(ViewBag.DepartmentList, "LookValue", "LookDesc"), "Select department | เลือกหน่วยงาน", new { @class = "custom-select", @id = "department-search" })
                         </div>
-                        <div class="form-group col-md-6">
+                        <div class="form-group col-md-3">
                             @Html.Label("รหัสผนักงาน | EmployeeID", new { @class = "font-weight-bold" })
                             @Html.TextBox("EmpID", null, new { @class = "form-control", @id = "emp-tb", @placeholder = "Enter EmpID | กรอกรหัสผนักงาน" })
                         </div>
@@ -99,38 +104,59 @@
                     <table class="table table-bordered table-striped" id="report-leave-balance-tbl">
                         <thead>
                             <tr>
-                                <th class="text-center">No. | ลำดับ</th>
-                                <th class="text-center">Department | แผนก</th>
-                                <th class="text-center">Employee ID | รหัสพนักงาน</th>
-                                <th class="text-center">Employee Name | ชื่อพนักงาน</th>
-                                <th class="text-center">Position | ตำแหน่ง</th>
-                                <th class="text-center">Start Date | วันเริ่มงาน</th>
-                                <th class="text-center">Years of Service | อายุงาน (ปี)</th>
-                                <th class="text-center">Months of Service | อายุงาน (เดือน)</th>
-                                <th class="text-center">Days of Service | อายุงาน (วัน)</th>
+                                <th class="text-center" rowspan="2" align="center">No. | ลำดับ</th>
+                                <th class="text-center" rowspan="2" align="center">Department | แผนก</th>
+                                <th class="text-center" rowspan="2" align="center">Employee ID | รหัสพนักงาน</th>
+                                <th class="text-center" rowspan="2" align="center">Employee Name | ชื่อพนักงาน</th>
+                                <th class="text-center" rowspan="2" align="center">Position | ตำแหน่ง</th>
+                                <th class="text-center" rowspan="2" align="center">Start Date | วันเริ่มงาน</th>
+                                <th class="text-center" rowspan="2" align="center">Years of Service | อายุงาน (ปี)</th>
+                                <th class="text-center" rowspan="2" align="center">Months of Service | อายุงาน (เดือน)</th>
+                                <th class="text-center" rowspan="2" align="center">Days of Service | อายุงาน (วัน)</th>
 
-                                <th class="text-center">Vacation Entitlement | สิทธิ์ลาพักร้อน</th>
-                                <th class="text-center">Vacation Taken | ใช้ลาพักร้อน</th>
-                                <th class="text-center">Vacation Remaining | ลาพักร้อนคงเหลือ</th>
+                                <th class="text-center" colspan="3">Annual Leave | สิทธิ์ลาพักร้อน</th>
+                                @*<th class="text-center" rowspan="2" align="center" >Vacation Taken | ใช้ลาพักร้อน</th>
+                                    <th class="text-center" rowspan="2" align="center" >Vacation Remaining | ลาพักร้อนคงเหลือ</th>*@
 
-                                <th class="text-center">SickLeave Entitlement | สิทธิ์ลาป่วย</th>
-                                <th class="text-center">SickLeave Taken | ใช้ลาป่วย</th>
-                                <th class="text-center">SickLeave Remaining | ลาป่วยคงเหลือ</th>
+                                <th class="text-center" colspan="3">Sick Leave | สิทธิ์ลาป่วย</th>
+                                @*<th class="text-center" rowspan="2" align="center" >SickLeave Taken | ใช้ลาป่วย</th>
+                                    <th class="text-center" rowspan="2" align="center" >SickLeave Remaining | ลาป่วยคงเหลือ</th>*@
 
-                                <th class="text-center">PersonalLeave Entitlement (Paid) | สิทธิ์ลากิจ (ได้รับเงิน)</th>
-                                <th class="text-center">PersonalLeave Taken | ใช้ลากิจ</th>
-                                <th class="text-center">PersonalLeave Remaining | ลากิจคงเหลือ</th>
+                                <th class="text-center" colspan="3">Personal Leave (Paid) | สิทธิ์ลากิจ (ได้รับเงิน)</th>
+                                @*<th class="text-center" rowspan="2" align="center" >PersonalLeave Taken | ใช้ลากิจ</th>
+                                    <th class="text-center" rowspan="2" align="center" >PersonalLeave Remaining | ลากิจคงเหลือ</th>*@
 
-                                <th class="text-center">CompensationLeave Entitlement | สิทธิ์หยุดชดเชย</th>
-                                <th class="text-center">CompensationLeave Taken | ใช้หยุดชดเชย</th>
-                                <th class="text-center">CompensationLeave Remaining | หยุดชดเชยคงเหลือ</th>
+                                <th class="text-center" colspan="3">Compensation Leave | สิทธิ์หยุดชดเชย</th>
+                                @*<th class="text-center" rowspan="2" align="center" >CompensationLeave Taken | ใช้หยุดชดเชย</th>
+                                    <th class="text-center" rowspan="2" align="center" >CompensationLeave Remaining | หยุดชดเชยคงเหลือ</th>*@
 
-                                <th class="text-center">OrdinationLeave | ลาบวช</th>
-                                <th class="text-center">MaternityLeave | ลาคลอด</th>
-                                <th class="text-center">Other | อื่นๆ</th>
+                                <th class="text-center" rowspan="2" align="center">Ordination Leave | ลาบวช</th>
+                                <th class="text-center" rowspan="2" align="center">Maternity Leave | ลาคลอด</th>
+                                <th class="text-center" rowspan="2" align="center">Other | อื่นๆ</th>
+                            </tr>
+                            <tr>
+                                @*ลาพักร้อน*@
+                                <th>Total</th>
+                                <th>Taken</th>
+                                <th>Remaining</th>
 
+                                @*ลาป่วย*@
+                                <th>Total</th>
+                                <th>Taken</th>
+                                <th>Remaining</th>
+
+                                @*ลากิจ*@
+                                <th>Total</th>
+                                <th>Taken</th>
+                                <th>Remaining</th>
+
+                                @*หยุดชดเชย*@
+                                <th>Total</th>
+                                <th>Taken</th>
+                                <th>Remaining</th>
                             </tr>
                         </thead>
+
                         <tbody>
                             @{
                                 int i = 0;
@@ -148,21 +174,21 @@
                                     <td class="text-center">@report.Years</td>
                                     <td class="text-center">@report.Months</td>
                                     <td class="text-center">@report.Days</td>
-                                    <td class="text-center">@report.AL02_Accured</td>
-                                    <td class="text-center @(report.AL02_Leave > 0 ? "note" : "") "><a href="#" id="al02-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="al02"> @report.AL02_Leave</a></td>
-                                    <td class="text-center">@report.AL02_Balance</td>
-                                    <td class="text-center">@report.SL01_Accured</td>
-                                    <td class="text-center @(report.SL01_Leave > 0 ? "note" : "")"><a href="#" id="sl01-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="sl01"> @report.SL01_Leave</a></td>
-                                    <td class="text-center">@report.SL01_Balance</td>
-                                    <td class="text-center">@report.BU04_Accured</td>
-                                    <td class="text-center @(report.BU04_Leave > 0 ? "note" : "")"><a href="#" id="bu04-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="bu04"> @report.BU04_Leave</a> </td>
-                                    <td class="text-center">@report.BU04_Balance</td>
-                                    <td class="text-center">@report.CP03_Accured</td>
-                                    <td class="text-center  @(report.CP03_Leave > 0 ? "note" : "")"><a href="#" id="cp03-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="cp03"> @report.CP03_Leave</a></td>
-                                    <td class="text-center">@report.CP03_Balance</td>
-                                    <td class="text-center">@report.OL07_Accured</td>
-                                    <td class="text-center">@report.ML06_Accured</td>
-                                    <td class="text-center">@report.Other_Accured</td>
+                                    <td class="text-center">@report.AL02_Accured.ToString("0.#")</td>
+                                    <td class="text-center @(report.AL02_Leave > 0 ? "note" : "")" id="al02-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="al02"><a href="#"> @report.AL02_Leave.ToString("0.#")</a></td>
+                                    <td class="text-center">@report.AL02_Balance.ToString("0.#")</td>
+                                    <td class="text-center">@report.SL01_Accured.ToString("0.#")</td>
+                                    <td class="text-center @(report.SL01_Leave > 0 ? "note" : "")" id="sl01-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="sl01"><a href="#"> @report.SL01_Leave.ToString("0.#")</a></td>
+                                    <td class="text-center">@report.SL01_Balance.ToString("0.#")</td>
+                                    <td class="text-center">@report.BU04_Accured.ToString("0.#")</td>
+                                    <td class="text-center @(report.BU04_Leave > 0 ? "note" : "")" id="bu04-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="bu04"><a href="#"> @report.BU04_Leave.ToString("0.#")</a> </td>
+                                    <td class="text-center">@report.BU04_Balance.ToString("0.#")</td>
+                                    <td class="text-center">@report.CP03_Accured.ToString("0.#")</td>
+                                    <td class="text-center  @(report.CP03_Leave > 0 ? "note" : "")" id="cp03-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="cp03"><a href="#"> @report.CP03_Leave.ToString("0.#")</a></td>
+                                    <td class="text-center">@report.CP03_Balance.ToString("0.#")</td>
+                                    <td class="text-center">@report.OL07_Accured.ToString("0.#")</td>
+                                    <td class="text-center">@report.ML06_Accured.ToString("0.#")</td>
+                                    <td class="text-center">@report.Other_Accured.ToString("0.#")</td>
                                 </tr>
                             }
                         </tbody>
@@ -227,8 +253,18 @@
         //        infoEmpty: "ไม่มีข้อมูลให้แสดง"
         //    }
         //});
+        var isMdOrLarger = window.matchMedia("(min-width: 768px)").matches;
         $('#report-leave-balance-tbl').DataTable({
             paging: true,
+            fixedColumns: isMdOrLarger
+                ? { start: 5, end: 0 } // ใช้งาน fixedColumns ถ้าหน้าจอเป็น md ขึ้นไป
+                : false,
+            columnDefs: [
+                {
+                    targets: '_all',
+                    className: "dt-head-center"
+                }
+            ],
             pageLength: 100,
             lengthChange: false,
             searching: false,
@@ -238,13 +274,14 @@
                 info: "แสดง _START_ ถึง _END_ จากทั้งหมด _TOTAL_ คน",
                 infoEmpty: "ไม่มีข้อมูลให้แสดง"
             },
+            scrollY: 500,
             dom: '<"d-flex justify-content-between mb-3"B>t<"d-flex align-items-center"i<"ml-3"p>>', // ปรับตำแหน่ง DOM
             buttons: [
                 {
                     extend: 'excelHtml5',
                     text: 'Export to Excel', // ข้อความปุ่ม
                     className: 'btn btn-success', // เพิ่มคลาสเพื่อปรับแต่งปุ่ม
-                    title: 'รายงานข้อมูล'//, // ชื่อไฟล์ Excel
+                    title: 'รายงานข้อมูลรวมปี'//, // ชื่อไฟล์ Excel
                     //exportOptions: {
                     //    columns: ':visible' // Export เฉพาะคอลัมน์ที่มองเห็น
                     //}

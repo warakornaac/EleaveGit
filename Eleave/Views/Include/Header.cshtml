@@ -45,10 +45,7 @@
                             }
                         </span>
                     </a>
-                    @*<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ModalAlert">
-                            Launch static backdrop modal
-                        </button>*@
-                    <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+                    <a class="dropdown-toggle" href="#" data-toggle="dropdown" id="notificate-alert">
 
                         <i class="fa fa-bell" id="bell_alert"></i>
 
@@ -151,8 +148,8 @@
                                 </a>*@
                         </div>
                         <ul class="pro-body">
-                            <li><a href="@Url.Action("ViewProfile","Employee")" class="dropdown-item"><i class="feather icon-user"></i> โปรไฟล์</a></li>
-                            <li><a href="@Url.Action("Logout","Home")" class="dropdown-item"><i class="feather icon-log-out"></i> ออกจากระบบ</a></li>
+                            <li><a href="@Url.Action("ViewProfile","Employee")" class="dropdown-item"><i class="feather icon-user"></i> โปรไฟล์ | Profile</a></li>
+                            <li><a href="@Url.Action("Logout","Home")" class="dropdown-item"><i class="feather icon-log-out"></i> ออกจากระบบ | Sign Out</a></li>
                         </ul>
                     </div>
                 </div>
@@ -192,6 +189,9 @@
 <script>
     $(document).ready(function () {
         UserSession();
+        $('#notificate-alert').click(function () {
+            UserSession();
+        });
     });
     $(document).on('click', '[id^="emp_btn_"]', async function () {
         var con = $(this).data('reqno');
@@ -219,6 +219,10 @@
     $(document).on('click', '#alert_refresh', function () {
         UserSession();
     });
+    $(document).on('click', '#notificate-alert', function () {
+        UserSession();
+    });
+
     //setInterval(function () {
     //    UserSession();
     //}, 6000);
