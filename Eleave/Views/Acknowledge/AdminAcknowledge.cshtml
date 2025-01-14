@@ -118,61 +118,160 @@
                             @{
                                 int i = 0;
                             }
-                            @foreach (var item in Model)
+                            @foreach (var itemAck in Model)
                             {
                                 i++;
                                 var colorStatus = string.Empty;
                                 var iconStatus = string.Empty;
+                                string colorBgStatus = string.Empty;
                                 <tr>
                                     <td class="text-center">@i</td>
                                     <td class="text-center">
-                                        <div class="btn btn-warning btn-xs p-1" id="ackbtn_@item.ReqNo" data-reqno="@item.ReqNo" data-empid="@item.EmpId"><span class="fa fa-eye p-1"></span></div>
+                                        <div class="btn btn-warning btn-xs p-1" id="ackbtn_@itemAck.ReqNo" data-reqno="@itemAck.ReqNo" data-empid="@itemAck.EmpId"><span class="fa fa-eye p-1"></span></div>
                                     </td>
-                                    <td class="text-center">@item.ReqNo</td>
-                                    <td class="text-center">@(item.ReqDate )</td>
-                                    <td class="text-center">@item.ReqType</td>
-                                    <td class="text-center">@item.Empname</td>
-                                    <td class="text-center">@item.LeaveType</td>
-                                    <td class="text-center">@(item.StartDate )</td>
-                                    <td class="text-center">@(item.EndDate )</td>
-                                    <td class="text-center">@item.NumDay</td>
-                                    @if (item.ReqStatus == "0")
+                                    <td class="text-center">@itemAck.ReqNo</td>
+                                    <td class="text-center">@(itemAck.ReqDate )</td>
+                                    <td class="text-center">@itemAck.ReqType</td>
+                                    <td class="text-center">@itemAck.Empname</td>
+                                    <td class="text-center">@itemAck.LeaveType</td>
+                                    <td class="text-center">@(itemAck.StartDate )</td>
+                                    <td class="text-center">@(itemAck.EndDate )</td>
+                                    <td class="text-center">@itemAck.NumDay</td>
+                                    @if (itemAck.ReqStatus == "0")
                                     {
                                         colorStatus = "text-warning";
                                         iconStatus = "fa fa-repeat";
+                                        colorBgStatus = "badge bg-warning rounded-pill";
+
 
                                     }
-                                    else if (item.ReqStatus == "1")
+                                    else if (itemAck.ReqStatus == "1")
                                     {
                                         colorStatus = "text-success";
                                         iconStatus = "fa fa-check";
+                                        colorBgStatus = "badge bg-success rounded-pill";
+
 
                                     }
-                                    else if (item.ReqStatus == "2")
+                                    else if (itemAck.ReqStatus == "2")
                                     {
                                         colorStatus = "text-danger";
                                         iconStatus = "fa fa-times";
+                                        colorBgStatus = "badge bg-danger rounded-pill";
+
                                     }
-                                    else if (item.ReqStatus == "3")
+                                    else if (itemAck.ReqStatus == "3")
                                     {
                                         colorStatus = "text-success";
                                         iconStatus = "fa fa-check";
+                                        colorBgStatus = "badge bg-success rounded-pill";
+
                                     }
-                                    else if (item.ReqStatus == "4")
+                                    else if (itemAck.ReqStatus == "4")
                                     {
                                         colorStatus = "text-danger";
                                         iconStatus = "fa fa-ban";
+                                        colorBgStatus = "badge bg-danger rounded-pill";
+
                                     }
-                                    <td class="text-center">
-                                        <div class="@colorStatus badge" style="font-size: 14px;"><i class="@iconStatus" aria-hidden="true"></i><span> @item.ReqStaDesc</span></div>
+                                    <td class="text-left">
+                                        <div class="@colorStatus badge" style="font-size: 14px;"><span class="@colorBgStatus"><i class="@iconStatus" aria-hidden="true"></i></span><span> @itemAck.ReqStaDesc</span></div>
                                     </td>
                                     <td style="max-width: 200px;">
-                                        <p class="p-0 m-0 text-truncate">@item.Remark</p>
+                                        <p class="p-0 m-0 text-truncate">@itemAck.Remark</p>
                                     </td>
-                                    <td class="text-center">@item.ApproveBy</td>
-                                    <td>@(item.ApproveDate )</td>
-                                    <td>@item.AcknowledgeBy</td>
-                                    <td>@(item.AcknowledgeDate )</td>
+
+                                    @*apprvby*@
+
+                                    @if (itemAck.ApproveBy != null && itemAck.ApproveBy.Contains(","))
+                                    {
+                                        <td class="text-left">
+                                            @{
+                                                string[] apprv = itemAck.ApproveBy.Split(',');
+                                                string apver = string.Empty;
+                                                string iconsta = string.Empty;
+                                                string iconbg = string.Empty;
+                                                foreach (var item in apprv)
+                                                {
+                                                    if (item.Contains(" | "))
+                                                    {
+                                                        string[] StatusNAme = item.Split('|');
+                                                        switch (StatusNAme[0].Trim())
+                                                        {
+                                                            case "0": iconsta = "fa fa-repeat "; iconbg = "bg-warning"; break;
+                                                            case "1": iconsta = "fa fa-check "; iconbg = "bg-success"; break;
+                                                            case "2": iconsta = "fa fa-times "; iconbg = "bg-danger"; break;
+                                                            case "3": iconsta = "fa fa-check "; iconbg = "bg-success"; break;
+                                                            default: iconsta = "fa fa-ban "; iconbg = "bg-danger"; break;
+
+                                                        }
+                                                        if (StatusNAme[0].Trim() == "4")
+                                                        {
+                                                            <span class="badge rounded-pill @iconbg">
+                                                                <i class="@iconsta" aria-hidden="true"></i>
+                                                            </span>
+                                                            <del>@StatusNAme[1]</del> <br />
+
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="badge rounded-pill @iconbg">
+                                                                <i class="@iconsta" aria-hidden="true"></i>
+                                                            </span>
+                                                            <span>@StatusNAme[1]</span><br />
+                                                        }
+
+                                                    }
+                                                }
+                                            }
+                                        </td>
+
+                                    }
+                                    else
+                                    {
+                                        //<td class="text-center">@leave.ApproveBy</td>
+
+
+                                        <td class="text-left">
+                                            @{
+                                                if (itemAck.ApproveBy != null)
+                                                {
+                                                    string[] apprv = itemAck.ApproveBy.Split(',');
+
+                                                    string apver = string.Empty;
+                                                    string iconsta = string.Empty;
+                                                    string iconbg = string.Empty;
+                                                    foreach (var item in apprv)
+                                                    {
+                                                        if (item.Contains(" | "))
+                                                        {
+
+                                                            string[] StatusNAme = item.Split('|');
+                                                            switch (StatusNAme[0].Trim())
+                                                            {
+                                                                case "0": iconsta = "fa fa-repeat "; iconbg = "bg-warning"; break;
+                                                                case "1": iconsta = "fa fa-check "; iconbg = "bg-success"; break;
+                                                                case "2": iconsta = "fa fa-times "; iconbg = "bg-danger"; break;
+                                                                case "3": iconsta = "fa fa-check "; iconbg = "bg-success"; break;
+                                                                default: iconsta = "fa fa-ban "; iconbg = "bg-danger"; break;
+
+                                                            }
+
+                                                            <span class="badge rounded-pill @iconbg">
+                                                                <i class="@iconsta" aria-hidden="true"></i>
+                                                            </span>
+                                                            <span>@StatusNAme[1]</span><br />
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        </td>
+                                    }
+                                    @*apprvby*@
+
+                                    <td>@(itemAck.ApproveDate )</td>
+                                    <td>@itemAck.AcknowledgeBy</td>
+                                    <td>@(itemAck.AcknowledgeDate )</td>
                                 </tr>
                             }
                         </tbody>
@@ -223,12 +322,12 @@
         $('#department-selector').select2({
             width: '100%'
         });
-        var isMdOrLarger = window.matchMedia("(min-width: 768px)").matches;
+        var isMdOrLarger = window.matchMedia("(min-width: 1600px)").matches;
         $('#request-table').dataTable({
             //orderFixed: [[2, 'asc']],
             dom: '<t><"d-flex align-items-center"ip>',
             fixedColumns: isMdOrLarger
-                ? { start: 7, end: 0 } // ใช้งาน fixedColumns ถ้าหน้าจอเป็น md ขึ้นไป
+                ? { start: 6, end: 0 } // ใช้งาน fixedColumns ถ้าหน้าจอเป็น md ขึ้นไป
                 : false,
             paging: true,
             pageLength: 50,

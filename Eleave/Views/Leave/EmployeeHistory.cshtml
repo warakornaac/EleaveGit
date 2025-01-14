@@ -123,6 +123,7 @@
                                 i++;
                                 var colorStatus = string.Empty;
                                 var iconStatus = string.Empty;
+                                string colorBgStatus = string.Empty;
                                 <tr>
                                     <td class="vcenter">@i</td>
 
@@ -143,37 +144,130 @@
                                     {
                                         colorStatus = "text-warning";
                                         iconStatus = "fa fa-repeat";
+                                        colorBgStatus = "badge bg-warning rounded-pill";
 
                                     }
                                     else if (leave.ReqStatus == "1")
                                     {
                                         colorStatus = "text-success";
                                         iconStatus = "fa fa-check";
+                                        colorBgStatus = "badge bg-success rounded-pill";
 
                                     }
                                     else if (leave.ReqStatus == "2")
                                     {
                                         colorStatus = "text-danger";
                                         iconStatus = "fa fa-times";
+                                        colorBgStatus = "badge bg-danger rounded-pill";
+
                                     }
                                     else if (leave.ReqStatus == "3")
                                     {
                                         colorStatus = "text-success";
                                         iconStatus = "fa fa-check";
+                                        colorBgStatus = "badge bg-success rounded-pill";
+
                                     }
                                     else if (leave.ReqStatus == "4")
                                     {
                                         colorStatus = "text-danger";
                                         iconStatus = "fa fa-ban";
+                                        colorBgStatus = "badge bg-danger rounded-pill";
+
                                     }
-                                    <td class="text-center">
-                                        <div class="@colorStatus badge" style="font-size: 14px;"><i class="@iconStatus" aria-hidden="true"></i><span> @leave.ReqStaDesc</span></div>
+                                    <td class="text-left">
+                                        <div class="@colorStatus" style="font-size: 14px;"><span class="@colorBgStatus"><i class="@iconStatus" aria-hidden="true"></i></span><span> @leave.ReqStaDesc</span></div>
                                     </td>
 
                                     <td style="max-width: 200px;">
                                         <p class="p-0 m-0 text-truncate">@leave.Remark</p>
                                     </td>
-                                    <td class="text-center">@leave.ApproveBy</td>
+                                    @*<td class="text-center">@leave.ApproveBy</td>*@
+
+                                    @*apprvby*@
+
+                                    @if (leave.ApproveBy.Contains(","))
+                                    {
+                                        <td class="text-left">
+                                            @{
+                                                string[] apprv = leave.ApproveBy.Split(',');
+                                                string apver = string.Empty;
+                                                string iconsta = string.Empty;
+                                                string iconbg = string.Empty;
+                                                foreach (var item in apprv)
+                                                {
+                                                    if (item.Contains(" | "))
+                                                    {
+
+                                                        string[] StatusNAme = item.Split('|');
+                                                        switch (StatusNAme[0].Trim())
+                                                        {
+                                                            case "0": iconsta = "fa fa-repeat "; iconbg = "bg-warning"; break;
+                                                            case "1": iconsta = "fa fa-check "; iconbg = "bg-success"; break;
+                                                            case "2": iconsta = "fa fa-times "; iconbg = "bg-danger"; break;
+                                                            case "3": iconsta = "fa fa-check "; iconbg = "bg-success"; break;
+                                                            default: iconsta = "fa fa-ban "; iconbg = "bg-danger"; break;
+
+                                                        }
+                                                        if (StatusNAme[0].Trim() == "4")
+                                                        {
+                                                            <span class="badge rounded-pill @iconbg">
+                                                                <i class="@iconsta" aria-hidden="true"></i>
+                                                            </span>
+                                                            <del>@StatusNAme[1]</del> <br />
+
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="badge rounded-pill @iconbg">
+                                                                <i class="@iconsta" aria-hidden="true"></i>
+                                                            </span>
+                                                            <span>@StatusNAme[1]</span><br />
+                                                        }
+
+                                                    }
+                                                }
+                                            }
+                                        </td>
+
+                                    }
+                                    else
+                                    {
+                                        //<td class="text-center">@leave.ApproveBy</td>
+                                        <td class="text-left">
+                                            @{
+                                                string[] apprv = leave.ApproveBy.Split(',');
+
+                                                string apver = string.Empty;
+                                                string iconsta = string.Empty;
+                                                string iconbg = string.Empty;
+                                                foreach (var item in apprv)
+                                                {
+                                                    if (item.Contains(" | "))
+                                                    {
+
+                                                        string[] StatusNAme = item.Split('|');
+                                                        switch (StatusNAme[0].Trim())
+                                                        {
+                                                            case "0": iconsta = "fa fa-repeat "; iconbg = "bg-warning"; break;
+                                                            case "1": iconsta = "fa fa-check "; iconbg = "bg-success"; break;
+                                                            case "2": iconsta = "fa fa-times "; iconbg = "bg-danger"; break;
+                                                            case "3": iconsta = "fa fa-check "; iconbg = "bg-success"; break;
+                                                            default: iconsta = "fa fa-ban "; iconbg = "bg-danger"; break;
+
+                                                        }
+
+                                                        <span class="badge rounded-pill @iconbg">
+                                                            <i class="@iconsta" aria-hidden="true"></i>
+                                                        </span>
+                                                        <span>@StatusNAme[1]</span><br />
+                                                    }
+                                                }
+                                            }
+                                        </td>
+                                    }
+                                    @*apprvby*@
+
                                     <td>@(leave.ApproveDate)</td>
                                     <td class="text-center">@leave.AcknowledgeBy</td>
                                     <td>@(leave.AcknowledgeDate)</td>
@@ -384,7 +478,7 @@
         $('#leave-his-table').dataTable({
             dom: '<t><"d-flex align-items-center"ip>',
             fixedColumns: isMdOrLarger
-                ? { start: 7, end: 0 } // ใช้งาน fixedColumns ถ้าหน้าจอเป็น md ขึ้นไป
+                ? { start: 6, end: 0 } // ใช้งาน fixedColumns ถ้าหน้าจอเป็น md ขึ้นไป
                 : false,
             paging: true,
             pageLength: 50,
