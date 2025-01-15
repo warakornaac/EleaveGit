@@ -123,6 +123,7 @@
                                 i++;
                                 var colorStatus = string.Empty;
                                 var iconStatus = string.Empty;
+                                string colorBgStatus = string.Empty;
                                 <tr>
                                     <td class="vcenter">@i</td>
 
@@ -142,37 +143,124 @@
                                     {
                                         colorStatus = "text-warning";
                                         iconStatus = "fa fa-repeat";
+                                        colorBgStatus = "badge bg-warning rounded-pill";
 
                                     }
                                     else if (leave.ReqStatus == "1")
                                     {
                                         colorStatus = "text-success";
                                         iconStatus = "fa fa-check";
-
+                                        colorBgStatus = "badge bg-success rounded-pill";
                                     }
                                     else if (leave.ReqStatus == "2")
                                     {
                                         colorStatus = "text-danger";
                                         iconStatus = "fa fa-times";
+                                        colorBgStatus = "badge bg-danger rounded-pill";
                                     }
                                     else if (leave.ReqStatus == "3")
                                     {
                                         colorStatus = "text-success";
                                         iconStatus = "fa fa-check";
+                                        colorBgStatus = "badge bg-success rounded-pill";
                                     }
                                     else if (leave.ReqStatus == "4")
                                     {
                                         colorStatus = "text-danger";
                                         iconStatus = "fa fa-ban";
+                                        colorBgStatus = "badge bg-danger rounded-pill";
                                     }
-                                    <td class="text-center">
-                                        <div class="@colorStatus badge" style="font-size: 14px;"><i class="@iconStatus" aria-hidden="true"></i><span> @leave.ReqStaDesc</span></div>
+                                    <td class="text-left">
+                                        <div class="@colorStatus" style="font-size: 14px;"><span class="@colorBgStatus"><i class="@iconStatus" aria-hidden="true"></i></span><span> @leave.ReqStaDesc</span></div>
                                     </td>
 
                                     <td style="max-width: 200px;">
                                         <p class="p-0 m-0 text-truncate">@leave.Remark</p>
                                     </td>
-                                    <td class="text-center">@leave.ApproveBy</td>
+                                    @*apprvby*@
+
+                                    @if (leave.ApproveBy.Contains(","))
+                                    {
+                                        <td class="text-left">
+                                            @{
+                                                string[] apprv = leave.ApproveBy.Split(',');
+                                                string apver = string.Empty;
+                                                string iconsta = string.Empty;
+                                                string iconbg = string.Empty;
+                                                foreach (var item in apprv)
+                                                {
+                                                    if (item.Contains(" | "))
+                                                    {
+
+                                                        string[] StatusNAme = item.Split('|');
+                                                        switch (StatusNAme[0].Trim())
+                                                        {
+                                                            case "0": iconsta = "fa fa-repeat "; iconbg = "bg-warning"; break;
+                                                            case "1": iconsta = "fa fa-check "; iconbg = "bg-success"; break;
+                                                            case "2": iconsta = "fa fa-times "; iconbg = "bg-danger"; break;
+                                                            case "3": iconsta = "fa fa-check "; iconbg = "bg-success"; break;
+                                                            default: iconsta = "fa fa-ban "; iconbg = "bg-danger"; break;
+
+                                                        }
+                                                        if (StatusNAme[0].Trim() == "4")
+                                                        {
+                                                            <span class="badge rounded-pill @iconbg">
+                                                                <i class="@iconsta" aria-hidden="true"></i>
+                                                            </span>
+                                                            <del>@StatusNAme[1]</del> <br />
+
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="badge rounded-pill @iconbg">
+                                                                <i class="@iconsta" aria-hidden="true"></i>
+                                                            </span>
+                                                            <span>@StatusNAme[1]</span><br />
+                                                        }
+
+                                                    }
+                                                }
+                                            }
+                                        </td>
+
+                                    }
+                                    else
+                                    {
+                                        //<td class="text-center">@leave.ApproveBy</td>
+                                        <td class="text-left">
+                                            @{
+                                                string[] apprv = leave.ApproveBy.Split(',');
+
+                                                string apver = string.Empty;
+                                                string iconsta = string.Empty;
+                                                string iconbg = string.Empty;
+                                                foreach (var item in apprv)
+                                                {
+                                                    if (item.Contains(" | "))
+                                                    {
+
+                                                        string[] StatusNAme = item.Split('|');
+                                                        switch (StatusNAme[0].Trim())
+                                                        {
+                                                            case "0": iconsta = "fa fa-repeat "; iconbg = "bg-warning"; break;
+                                                            case "1": iconsta = "fa fa-check "; iconbg = "bg-success"; break;
+                                                            case "2": iconsta = "fa fa-times "; iconbg = "bg-danger"; break;
+                                                            case "3": iconsta = "fa fa-check "; iconbg = "bg-success"; break;
+                                                            default: iconsta = "fa fa-ban "; iconbg = "bg-danger"; break;
+
+                                                        }
+
+                                                        <span class="badge rounded-pill @iconbg">
+                                                            <i class="@iconsta" aria-hidden="true"></i>
+                                                        </span>
+                                                        <span>@StatusNAme[1]</span><br />
+                                                    }
+                                                }
+                                            }
+                                        </td>
+                                    }
+                                    @*apprvby*@
+
                                     <td>@(leave.ApproveDate)</td>
                                     <td class="text-center">@leave.AcknowledgeBy</td>
                                     <td>@(leave.AcknowledgeDate)</td>
@@ -212,72 +300,72 @@
 
     $(document).ready(function () {
         $('#department-selector').select2({
-            width: '100%'
+                                                    width: '100%'
         });
-    });
+                                                });
 
     $('#reqStart').datepicker({
-        orientation: "bottom auto",
+                                                orientation: "bottom auto",
         format: "dd/mm/yyyy",
         autoclose: true
     });
     $('#reqEnd').datepicker({
-        orientation: "bottom auto",
+                                                orientation: "bottom auto",
         format: "dd/mm/yyyy",
         autoclose: true
     });
     $(document).on('change', '#LeaveType-selector', function () {
-        var typ = $(this).val();
-        console.log('typ :' + typ);
-        if (typ == 1) {
+                                                    var typ = $(this).val();
+                                                    console.log('typ :' + typ);
+                                                    if (typ == 1) {
             $('#reqType-selector').removeAttr('disabled');
-        }
-        else {
+                                                    }
+                                                    else {
             $('#reqType-selector').attr('disabled', true);
-        }
-    });
+                                                    }
+                                                });
     $(document).on('click', '[id^="btnview_"]', function (e) {
-        e.preventDefault();
-        var reqNo = $(this).data('reqno');
-        var empId = $(this).data('empid');
-        //console.log(reqNo);
-        //$('#RequestDetailModal').modal('show');
-        GetReqDetail(reqNo, empId);
-    });
+                                                    e.preventDefault();
+                                                    var reqNo = $(this).data('reqno');
+                                                    var empId = $(this).data('empid');
+                                                    //console.log(reqNo);
+                                                    //$('#RequestDetailModal').modal('show');
+                                                    GetReqDetail(reqNo, empId);
+                                                });
 
-    function GetReqDetail(REQ, empId) {
+                                                function GetReqDetail(REQ, empId) {
         $.ajax({
-            url: '@Url.Action("GetRequestDetail", "Leave")',
+                                                    url: '@Url.Action("GetRequestDetail", "Leave")',
             data: {
-                ReqNO: REQ,
+                                                        ReqNO: REQ,
                 EmpId: empId,
                 Flag: "view"
             },
             type: 'POST',
             dataType: 'HTML',
             beforeSend: function () {
-                LoadingShow();
+                                                            LoadingShow();
                 $('#RequestDetailModal').find('.modal-body').html("");
-            },
+                                                        },
             success: function (data) {
                 $('#RequestDetailModal').find('.modal-body').html(data);
                 $('#RequestDetailModal').modal('show');
-            },complete: function (res) {
-                LoadingHide();
-            },
+                                                        },complete: function (res) {
+                                                            LoadingHide();
+                                                        },
             error: function (er) {
-                Swal.fire({
-                    icon: 'error',
+                                                            Swal.fire({
+                                                            icon: 'error',
                     html: '<p>GetReqDetail :</p><p>' + er.error + '</p>',
                     confirmButtonColor: '#d33',
                     confirmButtonText: 'ปิด',
                     allowOutsideClick: false,
                     focusConfirm: false,
                 });
-            }
-        }).fail(function (error) {
-            Swal.fire({
-                icon: 'error',
+                                                        }
+                                                    }).fail(function (error) {
+                                                        Swal.fire({
+                                                        icon: 'error',
                 title: 'เกิดข้อผิดพลาด กรุณาแจ้งผู้ดูแลระบบ (' + error.status + ')',
                 html: '<p>GetReqDetail :</p><p>' + error.responseText + '</p>',
                 confirmButtonColor: '#d33',
@@ -285,89 +373,89 @@
                 allowOutsideClick: false,
                 focusConfirm: false,
             });
-        });
-    }
+                                                    });
+                                                }
 
     $(document).on('click', '#cancel_submit', function () {
-        var reqno = $('#cancel_reqid_val').val()
+                                                    var reqno = $('#cancel_reqid_val').val()
         $.ajax({
-            url: '@Url.Action("CancelRequest", "Leave")',
+                                                    url: '@Url.Action("CancelRequest", "Leave")',
             data: {
-                ReqNo: reqno
+                                                        ReqNo: reqno
             },
             type: 'POST',
             dataType: 'JSON',
             success: function (data) {
-                if (data.message == 'Y') {
+                                                            if (data.message == 'Y') {
                     $('#RequestDetailModal').modal('hide');
-                    Swal.fire({
-                        title: "Success!!!",
+                                                                Swal.fire({
+                                                                title: "Success!!!",
                         text: "ยกเลิกคำร้องสำเร็จ ",
                         icon: "success"
-                    }).then(() => {
-                        location.reload();
-                    });
-                }
-                else {
+                                                                }).then(() => {
+                                                                    location.reload();
+                                                                });
+                                                            }
+                                                            else {
                     $('#RequestDetailModal').modal('hide');
-                    Swal.fire({
-                        title: "Error!!!",
+                                                                Swal.fire({
+                                                                title: "Error!!!",
                         text: "Cancel Failed : " + data.message,
                         icon: "error"
-                    });
-                }
-            }
-        });
-    });
-    function DropdownReqTyp()
-    {
+                                                                });
+                                                            }
+                                                        }
+                                                    });
+                                                });
+                                                function DropdownReqTyp()
+                                                {
         $.ajax({
-                url: '@Url.Action("GetLeavetype", "Leave")',
+                                                    url: '@Url.Action("GetLeavetype", "Leave")',
                 data: {
 
-                },
+                                                        },
                 type: 'POST',
                 dataType: 'JSON',
                 success: function (data) {
-                    if (data.message == 'Y') {
-                        var select = $('#reqType-selector');
-                        select.children().remove();
-                        select.append($('<option>').val(null).text('เลือกประเภทการร้องขอ'))
-                        $(data.LeaveType).each(function (index, item) {
-                            select.append($('<option>').val(item.LeaveType).text(item.Description));
-                        });
+                                                            if (data.message == 'Y') {
+                                                                var select = $('#reqType-selector');
+                                                                select.children().remove();
+                                                                select.append($('<option>').val(null).text('เลือกประเภทการร้องขอ'))
+                                                                $(data.LeaveType).each(function (index, item) {
+                                                                    select.append($('<option>').val(item.LeaveType).text(item.Description));
+                                                                });
 
-                    }
-                    else {
-                        console.log('Message Type: ' + data.message);
-                    }
-                }
-            });
-    }
+                                                            }
+                                                            else {
+                                                                console.log('Message Type: ' + data.message);
+                                                            }
+                                                        }
+                                                    });
+                                                }
 
-    function GetReqStatus() {
+                                                function GetReqStatus() {
         $.ajax({
-            url: '@Url.Action("GetReqStatus", "Leave")',
+                                                    url: '@Url.Action("GetReqStatus", "Leave")',
             data: {
 
-            },
+                                                        },
             type: 'POST',
             dataType: 'JSON',
             success: function (data) {
-                if (data.message == 'Y') {
-                    var select = $('#reqStatus');
-                    select.children().remove();
-                    select.append($('<option>').val(null).text('สถานะคำขอ'));
+                                                            if (data.message == 'Y') {
+                                                                var select = $('#reqStatus');
+                                                                select.children().remove();
+                                                                select.append($('<option>').val(null).text('สถานะคำขอ'));
                     $(data.ReqSta).each(function (index, item) {
-                        select.append($('<option>').val(item.LookValue).text(item.LookDesc));
-                    });
-                }
-                else {
-                    console.log('Getstatus Error: ' + data.message);
-                }
-            }
-        });
-    }
+                                                                    select.append($('<option>').val(item.LookValue).text(item.LookDesc));
+                                                                });
+                                                            }
+                                                            else {
+                                                                console.log('Getstatus Error: ' + data.message);
+                                                            }
+                                                        }
+                                                    });
+                                                }
     $(document).on("click", "#reset-btn", function () {
         $('#reqId').val('');                      // รหัสคำขอ
         $('#reqType-selector').val('').trigger('change'); // ประเภทคำขอ
@@ -376,15 +464,15 @@
         $('#reqEnd').val('');                     // ถึงวันที่
         $('#reqStatus').val('').trigger('change'); // สถานะคำขอ
         $('#department-selector').val('').trigger('change');
-    });
+                                                });
     $('#reqStart').inputmask('99/99/9999');
     $('#reqEnd').inputmask('99/99/9999');
     $(document).ready(function () {
-        var isMdOrLarger = window.matchMedia("(min-width: 768px)").matches;
+        var isMdOrLarger = window.matchMedia("(min-width: 1600px)").matches;
         $('#leave-his-table').dataTable({
-            dom: '<t><"d-flex align-items-center"ip>',
+                                                    dom: '<t><"d-flex align-items-center"ip>',
             fixedColumns: isMdOrLarger
-                ? { start: 7, end: 0 } // ใช้งาน fixedColumns ถ้าหน้าจอเป็น md ขึ้นไป
+                ? { start: 6, end: 0 } // ใช้งาน fixedColumns ถ้าหน้าจอเป็น md ขึ้นไป
                 : false,
             paging: true,
             pageLength: 50,
@@ -394,11 +482,11 @@
             select: false,
             scrollY: 500,
             language: {
-                info: "แสดง _START_ ถึง _END_ จากทั้งหมด _TOTAL_ คำร้องขอ",
+                                                        info: "แสดง _START_ ถึง _END_ จากทั้งหมด _TOTAL_ คำร้องขอ",
                 infoEmpty: "ไม่มีข้อมูลให้แสดง"
             }
-        });
-    });
+                                                    });
+                                                });
 </script>
 
 <script type="text/javascript">
