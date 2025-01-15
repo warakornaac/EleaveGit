@@ -73,9 +73,11 @@
                             @*<span class="star"><i class="fa fa-star yellow"></i></span>*@
                             <span class="starLog font-bold"><img src="~/Images/Logo/log.png" style="width: 35px;"></span>
                             <div class="d-flex flex-column">
-                                <div>@rowItem.ApproveByName <span class="badge badge-warning" style="color: #000000;"><i class="fa fa-clock-o"></i> <span class=""> @rowItem.ApproveDate </span></span> </div>
-
-                                
+                                <div>@rowItem.ApproveByName 
+                                    @if (@rowItem.ApproveDate != "-") { 
+                                        <span class="badge badge-warning" style="color: #000000;"><i class="fa fa-clock-o"></i> <span class=""> @rowItem.ApproveDate </span></span> 
+                                    }
+                                </div>
 
                                 <div class="d-flex flex-row align-items-center time-text">
                                     <small>ผลการอนุมัติ : @rowItem.RequestStatusName</small>
