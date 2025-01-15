@@ -490,17 +490,25 @@ namespace Eleave.Controllers
             string IsRequiredAttach = string.Empty;
             string MaxDay = string.Empty;
             string AllowAdd = string.Empty;
+            string ClosingBal = string.Empty;
+            string LeaveTaken = string.Empty;
+            string EmpID = string.Empty;
             try
             {
                 var connectionString = Utils.GetConfig("HRIS_DB");
                 SqlConnection Connection = new SqlConnection(connectionString);
                 Connection.Open();
+                if (Session["EmpId"] != null)
+                {
+                    EmpID = Session["EmpId"].ToString();
+                }
                 if (LeaveType != null)
                 {
                     SqlCommand cmd = new SqlCommand("P_Get_LeaveType_Condition", Connection);
                     cmd.Connection = Connection;
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@inLeaveType", LeaveType.ToString());
+                    cmd.Parameters.AddWithValue("@inEmpId", EmpID);
                     SqlDataReader dr = cmd.ExecuteReader();
                     while (dr.Read())
                     {
@@ -511,6 +519,8 @@ namespace Eleave.Controllers
                         IsRequiredAttach = dr["IsRequiredAttach"].ToString();
                         MaxDay = dr["MaxDay"].ToString();
                         AllowAdd = dr["AllowAdd"].ToString();
+                        ClosingBal = (dr["ClosingBal"] != DBNull.Value && Convert.ToString(dr["ClosingBal"]) != "0") ? Convert.ToString(dr["ClosingBal"]) : "0";
+                        LeaveTaken = (dr["LeaveTaken"] != DBNull.Value && Convert.ToString(dr["LeaveTaken"]) != "0") ? Convert.ToString(dr["LeaveTaken"]) : "0";
                     }
                     txtStatus = "success";
                     cmd.Dispose();
@@ -534,6 +544,8 @@ namespace Eleave.Controllers
                 IsRequiredAttach = IsRequiredAttach,
                 MaxDay = MaxDay,
                 AllowAdd = AllowAdd,
+                ClosingBal = ClosingBal,
+                LeaveTaken = LeaveTaken
             }, JsonRequestBehavior.AllowGet);
         }
 

@@ -84,53 +84,54 @@
         overflow: auto;
     }
 
-        .dates div {
-            float: left;
-            width: 100%;
-            text-align: left;
-            position: relative;
-            font-size: 14px;
-            padding: 2px;
-        }
+    .dates div {
+        float: left;
+        width: 100%;
+        text-align: left;
+        position: relative;
+        font-size: 14px;
+        padding: 2px;
+    }
 
-        .dates strong,
-        .stats strong {
-            display: block;
-            color: #020202;
-            font-size: 11px;
-            font-weight: 700;
-        }
+    .dates strong,
+    .stats strong {
+        display: block;
+        /*color: #020202;*/
+        font-size: 11px;
+        font-weight: 700;
+    }
 
-        .dates span {
-            width: 1px;
-            height: 40px;
-            position: absolute;
-            right: 0;
-            top: 0;
-            background: #ebeff2;
-        }
+    .dates span {
+        width: 1px;
+        height: 40px;
+        position: absolute;
+        right: 0;
+        top: 0;
+        background: #ebeff2;
+    }
 
     .stats {
         border-top: 1px solid #ebeff2;
-        background: #f7f8fa;
+        background: #ffca7b;
         overflow: auto;
-        padding: 5px 0;
-        font-size: 16px;
+        padding: 2px 0;
+        font-size: 20px;
         color: #59687f;
         font-weight: 600;
-        border-radius: 0 0 5px 5px;
+        border-radius: 5px;
     }
 
-        .stats div {
-            border-right: 1px solid #ebeff2;
-            width: 20%;
-            float: left;
-            text-align: center
-        }
+    .stats div {
+        /*border-right: 1px solid #ebeff2;*/
+        width: 50%;
+        float: left;
+        text-align: center;
+        color: #000000;
+    }
 
-            .stats div:nth-of-type(3) {
-                border: none;
-            }
+    .stats div:nth-of-type(3) {
+        border: none;
+    }
 
     #datepicker {
         width: 200px;
@@ -145,12 +146,12 @@
         /*width: 300px;*/
     }
 
-        /* Change today button color */
-        .datepicker .today,
-        .datepicker .today:hover {
-            background-color: #007bff;
-            color: white;
-        }
+    /* Change today button color */
+    .datepicker .today,
+    .datepicker .today:hover {
+        background-color: #007bff;
+        color: white;
+    }
 
     /* Change the selected date background */
     /*.datepicker table tr td.active,
@@ -246,6 +247,7 @@
                                         <strong>ApplyBeforeDay</strong>
                                         @*<input type="hidden" id="ApplyBeforeDay" value="">*@
                                         <span id="ApplyBeforeDayVal"></span>
+                                        <inp>
                                     </div>
 
                                     <div>
@@ -276,22 +278,44 @@
                         </div>
                     </div>
                 </div>
-                @*<div class="row pt-0" style="margin-top: -50px;">
-                        <div class="col-md-12">
-                            <div class="alert alert-warning p-1" role="alert">
-                                <b>เงื่อไนขการลา : </b> พนักงานที่ประสงค์จะลาหยุดงาน จะต้องกรอกข้อมูลการลาในระบบและยื่นต่อผู้บังคับบัญชาตามลำดับชั้น และจะลาได้ก็ต่อเมื่อผู้บังคับบัญชาได้อนุมัติการลาเท่านั้น
+                @*เหลือสิทธิ์*@
+                <div class="row" id="divPrivilege" style="display:none;">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="tile">
+                            <div class="wrapper">
+                                <div class="stats">
+                                    <div style="border-right: 2px solid #ebeff2;">
+                                        <span id="ClosingBalTxt" class="font-size-20"></span>
+                                        <input type="hidden" id="ClosingBalVal" value="">
+                                        <h5>สิทธิ์คงเหลือ</h5>
+                                    </div>
+                                    <div>
+                                         
+                                        <span id="LeaveTakenTxt" class="font-size-20"></span>
+                                        <input type="hidden" id="LeaveTakenVal" value="">
+                                        <h5>ใช้สิทธิ์แล้ว</h5>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>*@
+                    </div>
+                </div>
+                @*<div class="row pt-0" style="margin-top: -50px;">
+                    <div class="col-md-12">
+                        <div class="alert alert-warning p-1" role="alert">
+                            <b>เงื่อไนขการลา : </b> พนักงานที่ประสงค์จะลาหยุดงาน จะต้องกรอกข้อมูลการลาในระบบและยื่นต่อผู้บังคับบัญชาตามลำดับชั้น และจะลาได้ก็ต่อเมื่อผู้บังคับบัญชาได้อนุมัติการลาเท่านั้น
+                        </div>
+                    </div>
+                </div>*@
                 <div id="divDatePicker" style="display: none;">
-                    <div class="row">
+                    <div class="row pt-2">
                         <div class="col-md-6 mb-6">
                             <label for="validationTooltip04" class="font-weight-bold">วันที่ลาเริ่มต้น <span class="filedRequired">*</span></label>
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="inputGroupPrepend"><i class="fa fa-calendar"></i></span>
                                 </div>
-                                <input type="text" id="startDate" class="form-control datepicker" placeholder="เลือกวันที่เริ่มต้น">
+                                <input type="text" id="startDate" class="form-control datepicker" autocomplete="off" placeholder="เลือกวันที่เริ่มต้น">
                             </div>
                         </div>
                         <div class="col-md-6 mb-6">
@@ -300,7 +324,7 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="inputGroupPrepend"><i class="fa fa-calendar"></i></span>
                                 </div>
-                                <input type="text" id="endDate" class="form-control datepicker" placeholder="เลือกวันที่สิ้นสุด">
+                                <input type="text" id="endDate" class="form-control datepicker" autocomplete="off" placeholder="เลือกวันที่สิ้นสุด">
                             </div>
                         </div>
                     </div>
@@ -346,7 +370,7 @@
                 </div>
                 <div class="form-row pt-2">
                     <div class="col-md-12 mb-12">
-                        <label for="exampleFormControlTextarea1" class="font-weight-bold">รายละเอียด/เหตุผลการลา</label>
+                        <label for="exampleFormControlTextarea1" class="font-weight-bold">รายละเอียด/เหตุผลการลา <span class="filedRequired">*</span> </label>
                         <div class="form-group">
                             <textarea class="form-control" name="remark" id="remark" rows="3"></textarea>
                         </div>
@@ -431,9 +455,6 @@
             2. กรณีขอลงเวลาทำงานนอกสถานที่ (Add Leave)<br>
             2.1. พนักงานที่มีสิทธิ์ใช้วันหยุดชดเฉยต้องเป็นพนักงานระดับ Supervisor ขึ้นไปเท่านั้น<br>
             2.2. ล่วงเวลาพิเศษ คือ การปฏิบัติงานนอกสถานที่เกิน 6 ชั่วโมง/การปฎิบัติงานที่ตรงกับวันเสาร์-อาทิตย์ และวันหยุดนักขัตฤกษ์<br>
-            @*<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>*@
         </div>
     </div>
 </div>
@@ -507,13 +528,23 @@
     //ดึงเงื่อนไขแต่ละการลา
     function getLeaveTypeCondition(LeaveType) {
         //$("#divDatePicker").fadeIn(100);
+        let LeaveTypeName = $("#leaveType option:selected").text();
         let txtCondition = "";
-        if (LeaveType == "SL01") {
-            $(".dates").fadeIn(100);
-            txtCondition = "การลาป่วยสามารถลาได้ตามระยะเวลาที่ป่วยจริง แต่ได้รับเงินค่าจ้างปกติไม่เกิน 30 วันในรอบปีปฎิทิน และการลาป่วยตั้งแต่ 3 วันติดต่อกันขึ้นไป <u>ต้องมีใบรับรองแพทย์ที่ระบุจำนวนวันลาป่วยเท่ากับวันที่ลาจริงทุกครั้ง</u>";
-        } else {
-            $(".dates").fadeOut(100);
-        }
+
+        //if (LeaveType == "SL01") { //ลาป่วย
+        //    $(".dates").fadeIn(100);
+        //    txtCondition = "การลาป่วยสามารถลาได้ตามระยะเวลาที่ป่วยจริง แต่ได้รับเงินค่าจ้างปกติไม่เกิน 30 วันในรอบปีปฎิทิน และการลาป่วยตั้งแต่ 3 วันติดต่อกันขึ้นไป <u>ต้องมีใบรับรองแพทย์ที่ระบุจำนวนวันลาป่วยเท่ากับวันที่ลาจริงทุกครั้ง</u>";
+        //} else {
+        //    $(".dates").fadeOut(100);
+        //}
+
+        //ลาพักร้อนเลือกได้ 4 ซม ++ disable 1-3 
+        //if (LeaveType == "AL02") {
+        //    $("#numHour option[value='1'], option[value='2'], option[value='3']").prop('disabled', true);
+        //} else {
+        //    $("#numHour option[value='1'], option[value='2'], option[value='3']").prop('disabled', false);
+        //}
+        resetValue();
         if (LeaveType != 0) {
             $("#divDatePicker").fadeIn(100); //show เลือกวันละ
             $.ajax({
@@ -529,19 +560,48 @@
                     //$("#divCondition").html('<i class="fa fa-spinner fa-spin f-center"></i>');
                 },
                 success: function (res) {
-                    $("#divCondition").css("display", "block");
+                    //$("#divCondition").css("display", "block");
                     if (res.Status = "success") {   //พบข้อมูล LeaveType
+                        if (res.ClosingBal == 0) {  //วันลาไม่เเหลือ
+                            $("#divPrivilege").css("display", "none");
+                            $("#ClosingBalTxt").text(0);
+                            $("#ClosingBalVal").val(0);
+                            $("#LeaveTakenTxt").text(0);
+                            $("#LeaveTakenVal").val(0);
+                            //show popup
+                            Swal.fire({
+                                title: 'ไม่พบสิทธิ์วันลาคงเหลือ',
+                                icon: 'warning',
+                                html: LeaveTypeName + '<br> กรุณาแจ้งผู้ดูแลระบบ'+'<br><br>' ,
+                                confirmButtonColor: '#3085d6',
+                                confirmButtonText: 'ปิด',
+                                allowOutsideClick: false,
+                                focusConfirm: false,
+                            }).then((result) => {
+                                LoadingShow();
+                                $("#leaveType").val(0).trigger('change');
+                                LoadingHide();
+                            });
+                            return false;
+                            //ปิดข้อมูลสิทธิ์
+                        }
+                        //แสดงข้อมูลสิทธิ์
+                        $("#divPrivilege").css("display", "block");
+                        $("#ClosingBalTxt").text(res.ClosingBal);
+                        $("#ClosingBalVal").val(res.ClosingBal);
+                        $("#LeaveTakenTxt").text(res.LeaveTaken);
+                        $("#LeaveTakenVal").val(res.LeaveTaken);
+                        //เงื่อนไขการลา
                         $("#ApplyBeforeDayVal").text(res.ApplyBeforeDay);
                         $("#MinHourVal").text(res.MinHour);
                         $("#MaxHourVal").text(res.MaxHour);
                         $("#MaxDayVal").text(res.MaxDay);
                         $("#CarryForwardVal").text(res.CarryForward);
-                        $("#txtCondition").html(txtCondition);
+                        //$("#txtCondition").html(txtCondition);
                         //จำนวนชั่วโมงจาก master
-                        $("#numHour").val(res.MaxHour);
+                        $("#numHour").val(res.MaxHour, 1);
                         //ส่งไป set start date
                         setDateStart(res.ApplyBeforeDay);
-
                     } else {    //ไม่พบข้อมูล LeaveType
                         $("#ApplyBeforeDayVal").text(0);
                         $("#MinHourVal").text(0);
@@ -567,7 +627,8 @@
         }
     }
     //set start, end date
-    function setDateStart(setMinDate) {
+    function setDateStart(setMinDate, setReqType) {
+        console.log("setReqType = " + setReqType);
         //set val mindate
         //$('#endDate').datepicker('destroy');
         let formattedDate = new Date();
@@ -578,29 +639,18 @@
             console.log("minDateVal 1 = " + minDateVal);
             yesterday.setDate(yesterday.getDate() + Number(minDateVal));
             console.log("Yesterday setMinDate > 0 = " + yesterday);
-            // Get the day of
-            //let dayOfWeek = yesterday.getDay();
-            //if (dayOfWeek === 0) {//ย้อนถึงวันหยุด Sunday
-            //    console.log("The date is a Sunday.");
-            //    yesterday.setDate(yesterday.getDate() - (minDateVal + 2));
-            //} else if (dayOfWeek === 6) { //ย้อนถึงวันหยุด Saturday
-            //    console.log("The date is a Saturday.");
-            //    yesterday.setDate(yesterday.getDate() - (minDateVal + 3));
-            //} else {
-            //    yesterday.setDate(yesterday.getDate() - minDateVal);
-            //}
             formattedDate = yesterday.getDate().toString().padStart(2, '0') + '-' + (yesterday.getMonth() + 1).toString().padStart(2, '0') + '-' + yesterday.getFullYear();
         } else { //ลาป่วย ภายในเดือน
             setMinDateVal = 0;
             yesterday.setDate(1); // Subtract 1 day
             formattedDate = yesterday.getDate().toString().padStart(2, '0') + '-' + (yesterday.getMonth() + 1).toString().padStart(2, '0') + '-' + yesterday.getFullYear();
         }
-        //let formattedDate = yesterday.getDate().toString().padStart(2, '0') + '-' + (yesterday.getMonth() + 1).toString().padStart(2, '0') + '-' + yesterday.getFullYear();
         console.log("minDateVal 2 = " + minDateVal);
         console.log("formattedDate = " + formattedDate);
+        var disabledDays = setReqType == 2 ? [] : [0, 6];
         //reset start end date
-        $('#startDate').datepicker('destroy');
         // startDate
+        $('#startDate').datepicker('destroy');
         $('#startDate').datepicker({
             todayBtn: "linked",
             format: 'dd-mm-yyyy',
@@ -608,7 +658,7 @@
             todayHighlight: true,
             language: 'th',
             startDate: formattedDate,
-            daysOfWeekDisabled: [0, 6],
+            daysOfWeekDisabled: [],
             days: ["อาทิตย์", "จันทร์", "อังคาร", "พุธ", "พฤหัส", "ศุกร์", "เสาร์", "อาทิตย์"],
             daysShort: ["อา", "จ", "อ", "พ", "พฤ", "ศ", "ส", "อา"],
             daysMin: ["อา", "จ", "อ", "พ", "พฤ", "ศ", "ส", "อา"],
@@ -617,12 +667,13 @@
             today: "วันนี้"
         });
         // endDate
+        $('#endDate').datepicker('destroy');
         $('#endDate').datepicker({
             todayBtn: "linked",
             format: 'dd-mm-yyyy',
             autoclose: true,
             todayHighlight: true,
-            daysOfWeekDisabled: [0, 6],
+            daysOfWeekDisabled: [],
             language: 'th',
             //startDate: formatDate(twoDaysAgo), // Ensure End Date respects the same limit
             days: ["อาทิตย์", "จันทร์", "อังคาร", "พุธ", "พฤหัส", "ศุกร์", "เสาร์", "อาทิตย์"],
@@ -652,19 +703,47 @@
                 console.log('End Date: ' + endD.toISOString().split('T')[0]);
                 console.log('Weekdays Count: ' + weekdays);
                 $("#numDay").val(weekdays);
-
                 $("#numHour").val(8);
                 if (weekdays > 1) {
                     $("#numHour").attr("disabled", true);
                 } else {
                     $("#numHour").attr("disabled", false);
                 }
+                //เช็ควันลาคงเหลือ
+                checkRemainLeave(weekdays);
 
                 $("#numDayOrg").val(weekdays);
                 $("#periodTime").val(1).trigger('change');
                 calNumHour(1, weekdays, 0, 'N')
             }
         });
+    }
+    function checkRemainLeave(numDay) {
+        let closingBalVal = $("#ClosingBalVal").val() || 0;
+        if (numDay > 0 && closingBalVal > 0) {
+            if (numDay > closingBalVal) { //จำนวนวันที่ลาน้อยกว่าสิทธิ์คงเหลือที่มี
+                Swal.fire({
+                    title: 'วันลาคงเหลือไม่พอ',
+                    icon: 'warning',
+                    html: 'ลาครั้งนี้ ' + numDay + ' วัน' + ' | ' + 'วันลาคงเหลือ ' + closingBalVal  +' วัน' +'<br><br>',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'ปิด',
+                    allowOutsideClick: false,
+                    focusConfirm: false,
+                }).then((result) => {
+                    LoadingShow();
+                    resetValue();
+                    LoadingHide();
+                });
+            }
+        }
+    }
+    function resetValue() {
+        $("#periodTime").val(1).trigger('change');
+        $("#numHour").val(8).trigger('change');
+        $("#numDay").val('');
+        $("#startDate").val('');
+        $("#endDate").val('');
     }
     //เลือกประเภทกวารลา
     function setShowCalendar(leaveId) {
@@ -680,9 +759,9 @@
         let current = new Date(start);
         //saturday, sunday
         while (current <= end) {
-            if (current.getDay() !== 0 && current.getDay() !== 6) {
+            //if (current.getDay() !== 0 && current.getDay() !== 6) {
                 count++;
-            }
+            //}
             current.setDate(current.getDate() + 1);
         }
         return count;
@@ -712,30 +791,30 @@
     //เลือกประเภทการร้องขอ
     function dropDownRequest(ReqType) {
         console.log("reqType = " + ReqType);
+        $("#leaveType").val(0).trigger('change');
         let txtCondition = "";
         if (ReqType == 0) {
             $("#divDateleaveType").fadeOut(100); //hide ประเภทการลา
             $("#divDatePicker").fadeOut(100); //show เลือกวันละ
-            $("#divCondition").fadeOut(100); //hide เงื่อนไข
+            //$("#divCondition").fadeOut(100); //hide เงื่อนไข
         } else if (ReqType == 2) { //AddLeave
-            setDateStart(0);
-            $("#divCondition").fadeIn(100); //show เงื่อนไข
+            setDateStart(0, ReqType);
+            //$("#divCondition").fadeIn(100); //show เงื่อนไข
             $(".dates").fadeIn(100); //show เงื่อนไข
             txtCondition = "- พนักงานที่มีสิทธิ์ใช้วันหยุดชดเฉยต้องเป็นพนักงานระดับ Supervisor ขึ้นไปเท่านั้น <br> - ล่วงเวลาพิเศษ คือ การปฏิบัติงานนอกสถานที่เกิน 6 ชั่วโมง / การปฎิบัติงานที่ตรงกับวันเสาร์ - อาทิตย์ และวันหยุดนักขัตฤกษ์";
             $("#txtCondition").html(txtCondition);
-
             $("#divDateleaveType").fadeOut(100); //hide ประเภทการลา
             $("#divDatePicker").fadeIn(100); //show เลือกวันละ
-        } else if (ReqType == 3) { //WFH
-            setDateStart(0);
+        } else if (ReqType == 3 || ReqType == 4) { //WFH, ทำงานนอกสถานที่
+            setDateStart(0, ReqType);
             $("#divDateleaveType").fadeOut(100); //hide ประเภทการลา
             $("#divDatePicker").fadeIn(100); //show เลือกวันละ
-            $("#divCondition").fadeOut(100); //hide เงื่อนไข
+            //$("#divCondition").fadeOut(100); //hide เงื่อนไข
         } else { //LeaveRequest
             $("#divDateleaveType").fadeIn(100); //show ประเภทการลา
             $("#divDatePicker").fadeOut(100); //hide เลือกวันละ
             $("#txtCondition").html("");
-            $("#divCondition").fadeOut(100); //hide เงื่อนไข
+            //$("#divCondition").fadeOut(100); //hide เงื่อนไข
             $(".dates").fadeOut(100); //hide เงื่อนไข
             $.ajax({
                 url: '@Url.Action("GetLeavetype", "Leave")',
@@ -782,14 +861,14 @@
         if (StartDate != "") {
             let StartDateParts = StartDate.split('-');
             let StartDay = StartDateParts[0];
-            let StartMonth = StartDateParts[1] - 1;
+            let StartMonth = StartDateParts[1];
             let StartYear = StartDateParts[2];
             StartDate = StartYear + '-' + StartMonth + '-' + StartDay;
         }
         if (EndDate != "") {
             let EndDateParts = EndDate.split('-');
             let EndDay = EndDateParts[0];
-            let EndMonth = EndDateParts[1] - 1;
+            let EndMonth = EndDateParts[1];
             let EndYear = EndDateParts[2];
             EndDate = EndYear + '-' + EndMonth + '-' + EndDay
         }
@@ -811,6 +890,10 @@
         if (EndDate == "") {
             Error++;
             TextMsg += Error + '. กรุณาเลือกวันที่ลาสิ้นสุด <br/>';
+        }
+        if (Remark == "") {
+            Error++;
+            TextMsg += Error + '. กรุณากรอกรายละเอียด/เหตุผลการลา <br/>';
         }
         if (Error > 0) {
             Swal.fire({
@@ -909,7 +992,7 @@
                                         Swal.fire({
                                             title: 'เกิดข้อผิดพลาด',
                                             icon: 'error',
-                                            html: 'กรุณาแจ้งผู้ดูแลระบบ<br>โดยการแคปหน้าจอและก๊อปปี้ Error ด่านล่างนี้<br>' + result.message +'<br><br>',
+                                            html: 'กรุณาแจ้งผู้ดูแลระบบ<br>โดยการแคปหน้าจอและก๊อปปี้ Error ด่านล่างนี้ <br> ' + result.message +'<br><br>',
                                             confirmButtonColor: '#3085d6',
                                             confirmButtonText: 'ปิด',
                                             allowOutsideClick: false,
@@ -926,8 +1009,8 @@
                             }).fail(function (error) {
                                 Swal.fire({
                                     icon: 'error',
-                                    title: 'ระบบทำงานผิดพลาด()',
-                                    html: 'กรุณาแจ้งผู้ดูแลระบบ<br>โดยการแคปหน้าจอและก๊อปปี้ Error ด่านล่างนี้<br>btnSubmitRequest<br><br>',
+                                    title: 'ระบบทำงานผิดพลาด',
+                                    html: 'กรุณาแจ้งผู้ดูแลระบบ<br>โดยการแคปหน้าจอและก๊อปปี้ Error ด่านล่างนี้ btnSubmitRequest <br> ' + error + '<br><br>',
                                     confirmButtonColor: '#d33',
                                     confirmButtonText: 'ปิด',
                                     allowOutsideClick: false,
