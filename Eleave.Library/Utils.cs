@@ -311,5 +311,54 @@ namespace Eleave.Library
             }
             return getResult;
         }
+        public static string CalculateDayHour(double txtNumberDate)
+        {
+            string txtNumberDateOrg = string.Empty;
+            txtNumberDateOrg = txtNumberDate.ToString("N2");
+            var txtDay = string.Empty;
+            var txthours = string.Empty;
+            var day = string.Empty;
+            var hours = string.Empty;
+            var txtFullDayHours = string.Empty;
+            if (!string.IsNullOrEmpty(txtNumberDateOrg) && txtNumberDate > 0)
+            {
+                string[] fullResultTxt = txtNumberDateOrg.Split('.');
+                txtDay = fullResultTxt[0];
+                txthours = fullResultTxt[1];
+                //check จำนวนวัน
+                if (txtDay != "0")
+                {
+                    day = txtDay + " วัน";
+                }
+                //check มีตัวเลขหลังจุดทศนิยมไหมถ้ามี คือ ชม
+                if (!string.IsNullOrEmpty(txthours))
+                {
+                    if (txthours == "13") hours = "1";
+                    else if (txthours == "25") hours = "2";
+                    else if (txthours == "38") hours = "3";
+                    else if (txthours == "50") hours = "4";
+                    else if (txthours == "63") hours = "5";
+                    else if (txthours == "75") hours = "6";
+                    else if (txthours == "88") hours = "7";
+                    else hours = "";
+                }
+            } else {
+                return "0";
+            }
+
+            if (!string.IsNullOrEmpty(hours)) {
+                hours = hours + " ชม";
+            }
+            if (!string.IsNullOrEmpty(day) && !string.IsNullOrEmpty(hours))
+            {
+                txtFullDayHours = day + ' ' + hours;
+            }
+            else 
+            { 
+                txtFullDayHours = day + hours;
+            }
+
+            return txtFullDayHours;
+        }
     }
 }
