@@ -68,7 +68,8 @@
                                     <div class="card-body row">
                                         <div class="col-2 d-flex align-items-center ">
                                             <h5 class="m-0">
-                                                @(bal.AccuredLeave?.ToString("0.#") ?? "0")
+                                                @*@(bal.AccuredLeave?.ToString("0.#") ?? "0")*@
+                                                @Eleave.Library.Utils.CalculateDayHour((double)bal.AccuredLeave)
                                             </h5>
                                         </div>
                                         <div class="col-8 pl-0 pr-0">
@@ -76,15 +77,15 @@
                                                 <div class="">
                                                     <h5>@(bal.LeaveType)</h5>
                                                     <div class="d-flex flex-row align-items-center time-text">
-                                                        <small>ใช้สิทธิแล้ว (@(bal.LeaveTaken?.ToString("0.#") ?? "0"))</small>
+                                                        <small>ใช้สิทธิแล้ว (@Eleave.Library.Utils.CalculateDayHour((double)bal.LeaveTaken))</small>
                                                         <span class="dots"></span>
-                                                        <small>รออนุมัติ (@(bal.WaitApprove?.ToString("0.#") ?? "0"))</small>
+                                                        <small>รออนุมัติ (@Eleave.Library.Utils.CalculateDayHour((double)bal.WaitApprove))</small>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-2 p-0 d-flex align-items-center justify-content-center">
-                                            <h5 class="content-text-1 m-0"> @(bal.ClosingBal?.ToString("0.#") ?? "0")</h5>
+                                            <h5 class="content-text-1 m-0"> @Eleave.Library.Utils.CalculateDayHour((double)bal.ClosingBal)</h5>
                                         </div>
                                     </div>
                                 </div>
