@@ -1,6 +1,6 @@
 ﻿@using Eleave.Models;
 @{
-    ViewBag.Title = "จัดการผู้ใช้งาน";
+    ViewBag.Title = "จัดการผู้ใช้งาน | Mange Employee";
     string company = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(ViewBag.seachCompany ?? ""));
     string department = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(ViewBag.seachDept ?? ""));
     string name = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(ViewBag.seachName ?? ""));
@@ -105,11 +105,11 @@
         <div class="row align-items-center">
             <div class="col-md-12">
                 <div class="page-header-title">
-                    <h5 class="m-b-10">จัดการผู้ใช้งาน</h5>
+                    <h5 class="m-b-10">จัดการผู้ใช้งาน | Manage Employee</h5>
                 </div>
                 <ul class="breadcrumb">
                     <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home")"><i class="feather icon-home"></i></a></li>
-                    <li class="breadcrumb-item"><a href="@Url.Action("ManagerEmployee", "Employee")">จัดการผู้ใช้งาน</a></li>
+                    <li class="breadcrumb-item"><a href="@Url.Action("ManagerEmployee", "Employee")">จัดการผู้ใช้งาน | Manage Employee</a></li>
                 </ul>
             </div>
         </div>
@@ -122,7 +122,7 @@
         <div class="modal-content">
             <div class="modal-header pb-2">
                 <div class="col-sm-10 col-md-10">
-                    <h4 class="modal-title" id="myModalLabel">ข้อมูลผู้ใช้งาน</h4>
+                    <h4 class="modal-title" id="myModalLabel">ข้อมูลผู้ใช้งาน | Employee Info </h4>
                 </div>
                 <div class="col-sm-2 col-md-2 text-right"><button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Close | ปิด</button></div>
             </div>
@@ -144,25 +144,25 @@
                     @Html.AntiForgeryToken()
                     <div class="row">
                         <div class="form-group col-md-3">
-                            <label class="font-weight-bold">Company | บริษัท :</label>
+                            <label class="font-weight-bold">บริษัท | Company:</label>
                             @Html.DropDownList("Company", new List<SelectListItem>
                                                 {
                                                     new SelectListItem() {Text="AAC", Value="AAC"},
                                                     new SelectListItem() {Text="TRU", Value="TRU"},
                                                     new SelectListItem(){Text="OMP",Value="OMP"}
-                                                }, "Select company | บริษัท", new { @class = "custom-select", @id = "Company-selector" })
+                                                }, "บริษัท | Select company", new { @class = "custom-select", @id = "Company-selector" })
                         </div>
 
                         <div class="form-group col-md-3">
-                            <label class="font-weight-bold">Department | หน่วยงาน :</label>
+                            <label class="font-weight-bold">หน่วยงาน | Department:</label>
                             @Html.DropDownList("Department", new SelectList(ViewBag.DepartmentList, "LookValue", "LookDesc"), "Select department | เลือกหน่วยงาน", new { @class = "custom-select", @id = "department-selector" })
                         </div>
                         <div class="form-group col-md-3">
-                            <label class="font-weight-bold">Employee ID | รหัสพนักงาน :</label>
+                            <label class="font-weight-bold">รหัสพนักงาน | Employee ID:</label>
                             @Html.TextBox("EmpID", null, new { @class = "form-control", @id = "empID" })
                         </div>
                         <div class="form-group col-md-3">
-                            <label class="font-weight-bold">Employee Name | ชื่อพนักงาน :</label>
+                            <label class="font-weight-bold">ชื่อพนักงาน | Employee Name:</label>
                             @Html.TextBox("Name", null, new { @class = "form-control", @id = "empName" })
                         </div>
                     </div>
@@ -189,12 +189,12 @@
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th class="text-center">COMPANY | บริษัท</th>
-                                <th class="text-center">EMP ID | รหัสพนักงาน</th>
-                                <th class="text-center">EMP NAME | ชื่อ-สกุล</th>
-                                <th class="text-center">DEPARTMENT | หน่วยงาน</th>
-                                <th class="text-center">POSITION | ตำแหน่ง</th>
-                                <th class="text-center">STATUS | สถานะ</th>
+                                <th class="text-center">บริษัท | COMPANY</th>
+                                <th class="text-center">รหัสพนักงาน | EMP ID</th>
+                                <th class="text-center">ชื่อ-สกุล | EMP NAME</th>
+                                <th class="text-center">หน่วยงาน | DEPARTMENT</th>
+                                <th class="text-center">ตำแหน่ง | POSITION</th>
+                                <th class="text-center">สถานะ | STATUS</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -224,10 +224,15 @@
                                                     </div>*@
                                             </td>
                                         }
+                                        else if(dataItem.EmpStatus == "Resign"){
+                                            <td class="text-center">
+                                                <div class="text-white badge badge-danger rounded-pill"><i class="fa fa-check-circle-o" aria-hidden="true"></i><span>ลาออก/Resigned</span></div>
+                                            </td>
+                                        }
                                         else
                                         {
                                             <td class="text-center">
-                                                <div class="text-white badge badge-danger rounded-pill"><i class="fa fa-times-circle-o" aria-hidden="true"></i><span>ลาออก/Resigned</span></div>
+                                                <div class="text-white badge badge-danger rounded-pill"><i class="fa fa-times-circle-o" aria-hidden="true"></i><span> ยกเลิก/Inactived</span></div>
                                                 @*<div class="text-center">
                                                         <label class="switch">
                                                             <input type="checkbox" disabled>
@@ -274,10 +279,6 @@
         });
         $('#employee-table').dataTable({
             dom: '<t><"d-flex align-items-center"ip>',
-            fixedColumns: {
-                start: 7,
-                end: 0
-            },
             paging: true,
             pageLength: 50,
             lengthChange: false,
@@ -308,7 +309,7 @@
                 e.preventDefault();
                 Swal.fire({
                     icon: "error",
-                    title: "กรุณากรอกข้อมูลที่ต้องการค้นหา"
+                    title: "กรุณากรอกข้อมูลที่ต้องการค้นหา|Please entry data to search !!!"
                 });
                 return false;
             }
