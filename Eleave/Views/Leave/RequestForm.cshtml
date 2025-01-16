@@ -1,7 +1,7 @@
-﻿@using Eleave.Models;
+﻿@using Eleave.Library;
 @{
     ViewBag.Title = "บันทึกการลา";
-    var countListBalance = ((List<StoreGetLeaveBalance>)ViewBag.listLeaveBalance).Count();
+    var countListBalance = ((List<Eleave.Models.StoreGetLeaveBalance>)ViewBag.listLeaveBalance).Count();
     int EmpLvl = Int32.Parse(Session["EmpLvl"].ToString());
 }
 <style>
@@ -84,31 +84,31 @@
         overflow: auto;
     }
 
-    .dates div {
-        float: left;
-        width: 100%;
-        text-align: left;
-        position: relative;
-        font-size: 14px;
-        padding: 2px;
-    }
+        .dates div {
+            float: left;
+            width: 100%;
+            text-align: left;
+            position: relative;
+            font-size: 14px;
+            padding: 2px;
+        }
 
-    .dates strong,
-    .stats strong {
-        display: block;
-        /*color: #020202;*/
-        font-size: 11px;
-        font-weight: 700;
-    }
+        .dates strong,
+        .stats strong {
+            display: block;
+            /*color: #020202;*/
+            font-size: 11px;
+            font-weight: 700;
+        }
 
-    .dates span {
-        width: 1px;
-        height: 40px;
-        position: absolute;
-        right: 0;
-        top: 0;
-        background: #ebeff2;
-    }
+        .dates span {
+            width: 1px;
+            height: 40px;
+            position: absolute;
+            right: 0;
+            top: 0;
+            background: #ebeff2;
+        }
 
     .stats {
         border-top: 1px solid #ebeff2;
@@ -121,17 +121,17 @@
         border-radius: 5px;
     }
 
-    .stats div {
-        /*border-right: 1px solid #ebeff2;*/
-        width: 50%;
-        float: left;
-        text-align: center;
-        color: #000000;
-    }
+        .stats div {
+            /*border-right: 1px solid #ebeff2;*/
+            width: 50%;
+            float: left;
+            text-align: center;
+            color: #000000;
+        }
 
-    .stats div:nth-of-type(3) {
-        border: none;
-    }
+            .stats div:nth-of-type(3) {
+                border: none;
+            }
 
     #datepicker {
         width: 200px;
@@ -146,12 +146,12 @@
         /*width: 300px;*/
     }
 
-    /* Change today button color */
-    .datepicker .today,
-    .datepicker .today:hover {
-        background-color: #007bff;
-        color: white;
-    }
+        /* Change today button color */
+        .datepicker .today,
+        .datepicker .today:hover {
+            background-color: #007bff;
+            color: white;
+        }
 
     /* Change the selected date background */
     /*.datepicker table tr td.active,
@@ -290,7 +290,7 @@
                                         <h5>สิทธิ์คงเหลือ</h5>
                                     </div>
                                     <div>
-                                         
+
                                         <span id="LeaveTakenTxt" class="font-size-20"></span>
                                         <input type="hidden" id="LeaveTakenVal" value="">
                                         <h5>ใช้สิทธิ์แล้ว</h5>
@@ -301,12 +301,12 @@
                     </div>
                 </div>
                 @*<div class="row pt-0" style="margin-top: -50px;">
-                    <div class="col-md-12">
-                        <div class="alert alert-warning p-1" role="alert">
-                            <b>เงื่อไนขการลา : </b> พนักงานที่ประสงค์จะลาหยุดงาน จะต้องกรอกข้อมูลการลาในระบบและยื่นต่อผู้บังคับบัญชาตามลำดับชั้น และจะลาได้ก็ต่อเมื่อผู้บังคับบัญชาได้อนุมัติการลาเท่านั้น
+                        <div class="col-md-12">
+                            <div class="alert alert-warning p-1" role="alert">
+                                <b>เงื่อไนขการลา : </b> พนักงานที่ประสงค์จะลาหยุดงาน จะต้องกรอกข้อมูลการลาในระบบและยื่นต่อผู้บังคับบัญชาตามลำดับชั้น และจะลาได้ก็ต่อเมื่อผู้บังคับบัญชาได้อนุมัติการลาเท่านั้น
+                            </div>
                         </div>
-                    </div>
-                </div>*@
+                    </div>*@
                 <div id="divDatePicker" style="display: none;">
                     <div class="row pt-2">
                         <div class="col-md-6 mb-6">
@@ -418,23 +418,22 @@
                     }
                     else
                     {
-                        foreach (var rowItem in (List<StoreGetLeaveBalance>)ViewBag.listLeaveBalance)
+                        foreach (var rowItem in (List<Eleave.Models.StoreGetLeaveBalance>)ViewBag.listLeaveBalance)
                         {
                             <div class="mt-3" id="sub-item-list">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div class="d-flex flex-row align-items-center">
-                                        @*<span class="star"><i class="fa fa-star yellow"></i></span>*@
-                                        <span class="star font-bold">@rowItem.AccuredLeave</span>
+                                        <span class="star font-bold">@Utils.CalculateDayHour(rowItem.AccuredLeave)</span>
                                         <div class="d-flex flex-column">
                                             <span>@rowItem.Description</span>
                                             <div class="d-flex flex-row align-items-center time-text">
-                                                <small>ใช้สิทธิแล้ว (@rowItem.LeaveTaken)</small>
+                                                <small>ใช้สิทธิแล้ว (@Utils.CalculateDayHour(rowItem.LeaveTaken))</small>
                                                 <span class="dots"></span>
-                                                <small>รออนุมัติ (@rowItem.WaitApprove)</small>
+                                                <small>รออนุมัติ (@Utils.CalculateDayHour(rowItem.WaitApprove))</small>
                                             </div>
                                         </div>
                                     </div>
-                                    <span class="content-text-1">@rowItem.ClosingBal</span>
+                                    <span class="content-text-1"> @Utils.CalculateDayHour(rowItem.ClosingBal) </span>
                                 </div>
                             </div>
                         }
@@ -538,7 +537,7 @@
         //    $(".dates").fadeOut(100);
         //}
 
-        //ลาพักร้อนเลือกได้ 4 ซม ++ disable 1-3 
+        //ลาพักร้อนเลือกได้ 4 ซม ++ disable 1-3
         //if (LeaveType == "AL02") {
         //    $("#numHour option[value='1'], option[value='2'], option[value='3']").prop('disabled', true);
         //} else {
@@ -855,7 +854,7 @@
         let PeriodTime = $("#periodTime option:selected").val();
         let NumDay = $("#numDay").val() || 0;
         let NumHour = $("#numHour").val() || 0;
-        let Remark = $("#remark").val() || "";
+        let Remark = $("#remark").val().trim() || "";
         console.log("StartDateBefore = " + StartDate);
         console.log("EndDateBefore = " + EndDate);
         if (StartDate != "") {
