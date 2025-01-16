@@ -10,6 +10,15 @@
         padding: 5px 10px;
         cursor: pointer;
     }*/
+    th, td {
+        white-space: nowrap;
+    }
+
+    div.dataTables_wrapper {
+        width: 800px;
+        margin: 0 auto;
+    }
+
     .note {
         position: relative;
     }
@@ -105,9 +114,10 @@
                         <thead>
                             <tr>
                                 <th class="text-center" rowspan="2" align="center">No. | ลำดับ</th>
-                                <th class="text-center" rowspan="2" align="center">Department | แผนก</th>
+                                <th class="text-center" rowspan="2" align="center">Company | บริษัท</th>
                                 <th class="text-center" rowspan="2" align="center">Employee ID | รหัสพนักงาน</th>
                                 <th class="text-center" rowspan="2" align="center">Employee Name | ชื่อพนักงาน</th>
+                                <th class="text-center" rowspan="2" align="center">Department | แผนก</th>
                                 <th class="text-center" rowspan="2" align="center">Position | ตำแหน่ง</th>
                                 <th class="text-center" rowspan="2" align="center">Start Date | วันเริ่มงาน</th>
                                 <th class="text-center" rowspan="2" align="center">Years of Service | อายุงาน (ปี)</th>
@@ -169,6 +179,7 @@
                                     <td class="text-center">@report.Company</td>
                                     <td class="text-center">@report.EmpId</td>
                                     <td class="text-center">@report.Fullname</td>
+                                    <td class="text-center">@report.DeptName</td>
                                     <td class="text-center">@report.Position</td>
                                     <td class="text-center">@report.StartDate</td>
                                     <td class="text-center">@report.Years</td>
