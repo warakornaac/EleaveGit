@@ -13,38 +13,38 @@
         <div class="row">
             <div class="col-xs-6 col-sm-4">
                 <div class="form-group">
-                    <h5>รหัสพนักงาน</h5>
+                    <h5>รหัสพนักงาน | Employee ID</h5>
                     <div> @dataEmp.EmpId </div>
                 </div>
             </div>
             <div class="col-xs-6 col-sm-4">
                 <div class="form-group">
-                    <h5>ชื่อ-สกุล</h5>
+                    <h5>ชื่อ-สกุล | Employee Name</h5>
                     <div> @dataEmp.Fullname  </div>
                 </div>
             </div>
             <div class="col-xs-6 col-sm-4">
                 <div class="form-group">
-                    <h5>บริษัท</h5>
+                    <h5>บริษัท | Company</h5>
                     <div> @dataEmp.Company </div>
                 </div>
             </div>
 
             <div class="col-xs-6 col-sm-4">
                 <div class="form-group">
-                    <h5>หน่วยงาน</h5>
+                    <h5>หน่วยงาน | Department</h5>
                     <div> @dataEmp.DeptName </div>
                 </div>
             </div>
             <div class="col-xs-6 col-sm-4">
                 <div class="form-group">
-                    <h5>ตำแหน่ง</h5>
+                    <h5>ตำแหน่ง | Position</h5>
                     <div> @dataEmp.Position </div>
                 </div>
             </div>
             <div class="col-xs-6 col-sm-4">
                 <div class="form-group">
-                    <h5>หัวหน้างาน</h5>
+                    <h5>หัวหน้างาน | Director</h5>
                     <div> @dataEmp.DirectorId </div>
                 </div>
             </div>
@@ -52,25 +52,25 @@
         <div class="row">
             <div class="col-xs-6 col-sm-4">
                 <div class="form-group">
-                    <h5>ระดับพนักงาน</h5>
+                    <h5>ระดับพนักงาน | Employee Level</h5>
                     <div> @dataEmp.EmpLvlName </div>
                 </div>
             </div>
             <div class="col-xs-6 col-sm-4">
                 <div class="form-group">
-                    <h5>ประเภทพนักงาน</h5>
+                    <h5>ประเภทพนักงาน | Employee Type</h5>
                     <div> @dataEmp.EmpTypeName </div>
                 </div>
             </div>
             <div class="col-xs-6 col-sm-4">
                 <div class="form-group">
-                    <h5>รหัสกลุ่มอนุมัติ</h5>
+                    <h5>รหัสกลุ่มอนุมัติ | Approval Group</h5>
                     <div> @dataEmp.ApprGrpID </div>
                 </div>
             </div>
             <div class="col-xs-6 col-sm-4">
                 <div class="form-group">
-                    <h5>วันที่เริ่มงาน</h5>
+                    <h5>วันที่เริ่มงาน | Start Date</h5>
                     <div> @dataEmp.StartDate.ToString("dd/MM/yyyy") </div>
                 </div>
             </div>
@@ -104,7 +104,7 @@
                                 days += daysInPreviousMonth;
                             }
 
-                            <span>@years ปี, @months เดือน, @days วัน</span>
+                            <span>@years ปี|Year, @months เดือน|Month, @days วัน|Days</span>
                         }
 
 
@@ -113,10 +113,14 @@
             </div>
             <div class="col-xs-6 col-sm-4">
                 <div class="form-group">
-                    <h5>สถานะพนักนักงาน</h5>
+                    <h5>สถานะพนักงาน | Employee Status</h5>
                     @if (dataEmp.EmpStatus == "Active")
                     {
                         <div class="text-white badge badge-success rounded-pill"><i class="fa fa-check-circle-o" aria-hidden="true"></i><span>ทำงาน/Working</span></div>
+                    }
+                    else if (dataEmp.EmpStatus == "Inactive")
+                    {
+                        <div class="text-white badge badge-success rounded-pill"><i class="fa fa-check-circle-o" aria-hidden="true"></i><span>ยกเลิก/Inactived</span></div>
                     }
                     else
                     {

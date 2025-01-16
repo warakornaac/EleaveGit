@@ -1,6 +1,6 @@
 ﻿@model Eleave.Models.StoreUpdateEmployeeProfile
 @{
-    ViewBag.Title = "แก้ไขข้อมูลพนักงาน";
+    ViewBag.Title = "แก้ไขข้อมูลพนักงาน | Modify Empolyee";
 
     var com = ViewBag.SearchCompany ?? string.Empty;
     var dept = ViewBag.SearchDept ?? string.Empty;
@@ -90,7 +90,7 @@
         <div class="row align-items-center">
             <div class="col-md-12">
                 <div class="page-header-title">
-                    <h5 class="m-b-10">แก้ไขข้อมูลผู้ใช้งาน</h5>
+                    <h5 class="m-b-10">แก้ไขข้อมูลผู้ใช้งาน | Modify Employee</h5>
                 </div>
                 <ul class="breadcrumb">
                     <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home")"><i class="feather icon-home"></i></a></li>
@@ -103,12 +103,13 @@
 <div class="col-xl-12 col-md-12">
     <div class="card table-card">
         <div class="card-header">
-            <h5>แก้ไขข้อมูลพนักงาน</h5>
+            <h5>แก้ไขข้อมูลพนักงาน | Modify Employee</h5>
             <input type="hidden" value="" id="" />
             <input type="hidden" value="" id="" />
             <input type="hidden" value="" id="" />
             <input type="hidden" value="" id="" />
             <span>กรุณากรอกข้อมูลที่มีเครื่องหมาย (<span class="text-danger">*</span>) ให้ครบถ้วน</span>
+            <span>| Please complete data with (<span class="text-danger">*</span>) </span>
         </div>
         <div class="card-body p-3 d-flex justify-content-center">
             @using (Html.BeginForm("UpdateEmployee", "Employee", FormMethod.Post, new { id = "update-employee-form" }))
@@ -117,25 +118,25 @@
                 <div class="row">
                     <div class="col-md-4 col-lg-4">
                         <div class="form-group">
-                            @Html.LabelFor(model => model.EmpId, "Employee ID | รหัสพนักงาน")
+                            @Html.LabelFor(model => model.EmpId, "รหัสพนักงาน | Employee ID")
                             @Html.TextBoxFor(model => model.EmpId, new { @class = "form-control", @readonly = "readonly" })
                         </div>
                     </div>
                     <div class="col-md-4 col-lg-4">
                         <div class="form-group">
-                            @Html.LabelFor(model => model.Company, "Company | บริษัท")<span class="text-danger">*</span>
+                            @Html.LabelFor(model => model.Company, "บริษัท | Company")<span class="text-danger">*</span>
                             @Html.DropDownListFor(model => model.Company, new List<SelectListItem>
                                                {
                                                     new SelectListItem() {Text="AAC", Value="AAC"},
                                                     new SelectListItem() {Text="TRU", Value="TRU"},
                                                     new SelectListItem(){Text="OMP",Value="OMP"}
-                                               }, "เลือกบริษัท", new { @class = "custom-select", @id = "comp-selector" })
-                            <span class="text-danger" id="alert-comp" hidden>Please select a company | กรุณาเลือกบริษัท</span>
+                                               }, "เลือกบริษัท|Select Company", new { @class = "custom-select", @id = "comp-selector" })
+                            <span class="text-danger" id="alert-comp" hidden>กรุณาเลือกบริษัท | Please select a company</span>
                         </div>
                     </div>
                     <div class="col-md-4 col-lg-4">
                         <div class="form-group">
-                            @Html.LabelFor(model => model.TitleName, "Title | คำนำหน้า")<span class="text-danger">*</span>
+                            @Html.LabelFor(model => model.TitleName, "คำนำหน้า | Title")<span class="text-danger">*</span>
                             @Html.DropDownListFor(model => model.TitleName, new List<SelectListItem>
                                                 {
                                                     new SelectListItem() {Text="นาย", Value="นาย"},
@@ -144,53 +145,53 @@
                                                     new SelectListItem() {Text="Mr", Value="Mr"},
                                                     new SelectListItem() {Text="Ms", Value="Ms"},
                                                     new SelectListItem() {Text="Mrs", Value="Mrs"}
-                                                }, "Select title | เลือกคำนำหน้า", new { @class = "custom-select", @id = "title-selector" })
-                            <span class="text-danger" id="alert-title" hidden>Please select a company | กรุณาเลือกบริษัท</span>
+                                                }, "เลือกคำนำหน้า|Select title", new { @class = "custom-select", @id = "title-selector" })
+                            <span class="text-danger" id="alert-title" hidden>กรุณาเลือกบริษัท | Please select a company</span>
                         </div>
                     </div>
                     <div class="col-md-4 col-lg-4">
                         <div class="form-group">
-                            @Html.LabelFor(model => model.FirstName, "First Name | ชื่อ")<span class="text-danger">*</span>
+                            @Html.LabelFor(model => model.FirstName, "ชื่อ | First Name")<span class="text-danger">*</span>
                             @Html.TextBoxFor(model => model.FirstName, new { @class = "form-control", @id = "fname-tbx" })
                             @* @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })*@
-                            <span class="text-danger" id="alert-fname" hidden>Please enter first name | กรุณากรอกชื่อ</span>
+                            <span class="text-danger" id="alert-fname" hidden>กรุณากรอกชื่อ | Please enter first name</span>
                         </div>
                     </div>
                     <div class="col-md-4 col-lg-4">
                         <div class="form-group">
-                            @Html.LabelFor(model => model.LastName, "Last Name | นามสกุล")<span class="text-danger">*</span>
+                            @Html.LabelFor(model => model.LastName, "นามสกุล | Last Name")<span class="text-danger">*</span>
                             @Html.TextBoxFor(model => model.LastName, new { @class = "form-control", @id = "lname-tbx" })
                             @*  @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })*@
-                            <span class="text-danger" id="alert-lname" hidden>Please enter last name | กรุณากรอกนามสกุล</span>
+                            <span class="text-danger" id="alert-lname" hidden>กรุณากรอกนามสกุล | Please enter last name</span>
                         </div>
                     </div>
                     <div class="col-md-4 col-lg-4">
                         <div class="form-group">
-                            @Html.LabelFor(model => model.Email, "E-mail | อีเมล")
+                            @Html.LabelFor(model => model.Email, "อีเมล | E-mail")
                             @Html.TextBoxFor(model => model.Email, new { @class = "form-control", @id = "email-tbx" })
-                            <span class="text-danger" id="alert-email" hidden>Please enter email | กรุณากรอกอีเมล</span>
+                            <span class="text-danger" id="alert-email" hidden>กรุณากรอกอีเมล | Please enter email</span>
                         </div>
                     </div>
                     <div class="col-md-4 col-lg-4">
                         <div class="form-group">
-                            @Html.LabelFor(model => model.DeptId, "Department | หน่วยงาน")<span class="text-danger">*</span>
-                            @Html.DropDownListFor(model => model.DeptId, new SelectList(ViewBag.DepartmentList, "LookValue", "LookDesc"), "เลือกหน่อยงาน", new { @class = "custom-select", @id = "department-selector" })
-                            <span class="text-danger" id="alert-dept" hidden>Please select a department | กรุณาเลือกแผนก</span>
+                            @Html.LabelFor(model => model.DeptId, "หน่วยงาน | Department")<span class="text-danger">*</span>
+                            @Html.DropDownListFor(model => model.DeptId, new SelectList(ViewBag.DepartmentList, "LookValue", "LookDesc"), "เลือกหน่วยงาน|Select Department", new { @class = "custom-select", @id = "department-selector" })
+                            <span class="text-danger" id="alert-dept" hidden>กรุณาเลือกแผนก | Please select a department</span>
                         </div>
                     </div>
                     <div class="col-md-4 col-lg-4">
                         <div class="form-group">
-                            @Html.LabelFor(model => model.Position, "Position | ตำแหน่ง")<span class="text-danger">*</span>
+                            @Html.LabelFor(model => model.Position, "ตำแหน่ง | Position")<span class="text-danger">*</span>
                             @Html.TextBoxFor(model => model.Position, new { @class = "form-control", @id = "pos-selector" })
                             <span class="text-danger" id="alert-position" hidden>Please select a position | กรุณาเลือกตำแหน่ง</span>
                         </div>
                     </div>
                     <div class="col-md-4 col-lg-4">
                         <div class="form-group">
-                            @Html.LabelFor(model => model.DirectorId, "Director | หัวหน้างาน")@*<span class="text-danger">*</span>*@
+                            @Html.LabelFor(model => model.DirectorId, "หัวหน้างาน |Director")@*<span class="text-danger">*</span>*@
                             @*@Html.TextBoxFor(model => model.DirectorId, new { @class = "form-control", list = "directors-list" })*@
-                            @Html.DropDownListFor(model => model.DirectorId, new SelectList(ViewBag.Directors, "EmpId", "Fullname"), "เลือกหัวหน้างาน", new { @class = "custom-select", @id = "directors-selector" })
-                            <span class="text-danger" id="alert-director" hidden>Please select a director | กรุณาเลือกหัวหน้างาน</span>
+                            @Html.DropDownListFor(model => model.DirectorId, new SelectList(ViewBag.Directors, "EmpId", "Fullname"), "เลือกหัวหน้างาน|Select Director", new { @class = "custom-select", @id = "directors-selector" })
+                            <span class="text-danger" id="alert-director" hidden>กรุณาเลือกหัวหน้างาน | Please select a director</span>
                             @*<datalist id="directors-list">
                                     @foreach (var director in ViewBag.Directors)
                                     {
@@ -201,41 +202,41 @@
                     </div>
                     <div class="col-md-4 col-lg-4">
                         <div class="form-group">
-                            @Html.LabelFor(model => model.EmpLvl, "Employee Level | ระดับพนักงาน")<span class="text-danger">*</span>
-                            @Html.DropDownListFor(model => model.EmpLvl, new SelectList(ViewBag.EmpLevel, "LookValue", "LookDesc"), "เลือกระดับพนักงาน", new { @class = "custom-select", @id = "emplvl-selector" })
-                            <span class="text-danger" id="alert-emplvl" hidden>Please select a employee level | กรุณาเลือกระดับพนักงาน</span>
+                            @Html.LabelFor(model => model.EmpLvl, "ระดับพนักงาน | Employee Level")<span class="text-danger">*</span>
+                            @Html.DropDownListFor(model => model.EmpLvl, new SelectList(ViewBag.EmpLevel, "LookValue", "LookDesc"), "เลือกระดับพนักงาน|Select Employee Level", new { @class = "custom-select", @id = "emplvl-selector" })
+                            <span class="text-danger" id="alert-emplvl" hidden>กรุณาเลือกระดับพนักงาน | Please select a employee level</span>
                         </div>
                     </div>
                     <div class="col-md-4 col-lg-4">
                         <div class="form-group">
-                            @Html.LabelFor(model => model.ApprGrpID, "Approval Group | กลุ่มอนุมัติ")<span class="text-danger">*</span>
-                            @Html.DropDownListFor(model => model.ApprGrpID, new SelectList(ViewBag.ApprovFlow, "ApprGrpId", "DisplayText"), "เลือกกลุ่มอนุมัติ", new { @class = "custom-select", @id = "approval-selector" })
-                            <span class="text-danger" id="alert-apprvgrp" hidden>Please select a approval group | กรุณาเลือกกลุ่มอนุมัติ</span>
+                            @Html.LabelFor(model => model.ApprGrpID, "กลุ่มอนุมัติ | Approval Group")<span class="text-danger">*</span>
+                            @Html.DropDownListFor(model => model.ApprGrpID, new SelectList(ViewBag.ApprovFlow, "ApprGrpId", "DisplayText"), "เลือกกลุ่มอนุมัติ|Select Approval Group", new { @class = "custom-select", @id = "approval-selector" })
+                            <span class="text-danger" id="alert-apprvgrp" hidden>กรุณาเลือกกลุ่มอนุมัติ | Please select a approval group</span>
                         </div>
                     </div>
                     <div class="col-md-4 col-lg-4">
                         <div class="form-group">
-                            @Html.LabelFor(model => model.UserType, "User Type | ประเภทผู้ใช้")<span class="text-danger">*</span>
-                            @Html.DropDownListFor(model => model.UserType, new SelectList(ViewBag.usrtyp, "TypeVal", "UsrTypeName"), "เลือกประเภทผู้ใช้", new { @class = "custom-select", @id = "usrtyp-selector" })
-                            <span class="text-danger" id="alert-usrtyp" hidden>Please select a user type | กรุณาเลือกประเภทผู้ใช้</span>
+                            @Html.LabelFor(model => model.UserType, "ประเภทผู้ใช้ | User Type")<span class="text-danger">*</span>
+                            @Html.DropDownListFor(model => model.UserType, new SelectList(ViewBag.usrtyp, "TypeVal", "UsrTypeName"), "เลือกประเภทผู้ใช้|Select User Type", new { @class = "custom-select", @id = "usrtyp-selector" })
+                            <span class="text-danger" id="alert-usrtyp" hidden>กรุณาเลือกประเภทผู้ใช้ | Please select a user type</span>
                         </div>
                     </div>
                     <div class="col-md-4 col-lg-4">
                         <div class="form-group">
-                            @Html.LabelFor(model => model.EmpTypeId, "Employee Type | ประเภทพนักงาน")
-                            @Html.DropDownListFor(model => model.EmpTypeId, new SelectList(ViewBag.EmpTyp, "LookValue", "LookDesc"), "เลือกหน่อยงาน", new { @class = "custom-select", @id = "emptyp-selector" })
+                            @Html.LabelFor(model => model.EmpTypeId, "ประเภทพนักงาน | Employee Type")
+                            @Html.DropDownListFor(model => model.EmpTypeId, new SelectList(ViewBag.EmpTyp, "LookValue", "LookDesc"), "เลือกประเภทพนักงาน|Select Employee Type", new { @class = "custom-select", @id = "emptyp-selector" })
 
                         </div>
                     </div>
                     <div class="col-md-4 col-lg-4">
                         <div class="form-group">
-                            @Html.LabelFor(model => model.StartDate, "Start Date | วันเรื่มงาน")
+                            @Html.LabelFor(model => model.StartDate, "วันเริ่มงาน | Start Date")
                             @Html.TextBoxFor(model => model.StartDate, new { @class = "form-control", id = "start-date" })
                         </div>
                     </div>
                     <div class="col-md-4 col-lg-4">
                         <div class="form-group">
-                            @Html.LabelFor(model => model.EmpStatus, "Employee Status | สถานะพนักนักงาน")
+                            @Html.LabelFor(model => model.EmpStatus, "สถานะพนักงาน | Employee Status")
                             @Html.DropDownListFor(model => model.EmpStatus, new SelectList(ViewBag.EmpSta, "LookValue", "LookDesc"), new { @class = "custom-select", @id = "empStatusDropdown" })
                         </div>
                     </div>
@@ -244,11 +245,11 @@
                 <div class="card-footer">
                     <div class="float-end">
                         @*<input type="submit" value="บันทึก" class="btn btn-success" />*@
-                        <Button type="submit" class="btn btn-success">SAVE | บันทึก</Button>
+                        <Button type="submit" class="btn btn-success">บันทึก | SAVE</Button>
 
                     </div>
                     <div class="float-left">
-                        <input type="button" value="BACK | ย้อนกลับ" class="btn btn-secondary" onclick="history.back();" id="back-btn" />
+                        <input type="button" value="ย้อนกลับ | BACK" class="btn btn-secondary" onclick="history.back();" id="back-btn" />
                     </div>
 
                 </div>
@@ -394,7 +395,7 @@
     @*if ("@ViewBag.UpdateStatus" === "Success") {
         Swal.fire({
             title: "@ViewBag.UpdateStatus",
-            text: "Update ข้อมูลพนักงานสำเร็จ",
+            text: "Update ข้อมูลพนักงานสำเร็จ | Update Success.",
             icon: "success"
         }).then(() => {
             window.location.href = "@Url.Action("ManagerEmployee", "Employee")";
@@ -427,7 +428,7 @@
     if ("@ViewBag.UpdateStatus" === "Success") {
         Swal.fire({
             title: "Success",
-            text: "Update ข้อมูลพนักงานสำเร็จ",
+            text: "Update ข้อมูลพนักงานสำเร็จ | Update Success.",
             icon: "success"
         }).then(() => {
             // สร้างฟอร์มเพื่อส่งค่ากลับไปที่ Controller
