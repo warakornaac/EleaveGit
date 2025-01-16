@@ -342,7 +342,20 @@
             language: {
                 info: "แสดง _START_ ถึง _END_ จากทั้งหมด _TOTAL_ คำร้องขอ",
                 infoEmpty: "ไม่มีข้อมูลให้แสดง"
-            }
+            },
+            scrollY: 500,
+            dom: '<"d-flex justify-content-between mb-3"B>t<"d-flex align-items-center"i<"ml-3"p>>', // ปรับตำแหน่ง DOM
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+                    text: 'Export to Excel', // ข้อความปุ่ม
+                    className: 'btn btn-success', // เพิ่มคลาสเพื่อปรับแต่งปุ่ม
+                    title: 'รายงานรายละเอียดการลา'//, // ชื่อไฟล์ Excel
+                    //exportOptions: {
+                    //    columns: ':visible' // Export เฉพาะคอลัมน์ที่มองเห็น
+                    //}
+                }
+            ]
         });
 
         if (page) {
