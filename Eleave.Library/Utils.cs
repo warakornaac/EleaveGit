@@ -311,6 +311,37 @@ namespace Eleave.Library
             }
             return getResult;
         }
+        public static string getLeaveTakenByDate(string EmpId, string StartDate, string EndDate)
+        {
+            double LeaveTakenDay = 0;
+
+            using (SqlConnection Connection = new SqlConnection(GetConfig("HRIS_DB")))
+            {
+                Connection.Open();
+                var cmdSearch = new SqlCommand("P_Get_LeaveTaken_By_Date", Connection);
+
+                cmdSearch.CommandType = CommandType.StoredProcedure;
+                cmdSearch.Parameters.AddWithValue("@inEmpId", EmpId);
+                cmdSearch.Parameters.AddWithValue("@inStartDate", StartDate);
+                cmdSearch.Parameters.AddWithValue("@inEndDate", EndDate);
+                SqlParameter returnResult = new SqlParameter("@outLeaveTakenDay", SqlDbType.NVarChar, 1000);
+                returnResult.Direction = ParameterDirection.Output;
+                returnResult.Scale = 2;
+                cmdSearch.Parameters.Add(returnResult);
+                cmdSearch.ExecuteNonQuery();
+                if (returnResult.Value != DBNull.Value)
+                {
+                    LeaveTakenDay = Convert.ToDouble(returnResult.Value);
+                }
+                else
+                {
+                    LeaveTakenDay = 0;
+                }
+                cmdSearch.Dispose();
+                Connection.Close();
+            }
+            return LeaveTakenDay.ToString(); ;
+        }
         public static string CalculateDayHour(double txtNumberDate)
         {
             string txtNumberDateOrg = string.Empty;
@@ -351,7 +382,7 @@ namespace Eleave.Library
             }
             if (!string.IsNullOrEmpty(day) && !string.IsNullOrEmpty(hours))
             {
-                txtFullDayHours = day + ' ' + hours;
+                txtFullDayHours = day + " " + hours;
             }
             else 
             { 
