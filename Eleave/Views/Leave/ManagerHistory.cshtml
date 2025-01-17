@@ -91,7 +91,7 @@
         <div class="card p-0">
             <div class="card-body p-0">
                 <div class="table-responsive">
-                    <table class="table table-bordered table-striped m-0" id="leave-his-table">
+                    <table class="table tableList table-bordered table-striped table-hover m-0" id="leave-his-table">
                         <thead>
                             <tr>
                                 <th>#</th>
@@ -125,7 +125,7 @@
                                 var iconStatus = string.Empty;
                                 string colorBgStatus = string.Empty;
                                 <tr>
-                                    <td class="vcenter">@i</td>
+                                    <td class="vcenter text-center">@i</td>
 
                                     <td class="text-center vcenter">
                                         <div class="btn btn-info btn-xs p-1" id="btnview_@leave.ReqNo" data-reqno="@leave.ReqNo" data-empid="@leave.EmpId"><span class="fa fa-eye p-1"></span></div>
@@ -136,8 +136,8 @@
                                     <td class="text-center">@leave.ReqType</td>
                                     <td class="text-center">@leave.Empname</td>
                                     <td class="text-center">@leave.LeaveType</td>
-                                    <td>@leave.StartDate</td>
-                                    <td>@leave.EndDate</td>
+                                    <td class="vcenter">@leave.StartDate</td>
+                                    <td class="vcenter">@leave.EndDate</td>
                                     <td class="text-center">@leave.NumDay</td>
                                     @if (leave.ReqStatus == "0")
                                     {
@@ -171,7 +171,7 @@
                                         colorBgStatus = "badge bg-danger rounded-pill";
                                     }
                                     <td class="text-left">
-                                        <div class="@colorStatus" style="font-size: 14px;"><span class="@colorBgStatus"><i class="@iconStatus" aria-hidden="true"></i></span><span> @leave.ReqStaDesc</span></div>
+                                        <div class="@colorStatus" style="font-size: 14px;"><span class="@colorBgStatus"><i class="@iconStatus" aria-hidden="true"></i></span><span><b> @leave.ReqStaDesc </b></span></div>
                                     </td>
 
                                     <td style="max-width: 200px;">
@@ -215,7 +215,7 @@
                                                             <span class="badge rounded-pill @iconbg">
                                                                 <i class="@iconsta" aria-hidden="true"></i>
                                                             </span>
-                                                            <span>@StatusNAme[1]</span><br />
+                                                            <span class="font-bold">@StatusNAme[1]</span><br />
                                                         }
 
                                                     }
@@ -253,7 +253,7 @@
                                                         <span class="badge rounded-pill @iconbg">
                                                             <i class="@iconsta" aria-hidden="true"></i>
                                                         </span>
-                                                        <span>@StatusNAme[1]</span><br />
+                                                        <span class="font-bold">@StatusNAme[1]</span><br />
                                                     }
                                                 }
                                             }
@@ -261,9 +261,9 @@
                                     }
                                     @*apprvby*@
 
-                                    <td>@(leave.ApproveDate)</td>
+                                    <td class="vcenter">@(leave.ApproveDate)</td>
                                     <td class="text-center">@leave.AcknowledgeBy</td>
-                                    <td>@(leave.AcknowledgeDate)</td>
+                                    <td class="vcenter">@(leave.AcknowledgeDate)</td>
 
                                 </tr>
                             }

@@ -548,6 +548,32 @@ namespace Eleave.Controllers
                 LeaveTaken = LeaveTaken
             }, JsonRequestBehavior.AllowGet);
         }
-
+        [HttpPost]
+        public ActionResult getLeaveTakenByDate(string EmpId, string StartDate, string EndDate)
+        {
+            string LeaveTakenDay = string.Empty;
+            double leaveTakenDayDouble = 0;
+            string txtStatus = string.Empty;
+            string txtMessage = string.Empty;
+            try
+            {
+                if (!string.IsNullOrEmpty(EmpId) && !string.IsNullOrEmpty(StartDate) && !string.IsNullOrEmpty(EndDate)) {
+                    LeaveTakenDay = Utils.getLeaveTakenByDate(EmpId, StartDate, EndDate);
+                    leaveTakenDayDouble = Convert.ToDouble(LeaveTakenDay);
+                    txtStatus = "success";
+                }
+            }
+            catch (Exception ex)
+            {
+                txtStatus = "fail";
+                txtMessage = "Error: " + ex.Message;
+            }
+            return Json(new
+            {
+                Status = txtStatus,
+                Message = txtMessage,
+                LeaveTakenDay = leaveTakenDayDouble
+            }, JsonRequestBehavior.AllowGet);
+        }
     }
 }

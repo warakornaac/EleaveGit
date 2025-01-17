@@ -53,7 +53,7 @@
                     </a>
                     <div class="dropdown-menu dropdown-menu-right notification">
                         <div class="noti-head">
-                            <h6 class="d-inline-block m-b-0">Notifications</h6>
+                            <h6 class="d-inline-block m-b-0">รายการแจ้งเตือน</h6>
                             @*<div class="float-right">
                                     <a href="#!" class="m-r-10">mark as read</a>
                                     <a href="#!">clear all</a>
@@ -116,16 +116,16 @@
                                 switch (Session["UserType"].ToString())
                                 {
                                     case "1": //Employee
-                                        <a href="@Url.Action("EmployeeHistory","Leave")">show all</a>;
+                                        <a href="@Url.Action("EmployeeHistory","Leave")">Show All</a>;
                                         break;
                                     case "2": //Hr
-                                        <a href="@Url.Action("AdminAcknowledge","Acknowledge")">show all</a>;
+                                        <a href="@Url.Action("AdminAcknowledge","Acknowledge")">Show All</a>;
                                         break;
                                     case "3": //Approve
-                                        <a href="@Url.Action("ManagerApproval","Approval")">show all</a>;
+                                        <a href="@Url.Action("ManagerApproval","Approval")">Show All</a>;
                                         break;
                                     default: //SuperAdmin (IT)
-                                        <a href="@Url.Action("ManagerHistory","Leave")">show all</a>;
+                                        <a href="@Url.Action("ManagerHistory","Leave")">Show All</a>;
                                         break;
                                 }
                             }
@@ -316,7 +316,7 @@
                     var colorStatus = '';
 
                     $('.noti-body').empty();
-                    $('.noti-body').html('<li class="n-title"><p class= "m-b-0">รายการรออนุมัติ</p></li>');
+                    $('.noti-body').html('<li class="n-title"></li>');
                     if (data.REQ.length != 0) {
                         $('#alert-number').text(data.REQ.length);
                         $('#bell_alert').addClass('text-warning');
@@ -346,7 +346,7 @@
                             HtmlString += ' <div class="media">';
                             HtmlString += '     <div class="media-body">';
                             HtmlString += '         <p><strong>' + data.REQ[i].Empname + '</strong><strong class="float-end "> ' + data.REQ[i].LeaveType + '</strong></p>';
-                            HtmlString += '         <p><span class="' + colorStatus + '"><i class="' + StaIcon + '"></i>' + data.REQ[i].ReqStaDesc + '</p>';
+                            HtmlString += '         <p><span class="' + colorStatus + '"><i class="' + StaIcon + '"></i>' + ' ' + data.REQ[i].ReqStaDesc + '</p>';
                             HtmlString += '     </div>';
                             HtmlString += ' </div>';
                             HtmlString += '</a>';

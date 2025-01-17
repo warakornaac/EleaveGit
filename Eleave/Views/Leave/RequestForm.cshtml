@@ -24,6 +24,8 @@
         margin-right: 10px;
         border-radius: 5px;
         font-weight: 700;
+        font-size: 12px;
+        text-align: center;
     }
 
     .time-text {
@@ -43,14 +45,18 @@
 
     .content-text-1 {
         height: 40px;
-        width: 40px;
         display: flex;
         justify-content: center;
         align-items: center;
-        border-radius: 50%;
+        border-radius: 30%;
         background-color: #e3f3e1;
         color: #0c8916;
         font-weight: 700;
+        font-size: 12px;
+        width: 37px;
+        word-wrap: break-word;
+        text-align: center;
+        white-space: pre-line;
     }
     /**note*/
     .tile {
@@ -571,7 +577,7 @@
                             Swal.fire({
                                 title: 'ไม่พบสิทธิ์วันลาคงเหลือ',
                                 icon: 'warning',
-                                html: LeaveTypeName + '<br> กรุณาแจ้งผู้ดูแลระบบ'+'<br><br>' ,
+                                html: LeaveTypeName + '<br> กรุณาแจ้งผู้ดูแลระบบ' + '<br><br>',
                                 confirmButtonColor: '#3085d6',
                                 confirmButtonText: 'ปิด',
                                 allowOutsideClick: false,
@@ -623,6 +629,12 @@
                     focusConfirm: false,
                 });
             });
+        } else {
+            $("#divPrivilege").css("display", "none");
+            $("#ClosingBalTxt").text(0);
+            $("#ClosingBalVal").val(0);
+            $("#LeaveTakenTxt").text(0);
+            $("#LeaveTakenVal").val(0);
         }
     }
     //set start, end date
@@ -873,6 +885,68 @@
         }
         console.log("StartDatePart = " + StartDate);
         console.log("EndDatePart = " + EndDate);
+         //เช็คว่าในวัน startDate - endDate มีลาไปกี่วันแล้ว
+        var AllNumDay = 0;
+        var RemainNumDay = 0;
+        $.ajax({
+            type: 'POST',
+            cache: false,
+            url: '@Url.Action("getLeaveTakenByDate", "Leave")',
+            data: {
+                EmpId: EmpId,
+                StartDate: StartDate,
+                EndDate: EndDate
+            },
+            dataType: 'json',
+            beforeSend: function () {
+                LoadingShow();
+            },
+            success: function (res) {
+                if (res.Status = "success") {   //พบข้อมูล LeaveType
+                    //NumDay วันที่ลา ณ ตอนนี้
+                    //res.LeaveTakenDay วันที่เคยลาไป
+                    console.log('LeaveTakenDay = ' + res.LeaveTakenDay);
+                    if (res.LeaveTakenDay > 0) {  //วันลาที่เคยใช้ไป
+                        AllNumDay = res.LeaveTakenDay + Number(NumDay);
+                        RemainNumDay = res.LeaveTakenDay - 1;
+
+                        console.log("AllNumDay = " + AllNumDay);
+                        if (AllNumDay > 1) {
+                            //show popup
+                            Swal.fire({
+                                title: 'ไม่สามารถทำลาได้ในวันลาที่เลือกเพราะได้เคยทำลาไปแล้ว',
+                                icon: 'warning',
+                                html: 'สิทธิ์คงเหลือ ' + RemainNumDay + '<br><br>',
+                                confirmButtonColor: '#3085d6',
+                                confirmButtonText: 'ปิด',
+                                allowOutsideClick: false,
+                                focusConfirm: false,
+                            }).then((result) => {
+                                LoadingShow();
+                                $("#leaveType").val(0).trigger('change');
+                                LoadingHide();
+                            });
+                        }
+                        return false;
+                        //ปิดข้อมูลสิทธิ์
+                    }
+                } else {
+                }
+            },
+            complete: function (res) {
+                LoadingHide();
+            }
+        }).fail(function (error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error not search',
+                html: 'กรุณาแจ้งผู้ดูแลระบบ<br>โดยการแคปหน้าจอและก๊อปปี้ Error ด่านล่างนี้<br>getLeaveTakenByDate<br>' + error.responseText + '<br><br>',
+                confirmButtonColor: '#d33',
+                confirmButtonText: 'ปิด',
+                allowOutsideClick: false,
+                focusConfirm: false,
+            });
+        });
         //return false;
         if (ReqType == 0) {
             Error++;
@@ -904,6 +978,7 @@
         }
 
         console.log("startDate = " + StartDate + " endDate = " + EndDate);
+        //return false;
 
         let formData = new FormData();
         let totalFiles = document.getElementById("file_upload_multi").files.length;

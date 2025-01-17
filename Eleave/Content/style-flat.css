@@ -20503,7 +20503,7 @@ pre[class*=language-]:before {
 
         .pcoded-header .dropdown .notification .noti-head {
             background: #2c3e50;
-            padding: 15px 20px;
+            padding: 10px 20px;
         }
 
             .pcoded-header .dropdown .notification .noti-head h6 {
@@ -20528,8 +20528,11 @@ pre[class*=language-]:before {
             }
 
             .pcoded-header .dropdown .notification .noti-body li {
-                padding: 15px 20px;
+                padding: 0px 19px;
                 transition: all 0.3s ease-in-out;
+                cursor: default;
+                white-space: inherit !important;
+                border-bottom: 1px solid #f4f4f4;
             }
 
                 .pcoded-header .dropdown .notification .noti-body li.n-title {
@@ -20625,7 +20628,7 @@ pre[class*=language-]:before {
                 .pcoded-header .dropdown .profile-notification .pro-body li a {
                     color: #373a3c;
                     font-size: 14px;
-                    padding: 10px 20px;
+                    padding: 15px 20px;
                 }
 
                     .pcoded-header .dropdown .profile-notification .pro-body li a i {
@@ -30299,6 +30302,17 @@ new-task label input[type=checkbox] {
 .filedRequired {
     content: '*';
     color: #ff0000;
+}
+
+.tableList thead th {
+    padding: 15px 5px !important;
+    vertical-align: middle !important;
+}
+
+.tableList tbody tr td {
+    padding: 5px 2px !important;
+    margin: 5px 2px !important;
+    vertical-align: middle !important;
 }
 
 /**====== user card css end ======**/

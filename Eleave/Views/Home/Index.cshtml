@@ -24,6 +24,22 @@
         margin-right: 7px;
     }
 
+    .star {
+        height: 40px;
+        width: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #eee;
+        margin-right: 10px;
+        border-radius: 5px;
+        font-weight: 700;
+        font-size: 12px;
+        text-align: center;
+        padding: 0 15px;
+        margin-left: -10px;
+    }
+
     .content-text-1 {
         height: 40px;
         width: 40px;
@@ -34,6 +50,10 @@
         background-color: #e3f3e1;
         color: #0c8916;
         font-weight: 700;
+        font-size: 14px;
+        word-wrap: break-word;
+        text-align: center;
+        white-space: pre-line;
     }
 
     .vcenter {
@@ -55,10 +75,10 @@
 <!-- [ breadcrumb ] end -->
 <!-- [ Main Content ] start -->
 <div class="row align-items-stretch">
-    <div class="col-md-4 col-lg-4 d-flex flex-column p-0">
-        <div class="col-md-12 col-xl-12 p-0">
+    <div class="col-md-8 col-lg-4 d-flex flex-column p-0">
+        <div class="col-md-12 col-lg-8  col-xl-12 p-0">
             <div class="card bg-transparent border-0 shadow-none">
-                <div class="card-body p-2">
+                <div class="card-body pt-0">
                     @if (ViewBag.BalanceLeave != null)
                     {
                         foreach (var bal in ViewBag.BalanceLeave)
@@ -66,16 +86,15 @@
                             <div class="col-md-12 col-xl-12 col-sm-4">
                                 <div class="card border-top-0 rounded-3 ">
                                     <div class="card-body row">
-                                        <div class="col-2 d-flex align-items-center ">
-                                            <h5 class="m-0">
-                                                @*@(bal.AccuredLeave?.ToString("0.#") ?? "0")*@
-                                                @Eleave.Library.Utils.CalculateDayHour((double)bal.AccuredLeave)
-                                            </h5>
+                                        <div class="col-2 d-flex align-items-center">
+
+                                            <span class="star font-bold"> @Eleave.Library.Utils.CalculateDayHour((double)bal.AccuredLeave) </span>
+
                                         </div>
                                         <div class="col-8 pl-0 pr-0">
                                             <div class="d-flex justify-content-between align-items-start">
                                                 <div class="">
-                                                    <h5>@(bal.LeaveType)</h5>
+                                                    <b>@(bal.LeaveType)</b>
                                                     <div class="d-flex flex-row align-items-center time-text">
                                                         <small>ใช้สิทธิแล้ว (@Eleave.Library.Utils.CalculateDayHour((double)bal.LeaveTaken))</small>
                                                         <span class="dots"></span>
@@ -132,7 +151,7 @@
             </div>
             <div class="card-body p-0">
                 <div class="table-responsive" style="height:100%">
-                    <table class="table table-bordered table-striped m-0" id="leave-his-table">
+                    <table class="table tableList table-bordered table-striped m-0" id="leave-his-table">
                         <thead>
                             <tr>
                                 <th>#</th>
@@ -161,7 +180,7 @@
                             {
                                 i++;
                                 <tr>
-                                    <td>@i</td>
+                                    <td class="text-center">@i</td>
                                     <td class="text-center vcenter">
                                         <div class="btn btn-info btn-xs p-1" id="btnview_@leave.ReqNo" data-reqno="@leave.ReqNo" data-empid="@leave.EmpId"><span class="fa fa-eye p-1"></span></div>
                                     </td>
