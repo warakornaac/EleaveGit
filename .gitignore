@@ -79,3 +79,4 @@ packages/
 # Ignore other common files
 *.cache
 *.tmp
+*.xml
