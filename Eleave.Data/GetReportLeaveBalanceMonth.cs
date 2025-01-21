@@ -12,7 +12,7 @@ namespace Eleave.Data
     public class GetReportLeaveBalanceMonth : MsSQL
     {
         public GetReportLeaveBalanceMonth() : base(Utils.GetConfig("HRIS_DB")) { }
-        public List<ReportLeaveBalanceMonth> GetReportMonth(string COMP, string DEPT, string STARTDATE, string ENDDATE)
+        public List<ReportLeaveBalance> GetReportMonth(string COMP, string DEPT, string STARTDATE, string ENDDATE)
         {
             var p = new SqlParameters();
             p.AddParams("@inComp", COMP);
@@ -20,7 +20,7 @@ namespace Eleave.Data
             p.AddParams("@inStartdate", STARTDATE);
             p.AddParams("@inEnddate", ENDDATE);
             var table = GetData(CmdStore("P_Report_Leave_Balance_month", p));
-            return ConvertExtension.ConvertDataTable<ReportLeaveBalanceMonth>(GetData(CmdStore("P_Report_Leave_Balance_month", p)));
+            return ConvertExtension.ConvertDataTable<ReportLeaveBalance>(GetData(CmdStore("P_Report_Leave_Balance_month", p)));
 
         }
     }

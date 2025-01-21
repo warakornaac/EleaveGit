@@ -22,18 +22,44 @@ namespace Eleave.Models
         public decimal AL02_Accured { get; set; }
         public decimal AL02_Leave { get; set; }
         public decimal AL02_Balance { get; set; }
-        public decimal SL01_Accured { get; set; }
-        public decimal SL01_Leave { get; set; }
-        public decimal SL01_Balance { get; set; }
+        public decimal AL01_Accured { get; set; }
+        public decimal AL01_Leave { get; set; }
+        public decimal AL01_Balance { get; set; }
         public decimal CP03_Accured { get; set; }
         public decimal CP03_Leave { get; set; }
         public decimal CP03_Balance { get; set; }
+        public decimal SL01_Accured { get; set; }
+        public decimal SL01_Leave { get; set; }
+        public decimal SL01_Balance { get; set; }
+
         public decimal BU04_Accured { get; set; }
         public decimal BU04_Leave { get; set; }
         public decimal BU04_Balance { get; set; }
+        public decimal OT13_Accured { get; set; }
+        public decimal OT13_Leave { get; set; }
+        public decimal OT13_Balance { get; set; }
         public decimal OL07_Accured { get; set; }
+        public decimal OL07_Leave { get; set; }
+        public decimal OL07_Balance { get; set; }
         public decimal ML06_Accured { get; set; }
-        public decimal Other_Accured { get; set; }
+        public decimal ML06_Leave { get; set; }
+        public decimal ML06_Balance { get; set; }
+        public decimal CO11_Accured { get; set; }
+        public decimal CO11_Leave { get; set; }
+        public decimal CO11_Balance { get; set; }
+        public decimal BL10_Accured { get; set; }
+        public decimal BL10_Leave { get; set; }
+        public decimal BL10_Balance { get; set; }
+        public decimal GL09_Accured { get; set; }
+        public decimal GL09_Leave { get; set; }
+        public decimal GL09_Balance { get; set; }
+        public decimal MS08_Accured { get; set; }
+        public decimal MS08_Leave { get; set; }
+        public decimal MS08_Balance { get; set; }
+        public decimal WFH_Approve { get; set; }
+        public decimal WFH_Waiting { get; set; }
+        public decimal OffSite_Approve { get; set; }
+        public decimal OffSite_Waiting { get; set; }
 
     }
 }

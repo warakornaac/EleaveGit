@@ -82,7 +82,7 @@ namespace Eleave.Controllers
         {
             string emp = string.Empty;
             string EmpType = string.Empty;
-            var Report_leav_bal = new List<ReportLeaveBalanceMonth>();
+            var Report_leav_bal = new List<ReportLeaveBalance>();
             if (Session["EmpId"] != null)
             {
                 emp = Session["EmpId"].ToString();
@@ -133,7 +133,7 @@ namespace Eleave.Controllers
             DateTime lastDayOfMonth;
             string formatStartDate = string.Empty;
             string formatEndDate = string.Empty;
-            var Report_leav_bal = new List<ReportLeaveBalanceMonth>();
+            var Report_leav_bal = new List<ReportLeaveBalance>();
             if (Session["EmpId"] != null)
             {
                 emp = Session["EmpId"].ToString();
@@ -192,6 +192,10 @@ namespace Eleave.Controllers
             try
             {
                 Detail = new GetDetailReport().Get(EMP, LEVTYP, YEAR);
+                foreach (var item in Detail)
+                {
+                    item.CalculatedHour = Eleave.Library.Utils.CalculateDayHour((double)item.NumDay);
+                }
                 message = "Y";
             }
             catch (Exception ex)
@@ -208,6 +212,10 @@ namespace Eleave.Controllers
             try
             {
                 Detail = new GetDetailReportMonth().GetDetail(EmpID, LeavTyp, StartDate, EndDate);
+                foreach (var item in Detail)
+                {
+                    item.CalculatedHour = Eleave.Library.Utils.CalculateDayHour((double)item.NumDay);
+                }
                 message = "Y";
             }
             catch (Exception ex)

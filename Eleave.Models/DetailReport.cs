@@ -19,6 +19,7 @@ namespace Eleave.Models
         public string TimeLev { get; set; }
         public string RequestStatus { get; set; }
         public decimal NumDay { get; set; }
+        public string CalculatedHour { get; set; }
         public int NumHour { get; set; }
         public string PeriodTime { get; set; }
     }
