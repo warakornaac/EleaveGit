@@ -1,5 +1,6 @@
 ﻿
 @using Eleave.Models;
+@using Eleave.Library;
 @{
     Layout = null;
     var countListBalance = ((List<StoreGetLeaveBalance>)ViewBag.listLeaveBalance).Count();
@@ -24,6 +25,8 @@
         margin-right: 10px;
         border-radius: 5px;
         font-weight: 700;
+        font-size: 12px;
+        text-align: center;
     }
 
     .time-text {
@@ -43,14 +46,18 @@
 
     .content-text-1 {
         height: 40px;
-        width: 40px;
         display: flex;
         justify-content: center;
         align-items: center;
-        border-radius: 50%;
+        border-radius: 30%;
         background-color: #e3f3e1;
         color: #0c8916;
         font-weight: 700;
+        font-size: 12px;
+        width: 37px;
+        word-wrap: break-word;
+        text-align: center;
+        white-space: pre-line;
     }
 </style>
 <div class="card p-2">
@@ -72,17 +79,17 @@
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="d-flex flex-row align-items-center">
                                 @*<span class="star"><i class="fa fa-star yellow"></i></span>*@
-                                <span class="star font-bold">@rowItem.AccuredLeave</span>
+                                <span class="star font-bold"> @Utils.CalculateDayHour(rowItem.AccuredLeave)</span>
                                 <div class="d-flex flex-column">
                                     <span>@rowItem.Description</span>
                                     <div class="d-flex flex-row align-items-center time-text">
-                                        <small>ใช้สิทธิแล้ว (@rowItem.LeaveTaken)</small>
+                                        <small>ใช้สิทธิแล้ว (@Utils.CalculateDayHour(rowItem.LeaveTaken))</small>
                                         <span class="dots"></span>
-                                        <small>รออนุมัติ (@rowItem.WaitApprove)</small>
+                                        <small>รออนุมัติ (@Utils.CalculateDayHour(rowItem.WaitApprove))</small>
                                     </div>
                                 </div>
                             </div>
-                            <span class="content-text-1">@rowItem.ClosingBal</span>
+                            <span class="content-text-1"> @Utils.CalculateDayHour(rowItem.ClosingBal)</span>
                         </div>
                     </div>
                 }
