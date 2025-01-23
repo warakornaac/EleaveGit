@@ -364,6 +364,8 @@ namespace Eleave.Controllers
                             cmdUpload.Parameters.AddWithValue("@inEmpStatus", dReader.GetValue(14).ToString());
                             cmdUpload.Parameters.AddWithValue("@inUserType", dReader.GetValue(15).ToString());
                             cmdUpload.Parameters.AddWithValue("@inDirectorId", dReader.GetValue(16).ToString());
+                            cmdUpload.Parameters.AddWithValue("@inTempId", dReader.GetValue(17).ToString());
+                            cmdUpload.Parameters.AddWithValue("@inProrateDate", dReader.GetValue(18).ToString());
                             cmdUpload.Parameters.AddWithValue("@inInsertedBy", empId.ToString());
                             SqlParameter returnValue = new SqlParameter("@outGenstatus", SqlDbType.NVarChar, 100);
                             returnValue.Direction = System.Data.ParameterDirection.Output;
@@ -399,6 +401,8 @@ namespace Eleave.Controllers
                                     EmpStatus = dr["EmpStatus"].ToString(),
                                     UserType = dr["UserType"].ToString(),
                                     DirectorId = dr["DirectorId"].ToString(),
+                                    TempId = dr["TempId"].ToString(),
+                                    ProrateDate = dr["ProrateDate"].ToString(),
                                     InsertedBy = dr["InsertedBy"].ToString(),
                                     StatusImport = dr["StatusImport"].ToString(),
                                     ErrorImport = dr["ErrorImport"].ToString()

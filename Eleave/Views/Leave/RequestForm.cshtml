@@ -845,6 +845,8 @@
                                 select.append($('<option>').val(item.LeaveType).text(item.Description));
                             }
                         });
+                        //remove AL01=ลาพักร้อนยกมา, CP02=ลาชดเชยยกมา
+                        $('#leaveType option[value="AL01"], option[value="CP02"]').remove();
                         select.val(0).trigger('change');
                     } else {
                         console.log('Message Type: ' + data.message);
@@ -1111,7 +1113,7 @@
                     Swal.fire({
                         icon: 'error',
                         title: 'Error not search',
-                        html: 'กรุณาแจ้งผู้ดูแลระบบ<br>โดยการแคปหน้าจอและก๊อปปี้ Error ด่านล่างนี้<br>getLeaveTypeCondition<br>' + error.responseText + '<br><br>',
+                        html: 'กรุณาแจ้งผู้ดูแลระบบ<br>โดยการแคปหน้าจอและก๊อปปี้ Error ด่านล่างนี้<br>btnSubmitRequest<br>' + error.responseText + '<br><br>',
                         confirmButtonColor: '#d33',
                         confirmButtonText: 'ปิด',
                         allowOutsideClick: false,
