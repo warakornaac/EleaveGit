@@ -61,10 +61,12 @@
                                         new SelectListItem() {Text="TRU", Value="TRU"},
                                         new SelectListItem(){Text="OMP",Value="OMP"}
                                     }, "Select Company | เลือกบริษัท", new { @class = "custom-select", @id = "Company-selector" })
+                            @Html.Hidden("CompanyHidden", "", new { @id = "Company-hidden" })
                         </div>
                         <div class="form-group col-md-3">
                             @Html.Label("แผนก | Department", new { @class = "font-weight-bold" })
                             @Html.DropDownList("Department", new SelectList(ViewBag.DepartmentList, "LookValue", "LookDesc"), "Select department | เลือกหน่วยงาน", new { @class = "custom-select", @id = "department-search" })
+                            @Html.Hidden("DepartmentHidden", "", new { @id = "Department-hidden" })
                         </div>
                         <div class="form-group col-md-3">
                             @Html.Label("เริ่มต้น | Begin", new { @class = "font-weight-bold" })
@@ -90,197 +92,205 @@
     <div class="col-md-12">
         <div class="card">
             <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-striped" id="report-leave-balance-month-tbl">
-                        <thead>
-                            <tr>
-                                <th class="text-center" rowspan="2" align="center">No. | ลำดับ</th>
-                                <th class="text-center" rowspan="2" align="center">Company | บริษัท</th>
-                                <th class="text-center" rowspan="2" align="center">Employee ID | รหัสพนักงาน</th>
-                                <th class="text-center" rowspan="2" align="center">Employee Name | ชื่อพนักงาน</th>
-                                <th class="text-center" rowspan="2" align="center">Department | แผนก</th>
-                                <th class="text-center" rowspan="2" align="center">Position | ตำแหน่ง</th>
-                                <th class="text-center" rowspan="2" align="center">Start Date | วันเริ่มงาน</th>
-                                <th class="text-center" rowspan="2" align="center">Years of Service | อายุงาน (ปี)</th>
-                                <th class="text-center" rowspan="2" align="center">Months of Service | อายุงาน (เดือน)</th>
-                                <th class="text-center" rowspan="2" align="center">Days of Service | อายุงาน (วัน)</th>
+                <div class="row">
+                    <div class="col-12">
+                        <button type="button" class="btn btn-secondary" id="btn-ex-table"><i class="fa fa-file-excel-o" aria-hidden="true"></i> Export .xlsx</button>
+                    </div>
+                    <div class="col-12 pt-3">
+                        <div class="table-responsive">
+                            <table class="table table-striped" id="report-leave-balance-month-tbl">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center" rowspan="2" align="center">No. | ลำดับ</th>
+                                        <th class="text-center" rowspan="2" align="center">Company | บริษัท</th>
+                                        <th class="text-center" rowspan="2" align="center">Employee ID | รหัสพนักงาน</th>
+                                        <th class="text-center" rowspan="2" align="center">Employee Name | ชื่อพนักงาน</th>
+                                        <th class="text-center" rowspan="2" align="center">Department | แผนก</th>
+                                        <th class="text-center" rowspan="2" align="center">Position | ตำแหน่ง</th>
+                                        <th class="text-center" rowspan="2" align="center">Start Date | วันเริ่มงาน</th>
+                                        <th class="text-center" rowspan="2" align="center">Years of Service | อายุงาน (ปี)</th>
+                                        <th class="text-center" rowspan="2" align="center">Months of Service | อายุงาน (เดือน)</th>
+                                        <th class="text-center" rowspan="2" align="center">Days of Service | อายุงาน (วัน)</th>
 
-                                <th class="text-center" colspan="3">Annual Leave | สิทธิ์ลาพักร้อน</th>
+                                        <th class="text-center" colspan="3">Annual Leave | สิทธิ์ลาพักร้อน</th>
 
-                                <th class="text-center" colspan="3">Annual Leave | สิทธิ์ลาพักร้อนยกยอด</th>
+                                        <th class="text-center" colspan="3">Annual Leave | สิทธิ์ลาพักร้อนยกยอด</th>
 
-                                <th class="text-center" colspan="3">Compensation Leave | สิทธิ์หยุดชดเชย</th>
+                                        <th class="text-center" colspan="3">Compensation Leave | สิทธิ์หยุดชดเชย</th>
 
-                                <th class="text-center" colspan="3">Sick Leave | สิทธิ์ลาป่วย</th>
+                                        <th class="text-center" colspan="3">Sick Leave | สิทธิ์ลาป่วย</th>
 
-                                <th class="text-center" colspan="3">Personal Leave (Paid) | สิทธิ์ลากิจ (ได้รับเงิน)</th>
+                                        <th class="text-center" colspan="3">Personal Leave (Paid) | สิทธิ์ลากิจ (ได้รับเงิน)</th>
 
-                                <th class="text-center" colspan="3">Personal Leave (Not Paid) | สิทธิ์ลากิจ (ไม่ได้รับเงิน)</th>
+                                        <th class="text-center" colspan="3">Personal Leave (Not Paid) | สิทธิ์ลากิจ (ไม่ได้รับเงิน)</th>
 
-                                <th class="text-center" colspan="3" align="center">Ordination Leave | ลาบวช</th>
+                                        <th class="text-center" colspan="3" align="center">Ordination Leave | ลาบวช</th>
 
-                                <th class="text-center" colspan="3" align="center">Maternity Leave | ลาคลอด</th>
+                                        <th class="text-center" colspan="3" align="center">Maternity Leave | ลาคลอด</th>
 
-                                <th class="text-center" colspan="3" align="center">Contraceptive Operation Leave | ลาทำหมัน</th>
+                                        <th class="text-center" colspan="3" align="center">Contraceptive Operation Leave | ลาทำหมัน</th>
 
-                                <th class="text-center" colspan="3" align="center">Bereavement Leave | ลาพิธีศพ</th>
+                                        <th class="text-center" colspan="3" align="center">Bereavement Leave | ลาพิธีศพ</th>
 
-                                <th class="text-center" colspan="3" align="center">Graduation Leave | ลารับปริญญา</th>
+                                        <th class="text-center" colspan="3" align="center">Graduation Leave | ลารับปริญญา</th>
 
-                                <th class="text-center" colspan="3" align="center">Military Service Leave | ลาเกณฑ์ทหาร</th>
+                                        <th class="text-center" colspan="3" align="center">Military Service Leave | ลาเกณฑ์ทหาร</th>
 
 
-                                <th class="text-center" colspan="2" align="center">Work From Home | ทำงานที่บ้าน</th>
-                                <th class="text-center" colspan="2" align="center">Work off site | ทำงานนอกสถานที่</th>
+                                        <th class="text-center" colspan="2" align="center">Work From Home | ทำงานที่บ้าน</th>
+                                        <th class="text-center" colspan="2" align="center">Work off site | ทำงานนอกสถานที่</th>
 
-                            </tr>
-                            <tr>
-                                @*ลาพักร้อน*@
-                                <th>Total</th>
-                                <th>Taken</th>
-                                <th>Remaining</th>
+                                    </tr>
+                                    <tr>
+                                        @*ลาพักร้อน*@
+                                        <th>Total</th>
+                                        <th>Taken</th>
+                                        <th>Remaining</th>
 
-                                @*ลาพักร้อนยกยอด*@
-                                <th>Total</th>
-                                <th>Taken</th>
-                                <th>Remaining</th>
+                                        @*ลาพักร้อนยกยอด*@
+                                        <th>Total</th>
+                                        <th>Taken</th>
+                                        <th>Remaining</th>
 
-                                @*ลาหยุดชดเชย*@
-                                <th>Total</th>
-                                <th>Taken</th>
-                                <th>Remaining</th>
+                                        @*ลาหยุดชดเชย*@
+                                        <th>Total</th>
+                                        <th>Taken</th>
+                                        <th>Remaining</th>
 
-                                @*ลาป่วย*@
-                                <th>Total</th>
-                                <th>Taken</th>
-                                <th>Remaining</th>
+                                        @*ลาป่วย*@
+                                        <th>Total</th>
+                                        <th>Taken</th>
+                                        <th>Remaining</th>
 
-                                @*ลากิจ*@
-                                <th>Total</th>
-                                <th>Taken</th>
-                                <th>Remaining</th>
+                                        @*ลากิจ*@
+                                        <th>Total</th>
+                                        <th>Taken</th>
+                                        <th>Remaining</th>
 
-                                @*ลากิจไม่ได้เงิน*@
-                                <th>Total</th>
-                                <th>Taken</th>
-                                <th>Remaining</th>
+                                        @*ลากิจไม่ได้เงิน*@
+                                        <th>Total</th>
+                                        <th>Taken</th>
+                                        <th>Remaining</th>
 
-                                @*ลาบวช*@
-                                <th>Total</th>
-                                <th>Taken</th>
-                                <th>Remaining</th>
+                                        @*ลาบวช*@
+                                        <th>Total</th>
+                                        <th>Taken</th>
+                                        <th>Remaining</th>
 
-                                @*ลาคลอด*@
-                                <th>Total</th>
-                                <th>Taken</th>
-                                <th>Remaining</th>
+                                        @*ลาคลอด*@
+                                        <th>Total</th>
+                                        <th>Taken</th>
+                                        <th>Remaining</th>
 
-                                @*ลาทำหมัน*@
-                                <th>Total</th>
-                                <th>Taken</th>
-                                <th>Remaining</th>
+                                        @*ลาทำหมัน*@
+                                        <th>Total</th>
+                                        <th>Taken</th>
+                                        <th>Remaining</th>
 
-                                @*ลางานศพ*@
-                                <th>Total</th>
-                                <th>Taken</th>
-                                <th>Remaining</th>
+                                        @*ลางานศพ*@
+                                        <th>Total</th>
+                                        <th>Taken</th>
+                                        <th>Remaining</th>
 
-                                @*ลารับปริญญา*@
-                                <th>Total</th>
-                                <th>Taken</th>
-                                <th>Remaining</th>
+                                        @*ลารับปริญญา*@
+                                        <th>Total</th>
+                                        <th>Taken</th>
+                                        <th>Remaining</th>
 
-                                @*ลาเกณฑ์ทหาร*@
-                                <th>Total</th>
-                                <th>Taken</th>
-                                <th>Remaining</th>
+                                        @*ลาเกณฑ์ทหาร*@
+                                        <th>Total</th>
+                                        <th>Taken</th>
+                                        <th>Remaining</th>
 
-                                @*WFH*@
-                                <th>Taken</th>
-                                <th>Waiting</th>
+                                        @*WFH*@
+                                        <th>Taken</th>
+                                        <th>Waiting</th>
 
-                                @*OffSite*@
-                                <th>Taken</th>
-                                <th>Waiting</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @{
-                                int i = 0;
-                            }
-                            @foreach (var report in Model)
-                            {
-                                i++;
-                                <tr>
-                                    <td class="text-center">@i</td>
-                                    <td class="text-center">@report.Company</td>
-                                    <td class="text-center">@report.EmpId</td>
-                                    <td class="text-center">@report.Fullname</td>
-                                    <td class="text-center">@report.DeptName</td>
-                                    <td class="text-center">@report.Position</td>
-                                    <td class="text-center">@report.StartDate</td>
-                                    <td class="text-center">@report.Years</td>
-                                    <td class="text-center">@report.Months</td>
-                                    <td class="text-center">@report.Days</td>
-                                    @*ลาพักร้อน*@
-                                    <td class="text-center">@report.AL02_Accured.ToString("0.#")</td>
-                                    <td class="text-center @(report.AL02_Leave > 0 ? "note" : "")" id="al02-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="al02"><a href="#"> @report.AL02_Leave.ToString("0.#")</a></td>
-                                    <td class="text-center">@report.AL02_Balance.ToString("0.#")</td>
-                                    @*ลาพักร้อนยกยอด*@
-                                    <td class="text-center">@report.AL01_Accured.ToString("0.#")</td>
-                                    <td class="text-center @(report.AL01_Leave > 0 ? "note" : "")" id="al01-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="al01"><a href="#"> @report.AL01_Leave.ToString("0.#")</a></td>
-                                    <td class="text-center">@report.AL01_Balance.ToString("0.#")</td>
-                                    @*ลาชดเชย*@
-                                    <td class="text-center">@report.CP03_Accured.ToString("0.#")</td>
-                                    <td class="text-center @(report.CP03_Leave > 0 ? "note" : "")" id="cp03-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="cp03"><a href="#"> @report.CP03_Leave.ToString("0.#")</a> </td>
-                                    <td class="text-center">@report.CP03_Balance.ToString("0.#")</td>
-                                    @*ลาป่วย*@
-                                    <td class="text-center">@report.SL01_Accured.ToString("0.#")</td>
-                                    <td class="text-center  @(report.SL01_Leave > 0 ? "note" : "")" id="sl01-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="sl01"><a href="#"> @report.SL01_Leave.ToString("0.#")</a></td>
-                                    <td class="text-center">@report.SL01_Balance.ToString("0.#")</td>
-                                    @*ลากิจ(ได้รับเงิน)*@
-                                    <td class="text-center">@report.BU04_Accured.ToString("0.#")</td>
-                                    <td class="text-center  @(report.BU04_Leave > 0 ? "note" : "")" id="bu04-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="bu04"><a href="#"> @report.BU04_Leave.ToString("0.#")</a></td>
-                                    <td class="text-center">@report.BU04_Balance.ToString("0.#")</td>
-                                    @*ลากิจ(ไม่ได้รับเงิน)*@
-                                    <td class="text-center">@report.OT13_Accured.ToString("0.#")</td>
-                                    <td class="text-center  @(report.OT13_Leave > 0 ? "note" : "")" id="ot13-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="ot13"><a href="#"> @report.OT13_Leave.ToString("0.#")</a></td>
-                                    <td class="text-center">@report.OT13_Balance.ToString("0.#")</td>
-                                    @*ลาบวช*@
-                                    <td class="text-center">@report.OL07_Accured.ToString("0.#")</td>
-                                    <td class="text-center  @(report.OL07_Leave > 0 ? "note" : "")" id="ol07-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="ol07"><a href="#"> @report.OL07_Leave.ToString("0.#")</a></td>
-                                    <td class="text-center">@report.OL07_Balance.ToString("0.#")</td>
-                                    @*ลาคลอด*@
-                                    <td class="text-center">@report.ML06_Accured.ToString("0.#")</td>
-                                    <td class="text-center  @(report.ML06_Leave > 0 ? "note" : "")" id="ml06-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="ml06"><a href="#"> @report.ML06_Leave.ToString("0.#")</a></td>
-                                    <td class="text-center">@report.ML06_Balance.ToString("0.#")</td>
-                                    @*ลาทำหมัน*@
-                                    <td class="text-center">@report.CO11_Accured.ToString("0.#")</td>
-                                    <td class="text-center  @(report.CO11_Leave > 0 ? "note" : "")" id="co11-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="co11"><a href="#"> @report.CO11_Leave.ToString("0.#")</a></td>
-                                    <td class="text-center">@report.CO11_Balance.ToString("0.#")</td>
-                                    @*ลาพิธีศพ*@
-                                    <td class="text-center">@report.BL10_Accured.ToString("0.#")</td>
-                                    <td class="text-center  @(report.BL10_Leave > 0 ? "note" : "")" id="bl10-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="bl10"><a href="#"> @report.BL10_Leave.ToString("0.#")</a></td>
-                                    <td class="text-center">@report.BL10_Balance.ToString("0.#")</td>
-                                    @*ลารับปริญญา*@
-                                    <td class="text-center">@report.GL09_Accured.ToString("0.#")</td>
-                                    <td class="text-center  @(report.GL09_Leave > 0 ? "note" : "")" id="gl09-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="gl09"><a href="#"> @report.GL09_Leave.ToString("0.#")</a></td>
-                                    <td class="text-center">@report.GL09_Balance.ToString("0.#")</td>
-                                    @*ลาเกณฑ์ทหาร*@
-                                    <td class="text-center">@report.MS08_Accured.ToString("0.#")</td>
-                                    <td class="text-center  @(report.MS08_Leave > 0 ? "note" : "")" id="ms08-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="ms08"><a href="#"> @report.MS08_Leave.ToString("0.#")</a></td>
-                                    <td class="text-center">@report.MS08_Balance.ToString("0.#")</td>
-                                    @*WFH*@
-                                    <td class="text-center  @(report.WFH_Approve > 0 ? "note" : "")" id="wfh-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="wfh"><a href="#"> @report.WFH_Approve.ToString("0.#")</a></td>
-                                    <td class="text-center">@report.WFH_Waiting.ToString("0.#")</td>
-                                    @*Onsite*@
-                                    <td class="text-center  @(report.OffSite_Approve > 0 ? "note" : "")" id="offsite-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="offsite"><a href="#"> @report.OffSite_Approve.ToString("0.#")</a></td>
-                                    <td class="text-center">@report.OffSite_Waiting.ToString("0.#")</td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
+                                        @*OffSite*@
+                                        <th>Taken</th>
+                                        <th>Waiting</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        int i = 0;
+                                    }
+                                    @foreach (var report in Model)
+                                    {
+                                        i++;
+                                        <tr>
+                                            <td class="text-center">@i</td>
+                                            <td class="text-center">@report.Company</td>
+                                            <td class="text-center">@report.EmpId</td>
+                                            <td class="text-center">@report.Fullname</td>
+                                            <td class="text-center">@report.DeptName</td>
+                                            <td class="text-center">@report.Position</td>
+                                            <td class="text-center">@report.StartDate</td>
+                                            <td class="text-center">@report.Years</td>
+                                            <td class="text-center">@report.Months</td>
+                                            <td class="text-center">@report.Days</td>
+                                            @*ลาพักร้อน*@
+                                            <td class="text-center">@report.AL02_Accured.ToString("0.#")</td>
+                                            <td class="text-center @(report.AL02_Leave > 0 ? "note" : "")" id="al02-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="al02"><a href="#"> @report.AL02_Leave.ToString("0.#")</a></td>
+                                            <td class="text-center">@report.AL02_Balance.ToString("0.#")</td>
+                                            @*ลาพักร้อนยกยอด*@
+                                            <td class="text-center">@report.AL01_Accured.ToString("0.#")</td>
+                                            <td class="text-center @(report.AL01_Leave > 0 ? "note" : "")" id="al01-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="al01"><a href="#"> @report.AL01_Leave.ToString("0.#")</a></td>
+                                            <td class="text-center">@report.AL01_Balance.ToString("0.#")</td>
+                                            @*ลาชดเชย*@
+                                            <td class="text-center">@report.CP03_Accured.ToString("0.#")</td>
+                                            <td class="text-center @(report.CP03_Leave > 0 ? "note" : "")" id="cp03-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="cp03"><a href="#"> @report.CP03_Leave.ToString("0.#")</a> </td>
+                                            <td class="text-center">@report.CP03_Balance.ToString("0.#")</td>
+                                            @*ลาป่วย*@
+                                            <td class="text-center">@report.SL01_Accured.ToString("0.#")</td>
+                                            <td class="text-center  @(report.SL01_Leave > 0 ? "note" : "")" id="sl01-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="sl01"><a href="#"> @report.SL01_Leave.ToString("0.#")</a></td>
+                                            <td class="text-center">@report.SL01_Balance.ToString("0.#")</td>
+                                            @*ลากิจ(ได้รับเงิน)*@
+                                            <td class="text-center">@report.BU04_Accured.ToString("0.#")</td>
+                                            <td class="text-center  @(report.BU04_Leave > 0 ? "note" : "")" id="bu04-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="bu04"><a href="#"> @report.BU04_Leave.ToString("0.#")</a></td>
+                                            <td class="text-center">@report.BU04_Balance.ToString("0.#")</td>
+                                            @*ลากิจ(ไม่ได้รับเงิน)*@
+                                            <td class="text-center">@report.OT13_Accured.ToString("0.#")</td>
+                                            <td class="text-center  @(report.OT13_Leave > 0 ? "note" : "")" id="ot13-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="ot13"><a href="#"> @report.OT13_Leave.ToString("0.#")</a></td>
+                                            <td class="text-center">@report.OT13_Balance.ToString("0.#")</td>
+                                            @*ลาบวช*@
+                                            <td class="text-center">@report.OL07_Accured.ToString("0.#")</td>
+                                            <td class="text-center  @(report.OL07_Leave > 0 ? "note" : "")" id="ol07-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="ol07"><a href="#"> @report.OL07_Leave.ToString("0.#")</a></td>
+                                            <td class="text-center">@report.OL07_Balance.ToString("0.#")</td>
+                                            @*ลาคลอด*@
+                                            <td class="text-center">@report.ML06_Accured.ToString("0.#")</td>
+                                            <td class="text-center  @(report.ML06_Leave > 0 ? "note" : "")" id="ml06-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="ml06"><a href="#"> @report.ML06_Leave.ToString("0.#")</a></td>
+                                            <td class="text-center">@report.ML06_Balance.ToString("0.#")</td>
+                                            @*ลาทำหมัน*@
+                                            <td class="text-center">@report.CO11_Accured.ToString("0.#")</td>
+                                            <td class="text-center  @(report.CO11_Leave > 0 ? "note" : "")" id="co11-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="co11"><a href="#"> @report.CO11_Leave.ToString("0.#")</a></td>
+                                            <td class="text-center">@report.CO11_Balance.ToString("0.#")</td>
+                                            @*ลาพิธีศพ*@
+                                            <td class="text-center">@report.BL10_Accured.ToString("0.#")</td>
+                                            <td class="text-center  @(report.BL10_Leave > 0 ? "note" : "")" id="bl10-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="bl10"><a href="#"> @report.BL10_Leave.ToString("0.#")</a></td>
+                                            <td class="text-center">@report.BL10_Balance.ToString("0.#")</td>
+                                            @*ลารับปริญญา*@
+                                            <td class="text-center">@report.GL09_Accured.ToString("0.#")</td>
+                                            <td class="text-center  @(report.GL09_Leave > 0 ? "note" : "")" id="gl09-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="gl09"><a href="#"> @report.GL09_Leave.ToString("0.#")</a></td>
+                                            <td class="text-center">@report.GL09_Balance.ToString("0.#")</td>
+                                            @*ลาเกณฑ์ทหาร*@
+                                            <td class="text-center">@report.MS08_Accured.ToString("0.#")</td>
+                                            <td class="text-center  @(report.MS08_Leave > 0 ? "note" : "")" id="ms08-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="ms08"><a href="#"> @report.MS08_Leave.ToString("0.#")</a></td>
+                                            <td class="text-center">@report.MS08_Balance.ToString("0.#")</td>
+                                            @*WFH*@
+                                            <td class="text-center  @(report.WFH_Approve > 0 ? "note" : "")" id="wfh-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="wfh"><a href="#"> @report.WFH_Approve.ToString("0.#")</a></td>
+                                            <td class="text-center">@report.WFH_Waiting.ToString("0.#")</td>
+                                            @*Onsite*@
+                                            <td class="text-center  @(report.OffSite_Approve > 0 ? "note" : "")" id="offsite-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="offsite"><a href="#"> @report.OffSite_Approve.ToString("0.#")</a></td>
+                                            <td class="text-center">@report.OffSite_Waiting.ToString("0.#")</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
+
             </div>
         </div>
     </div>
@@ -321,6 +331,104 @@
 
 <script>
     $(document).ready(function () {
+        // ดึงค่าจาก DropDownList และ TextBox
+        var companyValue = $('#Company-selector').val();
+        var departmentValue = $('#department-search').val();
+        var startDateValue = $('#start-date').val();
+        var endDateValue = $('#end-date').val();
+
+        // เซ็ตค่าลงใน Hidden Field
+        $('#Company-hidden').val(companyValue);
+        $('#Department-hidden').val(departmentValue);
+        $('#start-date-hidden').val(startDateValue);
+        $('#end-date-hidden').val(endDateValue);
+    });
+
+    //$(document).ready(function () {
+    //    $("#btn-ex-table").click(function () {
+    //        let table = $('#report-leave-balance-month-tbl');
+    //        console.log(table);
+    //        debugger;
+    //        TableToExcel.convert(table[0], {
+    //            name: `Report_Month.xlsx`,
+    //            sheet: {
+    //                name: 'Report_Month'
+    //            }
+    //        });
+    //    });
+    //});
+    $(document).ready(function () {
+        $("#btn-ex-table").click(function () {
+            var today = new Date();
+            var formattedDate = today.getFullYear() + '-' +
+                String(today.getMonth() + 1).padStart(2, '0') + '-' +
+                String(today.getDate()).padStart(2, '0');
+            // ดึงข้อมูลจาก Table แรก
+            let table1 = document.getElementById('report-leave-balance-month-tbl');
+            let ws1 = XLSX.utils.table_to_sheet(table1);
+            const Company = $('#Company-hidden').val();
+            const dep = $('#Department-hidden').val();
+            const stdate = $('#start-date-hidden').val();
+            const enddate = $('#end-date-hidden').val();
+            // ดึงข้อมูลจาก Stored Procedure
+            $.ajax({
+                url: '@Url.Action("DetailReportMonthSheet", "Report")',
+                type: "POST",
+                dataType: "JSON",
+                data: {
+                    ReqStart: stdate,
+                    ReqEnd: enddate,
+                    Dept: dep,
+                    Comp: Company
+                },
+                success: function (response) {
+                    if (response.message === 'Y') {
+                        // Header
+                        let data2 = [['Country', 'Company', 'REQ_NO', 'EmpId', 'Empname', 'ReqStatus', 'LeaveType', 'StartDate', 'EndDate', 'NumDay', 'ApprGrpID', 'ApproveBy', 'ApproveDate', 'AcknowledgeBy', 'AcknowledgeDate']]; // Header
+
+                        // เพิ่มข้อมูล
+                        response.Detail.forEach(item => {
+                            data2.push([
+                                item.CountryCode,
+                                item.Company,
+                                item.ReqNo,
+                                item.EmpId,
+                                item.Empname,
+                                item.ReqStaDesc,
+                                item.LeaveType,
+                                item.StartDate,
+                                item.EndDate,
+                                item.NumDayCal,
+                                item.ApprGrpID,
+                                item.ApproveBy,
+                                item.ApproveDate,
+                                item.AcknowledgeBy,
+                                item.AcknowledgeDate
+                            ]);
+                        });
+
+                        // สร้าง Sheet ที่สอง
+                        let ws2 = XLSX.utils.aoa_to_sheet(data2);
+
+                        // สร้าง Workbook
+                        let wb = XLSX.utils.book_new();
+                        XLSX.utils.book_append_sheet(wb, ws1, 'Report_Month');
+                        XLSX.utils.book_append_sheet(wb, ws2, 'Detail');
+
+                        // บันทึกไฟล์ Excel
+                        XLSX.writeFile(wb, 'Report_Leave_Month_' + formattedDate +'.xlsx');
+                    } else {
+                        console.error('Error fetching data:', response.message);
+                    }
+                },
+                error: function (err) {
+                    console.error('Error in AJAX:', err);
+                }
+            });
+        });
+    });
+
+    $(document).ready(function () {
         $('#department-search').select2({
             width: '100%'
         });
@@ -336,6 +444,7 @@
                     className: "dt-head-center"
                 }
             ],
+            paging: false,
             pageLength: 100,
             lengthChange: false,
             searching: false,
@@ -347,18 +456,8 @@
             },
             screenX: true,
             scrollY: 500,
-            dom: '<"d-flex justify-content-between mb-3"B>t<"d-flex align-items-center"i<"ml-3"p>>', // ปรับตำแหน่ง DOM
-            buttons: [
-                {
-                    extend: 'excelHtml5',
-                    text: 'Export to Excel', // ข้อความปุ่ม
-                    className: 'btn btn-success', // เพิ่มคลาสเพื่อปรับแต่งปุ่ม
-                    title: 'รายงานข้อมูลรวมเดือน'//, // ชื่อไฟล์ Excel
-                    //exportOptions: {
-                    //    columns: ':visible' // Export เฉพาะคอลัมน์ที่มองเห็น
-                    //}
-                }
-            ]
+            scrollCollapse: true,
+            dom: '<t><"d-flex align-items-center"ip>',
         });
     });
 

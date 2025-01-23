@@ -8,6 +8,7 @@ namespace Eleave.Models
 {
     public class ApprovalRequest
     {
+        public string Company { get; set; }
         public string ReqNo { get; set; }
         public string ReqType { get; set; }
         public string CountryCode { get; set; }
@@ -17,6 +18,7 @@ namespace Eleave.Models
         public string StartDate { get; set; }
         public string EndDate { get; set; }
         public decimal NumDay { get; set; }
+        public string NumDayCal { get; set; }
         public string ReqDate { get; set; }
         public string ApprGrpID { get; set; }
         public string ApproverId { get; set; }

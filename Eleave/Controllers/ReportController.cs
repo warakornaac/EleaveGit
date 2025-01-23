@@ -2,11 +2,13 @@
 using Eleave.Models;
 using System;
 using System.Collections.Generic;
+using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Services.Description;
 
 namespace Eleave.Controllers
 {
@@ -221,6 +223,166 @@ namespace Eleave.Controllers
             catch (Exception ex)
             {
                 message = ex.Message;
+            }
+            return Json(new { message = message, Detail }, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult DetailReportMonthSheet(string ReqStart, string ReqEnd, string Dept, string Comp)
+        {
+            string message = string.Empty;
+            string GetEmp = string.Empty;
+            DateTime? startDate = null;
+            DateTime? endDate = null;
+            // แปลง ReqStart เป็น DateTime 
+            if (!string.IsNullOrEmpty(ReqStart))
+            {
+                if (DateTime.TryParseExact(ReqStart, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedStartDate))
+                {
+                    startDate = parsedStartDate;
+                }
+            }
+
+            // แปลง ReqEnd เป็น DateTime 
+            if (!string.IsNullOrEmpty(ReqEnd))
+            {
+                if (DateTime.TryParseExact(ReqEnd, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedEndDate))
+                {
+                    endDate = parsedEndDate;
+                }
+            }
+            if (Session["EmpId"] != null)
+            {
+                GetEmp = Session["EmpId"].ToString();
+            }
+            var Detail = new List<ApprovalRequest>();
+            try
+            {
+                Detail = new GetDataSheetReport().GetAck(GetEmp, Comp, "", "", "1", startDate, endDate, Dept, "", "", "0");
+
+                foreach (var item in Detail)
+                {
+                    if (!string.IsNullOrEmpty(item.ApproveBy))
+                    {
+                        var approvers = item.ApproveBy.Split(',');
+                        var approverList = new List<string>();
+
+                        foreach (var approver in approvers)
+                        {
+                            item.NumDayCal = Eleave.Library.Utils.CalculateDayHour((double)item.NumDay);
+                            if (approver.Contains("|"))
+                            {
+                                var parts = approver.Split('|');
+                                var status = parts[0].Trim();
+                                var name = parts.Length > 1 ? parts[1].Trim() : string.Empty;
+
+                                // แปลงค่า Status เป็นสัญลักษณ์
+                                string icon;
+                                switch (status)
+                                {
+                                    case "0":
+                                        icon = "↻"; // Repeat
+                                        break;
+                                    case "1":
+                                        icon = "✔"; // Success
+                                        break;
+                                    case "2":
+                                        icon = "✖"; // Error
+                                        break;
+                                    case "3":
+                                        icon = "✔"; // Success (อีกแบบ)
+                                        break;
+                                    case "4":
+                                        icon = "⊗"; // Cancel
+                                        break;
+                                    default:
+                                        icon = "?";
+                                        break;
+                                }
+                                approverList.Add($"{icon} {name}");
+                            }
+                        }
+                        item.ApproveBy = string.Join(", ", approverList);
+                    }
+                }
+                message = "Y";
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions
+                Console.WriteLine(ex.Message);
+            }
+            return Json(new { message = message, Detail }, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult DetailReportYearSheet(string Yearly, string Dept, string EmpID, string Comp)
+        {
+            string message = string.Empty;
+            string GetEmp = string.Empty;
+            // แปลง ReqStart เป็น DateTime 
+            int GetYear = int.Parse(Yearly);
+            DateTime firstDay = new DateTime(GetYear, 1, 1);
+            DateTime lastDay = new DateTime(GetYear, 12, 31);
+            var Detail = new List<ApprovalRequest>();
+            if (Session["EmpId"] != null)
+            {
+                GetEmp = Session["EmpId"].ToString();
+            }
+            try
+            {
+                Detail = new GetDataSheetReport().GetAck(GetEmp, Comp, "", "", "1", firstDay, lastDay, Dept, "", EmpID, "0");
+
+                foreach (var item in Detail)
+                {
+                    if (!string.IsNullOrEmpty(item.ApproveBy))
+                    {
+                        var approvers = item.ApproveBy.Split(',');
+                        var approverList = new List<string>();
+
+                        foreach (var approver in approvers)
+                        {
+                            item.NumDayCal = Eleave.Library.Utils.CalculateDayHour((double)item.NumDay);
+                            if (approver.Contains("|"))
+                            {
+                                var parts = approver.Split('|');
+                                var status = parts[0].Trim();
+                                var name = parts.Length > 1 ? parts[1].Trim() : string.Empty;
+
+                                // แปลงค่า Status เป็นสัญลักษณ์
+                                string icon;
+                                switch (status)
+                                {
+                                    case "0":
+                                        icon = "↻"; // Repeat
+                                        break;
+                                    case "1":
+                                        icon = "✔"; // Success
+                                        break;
+                                    case "2":
+                                        icon = "✖"; // Error
+                                        break;
+                                    case "3":
+                                        icon = "✔"; // Success (อีกแบบ)
+                                        break;
+                                    case "4":
+                                        icon = "⊗"; // Cancel
+                                        break;
+                                    default:
+                                        icon = "?";
+                                        break;
+                                }
+                                approverList.Add($"{icon} {name}");
+                            }
+                        }
+                        item.ApproveBy = string.Join(", ", approverList);
+                    }
+                }
+                message = "Y";
+            }
+            catch (Exception ex)
+            {
+                message = ex.Message;
+                // Handle exceptions
+                Console.WriteLine(ex.Message);
             }
             return Json(new { message = message, Detail }, JsonRequestBehavior.AllowGet);
         }
