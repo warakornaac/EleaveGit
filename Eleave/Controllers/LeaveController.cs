@@ -13,6 +13,7 @@ using System.IO;
 using Microsoft.Ajax.Utilities;
 using System.Web.Services.Description;
 using System.Data;
+using System.Drawing.Drawing2D;
 
 namespace Eleave.Controllers
 {
@@ -360,18 +361,56 @@ namespace Eleave.Controllers
         }
         public ActionResult GetRequestDetail(string ReqNO, string EmpId, string Flag)
         {
+            DateTime? startDate = null;
+            DateTime? endDate = null;
+
             var ReqDetail = new List<RequestList>();
             var ReqFile = new List<RequestFile>();
+            var ReqHistory = new List<RequestList>();
             var AppComment = new List<ApproveCommentRequest>();
             var AckComment = new List<ApproveCommentRequest>();
             var listLeaveBalance = new List<StoreGetLeaveBalance>();
             var listLogApprove = new List<StoreGetLogApprove>();
+
             string message = string.Empty;
             try
             {
 
                 ReqDetail = new GetRequestDetail().Get(ReqNO);
                 ReqFile = new GetRequestFile().GetFile(ReqNO);
+                var GetReqDate = ReqDetail.FirstOrDefault()?.StartDate.ToString();
+                //string GetDate = GetReqDate.Substring(GetReqDate.Length - 4);
+                Console.WriteLine($"GetReqDate : {GetReqDate}");
+                int Year;
+                if (!string.IsNullOrEmpty(GetReqDate) && DateTime.TryParseExact(GetReqDate, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedDate))
+                {
+                    Year = parsedDate.Year; // ดึงค่าปีจาก DateTime
+                }
+                else
+                {
+                    Year = DateTime.Now.Year;
+                }
+                DateTime firstDay = new DateTime(Year, 1, 1);
+                DateTime lastDay = new DateTime(Year, 12, 31);
+
+                // แปลง firstDay เป็น DateTime 
+                if (!string.IsNullOrEmpty(firstDay.ToString("dd/MM/yyyy")))
+                {
+                    if (DateTime.TryParseExact(firstDay.ToString("dd/MM/yyyy"), "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedStartDate))
+                    {
+                        startDate = parsedStartDate;
+                    }
+                }
+
+                // แปลง lastDay เป็น DateTime 
+                if (!string.IsNullOrEmpty(lastDay.ToString("dd/MM/yyyy")))
+                {
+                    if (DateTime.TryParseExact(lastDay.ToString("dd/MM/yyyy"), "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedEndDate))
+                    {
+                        endDate = parsedEndDate;
+                    }
+                }
+                ReqHistory = new SearchHistoryRequest().GetHis("", "", "1", startDate, endDate, "", "", ReqDetail.FirstOrDefault().Empname.ToString());
                 AppComment = new GetCommentApprover().GetComment(ReqNO);
                 AckComment = new GetCommentAcknowledge().GetComment(ReqNO);
                 listLeaveBalance = new GetLeaveBalance().LeaveBalance(EmpId);
@@ -380,6 +419,7 @@ namespace Eleave.Controllers
                 message = "Y";
                 ViewBag.ReqDetail = ReqDetail;
                 ViewBag.ReqFile = ReqFile;
+                ViewBag.ReqHistory = ReqHistory;
                 ViewBag.ApprvComment = AppComment;
                 ViewBag.AckComment = AckComment;
                 ViewBag.listLeaveBalance = listLeaveBalance;
@@ -390,6 +430,7 @@ namespace Eleave.Controllers
                 message = ex.Message;
                 ViewBag.ReqDetail = new List<object>();
                 ViewBag.ReqFile = new List<object>();
+                ViewBag.ReqHistory = new List<object>();
                 ViewBag.listLeaveBalance = new List<object>();
 
             }
@@ -399,6 +440,7 @@ namespace Eleave.Controllers
             {
                 @ViewBag.Message,
                 @ViewBag.ReqDetail,
+                @ViewBag.ReqHistory,
                 @ViewBag.ReqFile,
                 @ViewBag.Flag,
                 @ViewBag.listLeaveBalance,
@@ -557,7 +599,8 @@ namespace Eleave.Controllers
             string txtMessage = string.Empty;
             try
             {
-                if (!string.IsNullOrEmpty(EmpId) && !string.IsNullOrEmpty(StartDate) && !string.IsNullOrEmpty(EndDate)) {
+                if (!string.IsNullOrEmpty(EmpId) && !string.IsNullOrEmpty(StartDate) && !string.IsNullOrEmpty(EndDate))
+                {
                     LeaveTakenDay = Utils.getLeaveTakenByDate(EmpId, StartDate, EndDate);
                     leaveTakenDayDouble = Convert.ToDouble(LeaveTakenDay);
                     txtStatus = "success";
