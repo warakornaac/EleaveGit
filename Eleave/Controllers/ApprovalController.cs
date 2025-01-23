@@ -263,7 +263,6 @@ namespace Eleave.Controllers
             string message = string.Empty;
             try
             {
-
                 ReqSta = new GetLookupData().GetLookupDataStore("REQ_STS");
                 message = "Y";
             }

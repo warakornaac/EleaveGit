@@ -4,13 +4,28 @@
     var reqDetails = ViewBag.ReqDetail;
     string EMPID = Session["EmpId"].ToString();
     var countLogApprove = ((List<StoreGetLogApprove>)ViewBag.listLogApprove).Count();
-
+    string NAME = Session["FullName"].ToString();
+    string CheckName = string.Empty;
 }
+<style>
+    .table-style {
+        height: 200px;
+        overflow-y: auto;
+    }
+
+    .sticky-head {
+        position: sticky !important;
+        top: 0;
+        background-color: white;
+        z-index: 3 !important;
+    }
+</style>
 
 @if (ViewBag.ReqDetail != null)
 {
     foreach (var reqDetail in ViewBag.ReqDetail)
     {
+        CheckName = reqDetail.Empname;
         <div class="row">
             <div class="col-sm-3 col-md-3">
                 <div class="form-group highlight-addon hide-errors">
@@ -21,6 +36,7 @@
                         <input type="hidden" id="ReqIdHide" name="ReqIdHide" value="@reqDetail.ReqNo" />
                         <input type="hidden" id="ReqStatus" name="ReqStatus" value="@reqDetail.ReqStatus" />
                         <input type="hidden" id="ReqEmpId" name="ReqEmpId" value="@reqDetail.EmpId" />
+                        <input type="hidden" id="EndDatecancel" name="EndDatecancel" value="@reqDetail.EndDate" />
                     </div>
                 </div>
             </div>
@@ -28,7 +44,7 @@
                 <div class="form-group highlight-addon hide-errors">
                     <label class="control-label font-weight-bold" for="">Emp Name | ชื่อพนักงาน : </label>
                     <div class="form-control-static">
-                        <span style="white-space: nowrap;"><p class="border-0 p-0 m-0" name="Empname" id="Empname"> @reqDetail.Empname </p></span>
+                        <span style="white-space: nowrap;"><p class="border-0 p-0 m-0" name="Empname" id="Empname"> @reqDetail.Empname  </p></span>
                     </div>
                 </div>
             </div>
@@ -77,7 +93,7 @@
                 <div class="form-group highlight-addon hide-errors">
                     <label class="control-label font-weight-bold" for="">Total Date | จำนวนวัน	 : </label>
                     <div class="form-control-static">
-                        <p class="border-0 p-0 m-0" name="NumDay" id="NumDay"> @reqDetail.NumDay </p>
+                        <p class="border-0 p-0 m-0" name="NumDay" id="NumDay"> @Eleave.Library.Utils.CalculateDayHour((double)reqDetail.NumDay) </p>
                     </div>
                 </div>
             </div>
@@ -97,10 +113,61 @@
                     </div>
                 </div>
             </div>
+        </div><div class="row">
+            <hr />
         </div>
 
-        <div class="row">
-            <hr />
+        <div class="row" id="his-head" @(NAME == CheckName ? "hidden" : "")>
+            <div class="col-sm-6 col-md-6 text-left">
+                <span class="badge badge-light-secondary" style="font-size: 16px;">Leave History | ประวัติลา </span>
+            </div>
+        </div>
+        <div class="row pt-2" id="his-body" @(NAME == CheckName ? "hidden" : "")>
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="col-12 p-0 m-0">
+                        <div class="table-responsive table-style">
+                            <table class="table table-bordered table-striped tableList m-0" id="detail-history-table">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center sticky-head">No|ลำดับ</th>
+                                        <th class="text-center sticky-head">REQ TYPE|ลำดับ</th>
+                                        <th class="text-center sticky-head">REQ DATE|วันลา</th>
+                                        <th class="text-center sticky-head">TOT REQ|จำนวนวน</th>
+                                        <th class="text-center sticky-head">REMARK|หมายเหตุ</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (ViewBag.ReqHistory.Count > 0)
+                                    {
+                                        int coun = 0;
+                                        foreach (var ItemHis in ViewBag.ReqHistory)
+                                        {
+                                            coun++;
+                                            <tr>
+                                                <td class="text-center">@coun</td>
+                                                <td class="text-center">@ItemHis.LeaveType</td>
+                                                <td class="text-center">@(ItemHis.StartDate)-@(ItemHis.EndDate)</td>
+                                                <td class="text-center">@Eleave.Library.Utils.CalculateDayHour((double)ItemHis.NumDay)</td>
+                                                <td>@ItemHis.Remark</td>
+                                            </tr>
+                                        }
+                                    }
+                                    else if (ViewBag.ReqHistory.Count == 0 || ViewBag.ReqHistory == null)
+                                    {
+                                        <tr>
+                                            <td class="text-center" colspan="5">No Data</td>
+                                        </tr>
+                                    }
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
         </div>
 
         <div class="row">
@@ -267,11 +334,31 @@ else
 {
     <div class="alert alert-danger text-center" style="font-size: 16px; font-weight: bold;"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> ไม่พบข้อมูล</div>
 }
+@*<script>
+        $(document).ready(function () {
+            $.fn.dataTable.ext.errMode = 'none';
+            $('#detail-history-table').dataTable({
+                dom: '<t><"d-flex align-items-center"i>',
+                paging: false,
+                searching: false,
+                ordering: false,
+                select: false,
+                scrollY: 250,
+                scrollX: true,
+                language: {
+                    info: "แสดง _START_ ถึง _END_ จากทั้งหมด _TOTAL_ คำร้องขอ",
+                    infoEmpty: "ไม่มีข้อมูลให้แสดง"
+                }
+            });
+            table.columns.adjust();
+        });
+    </script>*@
 <script defer>
+
      //set leave balance
-    $('#item-list #sub-item-list').slice(5).hide();
+    $('#item-list #sub-item-list').slice(3).hide();
     $('#view-more').click(function () {
-        $('#item-list #sub-item-list').slice(5).toggle(); // Toggle the hidden items
+        $('#item-list #sub-item-list').slice(3).toggle(); // Toggle the hidden items
         if ($(this).val() == "View More") {
             $(this).val("View Less");
             $(this).html("เพิ่มเติม <i class='fa fa-angle-double-down'> </i>");
@@ -281,34 +368,58 @@ else
         }
     });
     $(document).ready(function () {
-        var ReqStatus = $("#ReqStatus").val() || 0;
-        var EmpString = $('#ReqEmpId').val();
-        if (EmpString == '@EMPID') {
-            if (ReqStatus > 0) {
-                $("#cancel_submit").css("display", "none");
-            }
-            else {
-                $("#cancel_submit").css("display", "block");
-            }
-        }
-        else {
-            $("#cancel_submit").css("display", "none");
-        }
-    });
+         var Enddate = $('#EndDatecancel').val();
+         // แปลง input เป็น Date object
+         var inputDateParts = Enddate.split('/');
+         var inputDate = new Date(inputDateParts[2], inputDateParts[1] - 1, 1);
+
+         // ดึง current date
+         var currentDate = new Date();
+         var currentYear = currentDate.getFullYear();
+         var currentMonth = currentDate.getMonth();
+         //
+
+         var ReqStatus = $("#ReqStatus").val() || 0;
+         var EmpString = $('#ReqEmpId').val();
+         if (EmpString == '@EMPID') {
+             if (inputDate.getFullYear() != currentYear ||
+                 (inputDate.getFullYear() === currentYear && inputDate.getMonth() > currentMonth) && ReqStatus != 1) {
+                 $("#cancel_submit").css("display", "none");
+             }
+             else {
+                 $("#cancel_submit").css("display", "block");
+             }
+         }
+         else {
+             $("#cancel_submit").css("display", "none");
+         }
+     });
     $(document).ready(function () {
-        var ReqStatus = $("#ReqStatus").val() || 0;
-        var EmpString = $('#ReqEmpId').val();
-        if (EmpString == '@EMPID') {
-            if (ReqStatus > 0) {
-                $("#cancel_alt_submit").css("display", "none");
-            }
-            else {
-                $("#cancel_alt_submit").css("display", "block");
-            }
-        }
-        else {
-            $("#cancel_alt_submit").css("display", "none");
-        }
-    });
+         var Enddate = $('#EndDatecancel').val();
+         // แปลง input เป็น Date object
+         var inputDateParts = Enddate.split('/');
+         var inputDate = new Date(inputDateParts[2], inputDateParts[1] - 1, 1);
+
+         // ดึง current date
+         var currentDate = new Date();
+         var currentYear = currentDate.getFullYear();
+         var currentMonth = currentDate.getMonth();
+         //
+
+         var ReqStatus = $("#ReqStatus").val() || 0;
+         var EmpString = $('#ReqEmpId').val();
+         if (EmpString == '@EMPID') {
+             if (inputDate.getFullYear() != currentYear ||
+                 (inputDate.getFullYear() === currentYear && inputDate.getMonth() > currentMonth) && ReqStatus != 1) {
+                 $("#cancel_alt_submit").css("display", "none");
+             }
+             else {
+                 $("#cancel_alt_submit").css("display", "block");
+             }
+         }
+         else {
+             $("#cancel_alt_submit").css("display", "none");
+         }
+     });
 
 </script>

@@ -152,6 +152,8 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\bootstrap.rtl.css" />
     <Content Include="Content\bootstrap.rtl.min.css" />
+    <Content Include="Content\datatable\datatables.css" />
+    <Content Include="Content\datatable\datatables.min.css" />
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\login\bootstrap-extend.min.css" />
     <Content Include="Content\login\bootstrap.min.css" />
@@ -239,6 +241,8 @@
     <Content Include="fonts\pct.eot" />
     <Content Include="fonts\pct.ttf" />
     <Content Include="fonts\pct.woff" />
+    <Content Include="Scripts\datatable\datatables.js" />
+    <Content Include="Scripts\datatable\datatables.min.js" />
     <Content Include="Views\Include\Header.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
