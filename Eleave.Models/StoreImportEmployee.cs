@@ -25,6 +25,8 @@ namespace Eleave.Models
         public string EmpStatus { get; set; }
         public string UserType { get; set; }
         public string DirectorId { get; set; }
+        public string TempId { get; set; }
+        public string ProrateDate { get; set; }
         public string InsertedBy { get; set; }
         public string InsertedDate { get; set; }
         public string StatusImport { get; set; }
