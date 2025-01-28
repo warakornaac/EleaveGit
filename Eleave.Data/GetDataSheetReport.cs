@@ -12,7 +12,7 @@ namespace Eleave.Data
     public class GetDataSheetReport : MsSQL
     {
         public GetDataSheetReport() : base(Utils.GetConfig("HRIS_DB")) { }
-        public List<ApprovalRequest> GetAck(string user, string Company, string LeaveType, string reqType, string ReqStatus, DateTime? ReqStart, DateTime? ReqEnd, string Department, string reqId, string empID, string flag)
+        public List<ReportLeaveBalanceDetail> GetAck(string user, string Company, string LeaveType, string reqType, string ReqStatus, DateTime? ReqStart, DateTime? ReqEnd, string Department, string reqId, string empID, string flag)
         {
             var p = new SqlParameters();
             p.AddParams("@inUser", user);
@@ -28,7 +28,7 @@ namespace Eleave.Data
             p.AddParams("@inSchFlag", flag);
 
             var table = GetData(CmdStore("P_Detail_Acknowledge_Request_Report", p));
-            return ConvertExtension.ConvertDataTable<ApprovalRequest>(GetData(CmdStore("P_Detail_Acknowledge_Request_Report", p)));
+            return ConvertExtension.ConvertDataTable<ReportLeaveBalanceDetail>(GetData(CmdStore("P_Detail_Acknowledge_Request_Report", p)));
         }
     }
 }
