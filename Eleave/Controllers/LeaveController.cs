@@ -532,6 +532,7 @@ namespace Eleave.Controllers
             string IsRequiredAttach = string.Empty;
             string MaxDay = string.Empty;
             string AllowAdd = string.Empty;
+            string IsLimit = string.Empty;
             string ClosingBal = string.Empty;
             string LeaveTaken = string.Empty;
             string EmpID = string.Empty;
@@ -558,9 +559,10 @@ namespace Eleave.Controllers
                         MinHour = dr["MinHour"].ToString();
                         MaxHour = dr["MaxHour"].ToString();
                         CarryForward = dr["CarryForward"].ToString();
-                        IsRequiredAttach = dr["IsRequiredAttach"].ToString();
+                        IsRequiredAttach = (dr["IsRequiredAttach"] != DBNull.Value && Convert.ToString(dr["IsRequiredAttach"]) != "0") ? Convert.ToString(dr["IsRequiredAttach"]) : "0";
                         MaxDay = dr["MaxDay"].ToString();
                         AllowAdd = dr["AllowAdd"].ToString();
+                        IsLimit = dr["IsLimit"].ToString();
                         ClosingBal = (dr["ClosingBal"] != DBNull.Value && Convert.ToString(dr["ClosingBal"]) != "0") ? Convert.ToString(dr["ClosingBal"]) : "0";
                         LeaveTaken = (dr["LeaveTaken"] != DBNull.Value && Convert.ToString(dr["LeaveTaken"]) != "0") ? Convert.ToString(dr["LeaveTaken"]) : "0";
                     }
@@ -586,6 +588,7 @@ namespace Eleave.Controllers
                 IsRequiredAttach = IsRequiredAttach,
                 MaxDay = MaxDay,
                 AllowAdd = AllowAdd,
+                IsLimit = IsLimit,
                 ClosingBal = ClosingBal,
                 LeaveTaken = LeaveTaken
             }, JsonRequestBehavior.AllowGet);
