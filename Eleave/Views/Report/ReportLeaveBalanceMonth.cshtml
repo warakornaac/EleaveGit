@@ -144,63 +144,63 @@
                                     <tr>
                                         @*ลาพักร้อน*@
                                         <th>Total</th>
-                                        <th>Taken</th>
                                         <th>Remaining</th>
+                                        <th>Taken</th>
 
                                         @*ลาพักร้อนยกยอด*@
                                         <th>Total</th>
-                                        <th>Taken</th>
                                         <th>Remaining</th>
+                                        <th>Taken</th>
 
                                         @*ลาหยุดชดเชย*@
                                         <th>Total</th>
-                                        <th>Taken</th>
                                         <th>Remaining</th>
+                                        <th>Taken</th>
 
                                         @*ลาป่วย*@
                                         <th>Total</th>
-                                        <th>Taken</th>
                                         <th>Remaining</th>
+                                        <th>Taken</th>
 
                                         @*ลากิจ*@
                                         <th>Total</th>
-                                        <th>Taken</th>
                                         <th>Remaining</th>
+                                        <th>Taken</th>
 
                                         @*ลากิจไม่ได้เงิน*@
                                         <th>Total</th>
-                                        <th>Taken</th>
                                         <th>Remaining</th>
+                                        <th>Taken</th>
 
                                         @*ลาบวช*@
                                         <th>Total</th>
-                                        <th>Taken</th>
                                         <th>Remaining</th>
+                                        <th>Taken</th>
 
                                         @*ลาคลอด*@
                                         <th>Total</th>
-                                        <th>Taken</th>
                                         <th>Remaining</th>
+                                        <th>Taken</th>
 
                                         @*ลาทำหมัน*@
                                         <th>Total</th>
-                                        <th>Taken</th>
                                         <th>Remaining</th>
+                                        <th>Taken</th>
 
                                         @*ลางานศพ*@
                                         <th>Total</th>
-                                        <th>Taken</th>
                                         <th>Remaining</th>
+                                        <th>Taken</th>
 
                                         @*ลารับปริญญา*@
                                         <th>Total</th>
-                                        <th>Taken</th>
                                         <th>Remaining</th>
+                                        <th>Taken</th>
 
                                         @*ลาเกณฑ์ทหาร*@
                                         <th>Total</th>
-                                        <th>Taken</th>
                                         <th>Remaining</th>
+                                        <th>Taken</th>
 
                                         @*WFH*@
                                         <th>Taken</th>
@@ -231,52 +231,52 @@
                                             <td class="text-center">@report.Days</td>
                                             @*ลาพักร้อน*@
                                             <td class="text-center">@report.AL02_Accured.ToString("0.#")</td>
-                                            <td class="text-center @(report.AL02_Leave > 0 ? "note" : "")" id="al02-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="al02"><a href="#"> @report.AL02_Leave.ToString("0.#")</a></td>
                                             <td class="text-center">@report.AL02_Balance.ToString("0.#")</td>
+                                            <td class="text-center @(report.AL02_Leave > 0 ? "note" : "")" id="al02-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="al02"><a href="#"> @report.AL02_Leave.ToString("0.#")</a></td>
                                             @*ลาพักร้อนยกยอด*@
                                             <td class="text-center">@report.AL01_Accured.ToString("0.#")</td>
-                                            <td class="text-center @(report.AL01_Leave > 0 ? "note" : "")" id="al01-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="al01"><a href="#"> @report.AL01_Leave.ToString("0.#")</a></td>
                                             <td class="text-center">@report.AL01_Balance.ToString("0.#")</td>
+                                            <td class="text-center @(report.AL01_Leave > 0 ? "note" : "")" id="al01-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="al01"><a href="#"> @report.AL01_Leave.ToString("0.#")</a></td>
                                             @*ลาชดเชย*@
                                             <td class="text-center">@report.CP03_Accured.ToString("0.#")</td>
-                                            <td class="text-center @(report.CP03_Leave > 0 ? "note" : "")" id="cp03-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="cp03"><a href="#"> @report.CP03_Leave.ToString("0.#")</a> </td>
                                             <td class="text-center">@report.CP03_Balance.ToString("0.#")</td>
+                                            <td class="text-center @(report.CP03_Leave > 0 ? "note" : "")" id="cp03-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="cp03"><a href="#"> @report.CP03_Leave.ToString("0.#")</a> </td>
                                             @*ลาป่วย*@
                                             <td class="text-center">@report.SL01_Accured.ToString("0.#")</td>
-                                            <td class="text-center  @(report.SL01_Leave > 0 ? "note" : "")" id="sl01-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="sl01"><a href="#"> @report.SL01_Leave.ToString("0.#")</a></td>
                                             <td class="text-center">@report.SL01_Balance.ToString("0.#")</td>
+                                            <td class="text-center  @(report.SL01_Leave > 0 ? "note" : "")" id="sl01-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="sl01"><a href="#"> @report.SL01_Leave.ToString("0.#")</a></td>
                                             @*ลากิจ(ได้รับเงิน)*@
                                             <td class="text-center">@report.BU04_Accured.ToString("0.#")</td>
-                                            <td class="text-center  @(report.BU04_Leave > 0 ? "note" : "")" id="bu04-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="bu04"><a href="#"> @report.BU04_Leave.ToString("0.#")</a></td>
                                             <td class="text-center">@report.BU04_Balance.ToString("0.#")</td>
+                                            <td class="text-center  @(report.BU04_Leave > 0 ? "note" : "")" id="bu04-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="bu04"><a href="#"> @report.BU04_Leave.ToString("0.#")</a></td>
                                             @*ลากิจ(ไม่ได้รับเงิน)*@
                                             <td class="text-center">@report.OT13_Accured.ToString("0.#")</td>
-                                            <td class="text-center  @(report.OT13_Leave > 0 ? "note" : "")" id="ot13-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="ot13"><a href="#"> @report.OT13_Leave.ToString("0.#")</a></td>
                                             <td class="text-center">@report.OT13_Balance.ToString("0.#")</td>
+                                            <td class="text-center  @(report.OT13_Leave > 0 ? "note" : "")" id="ot13-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="ot13"><a href="#"> @report.OT13_Leave.ToString("0.#")</a></td>
                                             @*ลาบวช*@
                                             <td class="text-center">@report.OL07_Accured.ToString("0.#")</td>
-                                            <td class="text-center  @(report.OL07_Leave > 0 ? "note" : "")" id="ol07-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="ol07"><a href="#"> @report.OL07_Leave.ToString("0.#")</a></td>
                                             <td class="text-center">@report.OL07_Balance.ToString("0.#")</td>
+                                            <td class="text-center  @(report.OL07_Leave > 0 ? "note" : "")" id="ol07-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="ol07"><a href="#"> @report.OL07_Leave.ToString("0.#")</a></td>
                                             @*ลาคลอด*@
                                             <td class="text-center">@report.ML06_Accured.ToString("0.#")</td>
-                                            <td class="text-center  @(report.ML06_Leave > 0 ? "note" : "")" id="ml06-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="ml06"><a href="#"> @report.ML06_Leave.ToString("0.#")</a></td>
                                             <td class="text-center">@report.ML06_Balance.ToString("0.#")</td>
+                                            <td class="text-center  @(report.ML06_Leave > 0 ? "note" : "")" id="ml06-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="ml06"><a href="#"> @report.ML06_Leave.ToString("0.#")</a></td>
                                             @*ลาทำหมัน*@
                                             <td class="text-center">@report.CO11_Accured.ToString("0.#")</td>
-                                            <td class="text-center  @(report.CO11_Leave > 0 ? "note" : "")" id="co11-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="co11"><a href="#"> @report.CO11_Leave.ToString("0.#")</a></td>
                                             <td class="text-center">@report.CO11_Balance.ToString("0.#")</td>
+                                            <td class="text-center  @(report.CO11_Leave > 0 ? "note" : "")" id="co11-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="co11"><a href="#"> @report.CO11_Leave.ToString("0.#")</a></td>
                                             @*ลาพิธีศพ*@
                                             <td class="text-center">@report.BL10_Accured.ToString("0.#")</td>
-                                            <td class="text-center  @(report.BL10_Leave > 0 ? "note" : "")" id="bl10-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="bl10"><a href="#"> @report.BL10_Leave.ToString("0.#")</a></td>
                                             <td class="text-center">@report.BL10_Balance.ToString("0.#")</td>
+                                            <td class="text-center  @(report.BL10_Leave > 0 ? "note" : "")" id="bl10-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="bl10"><a href="#"> @report.BL10_Leave.ToString("0.#")</a></td>
                                             @*ลารับปริญญา*@
                                             <td class="text-center">@report.GL09_Accured.ToString("0.#")</td>
-                                            <td class="text-center  @(report.GL09_Leave > 0 ? "note" : "")" id="gl09-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="gl09"><a href="#"> @report.GL09_Leave.ToString("0.#")</a></td>
                                             <td class="text-center">@report.GL09_Balance.ToString("0.#")</td>
+                                            <td class="text-center  @(report.GL09_Leave > 0 ? "note" : "")" id="gl09-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="gl09"><a href="#"> @report.GL09_Leave.ToString("0.#")</a></td>
                                             @*ลาเกณฑ์ทหาร*@
                                             <td class="text-center">@report.MS08_Accured.ToString("0.#")</td>
-                                            <td class="text-center  @(report.MS08_Leave > 0 ? "note" : "")" id="ms08-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="ms08"><a href="#"> @report.MS08_Leave.ToString("0.#")</a></td>
                                             <td class="text-center">@report.MS08_Balance.ToString("0.#")</td>
+                                            <td class="text-center  @(report.MS08_Leave > 0 ? "note" : "")" id="ms08-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="ms08"><a href="#"> @report.MS08_Leave.ToString("0.#")</a></td>
                                             @*WFH*@
                                             <td class="text-center  @(report.WFH_Approve > 0 ? "note" : "")" id="wfh-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="wfh"><a href="#"> @report.WFH_Approve.ToString("0.#")</a></td>
                                             <td class="text-center">@report.WFH_Waiting.ToString("0.#")</td>
@@ -384,7 +384,7 @@
                 success: function (response) {
                     if (response.message === 'Y') {
                         // Header
-                        let data2 = [['Country', 'Company', 'REQ_NO', 'EmpId', 'Empname', 'ReqStatus', 'LeaveType', 'StartDate', 'EndDate', 'NumDay', 'ApprGrpID', 'ApproveBy', 'ApproveDate', 'AcknowledgeBy', 'AcknowledgeDate']]; // Header
+                        let data2 = [['Country', 'Company', 'REQ_NO', 'EmpId', 'Empname', 'Department','ReqStatus', 'LeaveType', 'StartDate', 'EndDate', 'NumDay', 'ApprGrpID', 'ApproveBy', 'ApproveDate', 'AcknowledgeBy', 'AcknowledgeDate']]; // Header
 
                         // เพิ่มข้อมูล
                         response.Detail.forEach(item => {
@@ -394,6 +394,7 @@
                                 item.ReqNo,
                                 item.EmpId,
                                 item.Empname,
+                                item.DeptName,
                                 item.ReqStaDesc,
                                 item.LeaveType,
                                 item.StartDate,

@@ -254,7 +254,7 @@ namespace Eleave.Controllers
             {
                 GetEmp = Session["EmpId"].ToString();
             }
-            var Detail = new List<ApprovalRequest>();
+            var Detail = new List<ReportLeaveBalanceDetail>();
             try
             {
                 Detail = new GetDataSheetReport().GetAck(GetEmp, Comp, "", "", "1", startDate, endDate, Dept, "", "", "0");
@@ -322,7 +322,7 @@ namespace Eleave.Controllers
             int GetYear = int.Parse(Yearly);
             DateTime firstDay = new DateTime(GetYear, 1, 1);
             DateTime lastDay = new DateTime(GetYear, 12, 31);
-            var Detail = new List<ApprovalRequest>();
+            var Detail = new List<ReportLeaveBalanceDetail>();
             if (Session["EmpId"] != null)
             {
                 GetEmp = Session["EmpId"].ToString();
