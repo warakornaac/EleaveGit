@@ -53,7 +53,7 @@ namespace Eleave.Controllers
             }
             if (!string.IsNullOrEmpty(Department))
             {
-                GetEmployee = GetEmployee.Where(emp => emp.DeptNameShort.ToString().ToTrim() == Department.Trim()).ToList();
+                GetEmployee = GetEmployee.Where(emp => emp.DeptNameShort?.ToString().ToTrim() == Department.Trim()).ToList();
             }
             if (!string.IsNullOrEmpty(Name))
             {
