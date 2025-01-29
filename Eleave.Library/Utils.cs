@@ -370,6 +370,7 @@ namespace Eleave.Library
                     else if (txthours == "50") hours = "4";
                     else if (txthours == "63") hours = "5";
                     else if (txthours == "75") hours = "6";
+                    else if (txthours == "87") hours = "7";
                     else if (txthours == "88") hours = "7";
                     else hours = "";
                 }

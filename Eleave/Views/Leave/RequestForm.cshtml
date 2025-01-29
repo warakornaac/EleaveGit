@@ -5,6 +5,13 @@
     int EmpLvl = Int32.Parse(Session["EmpLvl"].ToString());
 }
 <style>
+    .filedRequiredAttach {
+        content: '*';
+        color: #ff0000;
+    }
+    #divPrivilege h5 {
+        font-weight: 100 !important;
+    }
     /**leaveBalance*/
     .filepond--credits {
         display: none;
@@ -296,7 +303,6 @@
                                         <h5>สิทธิ์คงเหลือ</h5>
                                     </div>
                                     <div>
-
                                         <span id="LeaveTakenTxt" class="font-size-20"></span>
                                         <input type="hidden" id="LeaveTakenVal" value="">
                                         <h5>ใช้สิทธิ์แล้ว</h5>
@@ -385,8 +391,9 @@
 
                 <div class="form-row">
                     <div class="col-md-12 mb-12">
-                        <label for="validationTooltip03" class="font-weight-bold">ไฟล์แนบ/Attach File</label>
+                        <label for="validationTooltip03" class="font-weight-bold">ไฟล์แนบ/Attach File <span class="filedRequiredAttach"  style="display: none;">*</span> </label>
                         <div class="row">
+                            <input type="hidden" id="IsRequiredAttach" value="">
                             <div class="col">
                                 <div class="file-loading">
                                     <input id="file_upload_multi" name="file_upload_multi[]" type="file" multiple="multiple">
@@ -533,8 +540,9 @@
     //ดึงเงื่อนไขแต่ละการลา
     function getLeaveTypeCondition(LeaveType) {
         //$("#divDatePicker").fadeIn(100);
-        let LeaveTypeName = $("#leaveType option:selected").text();
         let txtCondition = "";
+        let ClosingBalIsLimit = "ลาได้ตามจริง";
+        let LeaveTypeName = $("#leaveType option:selected").text();
 
         //if (LeaveType == "SL01") { //ลาป่วย
         //    $(".dates").fadeIn(100);
@@ -567,6 +575,8 @@
                 success: function (res) {
                     //$("#divCondition").css("display", "block");
                     if (res.Status = "success") {   //พบข้อมูล LeaveType
+                        //เช็คต้องแนบไฟล์
+                        checkRequiredFile(res.IsRequiredAttach);
                         if (res.ClosingBal == 0) {  //วันลาไม่เเหลือ
                             $("#divPrivilege").css("display", "none");
                             $("#ClosingBalTxt").text(0);
@@ -590,9 +600,16 @@
                             return false;
                             //ปิดข้อมูลสิทธิ์
                         }
+                        //check isLimit
+                        if (res.IsLimit == "Y") { //Y
+                            $("#ClosingBalTxt").css("color", "#000000");
+                            ClosingBalIsLimit = res.ClosingBal;
+                        } else { //N
+                            $("#ClosingBalTxt").css("color", "#008b3e");
+                        }
                         //แสดงข้อมูลสิทธิ์
                         $("#divPrivilege").css("display", "block");
-                        $("#ClosingBalTxt").text(res.ClosingBal);
+                        $("#ClosingBalTxt").text(ClosingBalIsLimit);
                         $("#ClosingBalVal").val(res.ClosingBal);
                         $("#LeaveTakenTxt").text(res.LeaveTaken);
                         $("#LeaveTakenVal").val(res.LeaveTaken);
@@ -602,7 +619,6 @@
                         $("#MaxHourVal").text(res.MaxHour);
                         $("#MaxDayVal").text(res.MaxDay);
                         $("#CarryForwardVal").text(res.CarryForward);
-                        //$("#txtCondition").html(txtCondition);
                         //จำนวนชั่วโมงจาก master
                         $("#numHour").val(res.MaxHour, 1);
                         //ส่งไป set start date
@@ -637,6 +653,18 @@
             $("#LeaveTakenVal").val(0);
         }
     }
+    //check required attachfile
+    function checkRequiredFile(isRequired) {
+        //console.log("isRequired = " + isRequired);
+        $("#IsRequiredAttach").val(isRequired);
+        if (isRequired == "True") { //True=ต้องแนบไฟล์
+            //ต้องแนบไฟล์
+            $(".filedRequiredAttach").css("display", "inline");
+        } else {
+            $(".filedRequiredAttach").css("display", "none");
+        }
+    }
+
     //set start, end date
     function setDateStart(setMinDate, setReqType) {
         console.log("setReqType = " + setReqType);
@@ -869,6 +897,7 @@
         let NumDay = $("#numDay").val() || 0;
         let NumHour = $("#numHour").val() || 0;
         let Remark = $("#remark").val().trim() || "";
+        let IsRequiredAttach = $("#IsRequiredAttach").val();
         console.log("StartDateBefore = " + StartDate);
         console.log("EndDateBefore = " + EndDate);
         if (StartDate != "") {
@@ -950,6 +979,9 @@
             });
         });
         //return false;
+        let formData = new FormData();
+        let totalFiles = document.getElementById("file_upload_multi").files.length;
+
         if (ReqType == 0) {
             Error++;
             TextMsg += Error + '. กรุณาเลือกประเภทการร้องขอ <br/>';
@@ -970,6 +1002,12 @@
             Error++;
             TextMsg += Error + '. กรุณากรอกรายละเอียด/เหตุผลการลา <br/>';
         }
+        if (IsRequiredAttach == "True" && totalFiles == 0) {
+            Error++;
+            TextMsg += Error + '. กรุณาแนบไฟล์อย่างน้อย 1 ไฟล์ <br/>';
+        }
+        //console.log("totalFiles = " + totalFiles);
+        //return false;
         if (Error > 0) {
             Swal.fire({
                 icon: 'warning',
@@ -982,8 +1020,6 @@
         console.log("startDate = " + StartDate + " endDate = " + EndDate);
         //return false;
 
-        let formData = new FormData();
-        let totalFiles = document.getElementById("file_upload_multi").files.length;
         for (let i = 0; i < totalFiles; i++) {
             let file = document.getElementById("file_upload_multi").files[i];
             formData.append("file_upload_multi", file);
