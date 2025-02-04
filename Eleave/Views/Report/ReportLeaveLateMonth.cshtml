@@ -1,0 +1,342 @@
+﻿
+@{
+    ViewBag.Title = "Report";
+    var currentMonth = DateTime.Now.Month;
+
+}
+<style>
+    .note {
+        position: relative;
+    }
+
+        .note:after { /* Magic Happens Here!!! */
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 0;
+            height: 0;
+            display: block;
+            border-left: 20px solid transparent;
+            border-bottom: 20px solid transparent;
+            border-top: 20px solid #f00;
+        }
+</style>
+<div class="page-header">
+    <div class="page-block">
+        <div class="row align-items-center">
+            <div class="col-md-12">
+                <div class="page-header-title">
+                    <h5 class="m-b-10">Report | รีพอร์ต</h5>
+                </div>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home")"><i class="feather icon-home"></i></a></li>
+                    <li class="breadcrumb-item"><a href="@Url.Action("ReportLeaveLateMonth", "Report")">รายงาน</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            @using (Html.BeginForm("ReportLeaveLateMonth", "Report", FormMethod.Post, new { @id = "formSearch" }))
+            {
+                <div class="card-body">
+                    <div class="row">
+                        <div class="form-group col-md-3">
+                            @Html.Label("บริษัท | Company", new { @class = "font-weight-bold" })
+                            @Html.DropDownList("Company", new List<SelectListItem>
+                                    {
+                                        new SelectListItem() {Text="AAC", Value="AAC"},
+                                        new SelectListItem() {Text="TRU", Value="TRU"},
+                                        new SelectListItem(){Text="OMP",Value="OMP"}
+                                    }, "เลือกบริษัท | Select Company ", new { @class = "custom-select", @id = "Company-selector" })
+                            @Html.Hidden("CompanyHidden", "", new { @id = "Company-hidden" })
+                        </div>
+                        <div class="form-group col-md-3">
+                            @Html.Label("แผนก | Department", new { @class = "font-weight-bold" })
+                            @Html.DropDownList("Department", new SelectList(ViewBag.DepartmentList, "LookValue", "LookDesc"), "Select ", new { @class = "custom-select", @id = "department-search" })
+                            @Html.Hidden("DepartmentHidden", "", new { @id = "Department-hidden" })
+                        </div>
+                        <div class="form-group col-md-3">
+                            @{
+                                string[] month_eng = {"January",
+                                    "February",
+                                    "March",
+                                    "April",
+                                    "May",
+                                    "June",
+                                    "July",
+                                    "August",
+                                    "September",
+                                    "October",
+                                    "November",
+                                    "December" };
+                                var months = new List<SelectListItem>();
+                                for (var i = 0; i < 12; i++)
+                                {
+                                    months.Add(new SelectListItem { Text = month_eng[i], Value = (i + 1).ToString() });
+                                }
+                            }
+                            @Html.Label("เดือน | Month", new { @class = "font-weight-bold" })
+                            @Html.DropDownList("Month", months, "เลือกเดือน | Select Month", new { @class = "custom-select", @id = "month-selector" })
+                            @Html.Hidden("MonthHidden", "", new { @id = "Month-hidden" })
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer p-1">
+                    <div class="form-group float-end m-2">
+                        <input type="button" value="ล้าง | Clear" class="btn btn-secondary" id="reset-btn" />
+                        <input type="submit" value="ค้นหา | Search" class="btn btn-primary" />
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+                        <button type="button" class="btn btn-secondary" id="btn-ex-table"><i class="fa fa-file-excel-o" aria-hidden="true"></i> Export .xlsx</button>
+                    </div>
+                    <div class="col-12 pt-3">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered tableList" id="table-report-attend">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">บริษัท | Company</th>
+                                        <th class="text-center">รหัสผนักงาน | Employee ID</th>
+                                        <th class="text-center">ชื่อพนักงาน | Employee Name</th>
+                                        <th class="text-center">แผนก | Department</th>
+                                        <th class="text-center">วันที่ | Date</th>
+                                        <th class="text-center">ลา | Exception</th>
+                                        <th class="text-center">ลาพักร้อน | Annaul Leave</th>
+                                        <th class="text-center">ลาชดเชย | Compensate Leave</th>
+                                        <th class="text-center">ลากิจ | Business Leave</th>
+                                        <th class="text-center">ลาป่วย | Sick Leave</th>
+                                        <th class="text-center">ลาเพื่อจัดพิธีศพ | Bereavement Leave</th>
+                                        <th class="text-center">ลาเพื่อทำหมัน | Contraceptive Leave</th>
+                                        <th class="text-center">ลารับปริญญาบัตร | Graduation Leave</th>
+                                        <th class="text-center">ลาคลอด | Maternity Leave</th>
+                                        <th class="text-center">ลาไปรับราชการทหาร | Military Service Leave</th>
+                                        <th class="text-center">ลาอุปสมบท หรือพิธีฮัจญ์ | Ordination leave</th>
+                                        <th class="text-center">ลาเพื่อพัฒนาความรู้ ความสามารถ | Professional development leave</th>
+                                        <th class="text-center">ลาอื่นๆ ไม่ได้รับค่าจ้าง | Leave Without Pay</th>
+                                        <th class="text-center">ทำงานที่บ้าน | Work From Home</th>
+                                        <th class="text-center">ทำงานนอกสถานที่ | Work Off-Site</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).on('click', '#reset-btn', function () {
+        $('#Company-selector').val('').trigger('change');
+        $('#month-selector').val('').trigger('change');
+        $('#department-search').val('').trigger('change');
+    });
+    $(document).ready(function () {
+        var comp = $('#Company-selector').val();
+        var department = $('#department-search').val();
+        var selectMonth = $('#month-selector').val();
+        console.log('Comp:' + comp);
+        console.log('department:' + department);
+        console.log('Month:' + selectMonth);
+        $('#Company-hidden').val(comp);
+        $('#Department-hidden').val(department);
+        $('#Month-hidden').val(selectMonth);
+    });
+    $(document).ready(function () {
+        console.log('Month NOW C# @currentMonth');
+        $('#department-search').select2({
+            width: '100%'
+        });
+        var isMdOrLarger = window.matchMedia("(min-width: 1600px)").matches;
+        $('#table-report-attend').DataTable({
+            paging: true,
+            fixedColumns: isMdOrLarger
+                ? { start: 5, end: 0 } // ใช้งาน fixedColumns ถ้าหน้าจอเป็น md ขึ้นไป
+                : false,
+            columnDefs: [
+                {
+                    targets: '_all',
+                    className: "dt-head-center"
+                }
+            ],
+            paging: false,
+            pageLength: 100,
+            lengthChange: false,
+            searching: false,
+            ordering: false,
+            select: false,
+            language: {
+                info: "แสดง _START_ ถึง _END_ จากทั้งหมด _TOTAL_ คน",
+                infoEmpty: "ไม่มีข้อมูลให้แสดง"
+            },
+            scrollY: 500,
+            scrollCollapse: true,
+            dom: '<t><"d-flex align-items-center"ip>',
+        });
+    });
+
+    $(document).ready(function () {
+        if ($.fn.DataTable.isDataTable('#table-report-attend')) {
+            $('#table-report-attend').DataTable().destroy(); // ทำลาย DataTable เก่า
+        }
+        var isMdOrLarger = window.matchMedia("(min-width: 1600px)").matches;
+        var table = $('#table-report-attend').DataTable({
+            paging: true,
+            fixedColumns: isMdOrLarger
+                ? { start: 5, end: 0 } // ใช้งาน fixedColumns ถ้าหน้าจอเป็น md ขึ้นไป
+                : false,
+            columnDefs: [
+                {
+                    targets: '_all',
+                    className: "dt-head-center "
+                }
+            ],
+            paging: false,
+            pageLength: 100,
+            lengthChange: false,
+            searching: false,
+            ordering: false,
+            select: false,
+            language: {
+                info: "แสดง _START_ ถึง _END_ จากทั้งหมด _TOTAL_ คน",
+                infoEmpty: "ไม่มีข้อมูลให้แสดง"
+            },
+            scrollY: 500,
+            scrollCollapse: true,
+            dom: '<t><"d-flex align-items-center"ip>',
+        });
+
+
+        var comp = $('#Company-hidden').val();
+        var department = $('#department-search').val();
+        var selectMonth = $('#month-selector').val();
+        $.ajax({
+            url: '@Url.Action("GetLeavelateJson", "Report")',
+            data: {
+                Company: comp,
+                Dept: department,
+                Month: selectMonth
+            },
+            type: 'POST',
+            dataType: 'JSON',
+            beforeSend: function () {
+                table.clear().draw(); // ล้างข้อมูลเก่า
+                $('#table-report-attend tbody').html('<tr><td colspan="19"><i class="fa fa-circle-o-notch fa-spin"></i> Loading...</td></tr>');
+            },
+            success: function (data) {
+                table.clear().draw();
+                var SubmithtmlPage = '';
+                if (data.message == 'Y') {
+                    if (data.Report.length > 0) {
+                        var newData = [];
+                        for (var i = 0; i < data.Report.length; i++) {
+                            newData.push([
+                                data.Report[i].Company,
+                                data.Report[i].EmpId,
+                                data.Report[i].EmpName,
+                                data.Report[i].Department,
+                                data.Report[i].DateMonth,
+                                data.Report[i].Exception,
+                                data.Report[i].AnnualLeave,
+                                data.Report[i].CompensateLeave,
+                                data.Report[i].BusinessLeave,
+                                data.Report[i].SickLeave,
+                                data.Report[i].BereavementLeave,
+                                data.Report[i].ContraceptiveLeave,
+                                data.Report[i].GraduationLeave,
+                                data.Report[i].MaternityLeave,
+                                data.Report[i].MilitaryLeave,
+                                data.Report[i].OrdinationLeave,
+                                data.Report[i].ProfessionalLeave,
+                                data.Report[i].OtherLeave,
+                                data.Report[i].WFH,
+                                data.Report[i].WFS
+                            ]);
+                        }
+                        table.rows.add(newData).draw();
+                        $('#table-report-attend tbody tr td').addClass('text-center');
+                    }
+                else {
+                        table.clear().draw(); // ล้างข้อมูลเก่า
+                        $('#table-report-attend tbody').html('<tr><td colspan="19"> No Data</td></tr>');
+                    }
+
+                    //table.rows.add(newData).draw();
+
+                }//end if
+                else {
+                    Swal.fire({
+                        title: "error",
+                        html: data.message,
+                        icon: 'warning'
+                    });
+                }
+            }
+        });
+    });
+
+
+    $(document).ready(function () {
+        $("#btn-ex-table").click(function () {
+            var today = new Date();
+            var formattedDate = today.getFullYear() + '-' +
+                String(today.getMonth() + 1).padStart(2, '0') + '-' +
+                String(today.getDate()).padStart(2, '0');
+
+            let table = $('#table-report-attend');
+
+            // ตรวจสอบว่าตารางมีข้อมูลหรือไม่
+            if (!table.length || table.find("tbody tr").length === 0) {
+                alert("No Data");
+                return;
+            }
+
+            // ตรวจสอบว่าตารางใช้ DataTable หรือไม่
+            if ($.fn.DataTable.isDataTable(table)) {
+                let dataTable = table.DataTable();
+                let data = dataTable.rows().data().toArray();
+
+                if (data.length === 0) {
+                    alert("No Data");
+                    return;
+                }
+
+                // แปลงข้อมูล DataTable เป็น Array
+                let ws_data = [["บริษัท", "รหัสพนักงาน", "ชื่อพนักงาน", "แผนก", "วันที่",
+                    "ลา", "ลาพักร้อน", "ลาชดเชย", "ลากิจ", "ลาป่วย",
+                    "ลาเพื่อจัดพิธีศพ", "ลาเพื่อทำหมัน", "ลารับปริญญาบัตร", "ลาคลอด",
+                    "ลาไปรับราชการทหาร", "ลาอุปสมบท", "ลาเพื่อพัฒนาความรู้", "ลาอื่นๆ",
+                    "ทำงานที่บ้าน", "ทำงานนอกสถานที่"]];
+                data.forEach(row => {
+                    ws_data.push(row);
+                });
+
+                let ws = XLSX.utils.aoa_to_sheet(ws_data);
+                let wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, 'Leave_Report');
+
+                XLSX.writeFile(wb, 'Leave_Report_' + formattedDate + '.xlsx');
+            } else {
+                // ถ้าเป็นตารางธรรมดา ใช้ table_to_sheet
+                let ws = XLSX.utils.table_to_sheet(document.getElementById('table-report-attend'), { raw: true });
+                let wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, 'Leave_Report');
+
+                XLSX.writeFile(wb, 'Leave_Report_' + formattedDate + '.xlsx');
+            }
+        });
+    });
+</script>

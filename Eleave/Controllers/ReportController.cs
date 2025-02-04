@@ -2,6 +2,9 @@
 using Eleave.Models;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Globalization;
@@ -186,6 +189,68 @@ namespace Eleave.Controllers
             return View("ReportLeaveBalanceMonth", Report_leav_bal);
         }
 
+        public ActionResult ReportLeaveLateAttend()
+        {
+            string emp = string.Empty;
+            string EmpType = string.Empty;
+            var Report = new List<ReportLeaveLate>();
+            if (Session["EmpId"] != null)
+            {
+                emp = Session["EmpId"].ToString();
+                EmpType = Session["UserType"].ToString();
+            }
+            else
+            {
+                return RedirectToAction("Login", "Home");
+            }
+            try
+            {
+                Report = new GetReportLeaveLate().GetReports("", "", "");
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = ex.Message;
+            }
+            LoadDepartments();
+            return View(Report);
+        }
+
+        public ActionResult ReportLeaveLateMonth()
+        {
+            string emp = string.Empty;
+            string EmpType = string.Empty;
+            if (Session["EmpId"] != null)
+            {
+                emp = Session["EmpId"].ToString();
+                EmpType = Session["UserType"].ToString();
+            }
+            else
+            {
+                return RedirectToAction("Login", "Home");
+            }
+
+            LoadDepartments();
+            return View();
+        }
+        [HttpPost]
+        public ActionResult ReportLeaveLateMonth(string Company, string Department, string Month)
+        {
+            string emp = string.Empty;
+            string EmpType = string.Empty;
+            if (Session["EmpId"] != null)
+            {
+                emp = Session["EmpId"].ToString();
+                EmpType = Session["UserType"].ToString();
+            }
+            else
+            {
+                return RedirectToAction("Login", "Home");
+            }
+
+            LoadDepartments();
+            return View();
+        }
+
         //Detail Report Year
         public JsonResult ReportDetail(string EMP, string LEVTYP, string YEAR)
         {
@@ -314,6 +379,137 @@ namespace Eleave.Controllers
             return Json(new { message = message, Detail }, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult GetLeavelateJson(string Company, string Dept, string Month)
+        {
+            string message;
+            var Report = new List<ReportLeaveLate>();
+
+            try
+            {
+                using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["HRIS_DB"].ConnectionString))
+                using (var cmd = new SqlCommand("P_Report_Leave_Attend", conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@inCompany", Company);
+                    cmd.Parameters.AddWithValue("@inDept", Dept);
+                    cmd.Parameters.AddWithValue("@inMonth", Month);
+
+                    conn.Open();
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Report.Add(new ReportLeaveLate
+                            {
+                                Company = reader["Company"] != DBNull.Value ? reader["Company"].ToString() : string.Empty,
+                                EmpId = reader["EmpId"] != DBNull.Value ? reader["EmpId"].ToString() : string.Empty,
+                                EmpName = reader["EmpName"] != DBNull.Value ? reader["EmpName"].ToString() : string.Empty,
+                                DateMonth = reader["DateMonth"] != DBNull.Value ? reader["DateMonth"].ToString() : string.Empty,
+                                Attend = reader["Attend"] != DBNull.Value ? reader["Attend"].ToString() : string.Empty,
+                                Finish = reader["Finish"] != DBNull.Value ? reader["Finish"].ToString() : string.Empty,
+                                Late = reader["Late"] != DBNull.Value ? reader["Late"].ToString() : string.Empty,
+                                BeforeW = reader["BeforeW"] != DBNull.Value ? reader["BeforeW"].ToString() : string.Empty,
+                                Missing = reader["Missing"] != DBNull.Value ? reader["Missing"].ToString() : string.Empty,
+                                Exception = reader["Exception"] != DBNull.Value ? reader["Exception"].ToString() : string.Empty,
+                                Department = reader["Department"] != DBNull.Value ? reader["Department"].ToString() : string.Empty,
+                                Total_late = reader["Total_late"] != DBNull.Value ? reader["Total_late"].ToString() : string.Empty,
+                                Late_work = reader["Late_work"] != DBNull.Value ? reader["Late_work"].ToString() : string.Empty,
+                                Missing_work = reader["Missing_work"] != DBNull.Value ? reader["Missing_work"].ToString() : string.Empty,
+                                AnnualLeave = reader["AnnualLeave"] != DBNull.Value ? reader["AnnualLeave"].ToString() : string.Empty,
+                                CompensateLeave = reader["CompensateLeave"] != DBNull.Value ? reader["CompensateLeave"].ToString() : string.Empty,
+                                BusinessLeave = reader["BusinessLeave"] != DBNull.Value ? reader["BusinessLeave"].ToString() : string.Empty,
+                                SickLeave = reader["SickLeave"] != DBNull.Value ? reader["SickLeave"].ToString() : string.Empty,
+                                BereavementLeave = reader["BereavementLeave"] != DBNull.Value ? reader["BereavementLeave"].ToString() : string.Empty,
+                                ContraceptiveLeave = reader["ContraceptiveLeave"] != DBNull.Value ? reader["ContraceptiveLeave"].ToString() : string.Empty,
+                                GraduationLeave = reader["GraduationLeave"] != DBNull.Value ? reader["GraduationLeave"].ToString() : string.Empty,
+                                MaternityLeave = reader["MaternityLeave"] != DBNull.Value ? reader["MaternityLeave"].ToString() : string.Empty,
+                                MilitaryLeave = reader["MilitaryLeave"] != DBNull.Value ? reader["MilitaryLeave"].ToString() : string.Empty,
+                                OrdinationLeave = reader["OrdinationLeave"] != DBNull.Value ? reader["OrdinationLeave"].ToString() : string.Empty,
+                                ProfessionalLeave = reader["ProfessionalLeave"] != DBNull.Value ? reader["ProfessionalLeave"].ToString() : string.Empty,
+                                OtherLeave = reader["OtherLeave"] != DBNull.Value ? reader["OtherLeave"].ToString() : string.Empty,
+                                WFH = reader["WFH"] != DBNull.Value ? reader["WFH"].ToString() : string.Empty,
+                                WFS = reader["WFS"] != DBNull.Value ? reader["WFS"].ToString() : string.Empty
+                            });
+                        }
+                    }
+                }
+
+                message = "Y";
+            }
+            catch (Exception ex)
+            {
+                message = ex.Message;
+            }
+
+            return new JsonResult
+            {
+                Data = new { message, Report },
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet,
+                MaxJsonLength = int.MaxValue // รองรับ JSON ที่มีขนาดใหญ่
+            };
+        }
+
+
+        //public JsonResult GetLeavelateJson(string Company, string Dept, string Month)
+        //{
+        //    string message = string.Empty;
+        //    var connectionString = ConfigurationManager.ConnectionStrings["HRIS_DB"].ConnectionString;
+        //    SqlConnection conn = new SqlConnection(connectionString);
+        //    var Report = new List<ReportLeaveLate>();
+        //    try
+        //    {
+        //        Report = new GetReportLeaveLate().GetReports(Company, Dept, Month);
+        //        conn.Open();
+        //        var cmd = new SqlCommand("P_Report_Leave_Attend", conn);
+        //        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+        //        cmd.Parameters.AddWithValue("@inCompany", Company);
+        //        cmd.Parameters.AddWithValue("@inDept", Dept);
+        //        cmd.Parameters.AddWithValue("@inMonth", Month);
+        //        SqlDataReader reader = cmd.ExecuteReader();
+        //        while (reader.Read())
+        //        {
+        //            Report.Add(new ReportLeaveLate
+        //            {
+        //                Company = reader["Company"] != DBNull.Value ? reader["Company"].ToString() : string.Empty,
+        //                EmpId = reader["EmpId"] != DBNull.Value ? reader["EmpId"].ToString() : string.Empty,
+        //                EmpName = reader["EmpName"] != DBNull.Value ? reader["EmpName"].ToString() : string.Empty,
+        //                DateMonth = reader["DateMonth"] != DBNull.Value ? reader["DateMonth"].ToString() : string.Empty,
+        //                Attend = reader["Attend"] != DBNull.Value ? reader["Attend"].ToString() : string.Empty,
+        //                Finish = reader["Finish"] != DBNull.Value ? reader["Finish"].ToString() : string.Empty,
+        //                Late = reader["Late"] != DBNull.Value ? reader["Late"].ToString() : string.Empty,
+        //                BeforeW = reader["BeforeW"] != DBNull.Value ? reader["BeforeW"].ToString() : string.Empty,
+        //                Missing = reader["Missing"] != DBNull.Value ? reader["Missing"].ToString() : string.Empty,
+        //                Exception = reader["Exception"] != DBNull.Value ? reader["Exception"].ToString() : string.Empty,
+        //                Department = reader["Department"] != DBNull.Value ? reader["Department"].ToString() : string.Empty,
+        //                Total_late = reader["Total_late"] != DBNull.Value ? reader["Total_late"].ToString() : string.Empty,
+        //                Late_work = reader["Late_work"] != DBNull.Value ? reader["Late_work"].ToString() : string.Empty,
+        //                Missing_work = reader["Missing_work"] != DBNull.Value ? reader["Missing_work"].ToString() : string.Empty,
+        //                AnnualLeave = reader["AnnualLeave"] != DBNull.Value ? reader["AnnualLeave"].ToString() : string.Empty,
+        //                CompensateLeave = reader["CompensateLeave"] != DBNull.Value ? reader["CompensateLeave"].ToString() : string.Empty,
+        //                BusinessLeave = reader["BusinessLeave"] != DBNull.Value ? reader["BusinessLeave"].ToString() : string.Empty,
+        //                SickLeave = reader["SickLeave"] != DBNull.Value ? reader["SickLeave"].ToString() : string.Empty,
+        //                BereavementLeave = reader["BereavementLeave"] != DBNull.Value ? reader["BereavementLeave"].ToString() : string.Empty,
+        //                ContraceptiveLeave = reader["ContraceptiveLeave"] != DBNull.Value ? reader["ContraceptiveLeave"].ToString() : string.Empty,
+        //                GraduationLeave = reader["GraduationLeave"] != DBNull.Value ? reader["GraduationLeave"].ToString() : string.Empty,
+        //                MaternityLeave = reader["MaternityLeave"] != DBNull.Value ? reader["MaternityLeave"].ToString() : string.Empty,
+        //                MilitaryLeave = reader["MilitaryLeave"] != DBNull.Value ? reader["MilitaryLeave"].ToString() : string.Empty,
+        //                OrdinationLeave = reader["OrdinationLeave"] != DBNull.Value ? reader["OrdinationLeave"].ToString() : string.Empty,
+        //                ProfessionalLeave = reader["ProfessionalLeave"] != DBNull.Value ? reader["ProfessionalLeave"].ToString() : string.Empty,
+        //                OtherLeave = reader["OtherLeave"] != DBNull.Value ? reader["OtherLeave"].ToString() : string.Empty,
+        //                WFH = reader["WFH"] != DBNull.Value ? reader["WFH"].ToString() : string.Empty,
+        //                WFS = reader["WFS"] != DBNull.Value ? reader["WFS"].ToString() : string.Empty
+        //            });
+        //        }
+        //        message = "Y";
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        message = ex.Message;
+        //    }
+        //    return Json(new { message = message, Report }, JsonRequestBehavior.AllowGet);
+
+        //}
+
         public JsonResult DetailReportYearSheet(string Yearly, string Dept, string EmpID, string Comp)
         {
             string message = string.Empty;
@@ -396,5 +592,6 @@ namespace Eleave.Controllers
 
             ViewBag.DepartmentList = departments;
         }
+
     }
 }

@@ -55,6 +55,7 @@
     <Compile Include="ReportLeaveBalance.cs" />
     <Compile Include="ReportLeaveBalanceDetail.cs" />
     <Compile Include="ReportLeaveBalanceMonth.cs" />
+    <Compile Include="ReportLeaveLate.cs" />
     <Compile Include="Request.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RequestFile.cs" />

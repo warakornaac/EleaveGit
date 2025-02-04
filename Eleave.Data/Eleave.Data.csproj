@@ -62,6 +62,7 @@
     <Compile Include="GetPermissionProfile.cs" />
     <Compile Include="GetProfile.cs" />
     <Compile Include="GetProfileList.cs" />
+    <Compile Include="GetReportLeaveLate.cs" />
     <Compile Include="GetReportLeaveBalance.cs" />
     <Compile Include="GetReportLeaveBalanceMonth.cs" />
     <Compile Include="GetRequestAcknowledge.cs" />
