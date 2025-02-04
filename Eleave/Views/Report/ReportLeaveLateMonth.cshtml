@@ -272,6 +272,11 @@
                         }
                         table.rows.add(newData).draw();
                         $('#table-report-attend tbody tr td').addClass('text-center');
+                        $('#table-report-attend tbody tr td').each(function () {
+                            if ($(this).text().trim() === "1") {
+                                $(this).addClass('note');
+                            }
+                        });
                     }
                 else {
                         table.clear().draw(); // ล้างข้อมูลเก่า
