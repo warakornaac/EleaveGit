@@ -56,23 +56,25 @@
                         </div>
                         <div class="form-group col-md-3">
                             @Html.Label("แผนก | Department", new { @class = "font-weight-bold" })
-                            @Html.DropDownList("Department", new SelectList(ViewBag.DepartmentList, "LookValue", "LookDesc"), "Select ", new { @class = "custom-select", @id = "department-search" })
+                            @Html.DropDownList("Department", new SelectList(ViewBag.DepartmentList, "LookValue", "LookDesc"), "เลือกแผนก | Select Department", new { @class = "custom-select", @id = "department-search" })
                             @Html.Hidden("DepartmentHidden", "", new { @id = "Department-hidden" })
                         </div>
                         <div class="form-group col-md-3">
                             @{
-                                string[] month_eng = {"January",
-                                    "February",
-                                    "March",
-                                    "April",
-                                    "May",
-                                    "June",
-                                    "July",
-                                    "August",
-                                    "September",
-                                    "October",
-                                    "November",
-                                    "December" };
+                                string[] month_eng = {
+                                    "มกราคม | January",
+                                    "กุมภาพันธ์ | February",
+                                    "มีนาคม | March",
+                                    "เมษายน | April",
+                                    "พฤษภาคม | May",
+                                    "มิถุนายน | June",
+                                    "กรกฎาคม | July",
+                                    "สิงหาคม | August",
+                                    "กันยายน | September",
+                                    "ตุลาคม | October",
+                                    "พฤศจิกายน | November",
+                                    "ธันวาคม | December"
+                                };
                                 var months = new List<SelectListItem>();
                                 for (var i = 0; i < 12; i++)
                                 {
@@ -100,6 +102,7 @@
                 <div class="row">
                     <div class="col-12">
                         <button type="button" class="btn btn-secondary" id="btn-ex-table"><i class="fa fa-file-excel-o" aria-hidden="true"></i> Export .xlsx</button>
+                        <button type="button" class="btn btn-secondary" id="btn-ex-table-all"><i class="fa fa-file-excel-o" aria-hidden="true"></i> Export All .xlsx</button>
                     </div>
                     <div class="col-12 pt-3">
                         <div class="table-responsive">
@@ -233,6 +236,7 @@
             type: 'POST',
             dataType: 'JSON',
             beforeSend: function () {
+                LoadingShow();
                 table.clear().draw(); // ล้างข้อมูลเก่า
                 $('#table-report-attend tbody').html('<tr><td colspan="19"><i class="fa fa-circle-o-notch fa-spin"></i> Loading...</td></tr>');
             },
@@ -284,6 +288,9 @@
                         icon: 'warning'
                     });
                 }
+            },
+            complete: function () {
+                LoadingHide();
             }
         });
     });
@@ -337,6 +344,108 @@
 
                 XLSX.writeFile(wb, 'Leave_Report_' + formattedDate + '.xlsx');
             }
+        });
+    });
+
+    $(document).ready(function () {
+        $("#btn-ex-table-all").click(function () {
+            // สร้างวันที่ให้เป็น YYYY-MM-DD
+            let today = new Date();
+            let formattedDate = today.getFullYear() + '-' +
+                ('0' + (today.getMonth() + 1)).slice(-2) + '-' +
+                ('0' + today.getDate()).slice(-2);
+
+            // ดึงค่าจาก Hidden Input
+            const companyValue = $('#Company-hidden').val();
+            const monthValue = $('#Month-hidden').val();
+
+            // กำหนด URL ให้ถูกต้องใน .cshtml
+            var url = '@Html.Raw(Url.Action("GetLeavelateJson", "Report"))';
+
+            $.ajax({
+                url: url,
+                type: 'POST',
+                dataType: 'JSON',
+                data: {
+                    Company: companyValue,
+                    Dept: '',
+                    Month: monthValue
+                },
+                beforeSend: function () {
+                    LoadingShow();
+                },
+                success: function (response) {
+                    if (response.message === 'Y') {
+                        try {
+                            // Header
+                            let data2 = [
+                                ["Company", "EmpId", "EmpName", "Department", "Date",
+                                    "Exception", "AnnaulLeave", "CompensateLeave", "BusinessLeave", "SickLeave",
+                                    "BereavementLeave", "ContraceptiveLeave", "GraduationLeave", "MaternityLeave",
+                                    "MilitaryServiceLeave", "OrdinationLeave", "ProfessionalDevelopmentLeave", "LeaveWithoutPay",
+                                    "WorkFromHome", "WorkOff-Site"]
+                            ];
+
+                            // เพิ่มข้อมูลลงไป ถ้ามีข้อมูลใน response.Detail
+                            if (Array.isArray(response.Report) && response.Report.length > 0) {
+                                response.Report.forEach(item => {
+                                    try {
+                                        data2.push([
+                                            item.Company ?? '',
+                                            item.EmpId ?? '',
+                                            item.EmpName ?? '',
+                                            item.Department ?? '',
+                                            item.DateMonth ?? '',
+                                            item.Exception ?? '',
+                                            item.AnnualLeave ?? '',
+                                            item.CompensateLeave ?? '',
+                                            item.BusinessLeave ?? '',
+                                            item.SickLeave ?? '',
+                                            item.BereavementLeave ?? '',
+                                            item.ContraceptiveLeave ?? '',
+                                            item.GraduationLeave ?? '',
+                                            item.MaternityLeave ?? '',
+                                            item.MilitaryLeave ?? '',
+                                            item.OrdinationLeave ?? '',
+                                            item.ProfessionalLeave ?? '',
+                                            item.OtherLeave ?? '',
+                                            item.WFH ?? '',
+                                            item.WFS ?? ''
+                                        ]);
+                                    } catch (err) {
+                                        console.error("Error in data mapping:", err, item);
+                                    }
+                                });
+
+                                // สร้าง Sheet ที่สอง
+                                let ws2 = XLSX.utils.aoa_to_sheet(data2);
+
+                                // สร้าง Workbook และเพิ่ม Sheet
+                                let wb = XLSX.utils.book_new();
+                                XLSX.utils.book_append_sheet(wb, ws2, 'LeaveAttend');
+
+                                // บันทึกไฟล์ Excel
+                                XLSX.writeFile(wb, 'Report_Leave_Attend_' + formattedDate + '.xlsx');
+                            } else {
+                                console.warn("No data found in response.Detail");
+                                alert("ไม่มีข้อมูลสำหรับดาวน์โหลด");
+                            }
+                        } catch (error) {
+                            console.error("Error processing data:", error);
+                        }
+                    } else {
+                        console.error("Error fetching data:", response.message);
+                        alert("เกิดข้อผิดพลาดในการดึงข้อมูล: " + response.message);
+                    }
+                },
+                complete: function () {
+                    LoadingHide();
+                },
+                error: function (xhr, status, error) {
+                    console.error("AJAX error:", xhr.responseText || status || error);
+                    alert("เกิดข้อผิดพลาดขณะส่งคำขอ: " + (xhr.responseText || status || error));
+                }
+            });
         });
     });
 </script>

@@ -189,32 +189,6 @@ namespace Eleave.Controllers
             return View("ReportLeaveBalanceMonth", Report_leav_bal);
         }
 
-        public ActionResult ReportLeaveLateAttend()
-        {
-            string emp = string.Empty;
-            string EmpType = string.Empty;
-            var Report = new List<ReportLeaveLate>();
-            if (Session["EmpId"] != null)
-            {
-                emp = Session["EmpId"].ToString();
-                EmpType = Session["UserType"].ToString();
-            }
-            else
-            {
-                return RedirectToAction("Login", "Home");
-            }
-            try
-            {
-                Report = new GetReportLeaveLate().GetReports("", "", "");
-            }
-            catch (Exception ex)
-            {
-                ViewBag.Error = ex.Message;
-            }
-            LoadDepartments();
-            return View(Report);
-        }
-
         public ActionResult ReportLeaveLateMonth()
         {
             string emp = string.Empty;
