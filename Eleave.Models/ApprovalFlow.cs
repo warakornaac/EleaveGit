@@ -8,6 +8,7 @@ namespace Eleave.Models
 {
     public class ApprovalFlow
     {
+        public string Id { get; set; }
         public string CountryCode { get; set; }
         public string ApprGrpId { get; set; }
         public string ApprGrpName { get; set; }
