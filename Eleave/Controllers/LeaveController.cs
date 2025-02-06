@@ -448,13 +448,13 @@ namespace Eleave.Controllers
             });
         }
 
-        public JsonResult GetLeavetype()
+        public JsonResult GetLeavetype(string EmpTypeId)
         {
             var LeaveType = new List<LeaveTypeModel>();
             string message = string.Empty;
             try
             {
-                LeaveType = new GetLeaveType().GetLeaveTypeList();
+                LeaveType = new GetLeaveType().GetLeaveTypeList(EmpTypeId);
                 message = "Y";
             }
             catch (Exception ex)
@@ -463,6 +463,21 @@ namespace Eleave.Controllers
             }
             return Json(new { message = message, LeaveType }, JsonRequestBehavior.AllowGet);
         }
+        //public JsonResult GetLeaveTypeByEmpType(string EmpTypeId)
+        //{
+        //    var LeaveType = new List<LeaveTypeModel>();
+        //    string message = string.Empty;
+        //    try
+        //    {
+        //        LeaveType = new GetLeaveType().GetLeaveTypeList(EmpTypeId);
+        //        message = "Y";
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        message = ex.Message;
+        //    }
+        //    return Json(new { message = message, LeaveType }, JsonRequestBehavior.AllowGet);
+        //}
         private void LoadLeavetype()
         {
             var LeaveType = new List<LeaveTypeModel>();
@@ -535,6 +550,8 @@ namespace Eleave.Controllers
             string IsLimit = string.Empty;
             string ClosingBal = string.Empty;
             string LeaveTaken = string.Empty;
+            string MinDayAttach = string.Empty;
+            string EmpTemp = string.Empty;
             string EmpID = string.Empty;
             try
             {
@@ -565,6 +582,8 @@ namespace Eleave.Controllers
                         IsLimit = dr["IsLimit"].ToString();
                         ClosingBal = (dr["ClosingBal"] != DBNull.Value && Convert.ToString(dr["ClosingBal"]) != "0") ? Convert.ToString(dr["ClosingBal"]) : "0";
                         LeaveTaken = (dr["LeaveTaken"] != DBNull.Value && Convert.ToString(dr["LeaveTaken"]) != "0") ? Convert.ToString(dr["LeaveTaken"]) : "0";
+                        MinDayAttach = (dr["MinDayAttach"] != DBNull.Value && Convert.ToString(dr["MinDayAttach"]) != "0") ? Convert.ToString(dr["MinDayAttach"]) : "0";
+                        EmpTemp = dr["EmpTemp"].ToString();
                     }
                     txtStatus = "success";
                     cmd.Dispose();
@@ -590,7 +609,9 @@ namespace Eleave.Controllers
                 AllowAdd = AllowAdd,
                 IsLimit = IsLimit,
                 ClosingBal = ClosingBal,
-                LeaveTaken = LeaveTaken
+                LeaveTaken = LeaveTaken,
+                MinDayAttach = MinDayAttach,
+                EmpTemp = EmpTemp
             }, JsonRequestBehavior.AllowGet);
         }
         [HttpPost]
