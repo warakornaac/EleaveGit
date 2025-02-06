@@ -14,6 +14,7 @@ namespace Eleave.Models
         public string DeptName { get; set; }
         public string EmpId { get; set; }
         public string Position { get; set; }
+        public string EmpStatus { get; set; }
         public string StartDate { get; set; }
         public string Fullname { get; set; }
         public string Years { get; set; }
@@ -31,7 +32,7 @@ namespace Eleave.Models
         public decimal SL01_Accured { get; set; }
         public decimal SL01_Leave { get; set; }
         public decimal SL01_Balance { get; set; }
-
+        public decimal SL01_File { get; set; }
         public decimal BU04_Accured { get; set; }
         public decimal BU04_Leave { get; set; }
         public decimal BU04_Balance { get; set; }
@@ -60,6 +61,9 @@ namespace Eleave.Models
         public decimal WFH_Waiting { get; set; }
         public decimal OffSite_Approve { get; set; }
         public decimal OffSite_Waiting { get; set; }
-
+        public decimal SL02_Accured { get; set; }
+        public decimal SL02_Leave { get; set; }
+        public decimal SL02_Balance { get; set; }
+        public decimal SL02_File { get; set; }
     }
 }

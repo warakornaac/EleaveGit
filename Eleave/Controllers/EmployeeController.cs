@@ -815,14 +815,14 @@ namespace Eleave.Controllers
             return Json(new { message = message, getDirector }, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetApprovflowSettingEdit(string ApprvGrp, string ApprvName, string ApprvStep)
+        public JsonResult GetApprovflowSettingEdit(string ApprvRow, string ApprvGrp, string ApprvName, string ApprvStep)
         {
             string message = string.Empty;
             var getApproval = new List<ApprovalFlow>();
             try
             {
 
-                getApproval = new GetApprovalFlowEdit().GetApprovalFlows(ApprvGrp, ApprvName, ApprvStep);
+                getApproval = new GetApprovalFlowEdit().GetApprovalFlows(ApprvRow, ApprvGrp, ApprvName, ApprvStep);
                 message = "Y";
 
 
@@ -909,7 +909,7 @@ namespace Eleave.Controllers
             }
             return Json(new { message = message }, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult DeleteApprvFlow(string ApprvID, string ApprvStep, string ApprvAction)
+        public JsonResult DeleteApprvFlow(string ApprvRow, string ApprvID, string ApprvStep, string ApprvAction)
         {
             string message = string.Empty;
             string username = Session["EmpId"].ToString();
@@ -929,6 +929,7 @@ namespace Eleave.Controllers
             {
                 var cmd = new SqlCommand("P_Delete_ApprovalFlowByStep", conn);
                 cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@inApprvRowID", ApprvRow);
                 cmd.Parameters.AddWithValue("@inApprvID", ApprvID);
                 cmd.Parameters.AddWithValue("@inStep", ApprvStep);
                 cmd.Parameters.AddWithValue("@inAction", ApprvAction);
@@ -952,6 +953,7 @@ namespace Eleave.Controllers
         {
             string message = string.Empty;
             string DepId = string.Empty;
+            string ApprvName = string.Empty;
             var connectionString = ConfigurationManager.ConnectionStrings["HRIS_DB"].ConnectionString;
             SqlConnection conn = new SqlConnection(connectionString);
             conn.Open();
@@ -963,7 +965,8 @@ namespace Eleave.Controllers
                 SqlDataReader reader = cmd.ExecuteReader();
                 if (reader.Read())
                 {
-                    DepId = reader[0].ToString();
+                    DepId = reader["LookValue"]?.ToString() ?? "";
+                    ApprvName = reader["ApprGrpName"]?.ToString() ?? "";
                 }
                 message = "Y";
                 cmd.Dispose();
@@ -974,7 +977,7 @@ namespace Eleave.Controllers
                 conn.Close();
                 message = ex.Message;
             }
-            return Json(new { message = message, DepID = DepId.Trim() }, JsonRequestBehavior.AllowGet);
+            return Json(new { message = message, DepID = DepId.Trim(), ApprvName = ApprvName.Trim() }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult DetailEmployee(string EMPID)

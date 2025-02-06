@@ -15,9 +15,10 @@ namespace Eleave.Data
         {
 
         }
-        public List<ApprovalFlow> GetApprovalFlows(string ApprvID, string ApprvName, string Step)
+        public List<ApprovalFlow> GetApprovalFlows(string ApprvRow, string ApprvID, string ApprvName, string Step)
         {
             var p = new SqlParameters();
+            p.AddParams("@inApprvRowID", ApprvRow);
             p.AddParams("@inApprvID", ApprvID);
             p.AddParams("@inApprvName", ApprvName);
             p.AddParams("@inStep", Step);

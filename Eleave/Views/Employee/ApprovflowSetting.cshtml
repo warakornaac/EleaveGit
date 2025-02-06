@@ -342,6 +342,7 @@
                                 foreach (var aprflow in ViewBag.apprvFlow)
                                 {
                                     <tr>
+
                                         <td class="text-center">@aprflow.ApprGrpId</td>
                                         <td class="text-center">@aprflow.ApprGrpName</td>
                                         <td class="text-center">@aprflow.DepName</td>
@@ -350,8 +351,9 @@
                                         <td class="text-center">@aprflow.EmpName</td>
                                         <td class="text-center">@aprflow.ActionType</td>
                                         <td class="text-center p-2">
-                                            <a href="#" class="btn btn-warning btn-xs" data-apprv="@aprflow.ApprGrpId" data-apprvname="@aprflow.ApprGrpName" data-department="@aprflow.DepId" data-dept="@aprflow.DeptShort" data-apprvstep="@aprflow.ApprStep" data-apprvaction="@aprflow.ActionType" id="editApprv-@aprflow.ApprGrpId"><span class="fa fa-edit"></span></a>
-                                            <a href="#" class="btn btn-danger btn-xs" id="deleteApprv-@aprflow.ApprGrpId" data-apprv="@aprflow.ApprGrpId" data-apprvname="@aprflow.ApprGrpName" data-department="@aprflow.DepId" data-dept="@aprflow.DeptShort" data-apprvstep="@aprflow.ApprStep" data-apprvaction="@aprflow.ActionType"><span class="fa fa-times"></span></a>
+                                            <input type="hidden" id="hidden-row" value="@aprflow.Id" />
+                                            <a href="#" class="btn btn-warning btn-xs" data-apprvrowid="@aprflow.Id" data-apprv="@aprflow.ApprGrpId" data-apprvname="@aprflow.ApprGrpName" data-department="@aprflow.DepId" data-dept="@aprflow.DeptShort" data-apprvstep="@aprflow.ApprStep" data-apprvaction="@aprflow.ActionType" id="editApprv-@aprflow.ApprGrpId"><span class="fa fa-edit"></span></a>
+                                            <a href="#" class="btn btn-danger btn-xs" id="deleteApprv-@aprflow.ApprGrpId" data-apprvrowid="@aprflow.Id" data-apprv="@aprflow.ApprGrpId" data-apprvname="@aprflow.ApprGrpName" data-department="@aprflow.DepId" data-dept="@aprflow.DeptShort" data-apprvstep="@aprflow.ApprStep" data-apprvaction="@aprflow.ActionType"><span class="fa fa-times"></span></a>
                                         </td>
                                     </tr>
                                 }
@@ -567,6 +569,7 @@
 
                     $('#department-selector-add').val(data.DepID).trigger('change');
                     $('#department-selector-add').prop('disabled', true);
+                    $('#groupName-add').val(data.ApprvName);
                 }
                 else {
                     $('#department-selector-add').prop('disabled', true);
@@ -612,11 +615,13 @@
         }
     });
     $('[id^="editApprv-"]').on('click', async function () {
+        var apprvrowid = $(this).data('apprvrowid');
         var ApprvID = $(this).data('apprv');
         var ApprvName = $(this).data('apprvname');
         var ApprvStep = $(this).data('apprvstep');
         var ApprvDept = $(this).data('dept');
         var ApprvAction = $(this).data('apprvaction');
+
         var Dept = $(this).data('department');
         $('#groupId-edit').val(ApprvID);
         $('#editFormModal').modal('show');
@@ -626,10 +631,11 @@
         else {
             await DropdownEmpSelectEditAsync(ApprvDept);
         }
-        await GetApprovflowSettingEdit(ApprvID, ApprvName, ApprvStep, ApprvDept, ApprvAction);
+        await GetApprovflowSettingEdit(apprvrowid,ApprvID, ApprvName, ApprvStep, ApprvDept, ApprvAction);
 
     });
     $('[id^="deleteApprv-"]').on('click', async function () {
+        var apprvrowid = $(this).data('apprvrowid');
         var ApprvID = $(this).data('apprv');
         var ApprvName = $(this).data('apprvname');
         var ApprvStep = $(this).data('apprvstep');
@@ -643,12 +649,13 @@
         else {
             await DropdownEmpSelectDelAsync(ApprvDept);
         }
-        await GetApprovflowSettingDel(ApprvID, ApprvName, ApprvStep, ApprvDept, ApprvAction);
+        await GetApprovflowSettingDel(apprvrowid,ApprvID, ApprvName, ApprvStep, ApprvDept, ApprvAction);
     });
     $(document).on('click', '#del-appr-btn-cn', function () {
         $('#DeleteFlowModal').modal('hide');
     });
     $(document).on('click', '#del-appr-btn', function () {
+        var RowID = $('#hidden-row').val();
         var ID = $('#groupId-del').val();
         var Dept = $('#department-selector-del').val()
         var Step = $('#apprvLvl-del').val()
@@ -656,6 +663,7 @@
         $.ajax({
             url: '@Url.Action("DeleteApprvFlow", "Employee")',
             data: {
+                ApprvRow: RowID,
                 ApprvID: ID,
                 ApprvStep: Step,
                 ApprvAction: Action
@@ -687,10 +695,11 @@
         });
 
     });
-    async function GetApprovflowSettingEdit(ApprvID, ApprvName, ApprvStep, ApprvDept, ApprvAction) {
+    async function GetApprovflowSettingEdit(apprvrowid,ApprvID, ApprvName, ApprvStep, ApprvDept, ApprvAction) {
         return $.ajax({
             url: '@Url.Action("GetApprovflowSettingEdit", "Employee")',
             data: {
+                ApprvRow: apprvrowid,
                 ApprvGrp: ApprvID,
                 ApprvName: ApprvName,
                 ApprvStep: ApprvStep,
@@ -744,10 +753,11 @@
         });
     }
 
-    async function GetApprovflowSettingDel(ApprvID, ApprvName, ApprvStep, ApprvDept, ApprvAction) {
+    async function GetApprovflowSettingDel(apprvrowid,ApprvID, ApprvName, ApprvStep, ApprvDept, ApprvAction) {
         return $.ajax({
             url: '@Url.Action("GetApprovflowSettingEdit", "Employee")',
             data: {
+                ApprvRow: apprvrowid,
                 ApprvGrp: ApprvID,
                 ApprvName: ApprvName,
                 ApprvStep: ApprvStep,

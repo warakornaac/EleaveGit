@@ -107,22 +107,23 @@
                                         <th class="text-center" rowspan="2" align="center">ชื่อพนักงาน | Employee Name</th>
                                         <th class="text-center" rowspan="2" align="center">แผนก | Department</th>
                                         <th class="text-center" rowspan="2" align="center">ตำแหน่ง | Position</th>
+                                        <th class="text-center" rowspan="2" align="center">สถานะ | Status</th>
                                         <th class="text-center" rowspan="2" align="center">วันเริ่มงาน | Start Date</th>
                                         <th class="text-center" rowspan="2" align="center">อายุงาน (ปี) | Years of Service</th>
                                         <th class="text-center" rowspan="2" align="center">อายุงาน (เดือน) | Months of Service</th>
                                         <th class="text-center" rowspan="2" align="center">อายุงาน (วัน) | Days of Service</th>
 
-                                        <th class="text-center" colspan="3">สิทธิ์ลาพักร้อน | Annual Leave</th>
+                                        <th class="text-center" colspan="3">ลาพักร้อน | Annual Leave</th>
 
-                                        <th class="text-center" colspan="3">สิทธิ์ลาพักร้อนยกยอด | Annual Leave (Carried Over)</th>
+                                        <th class="text-center" colspan="3">ลาพักร้อนยกยอด | Annual Leave (Carried Over)</th>
 
-                                        <th class="text-center" colspan="3">สิทธิ์หยุดชดเชย | Compensation Leave</th>
+                                        <th class="text-center" colspan="3">หยุดชดเชย | Compensation Leave</th>
 
-                                        <th class="text-center" colspan="3">สิทธิ์ลาป่วย | Sick Leave</th>
+                                        <th class="text-center" colspan="4">ลาป่วย | Sick Leave</th>
 
-                                        <th class="text-center" colspan="3">สิทธิ์ลากิจ (ได้รับเงิน) | Personal Leave (Paid)</th>
+                                        <th class="text-center" colspan="3">ลากิจ | Business Leave </th>
 
-                                        <th class="text-center" colspan="3">สิทธิ์ลากิจ (ไม่ได้รับเงิน) | Personal Leave (Not Paid)</th>
+                                        <th class="text-center" colspan="3">ลาอื่นๆ ไม่ได้รับค่าจ้าง | Leave Without Pay</th>
 
                                         <th class="text-center" colspan="3" align="center">ลาบวช | Ordination Leave</th>
 
@@ -139,76 +140,96 @@
                                         <th class="text-center" colspan="2" align="center">ทำงานที่บ้าน | Work From Home</th>
                                         <th class="text-center" colspan="2" align="center">ทำงานนอกสถานที่ | Work Off-Site</th>
 
+                                        <th class="text-center" colspan="4">ลาป่วยเกินสิทธิ์ | Sick Leave Without Pay</th>
+
 
                                     </tr>
                                     <tr>
                                         @*ลาพักร้อน*@
-                                        <th>Total</th>
-                                        <th>Remaining</th>
-                                        <th>Taken</th>
+                                        <th>ทั้งหมด | Total</th>
+                                        <th>คงเหลือ | Remaining</th>
+                                        <th>ใช้ไป | Taken</th>
+
 
                                         @*ลาพักร้อนยกยอด*@
-                                        <th>Total</th>
-                                        <th>Remaining</th>
-                                        <th>Taken</th>
+                                        <th>ทั้งหมด | Total</th>
+                                        <th>คงเหลือ | Remaining</th>
+                                        <th>ใช้ไป | Taken</th>
+
 
                                         @*ลาหยุดชดเชย*@
-                                        <th>Total</th>
-                                        <th>Remaining</th>
-                                        <th>Taken</th>
+                                        <th>ทั้งหมด | Total</th>
+                                        <th>คงเหลือ | Remaining</th>
+                                        <th>ใช้ไป | Taken</th>
+
 
                                         @*ลาป่วย*@
-                                        <th>Total</th>
-                                        <th>Remaining</th>
-                                        <th>Taken</th>
+                                        <th>ทั้งหมด | Total</th>
+                                        <th>คงเหลือ | Remaining</th>
+                                        <th>ใช้ไป | Taken</th>
+                                        <th>ไฟล์แนบ | File</th>
 
                                         @*ลากิจ*@
-                                        <th>Total</th>
-                                        <th>Remaining</th>
-                                        <th>Taken</th>
+                                        <th>ทั้งหมด | Total</th>
+                                        <th>คงเหลือ | Remaining</th>
+                                        <th>ใช้ไป | Taken</th>
+
 
                                         @*ลากิจไม่ได้เงิน*@
-                                        <th>Total</th>
-                                        <th>Remaining</th>
-                                        <th>Taken</th>
+                                        <th>ทั้งหมด | Total</th>
+                                        <th>คงเหลือ | Remaining</th>
+                                        <th>ใช้ไป | Taken</th>
+
 
                                         @*ลาบวช*@
-                                        <th>Total</th>
-                                        <th>Remaining</th>
-                                        <th>Taken</th>
+                                        <th>ทั้งหมด | Total</th>
+                                        <th>คงเหลือ | Remaining</th>
+                                        <th>ใช้ไป | Taken</th>
+
 
                                         @*ลาคลอด*@
-                                        <th>Total</th>
-                                        <th>Remaining</th>
-                                        <th>Taken</th>
+                                        <th>ทั้งหมด | Total</th>
+                                        <th>คงเหลือ | Remaining</th>
+                                        <th>ใช้ไป | Taken</th>
+
 
                                         @*ลาทำหมัน*@
-                                        <th>Total</th>
-                                        <th>Remaining</th>
-                                        <th>Taken</th>
+                                        <th>ทั้งหมด | Total</th>
+                                        <th>คงเหลือ | Remaining</th>
+                                        <th>ใช้ไป | Taken</th>
+
 
                                         @*ลางานศพ*@
-                                        <th>Total</th>
-                                        <th>Remaining</th>
-                                        <th>Taken</th>
+                                        <th>ทั้งหมด | Total</th>
+                                        <th>คงเหลือ | Remaining</th>
+                                        <th>ใช้ไป | Taken</th>
+
 
                                         @*ลารับปริญญา*@
-                                        <th>Total</th>
-                                        <th>Remaining</th>
-                                        <th>Taken</th>
+                                        <th>ทั้งหมด | Total</th>
+                                        <th>คงเหลือ | Remaining</th>
+                                        <th>ใช้ไป | Taken</th>
+
 
                                         @*ลาเกณฑ์ทหาร*@
-                                        <th>Total</th>
-                                        <th>Remaining</th>
-                                        <th>Taken</th>
+                                        <th>ทั้งหมด | Total</th>
+                                        <th>คงเหลือ | Remaining</th>
+                                        <th>ใช้ไป | Taken</th>
+
 
                                         @*WFH*@
-                                        <th>Taken</th>
-                                        <th>Waiting</th>
+                                        <th>ใช้ไป | Taken</th>
+                                        <th>รอยืนยัน | Waiting</th>
 
                                         @*OffSite*@
-                                        <th>Taken</th>
-                                        <th>Waiting</th>
+                                        <th>ใช้ไป | Taken</th>
+                                        <th>รอยืนยัน | Waiting</th>
+
+                                        @*ลาป่วยเกินสิทธิ์*@
+                                        <th>ทั้งหมด | Total</th>
+                                        <th>คงเหลือ | Remaining</th>
+                                        <th>ใช้ไป | Taken</th>
+                                        <th>ไฟล์แนบ | File</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -225,6 +246,7 @@
                                             <td class="text-center">@report.Fullname</td>
                                             <td class="text-center">@report.DeptName</td>
                                             <td class="text-center">@report.Position</td>
+                                            <td class="text-center">@report.EmpStatus</td>
                                             <td class="text-center">@report.StartDate</td>
                                             <td class="text-center">@report.Years</td>
                                             <td class="text-center">@report.Months</td>
@@ -245,11 +267,12 @@
                                             <td class="text-center">@report.SL01_Accured.ToString("0.#")</td>
                                             <td class="text-center">@report.SL01_Balance.ToString("0.#")</td>
                                             <td class="text-center  @(report.SL01_Leave > 0 ? "note" : "")" id="sl01-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="sl01"><a href="#"> @report.SL01_Leave.ToString("0.#")</a></td>
+                                            <td class="text-center">@report.SL01_File.ToString("0.#")</td>
                                             @*ลากิจ(ได้รับเงิน)*@
                                             <td class="text-center">@report.BU04_Accured.ToString("0.#")</td>
                                             <td class="text-center">@report.BU04_Balance.ToString("0.#")</td>
                                             <td class="text-center  @(report.BU04_Leave > 0 ? "note" : "")" id="bu04-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="bu04"><a href="#"> @report.BU04_Leave.ToString("0.#")</a></td>
-                                            @*ลากิจ(ไม่ได้รับเงิน)*@
+                                            @*อื่นๆ(ไม่ได้รับเงิน)*@
                                             <td class="text-center">@report.OT13_Accured.ToString("0.#")</td>
                                             <td class="text-center">@report.OT13_Balance.ToString("0.#")</td>
                                             <td class="text-center  @(report.OT13_Leave > 0 ? "note" : "")" id="ot13-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="ot13"><a href="#"> @report.OT13_Leave.ToString("0.#")</a></td>
@@ -283,6 +306,11 @@
                                             @*Onsite*@
                                             <td class="text-center  @(report.OffSite_Approve > 0 ? "note" : "")" id="offsite-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="offsite"><a href="#"> @report.OffSite_Approve.ToString("0.#")</a></td>
                                             <td class="text-center">@report.OffSite_Waiting.ToString("0.#")</td>
+                                            @*ลาป่วยเกินสิทธิ์*@
+                                            <td class="text-center">@report.SL02_Accured.ToString("0.#")</td>
+                                            <td class="text-center">@report.SL02_Balance.ToString("0.#")</td>
+                                            <td class="text-center  @(report.SL02_Leave > 0 ? "note" : "")" id="sl02-bal-detail-@report.EmpId" data-emp="@report.EmpId" data-levtyp="sl02"><a href="#"> @report.SL02_Leave.ToString("0.#")</a></td>
+                                            <td class="text-center">@report.SL02_File.ToString("0.#")</td>
                                         </tr>
                                     }
                                 </tbody>

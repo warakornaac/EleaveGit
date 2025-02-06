@@ -383,7 +383,7 @@ else
          var EmpString = $('#ReqEmpId').val();
          if (EmpString == '@EMPID') {
              if (inputDate.getFullYear() != currentYear ||
-                 (inputDate.getFullYear() === currentYear && inputDate.getMonth() > currentMonth) && ReqStatus != 1) {
+                 (inputDate.getFullYear() === currentYear && inputDate.getMonth() > currentMonth) && ReqStatus != 1 || ReqStatus == 4 || ReqStatus ==2) {
                  $("#cancel_submit").css("display", "none");
              }
              else {
@@ -410,7 +410,7 @@ else
          var EmpString = $('#ReqEmpId').val();
          if (EmpString == '@EMPID') {
              if (inputDate.getFullYear() != currentYear ||
-                 (inputDate.getFullYear() === currentYear && inputDate.getMonth() > currentMonth) && ReqStatus != 1) {
+                 (inputDate.getFullYear() === currentYear && inputDate.getMonth() > currentMonth) && ReqStatus != 1 || ReqStatus == 4 || ReqStatus == 2) {
                  $("#cancel_alt_submit").css("display", "none");
              }
              else {
