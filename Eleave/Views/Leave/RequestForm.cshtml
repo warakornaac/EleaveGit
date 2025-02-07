@@ -180,6 +180,44 @@
         color: white;
     }*/
 </style>
+<style>
+    .other {
+        /*border: 1px solid #ebeff2;*/
+        border-radius: 5px;
+        /*padding: 20px 0px;*/
+        margin: 10px 20px;
+        font-size: 14px;
+        color: #cb661f;
+        /*font-weight: 600;*/
+        overflow: auto;
+    }
+
+        .other div {
+            float: left;
+            width: 100%;
+            text-align: left;
+            position: relative;
+            font-size: 14px;
+            padding: 2px;
+        }
+
+        .other strong,
+        .stats strong {
+            display: block;
+            /*color: #020202;*/
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .other span {
+            width: 1px;
+            height: 40px;
+            position: absolute;
+            right: 0;
+            top: 0;
+            background: #ebeff2;
+        }
+</style>
 
 <div class="page-header">
     <div class="page-block">
@@ -394,7 +432,33 @@
 
                 <div class="form-row">
                     <div class="col-md-12 mb-12">
-                        <label for="validationTooltip03" class="font-weight-bold">ไฟล์แนบ/Attach File <span class="filedRequiredAttach" style="display: none;">*</span> </label>
+                        <label for="validationTooltip03" class="font-weight-bold">ไฟล์แนบ | Attach File <span class="filedRequiredAttach" style="display: none;">*</span> </label>
+                        @*<div class="row">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="tile mt-0" style="float: none !important;">
+                                        <div class="wrapper" style="border-top: 1px solid #ebeff2; background-color: #fdf2e4">
+                                            <div class="dates">
+                                                <div class="start">
+                                                    <label> กรุณาแนบไฟล์หลักฐาน</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>*@
+                        <div class="row" id="other-fileattach-label" style="display: none;">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="tile mt-0" style="float: none !important;">
+                                    <div class="wrapper" style="border-top: 1px solid #ebeff2; background-color: #fdf2e4">
+                                        <div class="other">
+                                            <div class="start">
+                                                <label> กรุณาแนบไฟล์หลักฐาน</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="row">
                             <input type="hidden" id="IsRequiredAttachVal" value="">
                             <div class="col">
@@ -407,6 +471,7 @@
                             อัปโหลดไฟล์ jpg, jped, png, pdf ขนาดไม่เกิน 5 MB (สามารถเลือกได้หลายไฟล์)
                             <br> File type for upload jpg, jped, png, pdf limit size 5 MB (Select Multiple Files)
                         </label>
+
                     </div>
                 </div>
             </div>
@@ -566,7 +631,32 @@
         //} else {
         //    $("#numHour option[value='1'], option[value='2'], option[value='3']").prop('disabled', false);
         //}
+
         resetValue();
+        switch(LeaveType) {
+            case "SL01": $("#other-fileattach-label").fadeIn(100); //ลาป่วย
+                    break;
+            case "SL02": $("#other-fileattach-label").fadeIn(100);//ลาป่วยเกิน
+                    break;
+            case "GL09": $("#other-fileattach-label").fadeIn(100);//ลาปริญญา
+                    break;
+            case "ML06": $("#other-fileattach-label").fadeIn(100);//ลาคลอด
+                    break;
+            case "OL07": $("#other-fileattach-label").fadeIn(100);//ลาบวช
+                    break;
+            case "MS08": $("#other-fileattach-label").fadeIn(100);//ลาทหาร
+                    break;
+            case "CO11": $("#other-fileattach-label").fadeIn(100);//ลาทำหมัร
+                    break;
+            case "TR14": $("#other-fileattach-label").fadeIn(100);//ลาเรียน
+                    break;
+            case "BL10": $("#other-fileattach-label").fadeIn(100);//ลางานศพ
+                    break;
+            case "OT13": $("#other-fileattach-label").fadeIn(100);//ลาอื่นๆ ไม่ได้ตังค์
+                    break;
+            default: $("#other-fileattach-label").css("display", "none");
+                    break;
+        }
         if (LeaveType != 0) {
             $("#divDatePicker").fadeIn(100); //show เลือกวันละ
             $.ajax({
@@ -584,6 +674,7 @@
                 success: function (res) {
                     //$("#divCondition").css("display", "block");
                     if (res.Status = "success") {   //พบข้อมูล LeaveType
+
                         //เช็ค max min hour
                         disableNumHour(res.MinHour, res.MaxHour);
                         if (res.ClosingBal == 0) {  //วันลาไม่เเหลือ
@@ -857,6 +948,7 @@
         $("#numDay").val('');
         $("#startDate").val('');
         $("#endDate").val('');
+        $("#other-fileattach-label").css("display","none");
     }
     //เลือกประเภทกวารลา
     function setShowCalendar(leaveId) {
@@ -905,6 +997,7 @@
     function dropDownRequest(ReqType) {
         console.log("reqType = " + ReqType);
         $("#leaveType").val(0).trigger('change');
+
         let txtCondition = "";
         if (ReqType == 0) {
             $("#divDateleaveType").fadeOut(100); //hide ประเภทการลา
@@ -915,7 +1008,7 @@
             disableNumHour(6, 8);
             $("#divCondition").fadeIn(100); //show เงื่อนไข
             $(".dates").fadeIn(100); //show เงื่อนไข
-            txtCondition = "- พนักงานที่มีสิทธิ์ใช้วันหยุดชดเฉยต้องเป็นพนักงานระดับ Supervisor ขึ้นไปเท่านั้น <br> - ล่วงเวลาพิเศษ คือ การปฏิบัติงานนอกสถานที่เกิน 6 ชั่วโมง / การปฎิบัติงานที่ตรงกับวันเสาร์ - อาทิตย์ และวันหยุดนักขัตฤกษ์";
+            txtCondition = "- พนักงานที่มีสิทธิ์ใช้วันหยุดชดเฉยต้องเป็นพนักงานระดับ Supervisor ขึ้นไปเท่านั้น <br> - ล่วงเวลาพิเศษ คือ การปฏิบัติงานนอกสถานที่เกิน 6 ชั่วโมง / การปฎิบัติงานที่ตรงกับวันเสาร์ - อาทิตย์ และวันหยุดนักขัตฤกษ์ <br> - กรุณาระบุช่วงเวลาการทำงาน หากปฏิบัติงานนอกสถานที่";
             $("#txtCondition").html(txtCondition);
             $("#divDateleaveType").fadeOut(100); //hide ประเภทการลา
             $("#divDatePicker").fadeIn(100); //show เลือกวันละ

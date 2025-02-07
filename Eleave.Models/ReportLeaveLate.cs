@@ -8,6 +8,7 @@ namespace Eleave.Models
 {
     public class ReportLeaveLate
     {
+        public string KEYMAP { get; set; }
         public string Company { get; set; }
         public string EmpId { get; set; }
         public string EmpName { get; set; }
@@ -34,6 +35,7 @@ namespace Eleave.Models
         public string OrdinationLeave { get; set; }
         public string ProfessionalLeave { get; set; }
         public string OtherLeave { get; set; }
+        public string SickLeaveWithoutPay { get; set; }
         public string WFH { get; set; }
         public string WFS { get; set; }
 

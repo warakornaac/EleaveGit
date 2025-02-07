@@ -375,6 +375,7 @@ namespace Eleave.Controllers
                         {
                             Report.Add(new ReportLeaveLate
                             {
+                                KEYMAP = reader["KEYMAP"] != DBNull.Value ? reader["KEYMAP"].ToString() : string.Empty,
                                 Company = reader["Company"] != DBNull.Value ? reader["Company"].ToString() : string.Empty,
                                 EmpId = reader["EmpId"] != DBNull.Value ? reader["EmpId"].ToString() : string.Empty,
                                 EmpName = reader["EmpName"] != DBNull.Value ? reader["EmpName"].ToString() : string.Empty,
@@ -401,6 +402,7 @@ namespace Eleave.Controllers
                                 OrdinationLeave = reader["OrdinationLeave"] != DBNull.Value ? reader["OrdinationLeave"].ToString() : string.Empty,
                                 ProfessionalLeave = reader["ProfessionalLeave"] != DBNull.Value ? reader["ProfessionalLeave"].ToString() : string.Empty,
                                 OtherLeave = reader["OtherLeave"] != DBNull.Value ? reader["OtherLeave"].ToString() : string.Empty,
+                                SickLeaveWithoutPay = reader["SickLeaveWithoutPay"] != DBNull.Value ? reader["SickLeaveWithoutPay"].ToString() : string.Empty,
                                 WFH = reader["WFH"] != DBNull.Value ? reader["WFH"].ToString() : string.Empty,
                                 WFS = reader["WFS"] != DBNull.Value ? reader["WFS"].ToString() : string.Empty
                             });

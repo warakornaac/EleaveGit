@@ -218,7 +218,7 @@ namespace Eleave.Controllers
             string message = string.Empty;
             try
             {
-                LeaveType = new GetLeaveType().GetLeaveTypeList();
+                LeaveType = new GetLeaveType().GetLeaveTypeList("");
                 message = "Y";
             }
             catch (Exception ex)
@@ -248,7 +248,7 @@ namespace Eleave.Controllers
             string message = string.Empty;
             try
             {
-                LeaveType = new GetLeaveType().GetLeaveTypeList();
+                LeaveType = new GetLeaveType().GetLeaveTypeList("");
                 message = "Y";
             }
             catch (Exception ex)
