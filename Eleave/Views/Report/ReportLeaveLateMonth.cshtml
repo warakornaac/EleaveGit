@@ -101,7 +101,7 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-12">
-                        <button type="button" class="btn btn-secondary" id="btn-ex-table"><i class="fa fa-file-excel-o" aria-hidden="true"></i> Export .xlsx</button>
+                        @*<button type="button" class="btn btn-secondary" id="btn-ex-table"><i class="fa fa-file-excel-o" aria-hidden="true"></i> Export .xlsx</button>*@
                         <button type="button" class="btn btn-secondary" id="btn-ex-table-all"><i class="fa fa-file-excel-o" aria-hidden="true"></i> Export All .xlsx</button>
                     </div>
                     <div class="col-12 pt-3">
@@ -127,6 +127,7 @@
                                         <th class="text-center">ลาอุปสมบท หรือพิธีฮัจญ์ | Ordination leave</th>
                                         <th class="text-center">ลาเพื่อพัฒนาความรู้ ความสามารถ | Professional development leave</th>
                                         <th class="text-center">ลาอื่นๆ ไม่ได้รับค่าจ้าง | Leave Without Pay</th>
+                                        <th class="text-center">ลาป่วยเกินสิทธิ์ | Sick Leave Without Pay</th>
                                         <th class="text-center">ทำงานที่บ้าน | Work From Home</th>
                                         <th class="text-center">ทำงานนอกสถานที่ | Work Off-Site</th>
                                     </tr>
@@ -266,6 +267,7 @@
                                 data.Report[i].OrdinationLeave,
                                 data.Report[i].ProfessionalLeave,
                                 data.Report[i].OtherLeave,
+                                data.Report[i].SickLeaveWithoutPay,
                                 data.Report[i].WFH,
                                 data.Report[i].WFS
                             ]);
@@ -384,10 +386,10 @@
                         try {
                             // Header
                             let data2 = [
-                                ["Company", "EmpId", "EmpName", "Department", "Date",
+                                ["KEYMAP","Company", "EmpId", "EmpName", "Department", "Date",
                                     "Exception", "AnnaulLeave", "CompensateLeave", "BusinessLeave", "SickLeave",
                                     "BereavementLeave", "ContraceptiveLeave", "GraduationLeave", "MaternityLeave",
-                                    "MilitaryServiceLeave", "OrdinationLeave", "ProfessionalDevelopmentLeave", "LeaveWithoutPay",
+                                    "MilitaryServiceLeave", "OrdinationLeave", "ProfessionalDevelopmentLeave", "LeaveWithoutPay","SickLeaveWithoutPay",
                                     "WorkFromHome", "WorkOff-Site"]
                             ];
 
@@ -396,6 +398,7 @@
                                 response.Report.forEach(item => {
                                     try {
                                         data2.push([
+                                            item.KEYMAP ??'',
                                             item.Company ?? '',
                                             item.EmpId ?? '',
                                             item.EmpName ?? '',
@@ -414,6 +417,7 @@
                                             item.OrdinationLeave ?? '',
                                             item.ProfessionalLeave ?? '',
                                             item.OtherLeave ?? '',
+                                            item.SickLeaveWithoutPay ?? '',
                                             item.WFH ?? '',
                                             item.WFS ?? ''
                                         ]);
