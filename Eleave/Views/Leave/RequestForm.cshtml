@@ -618,6 +618,7 @@
         let ClosingBalIsLimit = "ลาได้ตามจริง ";
         let LeaveTypeName = $("#leaveType option:selected").text();
         let NumDay = $("#numDay").val() || 0;
+        let empTypeId = $("#empTypeId").val();
         let typeCheck = '';
         //if (LeaveType == "SL01") { //ลาป่วย
         //    $(".dates").fadeIn(100);
@@ -634,30 +635,30 @@
         //}
 
         resetValue();
-        switch(LeaveType) {
-            case "SL01": $("#other-fileattach-label").fadeIn(100); //ลาป่วย
-                    break;
-            case "SL02": $("#other-fileattach-label").fadeIn(100);//ลาป่วยเกิน
-                    break;
-            case "GL09": $("#other-fileattach-label").fadeIn(100);//ลาปริญญา
-                    break;
-            case "ML06": $("#other-fileattach-label").fadeIn(100);//ลาคลอด
-                    break;
-            case "OL07": $("#other-fileattach-label").fadeIn(100);//ลาบวช
-                    break;
-            case "MS08": $("#other-fileattach-label").fadeIn(100);//ลาทหาร
-                    break;
-            case "CO11": $("#other-fileattach-label").fadeIn(100);//ลาทำหมัร
-                    break;
-            case "TR14": $("#other-fileattach-label").fadeIn(100);//ลาเรียน
-                    break;
-            case "BL10": $("#other-fileattach-label").fadeIn(100);//ลางานศพ
-                    break;
-            case "OT13": $("#other-fileattach-label").fadeIn(100);//ลาอื่นๆ ไม่ได้ตังค์
-                    break;
-            default: $("#other-fileattach-label").css("display", "none");
-                    break;
-        }
+        //switch(LeaveType) {
+        //    case "SL01": $("#other-fileattach-label").fadeIn(100); //ลาป่วย
+        //            break;
+        //    case "SL02": $("#other-fileattach-label").fadeIn(100);//ลาป่วยเกิน
+        //            break;
+        //    case "GL09": $("#other-fileattach-label").fadeIn(100);//ลาปริญญา
+        //            break;
+        //    case "ML06": $("#other-fileattach-label").fadeIn(100);//ลาคลอด
+        //            break;
+        //    case "OL07": $("#other-fileattach-label").fadeIn(100);//ลาบวช
+        //            break;
+        //    case "MS08": $("#other-fileattach-label").fadeIn(100);//ลาทหาร
+        //            break;
+        //    case "CO11": $("#other-fileattach-label").fadeIn(100);//ลาทำหมัร
+        //            break;
+        //    case "TR14": $("#other-fileattach-label").fadeIn(100);//ลาเรียน
+        //            break;
+        //    case "BL10": $("#other-fileattach-label").fadeIn(100);//ลางานศพ
+        //            break;
+        //    case "OT13": $("#other-fileattach-label").fadeIn(100);//ลาอื่นๆ ไม่ได้ตังค์
+        //            break;
+        //    default: $("#other-fileattach-label").css("display", "none");
+        //            break;
+        //}
         if (LeaveType != 0) {
             $("#divDatePicker").fadeIn(100); //show เลือกวันละ
             $.ajax({
@@ -723,6 +724,12 @@
                         $("#MaxDayVal").text(res.MaxDay);
                         $("#CarryForwardVal").text(res.CarryForward);
                         //เช็คแนบไฟล์
+                        console.log("res.IsRequiredAttach = " + res.IsRequiredAttach);
+                        if (res.IsRequiredAttach == "True" && (empTypeId == 3 || empTypeId == 4)) {
+                            $("#other-fileattach-label").fadeIn(100);
+                        } else {
+                            $("#other-fileattach-label").css("display", "none");
+                        }
                         $("#IsRequiredAttachVal").val(res.IsRequiredAttach); //ต้องแนบไฟล์หรือไม่
                         $("#MinDayAttachVal").val(res.MinDayAttach); //ลากี่วันต้องแนบไฟล์
                         $("#EmpTempVal").val(res.EmpTemp); //ใช้เฉพาะ temp หรือไม่
@@ -1077,23 +1084,19 @@
         let IsRequiredAttach = $("#IsRequiredAttachVal").val(); //ลาที่ต้องแนบไฟล์
         let MinDayAttach = $("#MinDayAttachVal").val(); //ลากี่วันต้องแนบไฟล์
         let EmpTemp = $("#EmpTempVal").val(); //ใช้พนักงาน temp หรือไม่
-
-        //console.log("StartDateBefore = " + StartDate);
-        //console.log("EndDateBefore = " + EndDate);
-
         var resRequired = "False"; //default false=ไม่ต้องแนบ, true=แนบ
-        if (NumDay > 0) {
-            if (empTypeId == 3 || empTypeId == 4) {  //ถ้าเป็น tmp
-                if (EmpTemp == "Y") { //Y=พนักงาน temp
-                    resRequired = "True";
-                }
-            } else {    //ถ้าไม่เป็น tmp
+        if (Number(NumDay) > 0 && Number(MinDayAttach) > 0) {
+            //if (empTypeId == 3 || empTypeId == 4) {  //ถ้าเป็น tmp 
+            //    if (EmpTemp == "Y") { //Y=พนักงาน temp
+            //        resRequired = "True";
+            //    }
+            //} else {    //ถ้าไม่เป็น tmp
                 if (IsRequiredAttach == "True") { //True=ต้องแนบไฟล์
                     if (Number(NumDay) >= Number(MinDayAttach)) { //วันลาจริง >= isDayAttach
                         resRequired = "True";
                     }
                 }
-            }
+            //}
         }
 
         //if (resRequired == "True") { //True=ต้องแนบไฟล์
