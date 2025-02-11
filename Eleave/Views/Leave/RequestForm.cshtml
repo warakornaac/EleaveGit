@@ -534,7 +534,8 @@
     <div class="col-md-12">
         <div class="callout callout-warning alert-dismissible fade show">
             <h4>หมายเหตุ</h4>
-            1. การลาป่วยสามารถลาได้ตามระยะเวลาที่ป่วยจริง แต่ได้รับเงินค่าจ้างปกติไม่เกิน 30 วันในรอบปีปฎิทิน และการลาป่วยตั้งแต่ 3 วันติดต่อกันขึ้นไป <u>ต้องมีใบรับรองแพทย์ที่ระบุจำนวนวันลาป่วยเท่ากับวันที่ลาจริงทุกครั้ง</u> <br>
+            @*edit 11-02-25 *@
+            1. การลาป่วยสามารถลาได้ตามระยะเวลาที่ป่วยจริง แต่ได้รับเงินค่าจ้างปกติไม่เกิน 30 วันในรอบปีปฎิทิน <u>ต้องมีใบรับรองแพทย์ที่ระบุจำนวนวันลาป่วยเท่ากับวันที่ลาจริงทุกครั้ง</u> <br>
             2. กรณีขอลงเวลาทำงานนอกสถานที่ ได้รับวันหยุดชดเชย (ขอเพิ่มวันลา | Add Leave)<br>
             2.1. พนักงานที่มีสิทธิ์ใช้วันหยุดชดเฉยต้องเป็นพนักงานระดับ Supervisor ขึ้นไปเท่านั้น<br>
             2.2. ล่วงเวลาพิเศษ คือ การปฏิบัติงานนอกสถานที่เกิน 6 ชั่วโมง/การปฎิบัติงานที่ตรงกับวันเสาร์-อาทิตย์ และวันหยุดนักขัตฤกษ์<br>
@@ -617,7 +618,7 @@
         let ClosingBalIsLimit = "ลาได้ตามจริง ";
         let LeaveTypeName = $("#leaveType option:selected").text();
         let NumDay = $("#numDay").val() || 0;
-
+        let typeCheck = '';
         //if (LeaveType == "SL01") { //ลาป่วย
         //    $(".dates").fadeIn(100);
         //    txtCondition = "การลาป่วยสามารถลาได้ตามระยะเวลาที่ป่วยจริง แต่ได้รับเงินค่าจ้างปกติไม่เกิน 30 วันในรอบปีปฎิทิน และการลาป่วยตั้งแต่ 3 วันติดต่อกันขึ้นไป <u>ต้องมีใบรับรองแพทย์ที่ระบุจำนวนวันลาป่วยเท่ากับวันที่ลาจริงทุกครั้ง</u>";
@@ -674,7 +675,9 @@
                 success: function (res) {
                     //$("#divCondition").css("display", "block");
                     if (res.Status = "success") {   //พบข้อมูล LeaveType
-
+                        if (LeaveType == 'SL01') {
+                            typeCheck = '<br> กรุณาใช้ลาป่วยเกินสิทธิ์ <br>| Please use sick leave without pay.';
+                        }
                         //เช็ค max min hour
                         disableNumHour(res.MinHour, res.MaxHour);
                         if (res.ClosingBal == 0) {  //วันลาไม่เเหลือ
@@ -687,7 +690,7 @@
                             Swal.fire({
                                 title: 'ไม่พบสิทธิ์วันลาคงเหลือ | You have no balance to request. ',
                                 icon: 'warning',
-                                html: LeaveTypeName + '<br> กรุณาแจ้งผู้ดูแลระบบ | Please contact to adim.' + '<br><br>',
+                                html: LeaveTypeName +  typeCheck + '<br> กรุณาแจ้งผู้ดูแลระบบ | Please contact to adim.' + '<br><br>',
                                 confirmButtonColor: '#3085d6',
                                 confirmButtonText: 'ปิด | Close',
                                 allowOutsideClick: false,
