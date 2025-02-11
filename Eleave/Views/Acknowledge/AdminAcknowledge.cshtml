@@ -35,17 +35,17 @@
                                     new SelectListItem() {Text="ลากิจ", Value="ลากิจ"},
                                     new SelectListItem(){Text="ลาพักร้อน",Value="ลาพักร้อน"}
                                 }, "ลา", new { @class = "custom-select", @id = "LeaveType-selector", @disabled = "disabled" })*@
-                            @Html.DropDownList("LeaveType", new SelectList(ViewBag.REQ_T, "LookValue", "LookDesc"), "Select request type | เลือกประเภทร้องขอ", new { @class = "custom-select", @id = "LeaveType-selector" })
+                            @Html.DropDownList("LeaveType", new SelectList(ViewBag.REQ_T, "LookValue", "LookDesc"), "เลือกประเภทร้องขอ | Select request type ", new { @class = "custom-select", @id = "LeaveType-selector" })
 
                         </div>
                         <div class="form-group col-lg-3">
                             <label class="font-weight-bold">ประเภทการลา | Leave Type :</label>
-                            @Html.DropDownList("reqType", new SelectList(ViewBag.Leavetype, "Leavetype", "Description"), "Select request type | เลือกประเภทร้องขอ", new { @class = "custom-select", @id = "reqType-selector", @disabled = "disabled" })
+                            @Html.DropDownList("reqType", new SelectList(ViewBag.Leavetype, "Leavetype", "Description"), "เลือกประเภทร้องขอ | Select request type", new { @class = "custom-select", @id = "reqType-selector", @disabled = "disabled" })
 
                         </div>
                         <div class="form-group col-lg-3">
                             <label class="font-weight-bold">สถานะคำขอ | Request Status :</label>
-                            @Html.DropDownList("ReqStatus", new SelectList(ViewBag.ReqSta, "LookValue", "LookDesc"), "All Request Statuses | สถานะคำขอทั้งหมด", new { @class = "custom-select", @id = "reqStatus" })
+                            @Html.DropDownList("ReqStatus", new SelectList(ViewBag.ReqSta, "LookValue", "LookDesc"), "สถานะคำขอทั้งหมด | All Request Statuses", new { @class = "custom-select", @id = "reqStatus" })
                         </div>
                         <div class="form-group col-lg-3">
                             <label class="font-weight-bold">เริ่มวันที่ | From Date :</label>
@@ -63,12 +63,12 @@
                                                new { @class = "custom-select", @id = "department-selector" })
                         </div>
                         <div class="form-group col-lg-3">
-                            <label class="font-weight-bold">รหัสคำขอ | Request No :</label>
-                            @Html.TextBox("reqId", null, new { @class = "form-control", @id = "reqId", @placeholder = "Request No | รหัสคำขอ" })
+                            <label class="font-weight-bold">รหัสพนักงาน | EmpID :</label>
+                            @Html.TextBox("reqId", null, new { @class = "form-control", @id = "reqId", @placeholder = "รหัสพนักงาน | EmpID" })
                         </div>
                         <div class="form-group col-lg-3">
                             <label class="font-weight-bold">ชื่อพนักงาน | Employee Name :</label>
-                            @Html.TextBox("empName", null, new { @class = "form-control", @id = "empName", @placeholder = "Employee Name | ชื่อพนักงาน" })
+                            @Html.TextBox("empName", null, new { @class = "form-control", @id = "empName", @placeholder = "ชื่อพนักงาน | Employee Name" })
                         </div>
                         <div class="form-group col-lg-3">
                             <div class="custom-control custom-checkbox">
