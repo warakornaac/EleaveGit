@@ -258,7 +258,7 @@
                                 <option value="0" selected>เลือกประเภทร้องขอ | Select request type</option>
                                 @foreach (var type in ViewBag.REQ_T)
                                 {
-                                    if (EmpLvl >= 3)
+                                    if (EmpLvl >= 3 && EmpLvl != 99)
                                     {
                                         if (@type.LookValue != "2")
                                         {
