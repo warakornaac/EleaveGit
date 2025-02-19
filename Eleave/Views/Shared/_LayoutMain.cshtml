@@ -81,6 +81,21 @@
                                 break;
                         }
                         @Html.Partial(fileMenu)
+                        <ul class="nav pcoded-inner-navbar">
+                            <li class="nav-item pcoded-menu-caption pt-1">
+                                <label>เอกสาร | Document</label>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#!" class="nav-link" data-toggle="modal" data-target="#imageModal" id="img-policy" onclick="ImgModalOpen();">
+                                    <span class="pcoded-micon"><i class="feather icon-grid"></i></span>
+                                    <span class="pcoded-mtext">ระเบียบการลา | Leave Policy</span>
+                                </a>
+                            </li>
+                        </ul>
+                        @*<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#imageModal">
+                                เปิด Modal (ทดสอบ)
+                            </button>*@
+
                     }
                     else
                     {
@@ -103,7 +118,21 @@
     @* [ Header ]*@
     <div class="pcoded-main-container">
         <div class="pcoded-content">
-
+            <!--Modal Image-->
+            <!-- Modal สำหรับขยายภาพ -->
+            <!-- Modal -->
+            <div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-body p-0">
+                            <img src="~/Images/E-Leave_ระเบียบการลา-1.png" alt="Expanded Image" class="img-fluid w-100">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal" id="close-img-modal" onclick="ImgModalClose();">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
             @RenderBody()
             @RenderSection("scripts", required: false)
             <footer>
@@ -155,7 +184,24 @@
 <script type="text/javascript" src="~/Scripts/daterangepicker.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
-
+<script>
+    function ImgModalOpen() {
+        $('#imageModal').modal('show');
+        console.log('Test Open');
+    }
+    function ImgModalClose() {
+        $('#imageModal').modal('hide');
+        console.log('Test Close');
+    }
+    //$(document).on('click', '#img-policy', function () {
+    //    $('#imageModal').modal('show');
+    //    console.log('Test Open');
+    //});
+    //$(document).on('click', '#close-img-modal', function () {
+    //    $('#imageModal').modal('hide');
+    //    console.log('Test Close');
+    //});
+</script>
 <script type="text/javascript">
     function LoadingShow() {
         JsLoadingOverlay.show();
@@ -163,4 +209,5 @@
     function LoadingHide() {
         JsLoadingOverlay.hide();
     }
+
 </script>
