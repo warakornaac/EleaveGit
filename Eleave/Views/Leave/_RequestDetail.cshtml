@@ -376,19 +376,26 @@ else
          // ดึง current date
          var currentDate = new Date();
          var currentYear = currentDate.getFullYear();
-         var currentMonth = currentDate.getMonth();
+        var currentMonth = currentDate.getMonth();
+        var currentDate = currentDate.getDay();
          //
 
          var ReqStatus = $("#ReqStatus").val() || 0;
          var EmpString = $('#ReqEmpId').val();
-         if (EmpString == '@EMPID') {
-             if (inputDate.getFullYear() != currentYear ||
-                 (inputDate.getFullYear() === currentYear && inputDate.getMonth() > currentMonth) && ReqStatus != 1 || ReqStatus == 4 || ReqStatus ==2) {
-                 $("#cancel_submit").css("display", "none");
-             }
-             else {
-                 $("#cancel_submit").css("display", "block");
-             }
+        if (EmpString == '@EMPID') {
+            if (ReqStatus == 0) {
+                $("#cancel_submit").css("display", "block");
+            }
+            else if (inputDate.getFullYear() != currentYear ||
+                (inputDate.getFullYear() === currentYear && inputDate.getMonth() < currentMonth ) && ReqStatus == 1 || ReqStatus == 3) {
+                $("#cancel_submit").css("display", "none");
+            }
+            else if (ReqStatus == 4 || ReqStatus == 2) {
+                $("#cancel_submit").css("display", "none");
+            }
+            else {
+                $("#cancel_submit").css("display", "block");
+            }
          }
          else {
              $("#cancel_submit").css("display", "none");
@@ -408,9 +415,15 @@ else
 
          var ReqStatus = $("#ReqStatus").val() || 0;
          var EmpString = $('#ReqEmpId').val();
-         if (EmpString == '@EMPID') {
-             if (inputDate.getFullYear() != currentYear ||
-                 (inputDate.getFullYear() === currentYear && inputDate.getMonth() > currentMonth) && ReqStatus != 1 || ReqStatus == 4 || ReqStatus == 2) {
+        if (EmpString == '@EMPID') {
+             if (ReqStatus == 0) {
+                 $("#cancel_alt_submit").css("display", "block");
+             }
+             else if (inputDate.getFullYear() != currentYear ||
+                 (inputDate.getFullYear() === currentYear && inputDate.getMonth() < currentMonth) && ReqStatus == 1 || ReqStatus == 3) {
+                 $("#cancel_alt_submit").css("display", "none");
+             }
+             else if (ReqStatus == 4 || ReqStatus == 2) {
                  $("#cancel_alt_submit").css("display", "none");
              }
              else {
