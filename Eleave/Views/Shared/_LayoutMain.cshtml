@@ -1,6 +1,7 @@
 ﻿@{
     string UsrType = Session["UserType"] != null ? Session["UserType"].ToString() : string.Empty;
     string UserID = Session["UserID"] != null ? Session["UserID"].ToString() : string.Empty;
+    string UserEmpID = Session["EmpId"] != null ? Session["EmpId"].ToString() : string.Empty;
 }
 <!DOCTYPE html>
 <html>
@@ -193,14 +194,33 @@
         $('#imageModal').modal('hide');
         console.log('Test Close');
     }
-    //$(document).on('click', '#img-policy', function () {
-    //    $('#imageModal').modal('show');
-    //    console.log('Test Open');
-    //});
-    //$(document).on('click', '#close-img-modal', function () {
-    //    $('#imageModal').modal('hide');
-    //    console.log('Test Close');
-    //});
+
+    var $Usession = '@UserEmpID'; // ป้องกันค่า null กลายเป็นสตริง "null"
+
+    $(function () {
+        $('.btn-info').click(function () {
+            if ($Usession.trim() === '') { // ตรวจสอบว่า session เป็นค่าว่างหรือไม่
+                LoadingHide();
+                $('.modal').modal('hide');
+                Swal.fire({
+                    title: "ไม่มีการใช้งานเกิน 15 นาที ระบบออกจากระบบอัตโนมัติ | Session timed out. Please log in again.",
+                    icon: 'warning',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'ปิด',
+                    allowOutsideClick: false,
+                    focusConfirm: false,
+                    timer: 5000,
+                    timerProgressBar: true,
+                    willClose: () => {  // ใช้ willClose แทน onClose
+                        LoadingHide();
+                    }
+                }).then(() => {
+                    window.location.replace("../Home/Logout");
+                });
+            }
+        });
+    });
+
 </script>
 <script type="text/javascript">
     function LoadingShow() {

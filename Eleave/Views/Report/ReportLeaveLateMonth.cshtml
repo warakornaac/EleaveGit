@@ -56,7 +56,7 @@
                         </div>
                         <div class="form-group col-md-3">
                             @Html.Label("แผนก | Department", new { @class = "font-weight-bold" })
-                            @Html.DropDownList("Department", new SelectList(ViewBag.DepartmentList, "LookValue", "LookDesc"), "เลือกแผนก | Select Department", new { @class = "custom-select", @id = "department-search" })
+                            @Html.DropDownList("Department", new SelectList(ViewBag.DepartmentList, "LookValue", "LookDesc"), new { @class = "custom-select", @id = "department-search" })
                             @Html.Hidden("DepartmentHidden", "", new { @id = "Department-hidden" })
                         </div>
                         <div class="form-group col-md-3">
