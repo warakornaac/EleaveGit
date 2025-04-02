@@ -387,11 +387,15 @@ else
                 $("#cancel_submit").css("display", "block");
             }
             else if (
-                inputDate.getFullYear() < currentYear ||
-                (inputDate.getFullYear() === currentYear &&
-                    (inputDate.getMonth() < currentMonth ||
-                        (inputDate.getMonth() === currentMonth - 1 && inputDate.getDate() <= 10))) &&
-                (ReqStatus == 1 || ReqStatus == 3) {
+                inputDate.getFullYear() === currentYear &&
+                inputDate.getMonth() === currentMonth - 1 &&
+                currentDay <= 10 &&
+                (ReqStatus == 1 || ReqStatus == 3)
+            ) {
+                $("#cancel_submit").css("display", "block"); // แสดงปุ่มเมื่อเงื่อนไขตรงตามที่ต้องการ
+            }
+            else if (inputDate.getFullYear() != currentYear ||
+                (inputDate.getFullYear() === currentYear && inputDate.getMonth() < currentMonth ) && ReqStatus == 1 || ReqStatus == 3) {
                 $("#cancel_submit").css("display", "none");
             }
             else if (ReqStatus == 4 || ReqStatus == 2) {
