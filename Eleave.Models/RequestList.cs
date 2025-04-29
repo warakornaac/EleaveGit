@@ -17,6 +17,7 @@ namespace Eleave.Models
         public string StartDate { get; set; }
         public string EndDate { get; set; }
         public decimal NumDay { get; set; }
+        public string PeriodTime { get; set; }
         public string ReqDate { get; set; }
         public string ApprGrpID { get; set; }
         public string ReqStatus { get; set; }
