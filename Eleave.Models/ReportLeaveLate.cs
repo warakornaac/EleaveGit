@@ -18,6 +18,7 @@ namespace Eleave.Models
         public string Late { get; set; }
         public string BeforeW { get; set; }
         public string Missing { get; set; }
+        public string AttachFile { get; set; }
         public string Exception { get; set; }
         public string Department { get; set; }
         public string Total_late { get; set; }

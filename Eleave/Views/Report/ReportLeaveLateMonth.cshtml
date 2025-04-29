@@ -115,6 +115,7 @@
                                         <th class="text-center">แผนก | Department</th>
                                         <th class="text-center">วันที่ | Date</th>
                                         <th class="text-center">ลา | Exception</th>
+                                        <th class="text-center">ไฟล์แนบ | AttachFile</th>
                                         <th class="text-center">ลาพักร้อน | Annaul Leave</th>
                                         <th class="text-center">ลาชดเชย | Compensate Leave</th>
                                         <th class="text-center">ลากิจ | Business Leave</th>
@@ -255,6 +256,7 @@
                                 data.Report[i].Department,
                                 data.Report[i].DateMonth,
                                 data.Report[i].Exception,
+                                data.Report[i].AttachFile,
                                 data.Report[i].AnnualLeave,
                                 data.Report[i].CompensateLeave,
                                 data.Report[i].BusinessLeave,
@@ -394,6 +396,7 @@
                                     "แผนก | Department",
                                     "วันที่ | Date",
                                     "ข้อยกเว้น | Exception",
+                                    "ไฟล์แนบ | AttachFile",
                                     "ลาพักร้อน | AnnualLeave",
                                     "หยุดชดเชย | CompensateLeave",
                                     "ลากิจ | BusinessLeave",
@@ -426,6 +429,7 @@
                                             item.Department ?? '',
                                             item.DateMonth ?? '',
                                             item.Exception ?? '',
+                                            item.AttachFile ?? '',
                                             item.AnnualLeave ?? '',
                                             item.CompensateLeave ?? '',
                                             item.BusinessLeave ?? '',

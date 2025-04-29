@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Globalization;
@@ -22,7 +23,8 @@ namespace Eleave.Controllers
         {
             string EmpID = string.Empty;
             string EmpType = string.Empty;
-
+            var connectionString = ConfigurationManager.ConnectionStrings["HRIS_DB"].ConnectionString;
+            SqlConnection conn = new SqlConnection(connectionString);
             if (Session["EmpId"] != null)
             {
                 EmpID = Session["EmpId"].ToString();
@@ -38,13 +40,117 @@ namespace Eleave.Controllers
                 return RedirectToAction("Index", "Home");
             }
             var Report_leav_bal = new List<ReportLeaveBalance>();
+            conn.Open();
             try
             {
-                Report_leav_bal = new GetReportLeaveBalance().GetReportLeaveBalances("", DateTime.Now.Year.ToString(), "", "", EmpID);
+                //Report_leav_bal = new GetReportLeaveBalance().GetReportLeaveBalances("", DateTime.Now.Year.ToString(), "", "", EmpID);
+                var cmd = new SqlCommand("P_Report_Leave_Balance", conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@inComp", "");
+                cmd.Parameters.AddWithValue("@inDept", "");
+                cmd.Parameters.AddWithValue("@inYear", DateTime.Now.Year.ToString());
+                cmd.Parameters.AddWithValue("@inEmpId", "");
+                cmd.Parameters.AddWithValue("@inUser", EmpID);
+                SqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    Report_leav_bal.Add(new ReportLeaveBalance
+                    {
+                        Company = reader["Company"]?.ToString() ?? "",
+                        LeaveYear = reader["LeaveYear"]?.ToString() ?? "",
+                        DeptNameShort = reader["DeptNameShort"]?.ToString() ?? "",
+                        DeptName = reader["DeptName"]?.ToString() ?? "",
+                        EmpId = reader["EmpId"]?.ToString() ?? "",
+                        Position = reader["Position"]?.ToString() ?? "",
+                        EmpStatus = reader["EmpStatus"]?.ToString() ?? "",
+                        StartDate = reader["StartDate"]?.ToString() ?? "",
+                        Fullname = reader["Fullname"]?.ToString() ?? "",
+                        Years = reader["Years"]?.ToString() ?? "",
+                        Months = reader["Months"]?.ToString() ?? "",
+                        Days = reader["Days"]?.ToString() ?? "",
+
+                        AL02_Accured = reader["AL02_Accured"] as decimal? ?? 0,
+                        AL02_Leave = reader["AL02_Leave"] as decimal? ?? 0,
+                        AL02_Balance = reader["AL02_Balance"] as decimal? ?? 0,
+                        AL02_File = reader["AL02_File"] as int? ?? 0,
+
+                        AL01_Accured = reader["AL01_Accured"] as decimal? ?? 0,
+                        AL01_Leave = reader["AL01_Leave"] as decimal? ?? 0,
+                        AL01_Balance = reader["AL01_Balance"] as decimal? ?? 0,
+                        AL01_File = reader["AL01_File"] as int? ?? 0,
+
+                        CP03_Accured = reader["CP03_Accured"] as decimal? ?? 0,
+                        CP03_Leave = reader["CP03_Leave"] as decimal? ?? 0,
+                        CP03_Balance = reader["CP03_Balance"] as decimal? ?? 0,
+                        CP03_File = reader["CP03_File"] as int? ?? 0,
+
+                        SL01_Accured = reader["SL01_Accured"] as decimal? ?? 0,
+                        SL01_Leave = reader["SL01_Leave"] as decimal? ?? 0,
+                        SL01_Balance = reader["SL01_Balance"] as decimal? ?? 0,
+                        SL01_File = reader["SL01_File"] as int? ?? 0,
+
+                        BU04_Accured = reader["BU04_Accured"] as decimal? ?? 0,
+                        BU04_Leave = reader["BU04_Leave"] as decimal? ?? 0,
+                        BU04_Balance = reader["BU04_Balance"] as decimal? ?? 0,
+                        BU04_File = reader["BU04_File"] as int? ?? 0,
+
+                        OT13_Accured = reader["OT13_Accured"] as decimal? ?? 0,
+                        OT13_Leave = reader["OT13_Leave"] as decimal? ?? 0,
+                        OT13_Balance = reader["OT13_Balance"] as decimal? ?? 0,
+                        OT13_File = reader["OT13_File"] as int? ?? 0,
+
+                        OL07_Accured = reader["OL07_Accured"] as decimal? ?? 0,
+                        OL07_Leave = reader["OL07_Leave"] as decimal? ?? 0,
+                        OL07_Balance = reader["OL07_Balance"] as decimal? ?? 0,
+                        OL07_File = reader["OL07_File"] as int? ?? 0,
+
+                        ML06_Accured = reader["ML06_Accured"] as decimal? ?? 0,
+                        ML06_Leave = reader["ML06_Leave"] as decimal? ?? 0,
+                        ML06_Balance = reader["ML06_Balance"] as decimal? ?? 0,
+                        ML06_File = reader["ML06_File"] as int? ?? 0,
+
+                        CO11_Accured = reader["CO11_Accured"] as decimal? ?? 0,
+                        CO11_Leave = reader["CO11_Leave"] as decimal? ?? 0,
+                        CO11_Balance = reader["CO11_Balance"] as decimal? ?? 0,
+                        CO11_File = reader["CO11_File"] as int? ?? 0,
+
+                        BL10_Accured = reader["BL10_Accured"] as decimal? ?? 0,
+                        BL10_Leave = reader["BL10_Leave"] as decimal? ?? 0,
+                        BL10_Balance = reader["BL10_Balance"] as decimal? ?? 0,
+                        BL10_File = reader["BL10_File"] as int? ?? 0,
+
+                        GL09_Accured = reader["GL09_Accured"] as decimal? ?? 0,
+                        GL09_Leave = reader["GL09_Leave"] as decimal? ?? 0,
+                        GL09_Balance = reader["GL09_Balance"] as decimal? ?? 0,
+                        GL09_File = reader["GL09_File"] as int? ?? 0,
+
+                        MS08_Accured = reader["MS08_Accured"] as decimal? ?? 0,
+                        MS08_Leave = reader["MS08_Leave"] as decimal? ?? 0,
+                        MS08_Balance = reader["MS08_Balance"] as decimal? ?? 0,
+                        MS08_File = reader["MS08_File"] as int? ?? 0,
+
+                        WFH_Approve = reader["WFH_Approve"] as decimal? ?? 0,
+                        WFH_Waiting = reader["WFH_Waiting"] as decimal? ?? 0,
+                        OffSite_Approve = reader["OffSite_Approve"] as decimal? ?? 0,
+                        OffSite_Waiting = reader["OffSite_Waiting"] as decimal? ?? 0,
+
+                        SL02_Accured = reader["SL02_Accured"] as decimal? ?? 0,
+                        SL02_Leave = reader["SL02_Leave"] as decimal? ?? 0,
+                        SL02_Balance = reader["SL02_Balance"] as decimal? ?? 0,
+                        SL02_File = reader["SL02_File"] as int? ?? 0,
+                    });
+
+                }
+                reader.Close();
+                cmd.Dispose();
             }
             catch (Exception ex)
             {
                 ViewBag.Error = ex.Message;
+            }
+            finally
+            {
+                conn.Close();
             }
 
 
@@ -56,6 +162,8 @@ namespace Eleave.Controllers
         {
             string emp = string.Empty;
             string EmpType = string.Empty;
+            var connectionString = ConfigurationManager.ConnectionStrings["HRIS_DB"].ConnectionString;
+            SqlConnection conn = new SqlConnection(connectionString);
             var Report_leav_bal = new List<ReportLeaveBalance>();
             if (Session["EmpId"] != null)
             {
@@ -71,13 +179,117 @@ namespace Eleave.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
+            conn.Open();
             try
             {
-                Report_leav_bal = new GetReportLeaveBalance().GetReportLeaveBalances(Company, Year, Department, EmpID, emp);
+                //Report_leav_bal = new GetReportLeaveBalance().GetReportLeaveBalances(Company, Year, Department, EmpID, emp);
+                var cmd = new SqlCommand("P_Report_Leave_Balance", conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@inComp", Company);
+                cmd.Parameters.AddWithValue("@inDept", Department);
+                cmd.Parameters.AddWithValue("@inYear", Year);
+                cmd.Parameters.AddWithValue("@inEmpId", EmpID);
+                cmd.Parameters.AddWithValue("@inUser", emp);
+                SqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    Report_leav_bal.Add(new ReportLeaveBalance
+                    {
+                        Company = reader["Company"]?.ToString() ?? "",
+                        LeaveYear = reader["LeaveYear"]?.ToString() ?? "",
+                        DeptNameShort = reader["DeptNameShort"]?.ToString() ?? "",
+                        DeptName = reader["DeptName"]?.ToString() ?? "",
+                        EmpId = reader["EmpId"]?.ToString() ?? "",
+                        Position = reader["Position"]?.ToString() ?? "",
+                        EmpStatus = reader["EmpStatus"]?.ToString() ?? "",
+                        StartDate = reader["StartDate"]?.ToString() ?? "",
+                        Fullname = reader["Fullname"]?.ToString() ?? "",
+                        Years = reader["Years"]?.ToString() ?? "",
+                        Months = reader["Months"]?.ToString() ?? "",
+                        Days = reader["Days"]?.ToString() ?? "",
+
+                        AL02_Accured = reader["AL02_Accured"] as decimal? ?? 0,
+                        AL02_Leave = reader["AL02_Leave"] as decimal? ?? 0,
+                        AL02_Balance = reader["AL02_Balance"] as decimal? ?? 0,
+                        AL02_File = reader["AL02_File"] as int? ?? 0,
+
+                        AL01_Accured = reader["AL01_Accured"] as decimal? ?? 0,
+                        AL01_Leave = reader["AL01_Leave"] as decimal? ?? 0,
+                        AL01_Balance = reader["AL01_Balance"] as decimal? ?? 0,
+                        AL01_File = reader["AL01_File"] as int? ?? 0,
+
+                        CP03_Accured = reader["CP03_Accured"] as decimal? ?? 0,
+                        CP03_Leave = reader["CP03_Leave"] as decimal? ?? 0,
+                        CP03_Balance = reader["CP03_Balance"] as decimal? ?? 0,
+                        CP03_File = reader["CP03_File"] as int? ?? 0,
+
+                        SL01_Accured = reader["SL01_Accured"] as decimal? ?? 0,
+                        SL01_Leave = reader["SL01_Leave"] as decimal? ?? 0,
+                        SL01_Balance = reader["SL01_Balance"] as decimal? ?? 0,
+                        SL01_File = reader["SL01_File"] as int? ?? 0,
+
+                        BU04_Accured = reader["BU04_Accured"] as decimal? ?? 0,
+                        BU04_Leave = reader["BU04_Leave"] as decimal? ?? 0,
+                        BU04_Balance = reader["BU04_Balance"] as decimal? ?? 0,
+                        BU04_File = reader["BU04_File"] as int? ?? 0,
+
+                        OT13_Accured = reader["OT13_Accured"] as decimal? ?? 0,
+                        OT13_Leave = reader["OT13_Leave"] as decimal? ?? 0,
+                        OT13_Balance = reader["OT13_Balance"] as decimal? ?? 0,
+                        OT13_File = reader["OT13_File"] as int? ?? 0,
+
+                        OL07_Accured = reader["OL07_Accured"] as decimal? ?? 0,
+                        OL07_Leave = reader["OL07_Leave"] as decimal? ?? 0,
+                        OL07_Balance = reader["OL07_Balance"] as decimal? ?? 0,
+                        OL07_File = reader["OL07_File"] as int? ?? 0,
+
+                        ML06_Accured = reader["ML06_Accured"] as decimal? ?? 0,
+                        ML06_Leave = reader["ML06_Leave"] as decimal? ?? 0,
+                        ML06_Balance = reader["ML06_Balance"] as decimal? ?? 0,
+                        ML06_File = reader["ML06_File"] as int? ?? 0,
+
+                        CO11_Accured = reader["CO11_Accured"] as decimal? ?? 0,
+                        CO11_Leave = reader["CO11_Leave"] as decimal? ?? 0,
+                        CO11_Balance = reader["CO11_Balance"] as decimal? ?? 0,
+                        CO11_File = reader["CO11_File"] as int? ?? 0,
+
+                        BL10_Accured = reader["BL10_Accured"] as decimal? ?? 0,
+                        BL10_Leave = reader["BL10_Leave"] as decimal? ?? 0,
+                        BL10_Balance = reader["BL10_Balance"] as decimal? ?? 0,
+                        BL10_File = reader["BL10_File"] as int? ?? 0,
+
+                        GL09_Accured = reader["GL09_Accured"] as decimal? ?? 0,
+                        GL09_Leave = reader["GL09_Leave"] as decimal? ?? 0,
+                        GL09_Balance = reader["GL09_Balance"] as decimal? ?? 0,
+                        GL09_File = reader["GL09_File"] as int? ?? 0,
+
+                        MS08_Accured = reader["MS08_Accured"] as decimal? ?? 0,
+                        MS08_Leave = reader["MS08_Leave"] as decimal? ?? 0,
+                        MS08_Balance = reader["MS08_Balance"] as decimal? ?? 0,
+                        MS08_File = reader["MS08_File"] as int? ?? 0,
+
+                        WFH_Approve = reader["WFH_Approve"] as decimal? ?? 0,
+                        WFH_Waiting = reader["WFH_Waiting"] as decimal? ?? 0,
+                        OffSite_Approve = reader["OffSite_Approve"] as decimal? ?? 0,
+                        OffSite_Waiting = reader["OffSite_Waiting"] as decimal? ?? 0,
+
+                        SL02_Accured = reader["SL02_Accured"] as decimal? ?? 0,
+                        SL02_Leave = reader["SL02_Leave"] as decimal? ?? 0,
+                        SL02_Balance = reader["SL02_Balance"] as decimal? ?? 0,
+                        SL02_File = reader["SL02_File"] as int? ?? 0,
+                    });
+
+                }
+                reader.Close();
+                cmd.Dispose();
             }
             catch (Exception ex)
             {
                 ViewBag.Error = ex.Message;
+            }
+            finally
+            {
+                conn.Close();
             }
 
             LoadDepartments();
@@ -85,9 +297,13 @@ namespace Eleave.Controllers
         }
         public ActionResult ReportLeaveBalanceMonth()
         {
+            var sw = new Stopwatch();
+
             string emp = string.Empty;
             string EmpType = string.Empty;
             var Report_leav_bal = new List<ReportLeaveBalance>();
+            var connectionString = ConfigurationManager.ConnectionStrings["HRIS_DB"].ConnectionString;
+            SqlConnection conn = new SqlConnection(connectionString);
             if (Session["EmpId"] != null)
             {
                 emp = Session["EmpId"].ToString();
@@ -97,9 +313,6 @@ namespace Eleave.Controllers
             {
                 return RedirectToAction("Login", "Home");
             }
-
-
-
             var year = DateTime.Now.Year;
             var month = DateTime.Now.Month;
             // วันแรกของเดือน
@@ -108,22 +321,123 @@ namespace Eleave.Controllers
             // วันสุดท้ายของเดือน
             DateTime lastDayOfMonth = new DateTime(year, month, DateTime.DaysInMonth(year, month));
 
-            Console.WriteLine("วันแรกของเดือน: " + firstDayOfMonth.ToString("yyyy-MM-dd"));
-            Console.WriteLine("วันสุดท้ายของเดือน: " + lastDayOfMonth.ToString("yyyy-MM-dd"));
-
-
-
-
+            conn.Open();
+            sw.Start();
             try
             {
-                Report_leav_bal = new GetReportLeaveBalanceMonth().GetReportMonth("", "", firstDayOfMonth.ToString("yyyy-MM-dd"), lastDayOfMonth.ToString("yyyy-MM-dd"));
+                //Report_leav_bal = new GetReportLeaveBalanceMonth().GetReportMonth("", "", firstDayOfMonth.ToString("yyyy-MM-dd"), lastDayOfMonth.ToString("yyyy-MM-dd"));
+                var cmd = new SqlCommand("P_Report_Leave_Balance_month", conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@inComp", "");
+                cmd.Parameters.AddWithValue("@inDept", "");
+                cmd.Parameters.AddWithValue("@inStartdate", firstDayOfMonth.ToString("yyyy-MM-dd"));
+                cmd.Parameters.AddWithValue("@inEnddate", lastDayOfMonth.ToString("yyyy-MM-dd"));
+                SqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    Report_leav_bal.Add(new ReportLeaveBalance
+                    {
+                        Company = reader["Company"]?.ToString() ?? "",
+                        DeptNameShort = reader["DeptNameShort"]?.ToString() ?? "",
+                        DeptName = reader["DeptName"]?.ToString() ?? "",
+                        EmpId = reader["EmpId"]?.ToString() ?? "",
+                        Position = reader["Position"]?.ToString() ?? "",
+                        EmpStatus = reader["EmpStatus"]?.ToString() ?? "",
+                        StartDate = reader["StartDate"]?.ToString() ?? "",
+                        Fullname = reader["Fullname"]?.ToString() ?? "",
+                        Years = reader["Years"]?.ToString() ?? "",
+                        Months = reader["Months"]?.ToString() ?? "",
+                        Days = reader["Days"]?.ToString() ?? "",
+
+                        AL02_Accured = reader["AL02_Accured"] as decimal? ?? 0,
+                        AL02_Leave = reader["AL02_Leave"] as decimal? ?? 0,
+                        AL02_Balance = reader["AL02_Balance"] as decimal? ?? 0,
+                        AL02_File = reader["AL02_File"] as int? ?? 0,
+
+                        AL01_Accured = reader["AL01_Accured"] as decimal? ?? 0,
+                        AL01_Leave = reader["AL01_Leave"] as decimal? ?? 0,
+                        AL01_Balance = reader["AL01_Balance"] as decimal? ?? 0,
+                        AL01_File = reader["AL01_File"] as int? ?? 0,
+
+                        CP03_Accured = reader["CP03_Accured"] as decimal? ?? 0,
+                        CP03_Leave = reader["CP03_Leave"] as decimal? ?? 0,
+                        CP03_Balance = reader["CP03_Balance"] as decimal? ?? 0,
+                        CP03_File = reader["CP03_File"] as int? ?? 0,
+
+                        SL01_Accured = reader["SL01_Accured"] as decimal? ?? 0,
+                        SL01_Leave = reader["SL01_Leave"] as decimal? ?? 0,
+                        SL01_Balance = reader["SL01_Balance"] as decimal? ?? 0,
+                        SL01_File = reader["SL01_File"] as int? ?? 0,
+
+                        BU04_Accured = reader["BU04_Accured"] as decimal? ?? 0,
+                        BU04_Leave = reader["BU04_Leave"] as decimal? ?? 0,
+                        BU04_Balance = reader["BU04_Balance"] as decimal? ?? 0,
+                        BU04_File = reader["BU04_File"] as int? ?? 0,
+
+                        OT13_Accured = reader["OT13_Accured"] as decimal? ?? 0,
+                        OT13_Leave = reader["OT13_Leave"] as decimal? ?? 0,
+                        OT13_Balance = reader["OT13_Balance"] as decimal? ?? 0,
+                        OT13_File = reader["OT13_File"] as int? ?? 0,
+
+                        OL07_Accured = reader["OL07_Accured"] as decimal? ?? 0,
+                        OL07_Leave = reader["OL07_Leave"] as decimal? ?? 0,
+                        OL07_Balance = reader["OL07_Balance"] as decimal? ?? 0,
+                        OL07_File = reader["OL07_File"] as int? ?? 0,
+
+                        ML06_Accured = reader["ML06_Accured"] as decimal? ?? 0,
+                        ML06_Leave = reader["ML06_Leave"] as decimal? ?? 0,
+                        ML06_Balance = reader["ML06_Balance"] as decimal? ?? 0,
+                        ML06_File = reader["ML06_File"] as int? ?? 0,
+
+                        CO11_Accured = reader["CO11_Accured"] as decimal? ?? 0,
+                        CO11_Leave = reader["CO11_Leave"] as decimal? ?? 0,
+                        CO11_Balance = reader["CO11_Balance"] as decimal? ?? 0,
+                        CO11_File = reader["CO11_File"] as int? ?? 0,
+
+                        BL10_Accured = reader["BL10_Accured"] as decimal? ?? 0,
+                        BL10_Leave = reader["BL10_Leave"] as decimal? ?? 0,
+                        BL10_Balance = reader["BL10_Balance"] as decimal? ?? 0,
+                        BL10_File = reader["BL10_File"] as int? ?? 0,
+
+                        GL09_Accured = reader["GL09_Accured"] as decimal? ?? 0,
+                        GL09_Leave = reader["GL09_Leave"] as decimal? ?? 0,
+                        GL09_Balance = reader["GL09_Balance"] as decimal? ?? 0,
+                        GL09_File = reader["GL09_File"] as int? ?? 0,
+
+                        MS08_Accured = reader["MS08_Accured"] as decimal? ?? 0,
+                        MS08_Leave = reader["MS08_Leave"] as decimal? ?? 0,
+                        MS08_Balance = reader["MS08_Balance"] as decimal? ?? 0,
+                        MS08_File = reader["MS08_File"] as int? ?? 0,
+
+                        WFH_Approve = reader["WFH_Approve"] as decimal? ?? 0,
+                        WFH_Waiting = reader["WFH_Waiting"] as decimal? ?? 0,
+                        OffSite_Approve = reader["OffSite_Approve"] as decimal? ?? 0,
+                        OffSite_Waiting = reader["OffSite_Waiting"] as decimal? ?? 0,
+
+                        SL02_Accured = reader["SL02_Accured"] as decimal? ?? 0,
+                        SL02_Leave = reader["SL02_Leave"] as decimal? ?? 0,
+                        SL02_Balance = reader["SL02_Balance"] as decimal? ?? 0,
+                        SL02_File = reader["SL02_File"] as int? ?? 0,
+                    });
+
+                }
+                reader.Close();
+                cmd.Dispose();
             }
             catch (Exception ex)
             {
                 ViewBag.Error = ex.Message;
             }
+            finally
+            {
+                conn.Close();
+            }
 
             LoadDepartments();
+            sw.Stop();
+            var elapased = sw.Elapsed;
+            Debug.WriteLine("Time Data: " + elapased.ToString());
+            Console.WriteLine("Time Data: " + elapased.ToString());
             return View(Report_leav_bal);
         }
         [HttpPost]
@@ -139,6 +453,8 @@ namespace Eleave.Controllers
             string formatStartDate = string.Empty;
             string formatEndDate = string.Empty;
             var Report_leav_bal = new List<ReportLeaveBalance>();
+            var connectionString = ConfigurationManager.ConnectionStrings["HRIS_DB"].ConnectionString;
+            SqlConnection conn = new SqlConnection(connectionString);
             if (Session["EmpId"] != null)
             {
                 emp = Session["EmpId"].ToString();
@@ -176,14 +492,115 @@ namespace Eleave.Controllers
                 lastDayOfMonth = new DateTime(year, month, DateTime.DaysInMonth(year, month));
                 formatEndDate = lastDayOfMonth.ToString("yyyy/MM/dd");
             }
-
+            conn.Open();
             try
             {
-                Report_leav_bal = new GetReportLeaveBalanceMonth().GetReportMonth(Company, Department, formatStartDate, formatEndDate);
+                //Report_leav_bal = new GetReportLeaveBalanceMonth().GetReportMonth(Company, Department, formatStartDate, formatEndDate);
+                var cmd = new SqlCommand("P_Report_Leave_Balance_month", conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@inComp", Company);
+                cmd.Parameters.AddWithValue("@inDept", Department);
+                cmd.Parameters.AddWithValue("@inStartdate", formatStartDate);
+                cmd.Parameters.AddWithValue("@inEnddate", formatEndDate);
+                SqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    Report_leav_bal.Add(new ReportLeaveBalance
+                    {
+                        Company = reader["Company"]?.ToString() ?? "",
+                        DeptNameShort = reader["DeptNameShort"]?.ToString() ?? "",
+                        DeptName = reader["DeptName"]?.ToString() ?? "",
+                        EmpId = reader["EmpId"]?.ToString() ?? "",
+                        Position = reader["Position"]?.ToString() ?? "",
+                        EmpStatus = reader["EmpStatus"]?.ToString() ?? "",
+                        StartDate = reader["StartDate"]?.ToString() ?? "",
+                        Fullname = reader["Fullname"]?.ToString() ?? "",
+                        Years = reader["Years"]?.ToString() ?? "",
+                        Months = reader["Months"]?.ToString() ?? "",
+                        Days = reader["Days"]?.ToString() ?? "",
+
+                        AL02_Accured = reader["AL02_Accured"] as decimal? ?? 0,
+                        AL02_Leave = reader["AL02_Leave"] as decimal? ?? 0,
+                        AL02_Balance = reader["AL02_Balance"] as decimal? ?? 0,
+                        AL02_File = reader["AL02_File"] as int? ?? 0,
+
+                        AL01_Accured = reader["AL01_Accured"] as decimal? ?? 0,
+                        AL01_Leave = reader["AL01_Leave"] as decimal? ?? 0,
+                        AL01_Balance = reader["AL01_Balance"] as decimal? ?? 0,
+                        AL01_File = reader["AL01_File"] as int? ?? 0,
+
+                        CP03_Accured = reader["CP03_Accured"] as decimal? ?? 0,
+                        CP03_Leave = reader["CP03_Leave"] as decimal? ?? 0,
+                        CP03_Balance = reader["CP03_Balance"] as decimal? ?? 0,
+                        CP03_File = reader["CP03_File"] as int? ?? 0,
+
+                        SL01_Accured = reader["SL01_Accured"] as decimal? ?? 0,
+                        SL01_Leave = reader["SL01_Leave"] as decimal? ?? 0,
+                        SL01_Balance = reader["SL01_Balance"] as decimal? ?? 0,
+                        SL01_File = reader["SL01_File"] as int? ?? 0,
+
+                        BU04_Accured = reader["BU04_Accured"] as decimal? ?? 0,
+                        BU04_Leave = reader["BU04_Leave"] as decimal? ?? 0,
+                        BU04_Balance = reader["BU04_Balance"] as decimal? ?? 0,
+                        BU04_File = reader["BU04_File"] as int? ?? 0,
+
+                        OT13_Accured = reader["OT13_Accured"] as decimal? ?? 0,
+                        OT13_Leave = reader["OT13_Leave"] as decimal? ?? 0,
+                        OT13_Balance = reader["OT13_Balance"] as decimal? ?? 0,
+                        OT13_File = reader["OT13_File"] as int? ?? 0,
+
+                        OL07_Accured = reader["OL07_Accured"] as decimal? ?? 0,
+                        OL07_Leave = reader["OL07_Leave"] as decimal? ?? 0,
+                        OL07_Balance = reader["OL07_Balance"] as decimal? ?? 0,
+                        OL07_File = reader["OL07_File"] as int? ?? 0,
+
+                        ML06_Accured = reader["ML06_Accured"] as decimal? ?? 0,
+                        ML06_Leave = reader["ML06_Leave"] as decimal? ?? 0,
+                        ML06_Balance = reader["ML06_Balance"] as decimal? ?? 0,
+                        ML06_File = reader["ML06_File"] as int? ?? 0,
+
+                        CO11_Accured = reader["CO11_Accured"] as decimal? ?? 0,
+                        CO11_Leave = reader["CO11_Leave"] as decimal? ?? 0,
+                        CO11_Balance = reader["CO11_Balance"] as decimal? ?? 0,
+                        CO11_File = reader["CO11_File"] as int? ?? 0,
+
+                        BL10_Accured = reader["BL10_Accured"] as decimal? ?? 0,
+                        BL10_Leave = reader["BL10_Leave"] as decimal? ?? 0,
+                        BL10_Balance = reader["BL10_Balance"] as decimal? ?? 0,
+                        BL10_File = reader["BL10_File"] as int? ?? 0,
+
+                        GL09_Accured = reader["GL09_Accured"] as decimal? ?? 0,
+                        GL09_Leave = reader["GL09_Leave"] as decimal? ?? 0,
+                        GL09_Balance = reader["GL09_Balance"] as decimal? ?? 0,
+                        GL09_File = reader["GL09_File"] as int? ?? 0,
+
+                        MS08_Accured = reader["MS08_Accured"] as decimal? ?? 0,
+                        MS08_Leave = reader["MS08_Leave"] as decimal? ?? 0,
+                        MS08_Balance = reader["MS08_Balance"] as decimal? ?? 0,
+                        MS08_File = reader["MS08_File"] as int? ?? 0,
+
+                        WFH_Approve = reader["WFH_Approve"] as decimal? ?? 0,
+                        WFH_Waiting = reader["WFH_Waiting"] as decimal? ?? 0,
+                        OffSite_Approve = reader["OffSite_Approve"] as decimal? ?? 0,
+                        OffSite_Waiting = reader["OffSite_Waiting"] as decimal? ?? 0,
+
+                        SL02_Accured = reader["SL02_Accured"] as decimal? ?? 0,
+                        SL02_Leave = reader["SL02_Leave"] as decimal? ?? 0,
+                        SL02_Balance = reader["SL02_Balance"] as decimal? ?? 0,
+                        SL02_File = reader["SL02_File"] as int? ?? 0,
+                    });
+
+                }
+                reader.Close();
+                cmd.Dispose();
             }
             catch (Exception ex)
             {
                 ViewBag.Error = ex.Message;
+            }
+            finally
+            {
+                conn.Close();
             }
             LoadDepartments();
             return View("ReportLeaveBalanceMonth", Report_leav_bal);
@@ -385,6 +802,7 @@ namespace Eleave.Controllers
                                 Late = reader["Late"] != DBNull.Value ? reader["Late"].ToString() : string.Empty,
                                 BeforeW = reader["BeforeW"] != DBNull.Value ? reader["BeforeW"].ToString() : string.Empty,
                                 Missing = reader["Missing"] != DBNull.Value ? reader["Missing"].ToString() : string.Empty,
+                                AttachFile = reader["AttachFile"] != DBNull.Value ? reader["AttachFile"].ToString() : string.Empty,
                                 Exception = reader["Exception"] != DBNull.Value ? reader["Exception"].ToString() : string.Empty,
                                 Department = reader["Department"] != DBNull.Value ? reader["Department"].ToString() : string.Empty,
                                 Total_late = reader["Total_late"] != DBNull.Value ? reader["Total_late"].ToString() : string.Empty,
@@ -494,6 +912,8 @@ namespace Eleave.Controllers
             int GetYear = int.Parse(Yearly);
             DateTime firstDay = new DateTime(GetYear, 1, 1);
             DateTime lastDay = new DateTime(GetYear, 12, 31);
+
+
             var Detail = new List<ReportLeaveBalanceDetail>();
             if (Session["EmpId"] != null)
             {

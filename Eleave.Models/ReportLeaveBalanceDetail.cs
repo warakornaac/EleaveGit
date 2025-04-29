@@ -19,6 +19,7 @@ namespace Eleave.Models
         public string StartDate { get; set; }
         public string EndDate { get; set; }
         public decimal NumDay { get; set; }
+        public string PeriodTime { get; set; }
         public string NumDayCal { get; set; }
         public string ReqDate { get; set; }
         public string ApprGrpID { get; set; }
@@ -30,5 +31,6 @@ namespace Eleave.Models
         public string ApproveDate { get; set; }
         public string AcknowledgeBy { get; set; }
         public string AcknowledgeDate { get; set; }
+        public string Attach_File { get; set; }
     }
 }

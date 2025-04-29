@@ -22,5 +22,6 @@ namespace Eleave.Models
         public string CalculatedHour { get; set; }
         public int NumHour { get; set; }
         public string PeriodTime { get; set; }
+        public string AttachFile { get; set; }
     }
 }
