@@ -658,7 +658,7 @@
         if (numDayCal > 0) {
             numDayCal = Number(numDayCal)
         }
-        ////ถ้าวันคงเหลือ = 0 set = 0.5 
+        ////ถ้าวันคงเหลือ = 0 set = 0.5
         if (numDayCal == 0) {
             numDayCal = 0.5;
         }
@@ -693,7 +693,7 @@
                         LoadingHide();
                     });
                 }
-            }  
+            }
         //}, 1500);
     }
     //ดึงเงื่อนไขแต่ละการลา
@@ -774,9 +774,18 @@
                         }
                         //แสดงข้อมูลสิทธิ์
                         $("#divPrivilege").css("display", "block");
-                        $("#ClosingBalTxt").text(ClosingBalIsLimit);
+                        //$("#ClosingBalTxt").text(ClosingBalIsLimit);
+
+                        const ValClosingBal = parseFloat(ClosingBalIsLimit);
+                        const resultClosingBal = calculateDayHour(ValClosingBal);
+
+                        $("#ClosingBalTxt").text(resultClosingBal);
                         $("#ClosingBalVal").val(res.ClosingBal);
-                        $("#LeaveTakenTxt").text(res.LeaveTaken);
+                        //$("#LeaveTakenTxt").text(res.LeaveTaken);
+
+                        const ValLeaveTaken = parseFloat(res.LeaveTaken);
+                        const resultLeaveTaken = calculateDayHour(ValLeaveTaken);
+                        $("#LeaveTakenTxt").text(resultLeaveTaken);
                         $("#LeaveTakenVal").val(res.LeaveTaken);
                         //เงื่อนไขการลา
                         $("#ApplyBeforeDayVal").text(res.ApplyBeforeDay);
@@ -1530,6 +1539,39 @@
         LoadingShow();
         location.reload();
         LoadingHide();
+    }
+
+    function calculateDayHour(txtNumberDate) {
+        if (txtNumberDate <= 0 || isNaN(txtNumberDate)) {
+            return "0";
+        }
+
+        const txtNumberDateOrg = txtNumberDate.toFixed(2); // แปลงเป็นทศนิยม 2 ตำแหน่ง
+        const [txtDay, txtHours] = txtNumberDateOrg.split(".");
+        let day = "";
+        let hours = "";
+
+        if (txtDay !== "0") {
+            day = `${parseInt(txtDay)} วัน`;
+        }
+
+        // แปลงค่าทศนิยมเป็นชั่วโมงตาม mapping
+        const hourMap = {
+            "13": "1",
+            "25": "2",
+            "38": "3",
+            "50": "4",
+            "63": "5",
+            "75": "6",
+            "87": "7",
+            "88": "7"
+        };
+
+        if (txtHours && hourMap[txtHours]) {
+            hours = `${hourMap[txtHours]} ชม`;
+        }
+
+        return [day, hours].filter(Boolean).join(" ");
     }
 
     document.onreadystatechange = function () {
