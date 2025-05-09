@@ -469,7 +469,7 @@
         }
     });
 
-        $(document).on('click', '[id^="selected_"]', function (e) {
+    $(document).on('click', '[id^="selected_"]', function (e) {
         e.preventDefault();
         var $loop_focus = 0;
         var Success_ack = 0;
@@ -491,7 +491,8 @@
                         AckComment: ack_comm
                     },
                     success: function (data) {
-                        if (data.message === 'Y') {
+                        console.log('data.message = ' + data.message);
+                        if (data.message == 'Y') {
                             Success_ack++;
                         } else {
                             Fail_ack++;

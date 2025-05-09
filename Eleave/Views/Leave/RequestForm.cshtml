@@ -647,7 +647,7 @@
         //console.log("numDayOrg = " + numDayOrg);
         //console.log("SetNumHour = " + SetNumHour);
         if (numDayOrg == 1) {
-            console.log("AfterSetNumHour = " + SetNumHour);
+            //console.log("AfterSetNumHour = " + SetNumHour);
             numDayCal = SetNumHour / 8;
             if (numDayCal >= 1) {
                 numDayCal = 1;
@@ -655,25 +655,29 @@
                 numDayCal = numDayCal.toFixed(2)
             }
         }
+        console.log("numDayCalCheck = " + numDayCal)
         if (numDayCal > 0) {
             numDayCal = Number(numDayCal)
         }
         ////ถ้าวันคงเหลือ = 0 set = 0.5
-        if (numDayCal == 0) {
+
+        if (numDayCal == 0 && (setPeriodTime == 2 || setPeriodTime == 3)) {
             numDayCal = 0.5;
+        } else {
+            numDayCal = numDayCal;
         }
         console.log("numDayOrg = " + numDayOrg);
         //คำนวณวันลาคงเหลือ
         if (setPeriodTime == 1) {
             SetNumHour = 8;
         } else {
-            SetNumHour = 4;
+            //SetNumHour = 4;
         }
         $("#numHour").val(SetNumHour);
         $("#numDay").val(numDayCal)
         //คำนวณวันลาที่ใช้ได้ในครั้งนี้
         //setTimeout(function () {
-            console.log("numDayCalTest = " + numDayCal);
+            //console.log("numDayCalTest = " + numDayCal);
             let closingBalVal = $("#ClosingBalVal").val() || 0;
             if (numDayCal > 0 && closingBalVal > 0 && numDayOrg > 0) {
                 if (numDayCal > closingBalVal && !popupShown) { //จำนวนวันที่ลาน้อยกว่าสิทธิ์คงเหลือที่มี

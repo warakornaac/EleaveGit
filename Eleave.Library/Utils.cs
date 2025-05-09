@@ -364,7 +364,8 @@ namespace Eleave.Library
                 //check มีตัวเลขหลังจุดทศนิยมไหมถ้ามี คือ ชม
                 if (!string.IsNullOrEmpty(txthours))
                 {
-                    if (txthours == "13") hours = "1";
+                    if (txthours == "12") hours = "1";
+                    else if (txthours == "13") hours = "1";
                     else if (txthours == "25") hours = "2";
                     else if (txthours == "38") hours = "3";
                     else if (txthours == "50") hours = "4";
