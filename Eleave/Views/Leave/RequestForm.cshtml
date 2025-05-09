@@ -1554,7 +1554,7 @@
         const [txtDay, txtHours] = txtNumberDateOrg.split(".");
         let day = "";
         let hours = "";
-
+        console.log('H = ' + txtHours)
         if (txtDay !== "0") {
             day = `${parseInt(txtDay)} วัน`;
         }
@@ -1564,13 +1564,17 @@
             "12": "1",
             "13": "1",
             "25": "2",
+            "26": "2",
             "38": "3",
             "50": "4",
             "63": "5",
+            "74": "6",
             "75": "6",
             "87": "7",
             "88": "7"
         };
+
+
 
         if (txtHours && hourMap[txtHours]) {
             hours = `${hourMap[txtHours]} ชม`;

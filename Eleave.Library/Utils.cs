@@ -367,27 +367,32 @@ namespace Eleave.Library
                     if (txthours == "12") hours = "1";
                     else if (txthours == "13") hours = "1";
                     else if (txthours == "25") hours = "2";
+                    else if (txthours == "26") hours = "2";
                     else if (txthours == "38") hours = "3";
                     else if (txthours == "50") hours = "4";
                     else if (txthours == "63") hours = "5";
+                    else if (txthours == "74") hours = "6";
                     else if (txthours == "75") hours = "6";
                     else if (txthours == "87") hours = "7";
                     else if (txthours == "88") hours = "7";
                     else hours = "";
                 }
-            } else {
+            }
+            else
+            {
                 return "0";
             }
 
-            if (!string.IsNullOrEmpty(hours)) {
+            if (!string.IsNullOrEmpty(hours))
+            {
                 hours = hours + " ªÁ";
             }
             if (!string.IsNullOrEmpty(day) && !string.IsNullOrEmpty(hours))
             {
                 txtFullDayHours = day + " " + hours;
             }
-            else 
-            { 
+            else
+            {
                 txtFullDayHours = day + hours;
             }
 
