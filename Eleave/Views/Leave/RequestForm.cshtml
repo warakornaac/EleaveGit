@@ -592,6 +592,11 @@
     function isDecimal(n) {
         return n % 1 !== 0;
     }
+
+    function truncateTo2Decimals(num) {
+        return Math.floor(num * 100) / 100;
+    }
+
     var EmpTypeId = $("#empTypeId").val() || 0;
     //set จำนวนชั่วโมง
     function calNumHour(PeriodTime, NumDay, NumHour, FlagCal) {
