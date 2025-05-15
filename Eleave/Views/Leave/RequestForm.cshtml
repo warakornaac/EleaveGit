@@ -599,7 +599,7 @@
         let setPeriodTime = PeriodTime;
         let setNumDay = NumDay;
         let numDayMin = 0;
-        let numDayOrg = $("#numDayOrg").val();
+        const numDayOrg = parseFloat($('#numDayOrg').val()) || 0;
         let numDayCal = 0;
         let popupShown = false;
         if (SetNumHour == 0) {
@@ -611,19 +611,24 @@
         if (setNumDay == 0) {
             setNumDay = $("#numDay").val();
         }
-        //console.log("setPeriodTime = " + setPeriodTime + " setNumDay = " + setNumDay, " FlagCal = " + FlagCal);
+        console.log("setNumDay = " + setNumDay);
+        console.log("setPeriodTime = " + setPeriodTime + " setNumDay = " + setNumDay, " FlagCal = " + FlagCal);
         console.log("numDayOrg = " + numDayOrg);
         console.log("setPeriodTime = " + setPeriodTime);
+        console.log("numDayCalCheck1 = " + numDayCal)
         if (setPeriodTime > 0) {
             if (setPeriodTime != 1) { //ครึ่งเช้า / ครึ่งบ่าย
                 SetNumHour = 4;
                 numDayMin = 0.5;
-                if (setNumDay > 0) {
+                if (setNumDay >= 1) {
                     if (FlagCal == 'Y') {
                         numDayCal = Number(numDayOrg) - 0.5;
                     } else {
                         numDayCal = Number(numDayOrg);
+
                     }
+                } else {
+                    numDayCal = Number(setNumDay);
                 }
             } else {
                 SetNumHour = 8;
@@ -640,14 +645,16 @@
                 }
             }
         }
+        console.log("numDayCalCheck2 = " + numDayCal)
         if (NumHour != 0) {
             SetNumHour = NumHour;
         }
         //กรณี 1 วัน ลาเป็นรายชํ่วโมง
-        //console.log("numDayOrg = " + numDayOrg);
-        //console.log("SetNumHour = " + SetNumHour);
-        if (numDayOrg == 1) {
+        if (numDayOrg == 1 || numDayOrg == "" || (numDayOrg >= 0.1 && numDayOrg <= 0.99)) {
             //console.log("AfterSetNumHour = " + SetNumHour);
+            if (numDayCal == 0) {
+                numDayCal = 1;
+            }
             numDayCal = SetNumHour / 8;
             if (numDayCal >= 1) {
                 numDayCal = 1;
@@ -655,24 +662,24 @@
                 numDayCal = numDayCal.toFixed(2)
             }
         }
-        console.log("numDayCalCheck = " + numDayCal)
+        console.log("numDayCalCheck3 = " + numDayCal)
         if (numDayCal > 0) {
             numDayCal = Number(numDayCal)
         }
-        ////ถ้าวันคงเหลือ = 0 set = 0.5
-
-        if (numDayCal == 0 && (setPeriodTime == 2 || setPeriodTime == 3)) {
-            numDayCal = 0.5;
-        } else {
-            numDayCal = numDayCal;
-        }
-        console.log("numDayOrg = " + numDayOrg);
-        //คำนวณวันลาคงเหลือ
+        //////ถ้าวันคงเหลือ = 0 set = 0.5
+        //if (numDayCal == 0 && (setPeriodTime == 2 || setPeriodTime == 3)) {
+        //    numDayCal = 0.5;
+        //} else {
+        //    numDayCal = numDayCal;
+        //}
+        //console.log("numDayOrg = " + numDayOrg);
+        ////คำนวณวันลาคงเหลือ
         if (setPeriodTime == 1) {
             SetNumHour = 8;
         } else {
             //SetNumHour = 4;
         }
+
         $("#numHour").val(SetNumHour);
         $("#numDay").val(numDayCal)
         //คำนวณวันลาที่ใช้ได้ในครั้งนี้
@@ -683,9 +690,9 @@
                 if (numDayCal > closingBalVal && !popupShown) { //จำนวนวันที่ลาน้อยกว่าสิทธิ์คงเหลือที่มี
                     popupShown = true;
                     Swal.fire({
-                        title: 'วันลาคงเหลือไม่พอ Test | Not enough leave available.',
+                        title: 'วันลาคงเหลือไม่พอ | Not enough leave available.',
                         icon: 'warning',
-                        html: 'ลาครั้งนี้ | Request ' + numDayCal + ' วัน | Day' + ' | ' + 'วันลาคงเหลือ | Remaining ' + closingBalVal + ' วัน | Day' + '<br><br>',
+                        html: 'ลาครั้งนี้ | Request Test ' + numDayCal + ' วัน | Day' + ' | ' + 'วันลาคงเหลือ | Remaining ' + closingBalVal + ' วัน | Day' + '<br><br>',
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'ปิด | Close',
                         allowOutsideClick: false,
@@ -950,7 +957,10 @@
 
         $('#startDate').on('changeDate', function (selected) {
             let getPeriodTime = $("#periodTime option:selected").val() || 1;
+            let getNumHour = $("#numHour option:selected").val() || 8;
             let startDate = new Date(selected.date.valueOf());
+            const numDay = parseFloat($('#numDay').val()) || 0;
+
             $('#endDate').datepicker('setStartDate', startDate);
             //cal day
             let start = $("#startDate").val();
@@ -958,36 +968,43 @@
             let end = $("#endDate").val();
             let endD = end ? new Date(end.split('-').reverse().join('-')) : null;
             if (startD && endD) {
+                console.log("numDay = " + numDay);
                 let weekdays = calculateWeekdays(startD, endD);
+                if (numDay >= 0.1 && numDay <= 0.99) {
+                    weekdays = numDay;
+                }
                 console.log('Start Date: ' + startD.toISOString().split('T')[0]);
                 console.log('End Date: ' + endD.toISOString().split('T')[0]);
                 console.log('Weekdays Count: ' + weekdays);
                 $("#numDay").val(weekdays);
-                $("#numHour").val(8);
+                $("#numHour").val(getNumHour);
                 if (weekdays > 1) {
                     $("#numHour").attr("disabled", true);
                 } else {
                     $("#numHour").attr("disabled", false);
                 }
                 //เช็ควันลาคงเหลือ
-                if (getPeriodTime > 1) {
+                if (getPeriodTime > 1 && weekdays > 0) {
                     weekdays = Number(weekdays) - 0.5;
                 }
                 //คำนวณวันลาที่ใช้ได้ในครั้งนี้
-                checkRemainLeave(weekdays);
+                //checkRemainLeave(weekdays);
 
                 $("#numDayOrg").val(weekdays);
                 if (getPeriodTime == 1) {
                     $("#periodTime").val(1).trigger('change');
                 }
                 //console.log("getPeriodTime = " + getPeriodTime);
-                calNumHour(getPeriodTime, weekdays, 0, 'Y')
+                calNumHour(getPeriodTime, weekdays, getNumHour, 'Y')
             }
         });
 
         $('#endDate').on('changeDate', function (selected) {
             let getPeriodTime = $("#periodTime option:selected").val() || 1;
+            let getNumHour = $("#numHour option:selected").val() || 8;
             let endDate = new Date(selected.date.valueOf());
+            const numDay = parseFloat($('#numDay').val()) || 0;
+
             $('#startDate').datepicker('setEndDate', endDate);
             //cal day
             let start = $("#startDate").val();
@@ -995,34 +1012,40 @@
             let end = $("#endDate").val();
             let endD = end ? new Date(end.split('-').reverse().join('-')) : null;
             if (startD && endD) {
+                console.log("numDay = " + numDay);
                 let weekdays = calculateWeekdays(startD, endD);
+                if (weekdays == 1 && (numDay >= 0.1 && numDay <= 0.99)) {
+                    weekdays = numDay;
+                }
                 console.log('Start Date: ' + startD.toISOString().split('T')[0]);
                 console.log('End Date: ' + endD.toISOString().split('T')[0]);
                 console.log('Weekdays Count: ' + weekdays);
                 $("#numDay").val(weekdays);
-                $("#numHour").val(8);
+                $("#numHour").val(getNumHour);
                 if (weekdays > 1) {
                     $("#numHour").attr("disabled", true);
                 } else {
                     $("#numHour").attr("disabled", false);
                 }
-                //เช็ควันลาคงเหลือ
-                if (getPeriodTime > 1) {
-                    weekdays = Number(weekdays) - 0.5;
-                }
+                ////เช็ควันลาคงเหลือ
+                //if (getPeriodTime > 1 && weekdays >= 1) {
+                //    weekdays = Number(weekdays) - 0.5;
+                //}
+                console.log("weekdays = " + weekdays);
                 //คำนวณวันลาที่ใช้ได้ในครั้งนี้
-                checkRemainLeave(weekdays);
+                //checkRemainLeave(weekdays);
 
                 $("#numDayOrg").val(weekdays);
                 if (getPeriodTime == 1) {
                     $("#periodTime").val(1).trigger('change');
                 }
                 //console.log("getPeriodTime = " + getPeriodTime);
-                calNumHour(getPeriodTime, weekdays, 0, 'Y')
+                calNumHour(getPeriodTime, weekdays, getNumHour, 'Y')
             }
         });
     }
-    function checkRemainLeave(numDay) {
+    function checkRemainLeave() {
+        let numDay = $("#numDay").val() || 0;
         let closingBalVal = $("#ClosingBalVal").val() || 0;
         if (numDay > 0 && closingBalVal > 0) {
             if (numDay > closingBalVal) { //จำนวนวันที่ลาน้อยกว่าสิทธิ์คงเหลือที่มี
@@ -1043,11 +1066,13 @@
         }
     }
     function resetValue() {
-        //$("#periodTime").val(1).trigger('change');
-        //$("#numHour").val(8).trigger('change');
         $("#numDay").val('');
+        $("#numDayOrg").val('');
         $("#startDate").val('');
         $("#endDate").val('');
+        $("#numHour").attr("disabled", false);
+        $("#periodTime").val(1).trigger('change');
+        $("#numHour").val(8).trigger('change');
         $("#other-fileattach-label").css("display","none");
     }
     //เลือกประเภทกวารลา
