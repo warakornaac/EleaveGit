@@ -140,6 +140,7 @@
                                         <th class="text-center">สถานะคำขอ | REQ STATUS</th>
                                         <th class="text-center">ผู้ร้องขอ | REQ BY</th>
                                         <th class="text-center">ประเภทการลา | REQ CATE</th>
+                                        <th class="text-center">วันที่ร้องขอ | REQ DATE</th>
                                         <th class="text-center">วันที่ลา | Leave DATE</th>
                                         <th class="text-center">รวมขอลา | TOT DATE</th>
                                         <th class="text-center">หมายเหตุการลา | REMARK</th>
@@ -205,6 +206,7 @@
                                             }
                                             <td class="text-center">@request.Empname</td>
                                             <td class="text-center">@request.LeaveType</td>
+                                            <td class="text-center">@request.ReqDate</td>
                                             <td class="text-center">@(request.StartDate )-@(request.EndDate)</td>
                                             @*<td class="text-center">@(request.EndDate )</td>*@
                                             <td class="text-center">@Eleave.Library.Utils.CalculateDayHour((double)request.NumDay) </td>

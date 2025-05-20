@@ -98,6 +98,7 @@
                                 <th class="text-center">จัดการ | ACT</th>
                                 <th class="text-center">สถานะคำขอ | REQ STATUS</th>
                                 <th class="text-center">ประเภทการลา | REQ CATE</th>
+                                <th class="text-center">วันที่ร้องขอ | REQ DATE</th>
                                 <th class="text-center">วันที่ลา | Leave DATE</th>
                                 <th class="text-center">รวมขอลา | TOT DATE</th>
                                 <th class="text-center">หมายเหตุการลา | REMARK</th>
@@ -160,6 +161,7 @@
                                         <div class="@colorStatus" style="font-size: 14px;"><span class="@colorBgStatus"><i class="@iconStatus" aria-hidden="true"></i></span><span><b> @leave.ReqStaDesc </b></span></div>
                                     </td>
                                     <td class="text-center">@leave.LeaveType</td>
+                                    <td class="text-center">@leave.ReqDate</td>
                                     <td class="vcenter">@(leave.StartDate)-@(leave.EndDate)</td>
                                     @*<td class="vcenter">@leave.EndDate</td>*@
                                     <td class="text-center">@Eleave.Library.Utils.CalculateDayHour((double)leave.NumDay)</td>
