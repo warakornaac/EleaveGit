@@ -240,7 +240,12 @@
                             @Html.DropDownListFor(model => model.EmpStatus, new SelectList(ViewBag.EmpSta, "LookValue", "LookDesc"), new { @class = "custom-select", @id = "empStatusDropdown" })
                         </div>
                     </div>
-
+                    <div class="col-md-4 col-lg-4">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.TempId, "รหัสพนักงานชั่วคราว | Temp ID")
+                            @Html.TextBoxFor(model => model.TempId, new { @class = "form-control", id = "start-date" })
+                        </div>
+                    </div>
                 </div>
                 <div class="card-footer">
                     <div class="float-end">

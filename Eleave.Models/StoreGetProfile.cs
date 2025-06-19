@@ -29,6 +29,7 @@ namespace Eleave.Models
         public string UserType { get; set; }
         public string UserTypeName { get; set; }
         public string DirectorId { get; set; }
+        public string TempId { get; set; }
         public DateTime InsertedDate { get; set; }
         public string InsertedBy { get; set; }
         public DateTime UpdatedDate { get; set; }

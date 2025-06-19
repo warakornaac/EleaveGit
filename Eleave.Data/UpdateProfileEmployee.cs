@@ -34,6 +34,7 @@ namespace Eleave.Data
             p.AddParams("@inUsrTyp", profile.UserType);
             p.AddParams("@inEmpTypeId", profile.EmpTypeId);
             p.AddParams("@inEmpStatus", profile.EmpStatus);
+            p.AddParams("@inTempID", profile.TempId);
             p.AddParams("@inUser", usrID);
 
             return ConvertExtension.ConvertDataTable<StoreUpdateEmployeeProfile>(GetData(CmdStore("P_Update_Profile_Employee", p)));

@@ -29,7 +29,6 @@ namespace Eleave.Models
         public string UserType { get; set; }
         public string EmpStatus { get; set; }
         public string DirectorId { get; set; }
-
-
+        public string TempId { get; set; }
     }
 }

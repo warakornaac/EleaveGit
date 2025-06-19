@@ -281,12 +281,27 @@
                                 {
                                     <div class="text-success"><i class="fa fa-check-circle-o" aria-hidden="true"></i><span>ทำงาน/Working</span></div>
                                 }
-                                else
+                                else if (dataEmp.EmpStatus == "Resign")
                                 {
                                     <div class="text-danger"><i class="fa fa-times-circle-o" aria-hidden="true"></i><span>ลาออก/Resigned</span></div>
                                 }
+                                else
+                                {
+                                    <div class="text-danger"><i class="fa fa-check-circle-o" aria-hidden="true"></i><span>ยกเลิก/Inactive</span></div>
+                                }
                             </div>
                         </div>
+                        @if (!string.IsNullOrEmpty(dataEmp.TempId))
+                        {
+                            <div class="col-xs-6 col-sm-4">
+                                <div class="form-group">
+                                    <h5>
+                                        รหัสพนักงานชั่วคราว | Temp ID
+                                    </h5>
+                                    <div> @dataEmp.TempId </div>
+                                </div>
+                            </div>
+                        }
                     </div>
                 </div>
             </div>
