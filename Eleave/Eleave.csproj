@@ -408,6 +408,7 @@
     <Content Include="Views\Report\ReportLeaveBalance.cshtml" />
     <Content Include="Views\Report\ReportLeaveBalanceMonth.cshtml" />
     <Content Include="Views\Report\ReportLeaveLateMonth.cshtml" />
+    <Content Include="Views\Report\ReportApprover.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
