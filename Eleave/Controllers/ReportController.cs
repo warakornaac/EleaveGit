@@ -660,7 +660,14 @@ namespace Eleave.Controllers
             {
                 message = ex.Message;
             }
-            return Json(new { message = message, Detail }, JsonRequestBehavior.AllowGet);
+            //return Json(new { message = message, Detail }, JsonRequestBehavior.AllowGet);
+            return new JsonResult
+            {
+                Data = new { message = message, Detail },
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet,
+                MaxJsonLength = int.MaxValue
+            };
+
         }
         //Detail Report Month
         public JsonResult ReportDetailMonth(string EmpID, string LeavTyp, string StartDate, string EndDate)
@@ -680,7 +687,13 @@ namespace Eleave.Controllers
             {
                 message = ex.Message;
             }
-            return Json(new { message = message, Detail }, JsonRequestBehavior.AllowGet);
+            //return Json(new { message = message, Detail }, JsonRequestBehavior.AllowGet);
+            return new JsonResult
+            {
+                Data = new { message = message, Detail },
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet,
+                MaxJsonLength = int.MaxValue
+            };
         }
 
         public JsonResult DetailReportMonthSheet(string ReqStart, string ReqEnd, string Dept, string Comp)
@@ -767,7 +780,13 @@ namespace Eleave.Controllers
                 // Handle exceptions
                 Console.WriteLine(ex.Message);
             }
-            return Json(new { message = message, Detail }, JsonRequestBehavior.AllowGet);
+            //return Json(new { message = message, Detail }, JsonRequestBehavior.AllowGet);
+            return new JsonResult
+            {
+                Data = new { message = message, Detail },
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet,
+                MaxJsonLength = int.MaxValue
+            };
         }
 
         public JsonResult GetLeavelateJson(string Company, string Dept, string Month)
