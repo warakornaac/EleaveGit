@@ -855,7 +855,7 @@
     }
     //check numhour max min
     function disableNumHour(minHour, maxHour) {
-        //console.log("minHour = " + minHour);
+        console.log("minHour = " + minHour);
         //ลาขั้นต่ำได้กี่ ชม.
         if (minHour > 0) {
             $('#numHour option').each(function () {
@@ -866,7 +866,14 @@
                 }
             });
             //console.log("minHour = " + minHour);
-            if (minHour == 6) {
+            //if (minHour == 6) {
+            //    $("#periodTime option[value='2'], option[value='3']").prop('disabled', true);
+            //} else {
+            //    $("#periodTime option[value='1'], option[value='2'], option[value='3']").prop('disabled', false);
+            //}
+            if (minHour == 4) { //ต้องลาอย่างน้อย 4 ซม
+                $("#periodTime option[value='1']").prop('disabled', true);
+            } else if (minHour == 8) { //ต้องลาอย่างน้อย 8 ซม
                 $("#periodTime option[value='2'], option[value='3']").prop('disabled', true);
             } else {
                 $("#periodTime option[value='1'], option[value='2'], option[value='3']").prop('disabled', false);
@@ -883,22 +890,22 @@
         let maxDay = new Date();
         let currentDay = today.getDate();
         if (currentDay <= 10) { //<= วันที่ 10 สามาถเลือกวันของเดือนก่อนหน้าได้
-            today.setMonth(today.getMonth() - 1);
-            formattedDate = '01' + '-' + (today.getMonth() + 1).toString().padStart(2, '0') + '-' + today.getFullYear();
+            //today.setMonth(today.getMonth() - 1);
+            //formattedDate = '01' + '-' + (today.getMonth() + 1).toString().padStart(2, '0') + '-' + today.getFullYear();
         } else {
-            if (setMinDate > 0) {//ลาล่วงหน้า
-                //console.log("ลาล่วงหน้า");
-                minDateVal = setMinDate;
-                console.log("minDateVal 1 = " + minDateVal);
-                yesterday.setDate(yesterday.getDate() + Number(minDateVal));
-                console.log("Yesterday setMinDate > 0 = " + yesterday);
-                formattedDate = yesterday.getDate().toString().padStart(2, '0') + '-' + (yesterday.getMonth() + 1).toString().padStart(2, '0') + '-' + yesterday.getFullYear();
-            } else { //ลาป่วย ภายในเดือน
-                //console.log("ภายในเดือน");
-                setMinDateVal = 0;
-                yesterday.setDate(1); // Subtract 1 day
-                formattedDate = yesterday.getDate().toString().padStart(2, '0') + '-' + (yesterday.getMonth() + 1).toString().padStart(2, '0') + '-' + yesterday.getFullYear();
-            }
+            //if (setMinDate > 0) {//ลาล่วงหน้า
+            //    //console.log("ลาล่วงหน้า");
+            //    minDateVal = setMinDate;
+            //    console.log("minDateVal 1 = " + minDateVal);
+            //    yesterday.setDate(yesterday.getDate() + Number(minDateVal));
+            //    console.log("Yesterday setMinDate > 0 = " + yesterday);
+            //    formattedDate = yesterday.getDate().toString().padStart(2, '0') + '-' + (yesterday.getMonth() + 1).toString().padStart(2, '0') + '-' + yesterday.getFullYear();
+            //} else { //ลาป่วย ภายในเดือน
+            //    //console.log("ภายในเดือน");
+            //    setMinDateVal = 0;
+            //    yesterday.setDate(1); // Subtract 1 day
+            //    formattedDate = yesterday.getDate().toString().padStart(2, '0') + '-' + (yesterday.getMonth() + 1).toString().padStart(2, '0') + '-' + yesterday.getFullYear();
+            //}
         }
 
         // Set maxDate one month after the current date
@@ -1266,16 +1273,20 @@
                     //res.LeaveTakenDay วันที่เคยลาไป
                     console.log('LeaveTakenDay = ' + res.LeaveTakenDay);
                     if (res.LeaveTakenDay > 0) {  //วันลาที่เคยใช้ไป
+
+                        console.log("ใช้ไปในวันที่เลือก = " + res.LeaveTakenDay);
+                        console.log("ลาครั้งนี้ = " + Number(NumDay));
+
                         AllNumDay = res.LeaveTakenDay + Number(NumDay);
                         RemainNumDay = res.LeaveTakenDay - 1;
 
                         console.log("AllNumDay = " + AllNumDay);
-                        if (AllNumDay > 1) {
+                        if (AllNumDay > 1.02) {
                             //show popup
                             Swal.fire({
-                                title: 'วันที่ขอลาซ้ำกับรายการขออื่น กรุณาตรวจสอบ | Date already requested. ',
+                                title: 'วันที่ขอลาซ้ำกับรายการขออื่นหรือวันลาคงเหลือไม่เพียงพอ <br> กรุณาตรวจสอบ | Date already requested. ',
                                 icon: 'warning',
-                                html: 'สิทธิ์คงเหลือ | Remaining' + RemainNumDay + '<br><br>',
+                                //html: 'สิทธิ์คงเหลือ | Remaining ' + RemainNumDay + '<br><br>',
                                 confirmButtonColor: '#3085d6',
                                 confirmButtonText: 'ปิด | Close',
                                 allowOutsideClick: false,
