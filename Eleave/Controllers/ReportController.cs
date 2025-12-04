@@ -624,7 +624,7 @@ namespace Eleave.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult ReportLeaveLateMonth(string Company, string Department, string Month)
+        public ActionResult ReportLeaveLateMonth(string Company, string Department, string Month, string Year)
         {
             string emp = string.Empty;
             string EmpType = string.Empty;
@@ -789,7 +789,7 @@ namespace Eleave.Controllers
             };
         }
 
-        public JsonResult GetLeavelateJson(string Company, string Dept, string Month)
+        public JsonResult GetLeavelateJson(string Company, string Dept, string Month, string Year = "")
         {
             string message;
             var Report = new List<ReportLeaveLate>();
@@ -803,6 +803,7 @@ namespace Eleave.Controllers
                     cmd.Parameters.AddWithValue("@inCompany", Company);
                     cmd.Parameters.AddWithValue("@inDept", Dept);
                     cmd.Parameters.AddWithValue("@inMonth", Month);
+                    cmd.Parameters.AddWithValue("@inYear", Year);
 
                     conn.Open();
                     using (SqlDataReader reader = cmd.ExecuteReader())

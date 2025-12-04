@@ -85,6 +85,20 @@
                             @Html.DropDownList("Month", months, "เลือกเดือน | Select Month", new { @class = "custom-select", @id = "month-selector" })
                             @Html.Hidden("MonthHidden", "", new { @id = "Month-hidden" })
                         </div>
+                        <div class="form-group col-md-3">
+                            @{
+                                var currentYear = DateTime.Now.Year;
+                                var years = Enumerable.Range(currentYear - 3, 4).Reverse()
+                                                      .Select(y => new SelectListItem
+                                                      {
+                                                          Value = y.ToString(),
+                                                          Text = y.ToString()
+                                                      }).ToList();
+                            }
+                            @Html.Label("ปี | Year", new { @class = "font-weight-bold" })
+                            @Html.DropDownList("Year", years, new { @class = "form-control", @id = "year-selector" })
+                            @Html.Hidden("YearHidden", "", new { @id = "Year-hidden" })
+                        </div>
                     </div>
                 </div>
                 <div class="card-footer p-1">
@@ -153,12 +167,14 @@
         var comp = $('#Company-selector').val();
         var department = $('#department-search').val();
         var selectMonth = $('#month-selector').val();
+        var selectYear = $('#year-selector').val();
         console.log('Comp:' + comp);
         console.log('department:' + department);
         console.log('Month:' + selectMonth);
         $('#Company-hidden').val(comp);
         $('#Department-hidden').val(department);
         $('#Month-hidden').val(selectMonth);
+        $('#Year-hidden').val(selectYear);
     });
     $(document).ready(function () {
         console.log('Month NOW C# @currentMonth');
@@ -228,12 +244,14 @@
         var comp = $('#Company-hidden').val();
         var department = $('#department-search').val();
         var selectMonth = $('#month-selector').val();
+        var selectYear = $('#year-selector').val();
         $.ajax({
             url: '@Url.Action("GetLeavelateJson", "Report")',
             data: {
                 Company: comp,
                 Dept: department,
-                Month: selectMonth
+                Month: selectMonth,
+                Year: selectYear
             },
             type: 'POST',
             dataType: 'JSON',
