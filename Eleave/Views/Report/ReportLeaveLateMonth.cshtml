@@ -385,6 +385,7 @@
             // ดึงค่าจาก Hidden Input
             const companyValue = $('#Company-hidden').val();
             const monthValue = $('#Month-hidden').val();
+            var yearValue = $('#Year-hidden').val();
 
             // กำหนด URL ให้ถูกต้องใน .cshtml
             var url = '@Html.Raw(Url.Action("GetLeavelateJson", "Report"))';
@@ -396,7 +397,9 @@
                 data: {
                     Company: companyValue,
                     Dept: '',
-                    Month: monthValue
+                    Month: monthValue,
+                    Year: yearValue
+
                 },
                 beforeSend: function () {
                     LoadingShow();
