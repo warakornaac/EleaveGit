@@ -73,7 +73,12 @@
                                 <label class="font-weight-bold">ชื่อพนักงาน :</label>
                                 @Html.TextBox("empName", null, new { @class = "form-control", @id = "empName", @placeholder = "ชื่อพนักงาน" })
                             </div>*@
-
+                        <div class="form-group col-lg-4">
+                            <label class="font-weight-bold">Request Year | ปี :</label>
+                            <select id="reqYear" name="ReqYear" class="custom-select">
+                                <option value="">All years | ทุกปี</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
                 <div class="card-footer p-0">
@@ -290,72 +295,72 @@
 
     $(document).ready(function () {
         $('#department-selector').select2({
-                                                    width: '100%'
+        width: '100%'
         });
-                                                });
+    });
 
     $('#reqStart').datepicker({
-                                                orientation: "bottom auto",
+        orientation: "bottom auto",
         format: "dd/mm/yyyy",
         autoclose: true
     });
     $('#reqEnd').datepicker({
-                                                orientation: "bottom auto",
+        orientation: "bottom auto",
         format: "dd/mm/yyyy",
         autoclose: true
     });
     $(document).on('change', '#LeaveType-selector', function () {
-                                                    var typ = $(this).val();
-                                                    console.log('typ :' + typ);
-                                                    if (typ == 1) {
+        var typ = $(this).val();
+        console.log('typ :' + typ);
+        if (typ == 1) {
             $('#reqType-selector').removeAttr('disabled');
-                                                    }
-                                                    else {
+        }
+        else {
             $('#reqType-selector').attr('disabled', true);
-                                                    }
-                                                });
+        }
+    });
     $(document).on('click', '[id^="btnview_"]', function (e) {
-                                                    e.preventDefault();
-                                                    var reqNo = $(this).data('reqno');
-                                                    var empId = $(this).data('empid');
-                                                    //console.log(reqNo);
-                                                    //$('#RequestDetailModal').modal('show');
-                                                    GetReqDetail(reqNo, empId);
-                                                });
+        e.preventDefault();
+        var reqNo = $(this).data('reqno');
+        var empId = $(this).data('empid');
+        //console.log(reqNo);
+        //$('#RequestDetailModal').modal('show');
+        GetReqDetail(reqNo, empId);
+    });
 
-                                                function GetReqDetail(REQ, empId) {
+    function GetReqDetail(REQ, empId) {
         $.ajax({
-                                                    url: '@Url.Action("GetRequestDetail", "Leave")',
+            url: '@Url.Action("GetRequestDetail", "Leave")',
             data: {
-                                                        ReqNO: REQ,
+                ReqNO: REQ,
                 EmpId: empId,
                 Flag: "view"
             },
             type: 'POST',
             dataType: 'HTML',
             beforeSend: function () {
-                                                            LoadingShow();
+                LoadingShow();
                 $('#RequestDetailModal').find('.modal-body').html("");
-                                                        },
+            },
             success: function (data) {
                 $('#RequestDetailModal').find('.modal-body').html(data);
                 $('#RequestDetailModal').modal('show');
-                                                        },complete: function (res) {
-                                                            LoadingHide();
-                                                        },
+            },complete: function (res) {
+                LoadingHide();
+            },
             error: function (er) {
-                                                            Swal.fire({
-                                                            icon: 'error',
+                    Swal.fire({
+                    icon: 'error',
                     html: '<p>GetReqDetail :</p><p>' + er.error + '</p>',
                     confirmButtonColor: '#d33',
                     confirmButtonText: 'ปิด',
                     allowOutsideClick: false,
                     focusConfirm: false,
                 });
-                                                        }
-                                                    }).fail(function (error) {
-                                                        Swal.fire({
-                                                        icon: 'error',
+            }
+            }).fail(function (error) {
+                Swal.fire({
+                icon: 'error',
                 title: 'เกิดข้อผิดพลาด กรุณาแจ้งผู้ดูแลระบบ (' + error.status + ')',
                 html: '<p>GetReqDetail :</p><p>' + error.responseText + '</p>',
                 confirmButtonColor: '#d33',
@@ -363,89 +368,119 @@
                 allowOutsideClick: false,
                 focusConfirm: false,
             });
-                                                    });
-                                                }
+            });
+    }
 
     $(document).on('click', '#cancel_submit', function () {
-                                                    var reqno = $('#cancel_reqid_val').val()
+     var reqno = $('#cancel_reqid_val').val()
         $.ajax({
-                                                    url: '@Url.Action("CancelRequest", "Leave")',
+            url: '@Url.Action("CancelRequest", "Leave")',
             data: {
-                                                        ReqNo: reqno
+            ReqNo: reqno
             },
             type: 'POST',
             dataType: 'JSON',
             success: function (data) {
-                                                            if (data.message == 'Y') {
+                    if (data.message == 'Y') {
                     $('#RequestDetailModal').modal('hide');
-                                                                Swal.fire({
-                                                                title: "Success!!!",
+                        Swal.fire({
+                        title: "Success!!!",
                         text: "ยกเลิกคำร้องสำเร็จ ",
                         icon: "success"
-                                                                }).then(() => {
-                                                                    location.reload();
-                                                                });
-                                                            }
-                                                            else {
+                        }).then(() => {
+                            location.reload();
+                        });
+                    }
+                    else {
                     $('#RequestDetailModal').modal('hide');
-                                                                Swal.fire({
-                                                                title: "Error!!!",
+                        Swal.fire({
+                        title: "Error!!!",
                         text: "Cancel Failed : " + data.message,
                         icon: "error"
-                                                                });
-                                                            }
-                                                        }
-                                                    });
-                                                });
-                                                function DropdownReqTyp()
-                                                {
+                    });
+                }
+            }
+        });
+    });
+    function DropdownReqTyp()
+    {
         $.ajax({
-                                                    url: '@Url.Action("GetLeavetype", "Leave")',
-                data: {
-
-                                                        },
-                type: 'POST',
-                dataType: 'JSON',
-                success: function (data) {
-                                                            if (data.message == 'Y') {
-                                                                var select = $('#reqType-selector');
-                                                                select.children().remove();
-                                                                select.append($('<option>').val(null).text('เลือกประเภทการร้องขอ'))
-                                                                $(data.LeaveType).each(function (index, item) {
-                                                                    select.append($('<option>').val(item.LeaveType).text(item.Description));
-                                                                });
-
-                                                            }
-                                                            else {
-                                                                console.log('Message Type: ' + data.message);
-                                                            }
-                                                        }
-                                                    });
-                                                }
-
-                                                function GetReqStatus() {
-        $.ajax({
-                                                    url: '@Url.Action("GetReqStatus", "Leave")',
+            url: '@Url.Action("GetLeavetype", "Leave")',
             data: {
 
-                                                        },
+            },
             type: 'POST',
             dataType: 'JSON',
             success: function (data) {
-                                                            if (data.message == 'Y') {
-                                                                var select = $('#reqStatus');
-                                                                select.children().remove();
-                                                                select.append($('<option>').val(null).text('สถานะคำขอ'));
+                    if (data.message == 'Y') {
+                        var select = $('#reqType-selector');
+                        select.children().remove();
+                        select.append($('<option>').val(null).text('เลือกประเภทการร้องขอ'))
+                        $(data.LeaveType).each(function (index, item) {
+                            select.append($('<option>').val(item.LeaveType).text(item.Description));
+                        });
+
+                    }
+                    else {
+                        console.log('Message Type: ' + data.message);
+                    }
+                }
+            });
+    }
+     function GetReqYear() {
+         $.ajax({
+             url: '@Url.Action("GetReqYear", "Leave")',
+             type: 'GET',
+             dataType: 'JSON',
+             success: function (data) {
+                 if (data.message === 'Y') {
+                     var select = $('#reqYear');
+                     select.empty();
+                     select.append($('<option>').val('').text('All years | ทุกปี'));
+                     var currentYear = new Date().getFullYear();
+                     $(data.years).each(function (index, year) {
+                         var opt = $('<option>').val(year).text(year);
+                         if (parseInt(year, 10) === currentYear) {
+                             opt.prop('selected', true);
+                         }
+                         select.append(opt);
+                     });
+                 } else {
+                     console.error('GetReqYear error: ' + data.message);
+                 }
+             },
+             error: function (err) {
+                 console.error('GetReqYear AJAX error', err);
+             }
+         });
+     }
+
+     $(document).ready(function () {
+         GetReqYear();
+     });
+    function GetReqStatus() {
+        $.ajax({
+            url: '@Url.Action("GetReqStatus", "Leave")',
+            data: {
+
+            },
+            type: 'POST',
+            dataType: 'JSON',
+            success: function (data) {
+                if (data.message == 'Y') {
+                    var select = $('#reqStatus');
+                    select.children().remove();
+                    select.append($('<option>').val(null).text('สถานะคำขอ'));
                     $(data.ReqSta).each(function (index, item) {
-                                                                    select.append($('<option>').val(item.LookValue).text(item.LookDesc));
-                                                                });
-                                                            }
-                                                            else {
-                                                                console.log('Getstatus Error: ' + data.message);
-                                                            }
-                                                        }
-                                                    });
-                                                }
+                        select.append($('<option>').val(item.LookValue).text(item.LookDesc));
+                    });
+                }
+                else {
+                    console.log('Getstatus Error: ' + data.message);
+                }
+            }
+        });
+    }
     $(document).on("click", "#reset-btn", function () {
         $('#reqId').val('');                      // รหัสคำขอ
         $('#reqType-selector').val('').trigger('change'); // ประเภทคำขอ
@@ -454,13 +489,14 @@
         $('#reqEnd').val('');                     // ถึงวันที่
         $('#reqStatus').val('').trigger('change'); // สถานะคำขอ
         $('#department-selector').val('').trigger('change');
-                                                });
+        $('#reqYear').val('');                    // clear selected year
+    });
     $('#reqStart').inputmask('99/99/9999');
     $('#reqEnd').inputmask('99/99/9999');
     $(document).ready(function () {
         var isMdOrLarger = window.matchMedia("(min-width: 1600px)").matches;
         $('#leave-his-table').dataTable({
-                                                    dom: '<t><"d-flex align-items-center"ip>',
+             dom: '<t><"d-flex align-items-center"ip>',
             fixedColumns: isMdOrLarger
                 ? { start: 6, end: 0 } // ใช้งาน fixedColumns ถ้าหน้าจอเป็น md ขึ้นไป
                 : false,
@@ -472,11 +508,11 @@
             select: false,
             scrollY: 500,
             language: {
-                                                        info: "แสดง _START_ ถึง _END_ จากทั้งหมด _TOTAL_ คำร้องขอ",
+            info: "แสดง _START_ ถึง _END_ จากทั้งหมด _TOTAL_ คำร้องขอ",
                 infoEmpty: "ไม่มีข้อมูลให้แสดง"
             }
-                                                    });
-                                                });
+            });
+        });
 </script>
 
 <script type="text/javascript">
@@ -489,23 +525,35 @@
         }
     }
 </script>
-
-@*@if (Model != null)
+    @if (ViewBag.ErrorMessage != null)
     {
-        <script type="text/javascript">
+        <script>
             $(document).ready(function () {
-                setTimeout(function () {
-                    LoadingHide();
-                }, 1500);
+                LoadingHide();
+                alert("@ViewBag.ErrorMessage");
             });
-        </script>
-    }*@
-@if (ViewBag.ErrorMessage != null)
-{
-    <script>
-        $(document).ready(function () {
-            LoadingHide();
-            alert("@ViewBag.ErrorMessage");
-        });
     </script>
 }
+
+<script>
+    // Before form submit, if user chose a year set full-year dates and log payload
+    $('#formSearch').on('submit', function (e) {
+        try {
+            var year = $('#reqYear').val();
+            if (year && year !== '') {
+                $('#reqStart').val('01/01/' + year);
+                $('#reqEnd').val('31/12/' + year);
+            }
+
+            // Debug: log form data to console to confirm fields being posted
+            var formArray = $(this).serializeArray();
+            console.group('ManagerSearchHistory payload');
+            formArray.forEach(function (f) { console.log(f.name + ':', f.value); });
+            console.groupEnd();
+        } catch (err) {
+            console.error('Submit hook error', err);
+        }
+        // allow normal submit
+        return true;
+    });
+</script>
