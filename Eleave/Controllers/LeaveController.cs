@@ -178,8 +178,8 @@ namespace Eleave.Controllers
             {
                 return RedirectToAction("EmployeeHistory", "Leave");
             }
-            var HisRequest = new List<RequestList>();
 
+            var HisRequest = new List<RequestList>();
             try
             {
                 HisRequest = new GetRequestList().GetRequests(EmpID, EmpType, "");
@@ -188,10 +188,12 @@ namespace Eleave.Controllers
             {
                 ViewBag.ErrorMessage = "ไม่สามารถโหลดข้อมูลได้ กรุณาลองอีกครั้ง";
             }
+
             LoadDepartments();
             LoadRequestType();
             LoadLeavetype();
             LoadReqStatus();
+            LoadReqYears(); // ✅ เพิ่ม
 
             return View(HisRequest);
         }
@@ -245,7 +247,6 @@ namespace Eleave.Controllers
                 return RedirectToAction("Login", "Home");
             }
 
-            // If a year is selected, use full-year range (server-side authoritative)
             if (!string.IsNullOrEmpty(ReqYear) && int.TryParse(ReqYear, out int yearVal))
             {
                 startDate = new DateTime(yearVal, 1, 1);
@@ -253,22 +254,15 @@ namespace Eleave.Controllers
             }
             else
             {
-                // Parse ReqStart if provided
                 if (!string.IsNullOrEmpty(ReqStart))
                 {
                     if (DateTime.TryParseExact(ReqStart, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedStartDate))
-                    {
                         startDate = parsedStartDate;
-                    }
                 }
-
-                // Parse ReqEnd if provided
                 if (!string.IsNullOrEmpty(ReqEnd))
                 {
                     if (DateTime.TryParseExact(ReqEnd, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedEndDate))
-                    {
                         endDate = parsedEndDate;
-                    }
                 }
             }
 
@@ -286,8 +280,36 @@ namespace Eleave.Controllers
             LoadRequestType();
             LoadLeavetype();
             LoadReqStatus();
+            LoadReqYears(); // ✅ เพิ่ม
+
             return View("ManagerHistory", leaveHis);
         }
+
+        private void LoadReqYears()
+        {
+            var years = new List<int>();
+            try
+            {
+                var connectionString = Utils.GetConfig("HRIS_DB");
+                using (var conn = new SqlConnection(connectionString))
+                using (var cmd = conn.CreateCommand())
+                {
+                    conn.Open();
+                    cmd.CommandType = CommandType.Text;
+                    cmd.CommandText = @"SELECT DISTINCT YEAR(ISNULL(StartDate, ReqDate)) AS Yr
+                                FROM [Request] ORDER BY Yr DESC";
+                    using (var rdr = cmd.ExecuteReader())
+                    {
+                        while (rdr.Read())
+                            if (!rdr.IsDBNull(0))
+                                years.Add(Convert.ToInt32(rdr.GetValue(0)));
+                    }
+                }
+            }
+            catch (Exception) { }
+            ViewBag.ReqYears = years;
+        }
+
         [HttpPost]
         public ActionResult EmployeeHistory(string LeaveType, string reqType, string ReqStatus, string ReqStart, string ReqEnd, string reqId)
         {
@@ -473,21 +495,6 @@ namespace Eleave.Controllers
             }
             return Json(new { message = message, LeaveType }, JsonRequestBehavior.AllowGet);
         }
-        //public JsonResult GetLeaveTypeByEmpType(string EmpTypeId)
-        //{
-        //    var LeaveType = new List<LeaveTypeModel>();
-        //    string message = string.Empty;
-        //    try
-        //    {
-        //        LeaveType = new GetLeaveType().GetLeaveTypeList(EmpTypeId);
-        //        message = "Y";
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        message = ex.Message;
-        //    }
-        //    return Json(new { message = message, LeaveType }, JsonRequestBehavior.AllowGet);
-        //}
         private void LoadLeavetype()
         {
             var LeaveType = new List<LeaveTypeModel>();
@@ -502,8 +509,6 @@ namespace Eleave.Controllers
                 message = ex.Message;
             }
             ViewBag.Leavetype = LeaveType;
-
-
         }
 
         private void LoadReqStatus()
@@ -663,18 +668,33 @@ namespace Eleave.Controllers
                     return Json(new { message = "NoSession", years = new int[0] }, JsonRequestBehavior.AllowGet);
 
                 var EmpID = Session["EmpId"].ToString();
+                var EmpType = Session["UserType"].ToString();
+                var DeptName = Session["DeptName"].ToString();
+
                 var connectionString = Utils.GetConfig("HRIS_DB");
                 using (var conn = new SqlConnection(connectionString))
                 using (var cmd = conn.CreateCommand())
                 {
                     conn.Open();
                     cmd.CommandType = CommandType.Text;
-                    cmd.CommandText = @"
-                SELECT DISTINCT YEAR(ISNULL(StartDate, ReqDate)) AS Yr
-                FROM [Request]
-                WHERE EmpId = @EmpId
-                ORDER BY Yr DESC";
-                    cmd.Parameters.AddWithValue("@EmpId", EmpID);
+
+                    // ✅ Manager เห็นปีของทุกคนในแผนก, Employee เห็นแค่ของตัวเอง
+                    if (EmpType == "1") // Employee
+                    {
+                        cmd.CommandText = @"
+                    SELECT DISTINCT YEAR(ISNULL(StartDate, ReqDate)) AS Yr
+                    FROM [Request]
+                    WHERE EmpId = @EmpId
+                    ORDER BY Yr DESC";
+                        cmd.Parameters.AddWithValue("@EmpId", EmpID);
+                    }
+                    else // Manager
+                    {
+                        cmd.CommandText = @"
+                    SELECT DISTINCT YEAR(ISNULL(StartDate, ReqDate)) AS Yr
+                    FROM [Request]
+                    ORDER BY Yr DESC";
+                    }
 
                     using (var rdr = cmd.ExecuteReader())
                     {
