@@ -381,7 +381,7 @@ namespace Eleave.Controllers
                 var GetReqDate = ReqDetail.FirstOrDefault()?.StartDate.ToString();
                 //string GetDate = GetReqDate.Substring(GetReqDate.Length - 4);
                 Console.WriteLine($"GetReqDate : {GetReqDate}");
-                int Year;
+                int Year = DateTime.Now.Year;
                 if (!string.IsNullOrEmpty(GetReqDate) && DateTime.TryParseExact(GetReqDate, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedDate))
                 {
                     Year = parsedDate.Year; // ดึงค่าปีจาก DateTime

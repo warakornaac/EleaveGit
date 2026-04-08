@@ -39,7 +39,8 @@ namespace Eleave.Controllers
             var BalanceLeave = new List<LeaveBalanceOverview>();
             try
             {
-                HisRequest = new GetRequestList().GetRequests(EmpID, EmpType, "");
+                var currentYear = DateTime.Now.Year;
+                HisRequest = new GetRequestList().GetRequests(EmpID, EmpType, "", currentYear); // show current year
                 BalanceLeave = new GetLeaveBalanceOverview().Get(EmpID);
             }
             catch

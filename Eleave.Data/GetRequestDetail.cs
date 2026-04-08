@@ -15,11 +15,11 @@ namespace Eleave.Data
         {
 
         }
-        public List<RequestList> Get(string ReqNO)
+        public List<RequestList> Get(string ReqNO, int? year = null)
         {
             var p = new SqlParameters();
             p.AddParams("@inReqNo", ReqNO);
-
+            p.AddParams("@inYear", year.HasValue ? year.Value.ToString() : null);
             var table = GetData(CmdStore("P_Get_Request_Detail", p));
             return ConvertExtension.ConvertDataTable<RequestList>(GetData(CmdStore("P_Get_Request_Detail", p)));
         }
