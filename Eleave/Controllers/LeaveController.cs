@@ -179,8 +179,8 @@ namespace Eleave.Controllers
             {
                 return RedirectToAction("EmployeeHistory", "Leave");
             }
-            var HisRequest = new List<RequestList>();
 
+            var HisRequest = new List<RequestList>();
             try
             {
                 HisRequest = new GetRequestList().GetRequests(EmpID, EmpType, "");
@@ -189,10 +189,12 @@ namespace Eleave.Controllers
             {
                 ViewBag.ErrorMessage = "ไม่สามารถโหลดข้อมูลได้ กรุณาลองอีกครั้ง";
             }
+
             LoadDepartments();
             LoadRequestType();
             LoadLeavetype();
             LoadReqStatus();
+            LoadReqYears(); // ✅ เพิ่ม
 
             return View(HisRequest);
         }
@@ -227,13 +229,14 @@ namespace Eleave.Controllers
             return View(HisRequest);
         }
         [HttpPost]
-        public ActionResult ManagerSearchHistory(string LeaveType, string reqType, string ReqStatus, string ReqStart, string ReqEnd, string reqId)
+        public ActionResult ManagerSearchHistory(string LeaveType, string reqType, string ReqStatus, string ReqStart, string ReqEnd, string reqId, string ReqYear)
         {
             DateTime? startDate = null;
             DateTime? endDate = null;
             string EmpID = string.Empty;
             string EmpName = string.Empty;
             string EmpDept = string.Empty;
+
             if (Session["EmpId"] != null)
             {
                 EmpID = Session["EmpId"].ToString();
@@ -245,40 +248,69 @@ namespace Eleave.Controllers
                 return RedirectToAction("Login", "Home");
             }
 
-            // แปลง ReqStart เป็น DateTime 
-            if (!string.IsNullOrEmpty(ReqStart))
+            if (!string.IsNullOrEmpty(ReqYear) && int.TryParse(ReqYear, out int yearVal))
             {
-                if (DateTime.TryParseExact(ReqStart, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedStartDate))
+                startDate = new DateTime(yearVal, 1, 1);
+                endDate = new DateTime(yearVal, 12, 31);
+            }
+            else
+            {
+                if (!string.IsNullOrEmpty(ReqStart))
                 {
-                    startDate = parsedStartDate;
+                    if (DateTime.TryParseExact(ReqStart, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedStartDate))
+                        startDate = parsedStartDate;
+                }
+                if (!string.IsNullOrEmpty(ReqEnd))
+                {
+                    if (DateTime.TryParseExact(ReqEnd, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedEndDate))
+                        endDate = parsedEndDate;
                 }
             }
 
-            // แปลง ReqEnd เป็น DateTime 
-            if (!string.IsNullOrEmpty(ReqEnd))
-            {
-                if (DateTime.TryParseExact(ReqEnd, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedEndDate))
-                {
-                    endDate = parsedEndDate;
-                }
-            }
             var leaveHis = new List<RequestList>();
             try
             {
                 leaveHis = new SearchHistoryRequest().GetHis(LeaveType, reqType, ReqStatus, startDate, endDate, EmpDept, reqId, EmpName);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 ViewBag.ErrorMessage = "ไม่สามารถโหลดข้อมูลได้ กรุณาลองอีกครั้ง";
             }
-
 
             LoadDepartments();
             LoadRequestType();
             LoadLeavetype();
             LoadReqStatus();
+            LoadReqYears(); // ✅ เพิ่ม
+
             return View("ManagerHistory", leaveHis);
         }
+
+        private void LoadReqYears()
+        {
+            var years = new List<int>();
+            try
+            {
+                var connectionString = Utils.GetConfig("HRIS_DB");
+                using (var conn = new SqlConnection(connectionString))
+                using (var cmd = conn.CreateCommand())
+                {
+                    conn.Open();
+                    cmd.CommandType = CommandType.Text;
+                    cmd.CommandText = @"SELECT DISTINCT YEAR(ISNULL(StartDate, ReqDate)) AS Yr
+                                FROM [Request] ORDER BY Yr DESC";
+                    using (var rdr = cmd.ExecuteReader())
+                    {
+                        while (rdr.Read())
+                            if (!rdr.IsDBNull(0))
+                                years.Add(Convert.ToInt32(rdr.GetValue(0)));
+                    }
+                }
+            }
+            catch (Exception) { }
+            ViewBag.ReqYears = years;
+        }
+
         [HttpPost]
         public ActionResult EmployeeHistory(string LeaveType, string reqType, string ReqStatus, string ReqStart, string ReqEnd, string reqId)
         {
@@ -297,7 +329,7 @@ namespace Eleave.Controllers
             DateTime? startDate = null;
             DateTime? endDate = null;
 
-            // แปลง ReqStart เป็น DateTime 
+            // Convert ReqStart to DateTime 
             if (!string.IsNullOrEmpty(ReqStart))
             {
                 if (DateTime.TryParseExact(ReqStart, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedStartDate))
@@ -306,7 +338,7 @@ namespace Eleave.Controllers
                 }
             }
 
-            // แปลง ReqEnd เป็น DateTime 
+            // Convert ReqEnd to DateTime 
             if (!string.IsNullOrEmpty(ReqEnd))
             {
                 if (DateTime.TryParseExact(ReqEnd, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedEndDate))
@@ -382,7 +414,7 @@ namespace Eleave.Controllers
                 var GetReqDate = ReqDetail.FirstOrDefault()?.StartDate.ToString();
                 //string GetDate = GetReqDate.Substring(GetReqDate.Length - 4);
                 Console.WriteLine($"GetReqDate : {GetReqDate}");
-                int Year;
+                int Year = DateTime.Now.Year;
                 if (!string.IsNullOrEmpty(GetReqDate) && DateTime.TryParseExact(GetReqDate, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedDate))
                 {
                     Year = parsedDate.Year; // ดึงค่าปีจาก DateTime
@@ -464,21 +496,6 @@ namespace Eleave.Controllers
             }
             return Json(new { message = message, LeaveType }, JsonRequestBehavior.AllowGet);
         }
-        //public JsonResult GetLeaveTypeByEmpType(string EmpTypeId)
-        //{
-        //    var LeaveType = new List<LeaveTypeModel>();
-        //    string message = string.Empty;
-        //    try
-        //    {
-        //        LeaveType = new GetLeaveType().GetLeaveTypeList(EmpTypeId);
-        //        message = "Y";
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        message = ex.Message;
-        //    }
-        //    return Json(new { message = message, LeaveType }, JsonRequestBehavior.AllowGet);
-        //}
         private void LoadLeavetype()
         {
             var LeaveType = new List<LeaveTypeModel>();
@@ -493,8 +510,6 @@ namespace Eleave.Controllers
                 message = ex.Message;
             }
             ViewBag.Leavetype = LeaveType;
-
-
         }
 
         private void LoadReqStatus()
@@ -642,6 +657,62 @@ namespace Eleave.Controllers
                 Message = txtMessage,
                 LeaveTakenDay = leaveTakenDayDouble
             }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public JsonResult GetReqYear()
+        {
+            var years = new List<int>();
+            try
+            {
+                if (Session["EmpId"] == null)
+                    return Json(new { message = "NoSession", years = new int[0] }, JsonRequestBehavior.AllowGet);
+
+                var EmpID = Session["EmpId"].ToString();
+                var EmpType = Session["UserType"].ToString();
+                var DeptName = Session["DeptName"].ToString();
+
+                var connectionString = Utils.GetConfig("HRIS_DB");
+                using (var conn = new SqlConnection(connectionString))
+                using (var cmd = conn.CreateCommand())
+                {
+                    conn.Open();
+                    cmd.CommandType = CommandType.Text;
+
+                    // ✅ Manager เห็นปีของทุกคนในแผนก, Employee เห็นแค่ของตัวเอง
+                    if (EmpType == "1") // Employee
+                    {
+                        cmd.CommandText = @"
+                    SELECT DISTINCT YEAR(ISNULL(StartDate, ReqDate)) AS Yr
+                    FROM [Request]
+                    WHERE EmpId = @EmpId
+                    ORDER BY Yr DESC";
+                        cmd.Parameters.AddWithValue("@EmpId", EmpID);
+                    }
+                    else // Manager
+                    {
+                        cmd.CommandText = @"
+                    SELECT DISTINCT YEAR(ISNULL(StartDate, ReqDate)) AS Yr
+                    FROM [Request]
+                    ORDER BY Yr DESC";
+                    }
+
+                    using (var rdr = cmd.ExecuteReader())
+                    {
+                        while (rdr.Read())
+                        {
+                            if (!rdr.IsDBNull(0))
+                                years.Add(Convert.ToInt32(rdr.GetValue(0)));
+                        }
+                    }
+                }
+
+                return Json(new { message = "Y", years }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { message = ex.Message, years = new int[0] }, JsonRequestBehavior.AllowGet);
+            }
         }
     }
 }

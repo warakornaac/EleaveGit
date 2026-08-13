@@ -8,27 +8,26 @@ namespace Eleave.Models
 {
     public class RequestList
     {
-        public string ReqNo { get; set; }
-        public string ReqType { get; set; }
-        public string CountryCode { get; set; }
-        public string EmpId { get; set; }
-        public string Empname { get; set; }
-        public string LeaveType { get; set; }
-        public string StartDate { get; set; }
-        public string EndDate { get; set; }
-        public decimal NumDay { get; set; }
-        public string PeriodTime { get; set; }
-        public string ReqDate { get; set; }
-        public string ApprGrpID { get; set; }
-        public string ReqStatus { get; set; }
-        public string ReqStaDesc { get; set; }
-        public string Remark { get; set; }
-        public string ApproveBy { get; set; }
-        public string ApproveDate { get; set; }
-        public string AcknowledgeBy { get; set; }
-        public string AcknowledgeDate { get; set; }
-        public string UpdatedBy { get; set; }
-        public DateTime? UpdateDate { get; set; }
-
+        public string ReqNo { get; set; } = string.Empty;
+        public string ReqType { get; set; } = string.Empty;
+        public string CountryCode { get; set; } = string.Empty;
+        public string EmpId { get; set; } = string.Empty;
+        public string Empname { get; set; } = string.Empty;
+        public string LeaveType { get; set; } = string.Empty;
+        public string StartDate { get; set; } = string.Empty;
+        public string EndDate { get; set; } = string.Empty;
+        public decimal NumDay { get; set; } = 0;
+        public string PeriodTime { get; set; } = string.Empty;
+        public string ReqDate { get; set; } = string.Empty;
+        public string ApprGrpID { get; set; } = string.Empty;
+        public string ReqStatus { get; set; } = string.Empty;
+        public string ReqStaDesc { get; set; } = string.Empty;
+        public string Remark { get; set; } = string.Empty;
+        public string ApproveBy { get; set; } = string.Empty;
+        public string ApproveDate { get; set; } = string.Empty;
+        public string AcknowledgeBy { get; set; } = string.Empty;
+        public string AcknowledgeDate { get; set; } = string.Empty;
+        public string UpdatedBy { get; set; } = string.Empty;
+        public DateTime? UpdateDate { get; set; } = null;
     }
 }
