@@ -800,6 +800,7 @@ namespace Eleave.Controllers
                 using (var cmd = new SqlCommand("P_Report_Leave_Attend", conn))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.CommandTimeout = 300;
                     cmd.Parameters.AddWithValue("@inCompany", Company);
                     cmd.Parameters.AddWithValue("@inDept", Dept);
                     cmd.Parameters.AddWithValue("@inMonth", Month);
